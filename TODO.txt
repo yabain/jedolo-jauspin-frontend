@@ -1,0 +1,6 @@
+utiliser la les detail des job pour le view d;un article dans la liste des articles(peut etre ajouter sur le view de l'article deja present)
+mais conserver le edit pour l'edition
+
+utiliser les commentaire du blog pour adapter le viesw des articles 
+
+utiliser la creation du blog pour adapter la creation des articles
