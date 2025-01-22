@@ -19,17 +19,17 @@ export const route = [
        {
               path: 'home',
               element: (
-                     <AuthGuard>
-                            <Suspense fallback={ <SplashScreen /> }>
-                                   <DashboardLayout show={ false }>
-                                          <Suspense fallback={ <SplashScreen /> }>
-                                                 <Suspense fallback={ <LoadingScreen /> }>
-                                                        <Outlet />
-                                                 </Suspense>
+                     // <AuthGuard>
+                     <Suspense fallback={ <SplashScreen /> }>
+                            <DashboardLayout show={ false }>
+                                   <Suspense fallback={ <SplashScreen /> }>
+                                          <Suspense fallback={ <LoadingScreen /> }>
+                                                 <Outlet />
                                           </Suspense>
-                                   </DashboardLayout>
-                            </Suspense>
-                     </AuthGuard>
+                                   </Suspense>
+                            </DashboardLayout>
+                     </Suspense>
+                     // </AuthGuard>
               ),
               children: [
                      { element: <IndexPage />, index: true },

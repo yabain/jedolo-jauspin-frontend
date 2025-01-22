@@ -22,162 +22,175 @@ import Image from 'src/components/image';
 import Iconify from 'src/components/iconify';
 import TextMaxLine from 'src/components/text-max-line';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import { Typography } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
-export default function PostItemHorizontal({ post }) {
-  const popover = usePopover();
+export default function PostItemHorizontal( { post } )
+{
+       const popover = usePopover();
 
-  const router = useRouter();
+       const router = useRouter();
 
-  const smUp = useResponsive('up', 'sm');
+       const smUp = useResponsive( 'up', 'sm' );
 
-  const {
-    title,
-    author,
-    publish,
-    coverUrl,
-    createdAt,
-    totalViews,
-    totalShares,
-    totalComments,
-    description,
-  } = post;
+       const {
+              categorie,
+              title,
+              author,
+              publish,
+              coverUrl,
+              createdAt,
+              price,
+              totalViews,
+              totalShares,
+              totalComments,
+              description,
+       } = post;
 
-  return (
-    <>
-      <Stack component={Card} direction="row">
-        <Stack
-          sx={{
-            p: (theme) => theme.spacing(3, 3, 2, 3),
-          }}
-        >
-          <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 2 }}>
-            <Label variant="soft" color={(publish === 'published' && 'info') || 'default'}>
-              {publish}
-            </Label>
+       return (
+              <>
+                     <Stack component={ Card } direction="row">
+                            <Stack
+                                   sx={ {
+                                          p: ( theme ) => theme.spacing( 3, 3, 2, 3 ),
+                                   } }
+                            >
+                                   <Stack direction="row" alignItems="center" justifyContent="space-between" sx={ { mb: 2 } }>
+                                          <Label variant="soft" color={ ( publish === 'published' && 'info' ) || 'default' }>
+                                                 { categorie }
+                                          </Label>
 
-            <Box component="span" sx={{ typography: 'caption', color: 'text.disabled' }}>
-              {fDate(createdAt)}
-            </Box>
-          </Stack>
+                                          <Box component="span" sx={ { typography: 'caption', color: 'text.disabled' } }>
+                                                 {/* { fDate( createdAt ) } */ }
+                                                 <Typography variant='h6' >
+                                                        { `${ price } fcfa` }
+                                                 </Typography>
 
-          <Stack spacing={1} flexGrow={1}>
-            <Link color="inherit" component={RouterLink} href={paths.dashboard.post.details(title)}>
-              <TextMaxLine variant="subtitle2" line={2}>
-                {title}
-              </TextMaxLine>
-            </Link>
+                                          </Box>
+                                   </Stack>
 
-            <TextMaxLine variant="body2" sx={{ color: 'text.secondary' }}>
-              {description}
-            </TextMaxLine>
-          </Stack>
+                                   <Stack spacing={ 1 } flexGrow={ 1 }>
+                                          <Link color="inherit" component={ RouterLink } href={ paths.dashboard.post.details( title ) }>
+                                                 <TextMaxLine variant="subtitle2" line={ 2 }>
+                                                        { title }
+                                                 </TextMaxLine>
+                                          </Link>
 
-          <Stack direction="row" alignItems="center">
-            <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
-              <Iconify icon="eva:more-horizontal-fill" />
-            </IconButton>
+                                          <TextMaxLine variant="body2" sx={ { color: 'text.secondary' } }>
+                                                 { description }
+                                          </TextMaxLine>
+                                   </Stack>
 
-            <Stack
-              spacing={1.5}
-              flexGrow={1}
-              direction="row"
-              flexWrap="wrap"
-              justifyContent="flex-end"
-              sx={{
-                typography: 'caption',
-                color: 'text.disabled',
-              }}
-            >
-              <Stack direction="row" alignItems="center">
-                <Iconify icon="eva:message-circle-fill" width={16} sx={{ mr: 0.5 }} />
-                {fShortenNumber(totalComments)}
-              </Stack>
+                                   <Stack direction="row" alignItems="center">
+                                          <IconButton color={ popover.open ? 'inherit' : 'default' } onClick={ popover.onOpen }>
+                                                 <Iconify icon="eva:more-horizontal-fill" />
+                                          </IconButton>
 
-              <Stack direction="row" alignItems="center">
-                <Iconify icon="solar:eye-bold" width={16} sx={{ mr: 0.5 }} />
-                {fShortenNumber(totalViews)}
-              </Stack>
+                                          <Stack
+                                                 spacing={ 1.5 }
+                                                 flexGrow={ 1 }
+                                                 direction="row"
+                                                 flexWrap="wrap"
+                                                 justifyContent="flex-end"
+                                                 sx={ {
+                                                        typography: 'caption',
+                                                        color: 'text.disabled',
+                                                 } }
+                                          >
+                                                 <Stack direction="row" alignItems="center">
+                                                        <Iconify icon="eva:message-circle-fill" width={ 16 } sx={ { mr: 0.5 } } />
+                                                        { fShortenNumber( totalComments ) }
+                                                 </Stack>
 
-              <Stack direction="row" alignItems="center">
-                <Iconify icon="solar:share-bold" width={16} sx={{ mr: 0.5 }} />
-                {fShortenNumber(totalShares)}
-              </Stack>
-            </Stack>
-          </Stack>
-        </Stack>
+                                                 <Stack direction="row" alignItems="center">
+                                                        <Iconify icon="solar:eye-bold" width={ 16 } sx={ { mr: 0.5 } } />
+                                                        { fShortenNumber( totalViews ) }
+                                                 </Stack>
 
-        {smUp && (
-          <Box
-            sx={{
-              width: 180,
-              height: 240,
-              position: 'relative',
-              flexShrink: 0,
-              p: 1,
-            }}
-          >
-            <Avatar
-              alt={author.name}
-              src={author.avatarUrl}
-              sx={{ position: 'absolute', top: 16, right: 16, zIndex: 9 }}
-            />
-            <Image alt={title} src={coverUrl} sx={{ height: 1, borderRadius: 1.5 }} />
-          </Box>
-        )}
-      </Stack>
+                                                 <Stack direction="row" alignItems="center">
+                                                        <Iconify icon="solar:share-bold" width={ 16 } sx={ { mr: 0.5 } } />
+                                                        { fShortenNumber( totalShares ) }
+                                                 </Stack>
+                                          </Stack>
+                                   </Stack>
+                            </Stack>
 
-      <CustomPopover
-        open={popover.open}
-        onClose={popover.onClose}
-        arrow="bottom-center"
-        sx={{ width: 140 }}
-      >
-        <MenuItem
-          onClick={() => {
-            popover.onClose();
-            router.push(paths.dashboard.post.details(title));
-          }}
-        >
-          <Iconify icon="solar:eye-bold" />
-          View
-        </MenuItem>
+                            { smUp && (
+                                   <Box
+                                          sx={ {
+                                                 width: 180,
+                                                 height: 240,
+                                                 position: 'relative',
+                                                 flexShrink: 0,
+                                                 p: 1,
+                                          } }
+                                   >
+                                          <Avatar
+                                                 alt={ author.name }
+                                                 src={ author.avatarUrl }
+                                                 sx={ { position: 'absolute', top: 16, right: 16, zIndex: 9 } }
+                                          />
+                                          <Image alt={ title } src={ coverUrl } sx={ { height: 1, borderRadius: 1.5 } } />
+                                   </Box>
+                            ) }
+                     </Stack>
 
-        <MenuItem
-          onClick={() => {
-            popover.onClose();
-            router.push(paths.dashboard.post.edit(title));
-          }}
-        >
-          <Iconify icon="solar:pen-bold" />
-          Edit
-        </MenuItem>
+                     <CustomPopover
+                            open={ popover.open }
+                            onClose={ popover.onClose }
+                            arrow="bottom-center"
+                            sx={ { width: 140 } }
+                     >
+                            <MenuItem
+                                   onClick={ () =>
+                                   {
+                                          popover.onClose();
+                                          router.push( paths.dashboard.post.details( title ) );
+                                   } }
+                            >
+                                   <Iconify icon="solar:eye-bold" />
+                                   View
+                            </MenuItem>
 
-        <MenuItem
-          onClick={() => {
-            popover.onClose();
-          }}
-          sx={{ color: 'error.main' }}
-        >
-          <Iconify icon="solar:trash-bin-trash-bold" />
-          Delete
-        </MenuItem>
-      </CustomPopover>
-    </>
-  );
+                            <MenuItem
+                                   onClick={ () =>
+                                   {
+                                          popover.onClose();
+                                          router.push( paths.dashboard.post.edit( title ) );
+                                   } }
+                            >
+                                   <Iconify icon="solar:pen-bold" />
+                                   Edit
+                            </MenuItem>
+
+                            <MenuItem
+                                   onClick={ () =>
+                                   {
+                                          popover.onClose();
+                                   } }
+                                   sx={ { color: 'error.main' } }
+                            >
+                                   <Iconify icon="solar:trash-bin-trash-bold" />
+                                   Delete
+                            </MenuItem>
+                     </CustomPopover>
+              </>
+       );
 }
 
 PostItemHorizontal.propTypes = {
-  post: PropTypes.shape({
-    author: PropTypes.object,
-    coverUrl: PropTypes.string,
-    createdAt: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
-    description: PropTypes.string,
-    publish: PropTypes.string,
-    title: PropTypes.string,
-    totalComments: PropTypes.number,
-    totalShares: PropTypes.number,
-    totalViews: PropTypes.number,
-  }),
+       post: PropTypes.shape( {
+              author: PropTypes.object,
+              categorie: PropTypes.string,
+              coverUrl: PropTypes.string,
+              createdAt: PropTypes.oneOfType( [ PropTypes.string, PropTypes.instanceOf( Date ) ] ),
+              description: PropTypes.string,
+              publish: PropTypes.string,
+              price: PropTypes.string,
+              title: PropTypes.string,
+              totalComments: PropTypes.number,
+              totalShares: PropTypes.number,
+              totalViews: PropTypes.number,
+       } ),
 };
