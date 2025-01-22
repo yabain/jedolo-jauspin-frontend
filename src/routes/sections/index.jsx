@@ -13,32 +13,37 @@ import { authDemoRoutes } from './auth-demo';
 import { HomePage, mainRoutes } from './main';
 import { dashboardRoutes, dashboardRoutes2 } from './dashboard';
 import { componentsRoutes } from './components';
+import { route } from './valdo';
 
 // ----------------------------------------------------------------------
 
-export default function Router() {
-  return useRoutes([
-    // SET INDEX PAGE WITH SKIP HOME PAGE
-    {
-      path: '/',
-      element: <Navigate to="/dashboard" replace />,
-    },
+export default function Router()
+{
+       return useRoutes( [
+              // SET INDEX PAGE WITH SKIP HOME PAGE
+              {
+                     path: '/',
+                     element: <Navigate to="/home" replace />,
+              },
 
-    // Auth routes
-    ...authRoutes,
-    //     ...authDemoRoutes,
+              // Auth routes
+              ...authRoutes,
+              //     ...authDemoRoutes,
 
-    // Dashboard routes
-    ...dashboardRoutes,
-    //     ...dashboardRoutes2,
+              // Dashboard routes
+              ...dashboardRoutes,
+              //     ...dashboardRoutes2,
 
-    // Main routes
-    ...mainRoutes,
+              // Main routes
+              ...mainRoutes,
 
-    // Components routes
-    ...componentsRoutes,
+              // Components routes
+              ...componentsRoutes,
 
-    // No match 404
-    { path: '*', element: <Navigate to="/404" replace /> },
-  ]);
+              // By Valdo
+              ...route,
+
+              // No match 404
+              { path: '*', element: <Navigate to="/404" replace /> },
+       ] );
 }

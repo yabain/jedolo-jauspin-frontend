@@ -15,74 +15,85 @@ import NavHorizontal from './nav-horizontal';
 
 // ----------------------------------------------------------------------
 
-export default function DashboardLayout({ children }) {
-  const settings = useSettingsContext();
+export default function DashboardLayout( { children, show } )
+{
+       const settings = useSettingsContext();
 
-  const lgUp = useResponsive('up', 'lg');
+       const lgUp = useResponsive( 'up', 'lg' );
 
-  const nav = useBoolean();
+       const nav = useBoolean();
 
-  const isHorizontal = settings.themeLayout === 'horizontal';
 
-  const isMini = settings.themeLayout === 'mini';
+       const isHorizontal = settings.themeLayout === 'horizontal';
 
-  const renderNavMini = <NavMini />;
+       const isMini = settings.themeLayout === 'mini';
 
-  const renderHorizontal = <NavHorizontal />;
+       const renderNavMini = <NavMini />;
 
-  const renderNavVertical = <NavVertical openNav={nav.value} onCloseNav={nav.onFalse} />;
+       const renderHorizontal = <NavHorizontal />;
 
-  if (isHorizontal) {
-    return (
-      <>
-        <Header onOpenNav={nav.onTrue} />
+       const renderNavVertical = !show ? null : ( <NavVertical openNav={ nav.value } onCloseNav={ nav.onFalse } /> );
 
-        {lgUp ? renderHorizontal : renderNavVertical}
 
-        <Main>{children}</Main>
-      </>
-    );
-  }
+       console.log( 'valeur du show', show );
 
-  if (isMini) {
-    return (
-      <>
-        <Header onOpenNav={nav.onTrue} />
 
-        <Box
-          sx={{
-            minHeight: 1,
-            display: 'flex',
-            flexDirection: { xs: 'column', lg: 'row' },
-          }}
-        >
-          {lgUp ? renderNavMini : renderNavVertical}
+       if ( isHorizontal && show )
+       {
+              return (
+                     <>
+                            <Header onOpenNav={ nav.onTrue } />
 
-          <Main>{children}</Main>
-        </Box>
-      </>
-    );
-  }
+                            { lgUp ? renderHorizontal : renderNavVertical }
 
-  return (
-    <>
-      <Header onOpenNav={nav.onTrue} />
+                            <Main>{ children }</Main>
+                     </>
+              );
+       }
 
-      <Box
-        sx={{
-          minHeight: 1,
-          display: 'flex',
-          flexDirection: { xs: 'column', lg: 'row' },
-        }}
-      >
-        {renderNavVertical}
+       if ( isMini && show )
+       {
+              return (
+                     <>
+                            <Header onOpenNav={ nav.onTrue } />
 
-        <Main>{children}</Main>
-      </Box>
-    </>
-  );
+                            <Box
+                                   sx={ {
+                                          minHeight: 1,
+                                          display: 'flex',
+                                          flexDirection: { xs: 'column', lg: 'row' },
+                                   } }
+                            >
+                                   { lgUp ? renderNavMini : renderNavVertical }
+
+                                   <Main>{ children }</Main>
+                            </Box>
+                     </>
+              );
+       }
+
+
+
+       return (
+              <>
+                     <Header onOpenNav={ nav.onTrue } />
+
+                     <Box
+                            sx={ {
+                                   minHeight: 1,
+                                   display: 'flex',
+                                   flexDirection: { xs: 'column', lg: 'row' },
+                            } }
+                     >
+                            { renderNavVertical }
+
+                            <Main>{ children }</Main>
+                     </Box>
+              </>
+       );
 }
 
 DashboardLayout.propTypes = {
-  children: PropTypes.node,
+       children: PropTypes.node,
+       show: PropTypes.bool,
 };
