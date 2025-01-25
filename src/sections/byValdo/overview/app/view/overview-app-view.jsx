@@ -50,21 +50,13 @@ export default function Home()
 
 
 
-                            <Grid xs={ 12 } md={ 10 } lg={ 10 }>
+                            <Grid xs={ 12 } md={ 12 } lg={ 12 }>
                                    <PostListView />
                             </Grid>
 
 
 
-                            <Grid xs={ 2 } lg={ 2 }>
-                                   <Button variant="outlined" color="primary">
-                                          supprimer les filtres
-                                   </Button>
 
-                                   <SidebarFilter />
-
-
-                            </Grid>
 
 
                      </Grid>

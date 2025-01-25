@@ -8,6 +8,7 @@ import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
+import { useBoolean } from 'src/hooks/use-boolean';
 import { RouterLink } from 'src/routes/components';
 
 import { useDebounce } from 'src/hooks/use-debounce';
@@ -24,8 +25,11 @@ import PostSort from '../post-sort';
 import PostSearch from '../post-search';
 import PostListHorizontal from '../post-list-horizontal';
 import PostList from '../post-list';
+import TourFilters from '../tour-filters';
 
 // ----------------------------------------------------------------------
+
+
 
 const defaultFilters = {
        publish: 'all',
@@ -35,6 +39,10 @@ const defaultFilters = {
 
 export default function PostListView()
 {
+
+
+       const openFilters = useBoolean();
+
        const settings = useSettingsContext();
 
        const [ sortBy, setSortBy ] = useState( 'latest' );
@@ -859,6 +867,24 @@ export default function PostListView()
 
 
 
+
+
+
+       const renderFilters = (
+              <TourFilters
+                     open={ openFilters.value }
+                     onOpen={ openFilters.onTrue }
+                     onClose={ openFilters.onFalse }
+                     onArgumentFilters={ filterByArguments }
+
+              />
+
+       );
+
+
+
+
+
        return (
               <Container maxWidth={ settings.themeStretch ? false : 'lg' }>
                      {/* <CustomBreadcrumbs
@@ -911,38 +937,53 @@ export default function PostListView()
                             <PostSort sort={ sortBy } onSort={ handleSortBy } sortOptions={ POST_SORT_OPTIONS } />
                      </Stack> */}
 
-                     <Tabs
-                            value={ selectedTab }
-                            onChange={ handleFilterPublish }
+
+
+                     <Stack
+                            spacing={ 1 }
+                            justifyContent="space-between"
+                            alignItems={ { xs: 'flex-end', sm: 'center' } }
+                            direction={ { xs: 'column', sm: 'row' } }
                             sx={ {
                                    mb: { xs: 3, md: 5 },
                             } }
                      >
-                            { [ 'all', 'VIP', 'Standard' ].map( ( tab ) => (
-                                   <Tab
-                                          key={ tab }
-                                          iconPosition="end"
-                                          value={ tab }
-                                          label={ tab }
-                                          icon={
-                                                 <Label
-                                                        variant={ ( ( tab === 'all' || tab === filters.publish ) && 'filled' ) || 'soft' }
-                                                        color={ ( tab === 'VIP' && 'info' ) || 'default' }
-                                                 >
-                                                        { tab === 'all' && posts.length }
+                            <Tabs
+                                   value={ selectedTab }
+                                   onChange={ handleFilterPublish }
+                                   sx={ {
+                                          mb: { xs: 3, md: 5 },
+                                   } }
+                            >
+                                   { [ 'all', 'VIP', 'Standard' ].map( ( tab ) => (
+                                          <Tab
+                                                 key={ tab }
+                                                 iconPosition="end"
+                                                 value={ tab }
+                                                 label={ tab }
+                                                 icon={
+                                                        <Label
+                                                               variant={ ( ( tab === 'all' || tab === filters.publish ) && 'filled' ) || 'soft' }
+                                                               color={ ( tab === 'VIP' && 'info' ) || 'default' }
+                                                        >
+                                                               { tab === 'all' && posts.length }
 
-                                                        { tab === 'VIP' && posts.filter( ( post ) => post.categorie === 'VIP' ).length }
+                                                               { tab === 'VIP' && posts.filter( ( post ) => post.categorie === 'VIP' ).length }
 
-                                                        { tab === 'Standard' && posts.filter( ( post ) => post.categorie === 'Standard' ).length }
-                                                 </Label>
-                                          }
-                                          sx={ { textTransform: 'capitalize' } }
-                                   />
-                            ) ) }
-                     </Tabs>
+                                                               { tab === 'Standard' && posts.filter( ( post ) => post.categorie === 'Standard' ).length }
+                                                        </Label>
+                                                 }
+                                                 sx={ { textTransform: 'capitalize' } }
+                                          />
+                                   ) ) }
+                            </Tabs>
+
+                            { renderFilters }
+
+                     </Stack>
 
 
-                     <Button variant='soft' onClick={ () => filterByPriceRange( Number( '2000' ), Number( '3000' ) ) }>
+                     {/* <Button variant='soft' onClick={ () => filterByPriceRange( Number( '2000' ), Number( '3000' ) ) }>
                             prix entre 2000 et 3000
                      </Button>
                      <Button sx={ { ml: 1 } } variant='soft' onClick={ () => filterByArguments( 'categorie', [ 'categorie1' ] ) }>
@@ -955,7 +996,7 @@ export default function PostListView()
 
                      <Button sx={ { ml: 1 } } variant='soft' onClick={ () => filterByArguments( 'categorie', [ 'categorie3', 'categorie1' ] ) }>
                             categorie1 et 3
-                     </Button>
+                     </Button> */}
                      {/* <PostList posts={ dataFiltered } loading={ postsLoading } /> */ }
                      <PostListHorizontal posts={ dataFiltered } loading={ postsLoading } />
               </Container>

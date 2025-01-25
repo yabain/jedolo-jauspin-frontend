@@ -103,7 +103,7 @@ export default function ProductTableToolbar( {
                                                         // }
                                                  } }
                                                  getOptionLabel={ ( option ) => option }
-                                                 renderInput={ ( params ) => <TextField { ...params } label="Statut" /> }
+                                                 renderInput={ ( params ) => <TextField { ...params } label="Ville" /> }
                                                  renderOption={ ( props, option ) => (
                                                         <li { ...props } key={ option }>
                                                                { option }
@@ -145,7 +145,7 @@ export default function ProductTableToolbar( {
                                                         // }
                                                  } }
                                                  getOptionLabel={ ( option ) => option }
-                                                 renderInput={ ( params ) => <TextField { ...params } label="Statut" /> }
+                                                 renderInput={ ( params ) => <TextField { ...params } label="Catégorie" /> }
                                                  renderOption={ ( props, option ) => (
                                                         <li { ...props } key={ option }>
                                                                { option }

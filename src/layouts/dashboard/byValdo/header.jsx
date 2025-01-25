@@ -150,7 +150,7 @@ export default function Header( { onOpenNav } )
                                                  // ml: 3,
 
                                           } }
-                                          variant={ location.pathname === '/home/annonce/categorie' ? "contained" : "outlined" } color="primary"
+                                          variant={ location.pathname === '/home/annonces/categorie' ? "contained" : "outlined" } color="primary"
                                    // startIcon={ <Iconify icon="eva:search-fill" /> }
                                    >
                                           Catégories

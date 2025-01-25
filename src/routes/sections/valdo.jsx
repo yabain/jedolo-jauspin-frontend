@@ -10,7 +10,12 @@ import { JwtLoginPage } from './auth';
 
 
 
-// PRODUCT
+// CATEGORY
+const OrderListPage = lazy( () => import( 'src/pages/byValdo/order/list' ) );
+const OrderDetailsPage = lazy( () => import( 'src/pages/byValdo/order/details' ) );
+
+
+// ANNONCES
 const ProductDetailsPage = lazy( () => import( 'src/pages/byValdo/product/details' ) );
 const ProductListPage = lazy( () => import( 'src/pages/byValdo/product/list' ) );
 const ProductCreatePage = lazy( () => import( 'src/pages/byValdo/product/new' ) );
@@ -50,6 +55,9 @@ export const route = [
               ),
               children: [
                      { element: <IndexPage />, index: true },
+
+
+
                      {
                             path: 'annonces',
                             children: [
@@ -58,6 +66,7 @@ export const route = [
                                    { path: ':id', element: <ProductDetailsPage /> },
                                    { path: 'new', element: <ProductCreatePage /> },
                                    { path: ':id/edit', element: <ProductEditPage /> },
+                                   { path: 'categorie', element: <OrderListPage /> },
                             ],
                      },
                      {
