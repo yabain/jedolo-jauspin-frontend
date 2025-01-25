@@ -772,19 +772,21 @@ export default function PostListView()
        const filterByArguments = useCallback(
               ( type, value ) =>
               {
-                     if ( value === 'all' || ( Array.isArray( value ) && value.length === 0 ) )
+                     if ( value[ 0 ] === 'all' )
                      {
                             // Si "all" est spécifié ou si le tableau est vide, afficher tous les posts
+
                             setFilteredPosts( posts );
+
                      } else
                      {
                             // Filtrer les posts si la propriété correspond à l'une des valeurs du tableau
                             const result = posts.filter( ( item ) => Array.isArray( value ) && value.includes( item[ type ] ) );
                             setFilteredPosts( result );
-                            console.log( 'Valeur filtrée', result );
+                            // console.log( 'Valeur filtrée', result );
                      }
 
-                     console.log( 'Valeur des posts', type, value );
+                     // console.log( 'Valeur des posts', type, value );
               },
               [ posts ] // Dépend uniquement de `posts`
        );
@@ -941,7 +943,18 @@ export default function PostListView()
 
 
                      <Button variant='soft' onClick={ () => filterByPriceRange( Number( '2000' ), Number( '3000' ) ) }>
-                            click
+                            prix entre 2000 et 3000
+                     </Button>
+                     <Button sx={ { ml: 1 } } variant='soft' onClick={ () => filterByArguments( 'categorie', [ 'categorie1' ] ) }>
+                            categorie1
+                     </Button>
+
+                     <Button sx={ { ml: 1 } } variant='soft' onClick={ () => filterByArguments( 'categorie', [ 'categorie2' ] ) }>
+                            categorie2
+                     </Button>
+
+                     <Button sx={ { ml: 1 } } variant='soft' onClick={ () => filterByArguments( 'categorie', [ 'categorie3', 'categorie1' ] ) }>
+                            categorie1 et 3
                      </Button>
                      {/* <PostList posts={ dataFiltered } loading={ postsLoading } /> */ }
                      <PostListHorizontal posts={ dataFiltered } loading={ postsLoading } />
