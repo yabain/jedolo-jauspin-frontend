@@ -9,32 +9,33 @@ import Header from './header';
 
 // ----------------------------------------------------------------------
 
-export default function MainLayout({ children }) {
-  const pathname = usePathname();
+export default function MainLayout( { children } )
+{
+       const pathname = usePathname();
 
-  const homePage = pathname === '/';
+       const homePage = pathname === '/';
 
-  return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', height: 1 }}>
-      <Header />
+       return (
+              <Box sx={ { display: 'flex', flexDirection: 'column', height: 1 } }>
+                     <Header />
 
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          ...(!homePage && {
-            pt: { xs: 8, md: 10 },
-          }),
-        }}
-      >
-        {children}
-      </Box>
+                     <Box
+                            component="main"
+                            sx={ {
+                                   flexGrow: 1,
+                                   ...( !homePage && {
+                                          pt: { xs: 8, md: 10 },
+                                   } ),
+                            } }
+                     >
+                            { children }
+                     </Box>
 
-      <Footer />
-    </Box>
-  );
+                     <Footer />
+              </Box>
+       );
 }
 
 MainLayout.propTypes = {
-  children: PropTypes.node,
+       children: PropTypes.node,
 };

@@ -14,6 +14,7 @@ import Label from 'src/components/label';
 import Image from 'src/components/image';
 import Iconify from 'src/components/iconify';
 import Carousel, { useCarousel, CarouselArrows } from 'src/components/carousel';
+import { width } from '@mui/system';
 
 // ----------------------------------------------------------------------
 
@@ -24,7 +25,7 @@ export default function BookingNewest( { title, subheader, list, sx, ...other } 
        const carousel = useCarousel( {
               slidesToShow: 4,
               autoplay: true,  // Active le défilement automatique
-              autoplaySpeed: 2000,  // Temps d'affichage de chaque slide (en ms)
+              autoplaySpeed: 2500,  // Temps d'affichage de chaque slide (en ms)
               responsive: [
                      {
                             breakpoint: theme.breakpoints.values.lg,
@@ -59,11 +60,12 @@ export default function BookingNewest( { title, subheader, list, sx, ...other } 
                             } }
                      />
 
-                     <Carousel ref={ carousel.carouselRef } { ...carousel.carouselSettings }>
+                     <Carousel sx={ { width: "100px" } } ref={ carousel.carouselRef } { ...carousel.carouselSettings }>
                             { list.map( ( item ) => (
                                    <BookingItem key={ item.id } item={ item } />
                             ) ) }
                      </Carousel>
+
               </Box>
        );
 }
@@ -90,6 +92,10 @@ function BookingItem( { item } )
                             bgcolor: 'background.neutral',
                      } }
               >
+                     <Box sx={ { p: 1, position: 'relative' } }>
+                            <Image alt={ coverUrl } src={ coverUrl } ratio="1/1" sx={ { borderRadius: 1.5 } } />
+                     </Box>
+
                      <Stack
                             spacing={ 2 }
                             sx={ {
@@ -139,18 +145,16 @@ function BookingItem( { item } )
                      <Label
                             variant="filled"
                             sx={ {
-                                   right: 16,
+                                   left: 16,
                                    zIndex: 9,
-                                   bottom: 16,
+                                   top: 16,
                                    position: 'absolute',
                             } }
                      >
                             { isHot && '🔥' } ${ price }
                      </Label>
 
-                     <Box sx={ { p: 1, position: 'relative' } }>
-                            <Image alt={ coverUrl } src={ coverUrl } ratio="1/1" sx={ { borderRadius: 1.5 } } />
-                     </Box>
+
               </Paper>
        );
 }

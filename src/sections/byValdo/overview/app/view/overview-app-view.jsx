@@ -4,11 +4,13 @@ import { useTheme } from '@mui/material/styles';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Unstable_Grid2';
 
+import { Box } from '@mui/system';
 import { useMockedUser } from 'src/hooks/use-mocked-user';
 
 import { SeoIllustration } from 'src/assets/illustrations';
 import { PostListView } from 'src/sections/byValdo/blog/view';
-import { _appAuthors, _appRelated, _appFeatured, _appInvoices, _appInstalled } from 'src/_mock';
+import BookingNewest from 'src/sections/byValdo/booking/booking-newest';
+import { _appAuthors, _appRelated, _appFeatured, _appInvoices, _appInstalled, _bookingNew } from 'src/_mock';
 
 import { useSettingsContext } from 'src/components/settings';
 
@@ -32,6 +34,15 @@ export default function Home()
 
        return (
               <Container maxWidth={ settings.themeStretch ? false : 'xl' }>
+
+
+
+
+
+
+
+
+
                      <Grid container spacing={ 3 }>
                             <Grid xs={ 12 } md={ 12 }>
                                    <AppWelcome
@@ -47,7 +58,35 @@ export default function Home()
                             </Grid>
 
 
+                            <Grid xs={ 12 } md={ 12 }>
+                                   <Container maxWidth={ settings.themeStretch ? false : 'xl' }>
 
+
+
+
+
+
+
+
+
+                                          <Grid container spacing={ 3 }>
+
+
+
+                                                 <Grid xs={ 12 } md={ 12 }>
+                                                        <BookingNewest title="Annonces à la une" subheader="12 Nouvelles Annonces" list={ _bookingNew } />
+                                                 </Grid>
+
+
+
+
+
+
+
+                                          </Grid>
+                                   </Container>
+
+                            </Grid>
 
 
                             <Grid xs={ 12 } md={ 12 } lg={ 12 }>
