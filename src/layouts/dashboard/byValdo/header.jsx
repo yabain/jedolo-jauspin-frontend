@@ -1,3 +1,5 @@
+
+import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 
 
@@ -34,6 +36,12 @@ import NotificationsPopover from '../../common/notifications-popover';
 
 export default function Header( { onOpenNav } )
 {
+
+
+       const setUser = useSelector( ( state ) => state.setUsers.selectedUser );
+
+       console.log( 'role du user depuis le header', setUser?.role );
+
        const theme = useTheme();
        const location = useLocation();
        const naviguate = useNavigate()
@@ -206,21 +214,51 @@ export default function Header( { onOpenNav } )
                                           </Button>
                                    </RoleBasedGuard>
 
-                                   <Button
+                                   { setUser?.role !== undefined ? (
+                                          <RoleBasedGuard hasContent roles={ [ 'user' ] }>
+                                                 <Button
+                                                        onClick={ () =>
+                                                               naviguate( '/home/annonces/new' )
+                                                        }
+                                                        sx={ { mt: 2 } }
+                                                        variant={ location.pathname === '/home/annonces/new' ? 'contained' : 'outlined' }
+                                                        color="primary"
+                                                 >
+                                                        Publier
+                                                 </Button>
+                                          </RoleBasedGuard>
+                                   ) : (
+                                          <Button
+                                                 onClick={ () =>
+                                                        naviguate( '/auth/jwt/login' )
+                                                 }
+                                                 sx={ { mt: 2 } }
+                                                 variant={ location.pathname === '/home/annonces/new' ? 'contained' : 'outlined' }
+                                                 color="primary"
+                                          >
+                                                 Publier
+                                          </Button>
+                                   ) }
 
-                                          onClick={ () => { naviguate( '/home/annonces/new' ) } }
-                                          sx={ {
 
-                                                 mt: 2,
+                                   <RoleBasedGuard hasContent roles={ [ 'admin' ] }  >
+                                          <Button
 
-                                                 // ml: 3,
+                                                 onClick={ () => { naviguate( '/home/annonces/list' ) } }
+                                                 sx={ {
 
-                                          } }
-                                          variant={ location.pathname === '/home/annonces/new' ? "contained" : "outlined" } color="primary"
-                                   // startIcon={ <Iconify icon="eva:search-fill" /> }
-                                   >
-                                          Publier
-                                   </Button>
+                                                        mt: 2,
+
+                                                        // ml: 3,
+
+                                                 } }
+                                                 variant={ location.pathname === '/home/annonces/list' ? "contained" : "outlined" } color="primary"
+                                          // startIcon={ <Iconify icon="eva:search-fill" /> }
+                                          >
+                                                 Annonces
+                                          </Button>
+                                   </RoleBasedGuard>
+
                             </Stack>
                             <RoleBasedGuard hasContent roles={ [ 'admin', 'user' ] } >
                                    <AccountPopover />

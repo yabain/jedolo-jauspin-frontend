@@ -1,3 +1,5 @@
+
+import { useSelector } from 'react-redux';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import { useTheme } from '@mui/material/styles';
@@ -22,6 +24,9 @@ import SidebarFilter from '../sidebar-filter';
 
 export default function Home()
 {
+
+       const setUser = useSelector( ( state ) => state.setUsers.selectedUser ); // Assure-toi que `selectedUser` est bien défini dans le store
+
        const { user } = useMockedUser();
 
        const theme = useTheme();
@@ -29,6 +34,7 @@ export default function Home()
        const settings = useSettingsContext();
 
 
+       console.log( 'setUser', setUser );
 
 
 

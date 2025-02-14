@@ -22,13 +22,18 @@ import { PATH_AFTER_LOGIN } from 'src/config-global';
 
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
-import { loadUsers } from 'src/store/usersReducer';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { _mock } from 'src/_mock';
+import { setUsers } from 'src/store/setUsersReducer';
 
 // ----------------------------------------------------------------------
 
 export default function JwtLoginView()
 {
+
+       const setUser = useSelector( ( state ) => state.setUsers.selectedUser ); // Assure-toi que `selectedUser` est bien défini dans le store
+
+
        const { login } = useAuthContext();
        const dispatch = useDispatch()
 
@@ -63,14 +68,40 @@ export default function JwtLoginView()
               formState: { isSubmitting },
        } = methods;
 
+       const user = {
+              id: '8864c717-587d-472a-929a-8e5f298024da-0',
+              displayName: 'Jaydon Frankie',
+              email: 'demo@minimals.cc',
+              password: 'demo1234',
+              photoURL: _mock.image.avatar( 24 ),
+              phoneNumber: '+40 777666555',
+              country: 'United States',
+              address: '90210 Broadway Blvd',
+              state: 'California',
+              city: 'San Francisco',
+              zipCode: '94116',
+              about: 'Praesent turpis. Phasellus viverra nulla ut metus varius laoreet. Phasellus tempus.',
+              role: 'admin',
+              isPublic: true,
+       };
+
+
        const onSubmit = handleSubmit( async ( data ) =>
        {
               try
               {
-                     await login?.( data.email, data.password );
-                     // dispatch( loadUsers( 29 ) )
+                     const updatedUser = {
+                            ...user, // Copier les autres propriétés
+                            role: data.email === "user@gmail.com" ? "user" : user.role, // Modifier le rôle si nécessaire
+                            email: data.email,
+                     };
 
-                     router.push( returnTo || PATH_AFTER_LOGIN );
+                     await login?.( data.email !== "demo@minimals.cc" ? "demo@minimals.cc" : 'demo@minimals.cc', data.password );
+                     dispatch( setUsers( updatedUser ) )
+                     console.log( 'utilisateur enregistrer dans le store', setUser );
+
+
+                     router.push( returnTo || '/home' );
 
               } catch ( error )
               {

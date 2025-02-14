@@ -9,16 +9,22 @@ import { useMockedUser } from 'src/hooks/use-mocked-user';
 import { ForbiddenIllustration } from 'src/assets/illustrations';
 
 import { varBounce, MotionContainer } from 'src/components/animate';
+import { useSelector } from 'react-redux';
 
 // ----------------------------------------------------------------------
 
 export default function RoleBasedGuard( { hasContent, roles, children, sx } )
 {
+
+       const setUser = useSelector( ( state ) => state.setUsers.selectedUser ); // Assure-toi que `selectedUser` est bien défini dans le store
+
+       // console.log( 'setUser', setUser );
+
        // Logic here to get current user role
        const { user } = useMockedUser();
 
-       const currentRole = 'user';
-       // const currentRole = user?.role; // admin;
+       // const currentRole = 'user';
+       const currentRole = setUser?.role; // admin;
 
        if ( roles.length === 0 && currentRole === '' ) 
        {

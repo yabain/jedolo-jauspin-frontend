@@ -31,6 +31,7 @@ export const uploadImage = createAsyncThunk( 'users/uploadImage', async ( imageO
        usersService.uploadImage( imageObject )
 );
 
+
 export const usersSlice = createSlice( {
        name: 'users',
        initialState: {
@@ -202,6 +203,8 @@ export const usersSlice = createSlice( {
                      } );
        },
 } );
+
+
 
 // Exportation des actions et du reducer
 export const { initUsers, addedUser, modifyPassword, resetDataAfterRequete } = usersSlice.actions;

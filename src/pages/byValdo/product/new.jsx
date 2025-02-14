@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
+import { ProductCreateView } from 'src/sections/byValdo/product/view';
 
-import { ProductCreateView } from 'src/sections/byTemplate/product/view';
 
 // ----------------------------------------------------------------------
 

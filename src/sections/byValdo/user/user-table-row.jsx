@@ -10,6 +10,7 @@ import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
 
+import { FormControlLabel, FormGroup, Switch } from '@mui/material';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import Label from 'src/components/label';
@@ -72,12 +73,10 @@ export default function UserTableRow( { row, selected, onEditRow, onSelectRow, o
                                    </Label>
                             </TableCell>
 
-                            <TableCell align="right" sx={ { px: 1, whiteSpace: 'nowrap' } }>
-                                   <Tooltip title="Quick Edit" placement="top" arrow>
-                                          <IconButton color={ quickEdit.value ? 'inherit' : 'default' } onClick={ quickEdit.onTrue }>
-                                                 <Iconify icon="solar:pen-bold" />
-                                          </IconButton>
-                                   </Tooltip>
+                            <TableCell sx={ { justifyContent: "center", alignItems: "center", display: "flex", px: 1, whiteSpace: 'nowrap' } }>
+                                   <FormGroup row>
+                                          <FormControlLabel control={ <Switch /> } />
+                                   </FormGroup>
 
                                    <IconButton color={ popover.open ? 'inherit' : 'default' } onClick={ popover.onOpen }>
                                           <Iconify icon="eva:more-vertical-fill" />

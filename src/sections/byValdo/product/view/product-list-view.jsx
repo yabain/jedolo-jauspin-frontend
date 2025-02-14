@@ -1,3 +1,13 @@
+
+import * as annoncesFunction from 'src/1functions/annonces'
+import { setValeurRef } from 'src/1data/annonces/ref';
+
+
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router';
+
+import { setData } from 'src/store/annonces/annoncesReducer';
+import { getList } from 'src/store/annonces/getReducer';
 import isEqual from 'lodash/isEqual';
 import { useState, useEffect, useCallback } from 'react';
 
@@ -42,7 +52,6 @@ import
        RenderCellProduct,
        RenderCellCreatedAt,
 } from '../product-table-row';
-
 // ----------------------------------------------------------------------
 
 const PUBLISH_OPTIONS = [
@@ -66,8 +75,10 @@ const HIDE_COLUMNS_TOGGLABLE = [ 'category', 'actions' ];
 export default function ProductListView()
 {
        const { enqueueSnackbar } = useSnackbar();
+       const dispatch = useDispatch()
 
        const confirmRows = useBoolean();
+       const naviguate = useNavigate()
 
        const router = useRouter();
 
@@ -75,6 +86,7 @@ export default function ProductListView()
 
        const { products, productsLoading } = useGetProducts();
 
+       const [ dataIsSet, setDataIsSet ] = useState( false );
        const [ tableData, setTableData ] = useState( [] );
 
        const [ filters, setFilters ] = useState( defaultFilters );
@@ -83,13 +95,85 @@ export default function ProductListView()
 
        const [ columnVisibilityModel, setColumnVisibilityModel ] = useState( HIDE_COLUMNS );
 
+
+       const user = useSelector( ( state ) => state.setUsers.selectedUser );
+       const annonceList = useSelector( ( state ) => state.getAnnonces.data );
+       const { isGeting, isGetingSuccess } = useSelector( ( state ) => state.getAnnonces );
+       const annonceFromStore = useSelector( ( state ) => state.annonces.data );
+
        useEffect( () =>
        {
-              if ( products.length )
+
+              setValeurRef.current = setTableData;
+
+       }, [] );
+
+
+
+
+
+
+
+
+
+       useEffect( () =>
+       {
+
+              if ( annonceList.length === 0 )
               {
-                     setTableData( products );
+
+                     dispatch( getList( "user@gmail.com" ) )
+                     console.log( 'recuperation des annonces' );
+
               }
-       }, [ products ] );
+
+       }, [ dispatch, annonceList.length ] );
+
+
+
+
+
+
+
+
+
+       useEffect( () =>
+       {
+
+              if ( !isGeting && isGetingSuccess )
+              {
+
+
+                     setTableData( annonceList );
+                     console.log( 'annonces recupere', annonceList );
+
+              }
+
+
+       }, [ isGetingSuccess, isGeting, annonceList ] );
+
+
+
+
+
+
+       useEffect( () =>
+       {
+
+              if ( !dataIsSet )
+              {
+
+                     // console.log( products );
+                     setDataIsSet( true );
+
+              }
+
+       }, [ dataIsSet, dispatch, annonceFromStore ] );
+
+
+
+
+
 
        const dataFiltered = applyFilter( {
               inputData: tableData,
@@ -253,16 +337,18 @@ export default function ProductListView()
                                                  href: paths.dashboard.product.root,
                                           }
                                    ] }
-                                   // action={
-                                   //        <Button
-                                   //               component={ RouterLink }
-                                   //               href={ paths.dashboard.product.new }
-                                   //               variant="contained"
-                                   //               startIcon={ <Iconify icon="mingcute:add-line" /> }
-                                   //        >
-                                   //               New Product
-                                   //        </Button>
-                                   // }
+                                   action={
+                                          <Button
+                                                 // component={ RouterLink }
+                                                 // href={ paths.dashboard.product.new }
+                                                 onClick={ () => naviguate( '/home/annonces/new' ) }
+
+                                                 variant="contained"
+                                                 startIcon={ <Iconify icon="mingcute:add-line" /> }
+                                          >
+                                                 New Product
+                                          </Button>
+                                   }
                                    sx={ {
                                           mb: {
                                                  xs: 3,
