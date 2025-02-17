@@ -31,163 +31,170 @@ import ProductDetailsDescription from '../product-details-description';
 // ----------------------------------------------------------------------
 
 const SUMMARY = [
-  {
-    title: '100% Original',
-    description: 'Chocolate bar candy canes ice cream toffee cookie halvah.',
-    icon: 'solar:verified-check-bold',
-  },
-  {
-    title: '10 Day Replacement',
-    description: 'Marshmallow biscuit donut dragée fruitcake wafer.',
-    icon: 'solar:clock-circle-bold',
-  },
-  {
-    title: 'Year Warranty',
-    description: 'Cotton candy gingerbread cake I love sugar sweet.',
-    icon: 'solar:shield-check-bold',
-  },
+       {
+              title: '100% Original',
+              description: 'Chocolate bar candy canes ice cream toffee cookie halvah.',
+              icon: 'solar:verified-check-bold',
+       },
+       {
+              title: '10 Day Replacement',
+              description: 'Marshmallow biscuit donut dragée fruitcake wafer.',
+              icon: 'solar:clock-circle-bold',
+       },
+       {
+              title: 'Year Warranty',
+              description: 'Cotton candy gingerbread cake I love sugar sweet.',
+              icon: 'solar:shield-check-bold',
+       },
 ];
 
 // ----------------------------------------------------------------------
 
-export default function ProductDetailsView({ id }) {
-  const { product, productLoading, productError } = useGetProduct(id);
+export default function ProductDetailsView( { id } )
+{
+       const { product, productLoading, productError } = useGetProduct( id );
+       // console.log( product );
 
-  const settings = useSettingsContext();
 
-  const [currentTab, setCurrentTab] = useState('description');
+       const settings = useSettingsContext();
 
-  const [publish, setPublish] = useState('');
+       const [ currentTab, setCurrentTab ] = useState( 'description' );
 
-  useEffect(() => {
-    if (product) {
-      setPublish(product?.publish);
-    }
-  }, [product]);
+       const [ publish, setPublish ] = useState( '' );
 
-  const handleChangePublish = useCallback((newValue) => {
-    setPublish(newValue);
-  }, []);
+       useEffect( () =>
+       {
+              if ( product )
+              {
+                     setPublish( product?.publish );
+              }
+       }, [ product ] );
 
-  const handleChangeTab = useCallback((event, newValue) => {
-    setCurrentTab(newValue);
-  }, []);
+       const handleChangePublish = useCallback( ( newValue ) =>
+       {
+              setPublish( newValue );
+       }, [] );
 
-  const renderSkeleton = <ProductDetailsSkeleton />;
+       const handleChangeTab = useCallback( ( event, newValue ) =>
+       {
+              setCurrentTab( newValue );
+       }, [] );
 
-  const renderError = (
-    <EmptyContent
-      filled
-      title={`${productError?.message}`}
-      action={
-        <Button
-          component={RouterLink}
-          href={paths.dashboard.product.root}
-          startIcon={<Iconify icon="eva:arrow-ios-back-fill" width={16} />}
-          sx={{ mt: 3 }}
-        >
-          Back to List
-        </Button>
-      }
-      sx={{ py: 10 }}
-    />
-  );
+       const renderSkeleton = <ProductDetailsSkeleton />;
 
-  const renderProduct = product && (
-    <>
-      <ProductDetailsToolbar
-        backLink={paths.dashboard.product.root}
-        editLink={paths.dashboard.product.edit(`${product?.id}`)}
-        liveLink={paths.product.details(`${product?.id}`)}
-        publish={publish || ''}
-        onChangePublish={handleChangePublish}
-        publishOptions={PRODUCT_PUBLISH_OPTIONS}
-      />
+       const renderError = (
+              <EmptyContent
+                     filled
+                     title={ `${ productError?.message }` }
+                     action={
+                            <Button
+                                   component={ RouterLink }
+                                   href={ paths.dashboard.product.root }
+                                   startIcon={ <Iconify icon="eva:arrow-ios-back-fill" width={ 16 } /> }
+                                   sx={ { mt: 3 } }
+                            >
+                                   Back to List
+                            </Button>
+                     }
+                     sx={ { py: 10 } }
+              />
+       );
 
-      <Grid container spacing={{ xs: 3, md: 5, lg: 8 }}>
-        <Grid xs={12} md={6} lg={7}>
-          <ProductDetailsCarousel product={product} />
-        </Grid>
+       const renderProduct = product && (
+              <>
+                     <ProductDetailsToolbar
+                            backLink={ paths.dashboard.product.root }
+                            editLink={ paths.dashboard.product.edit( `${ product?.id }` ) }
+                            liveLink={ paths.product.details( `${ product?.id }` ) }
+                            publish={ publish || '' }
+                            onChangePublish={ handleChangePublish }
+                            publishOptions={ PRODUCT_PUBLISH_OPTIONS }
+                     />
 
-        <Grid xs={12} md={6} lg={5}>
-          <ProductDetailsSummary disabledActions product={product} />
-        </Grid>
-      </Grid>
+                     <Grid container spacing={ { xs: 3, md: 5, lg: 8 } }>
+                            <Grid xs={ 12 } md={ 6 } lg={ 7 }>
+                                   <ProductDetailsCarousel product={ product } />
+                            </Grid>
 
-      <Box
-        gap={5}
-        display="grid"
-        gridTemplateColumns={{
-          xs: 'repeat(1, 1fr)',
-          md: 'repeat(3, 1fr)',
-        }}
-        sx={{ my: 10 }}
-      >
-        {SUMMARY.map((item) => (
-          <Box key={item.title} sx={{ textAlign: 'center', px: 5 }}>
-            <Iconify icon={item.icon} width={32} sx={{ color: 'primary.main' }} />
+                            <Grid xs={ 12 } md={ 6 } lg={ 5 }>
+                                   <ProductDetailsSummary disabledActions product={ product } />
+                            </Grid>
+                     </Grid>
 
-            <Typography variant="subtitle1" sx={{ mb: 1, mt: 2 }}>
-              {item.title}
-            </Typography>
+                     <Box
+                            gap={ 5 }
+                            display="grid"
+                            gridTemplateColumns={ {
+                                   xs: 'repeat(1, 1fr)',
+                                   md: 'repeat(3, 1fr)',
+                            } }
+                            sx={ { my: 10 } }
+                     >
+                            { SUMMARY.map( ( item ) => (
+                                   <Box key={ item.title } sx={ { textAlign: 'center', px: 5 } }>
+                                          <Iconify icon={ item.icon } width={ 32 } sx={ { color: 'primary.main' } } />
 
-            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              {item.description}
-            </Typography>
-          </Box>
-        ))}
-      </Box>
+                                          <Typography variant="subtitle1" sx={ { mb: 1, mt: 2 } }>
+                                                 { item.title }
+                                          </Typography>
 
-      <Card>
-        <Tabs
-          value={currentTab}
-          onChange={handleChangeTab}
-          sx={{
-            px: 3,
-            boxShadow: (theme) => `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
-          }}
-        >
-          {[
-            {
-              value: 'description',
-              label: 'Description',
-            },
-            {
-              value: 'reviews',
-              label: `Reviews (${product.reviews.length})`,
-            },
-          ].map((tab) => (
-            <Tab key={tab.value} value={tab.value} label={tab.label} />
-          ))}
-        </Tabs>
+                                          <Typography variant="body2" sx={ { color: 'text.secondary' } }>
+                                                 { item.description }
+                                          </Typography>
+                                   </Box>
+                            ) ) }
+                     </Box>
 
-        {currentTab === 'description' && (
-          <ProductDetailsDescription description={product?.description} />
-        )}
+                     <Card>
+                            <Tabs
+                                   value={ currentTab }
+                                   onChange={ handleChangeTab }
+                                   sx={ {
+                                          px: 3,
+                                          boxShadow: ( theme ) => `inset 0 -2px 0 0 ${ alpha( theme.palette.grey[ 500 ], 0.08 ) }`,
+                                   } }
+                            >
+                                   { [
+                                          {
+                                                 value: 'description',
+                                                 label: 'Description',
+                                          },
+                                          {
+                                                 value: 'reviews',
+                                                 label: `Reviews (${ product.reviews.length })`,
+                                          },
+                                   ].map( ( tab ) => (
+                                          <Tab key={ tab.value } value={ tab.value } label={ tab.label } />
+                                   ) ) }
+                            </Tabs>
 
-        {currentTab === 'reviews' && (
-          <ProductDetailsReview
-            ratings={product.ratings}
-            reviews={product.reviews}
-            totalRatings={product.totalRatings}
-            totalReviews={product.totalReviews}
-          />
-        )}
-      </Card>
-    </>
-  );
+                            { currentTab === 'description' && (
+                                   <ProductDetailsDescription description={ product?.description } />
+                            ) }
 
-  return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
-      {productLoading && renderSkeleton}
+                            { currentTab === 'reviews' && (
+                                   <ProductDetailsReview
+                                          ratings={ product.ratings }
+                                          reviews={ product.reviews }
+                                          totalRatings={ product.totalRatings }
+                                          totalReviews={ product.totalReviews }
+                                   />
+                            ) }
+                     </Card>
+              </>
+       );
 
-      {productError && renderError}
+       return (
+              <Container maxWidth={ settings.themeStretch ? false : 'lg' }>
+                     { productLoading && renderSkeleton }
 
-      {product && renderProduct}
-    </Container>
-  );
+                     { productError && renderError }
+
+                     { product && renderProduct }
+              </Container>
+       );
 }
 
 ProductDetailsView.propTypes = {
-  id: PropTypes.string,
+       id: PropTypes.string,
 };

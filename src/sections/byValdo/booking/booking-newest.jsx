@@ -1,5 +1,11 @@
 import PropTypes from 'prop-types';
 
+
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import 'dayjs/locale/fr';
+
+import { Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
@@ -15,11 +21,16 @@ import Image from 'src/components/image';
 import Iconify from 'src/components/iconify';
 import Carousel, { useCarousel, CarouselArrows } from 'src/components/carousel';
 import { width } from '@mui/system';
+import moment from 'moment';
+import 'moment/locale/fr';
+import { tabsRef } from 'src/1data/annonces/ref';
+import { fShortenNumber } from 'src/utils/format-number';
 
 // ----------------------------------------------------------------------
 
 export default function BookingNewest( { title, subheader, list, sx, ...other } )
 {
+
        const theme = useTheme();
 
        const carousel = useCarousel( {
@@ -49,7 +60,7 @@ export default function BookingNewest( { title, subheader, list, sx, ...other } 
        } );
 
        return (
-              <Box sx={ { py: 2, ...sx } } { ...other }>
+              <Box ref={ tabsRef } sx={ { py: 2, ...sx } } { ...other }>
                      <CardHeader
                             title={ title }
                             subheader={ subheader }
@@ -81,7 +92,12 @@ BookingNewest.propTypes = {
 
 function BookingItem( { item } )
 {
-       const { avatarUrl, name, duration, bookedAt, guests, coverUrl, price, isHot } = item;
+
+       const { avatarUrl, name, createdAt, guests, coverUrl, price, isHot } = item;
+
+
+       dayjs.extend( relativeTime );
+       dayjs.locale( 'fr' );
 
        return (
               <Paper
@@ -108,7 +124,7 @@ function BookingItem( { item } )
                                    <Avatar alt={ name } src={ avatarUrl } />
                                    <ListItemText
                                           primary={ name }
-                                          secondary={ fDateTime( bookedAt ) }
+                                          secondary={ fDateTime( createdAt ) }
                                           secondaryTypographyProps={ {
                                                  mt: 0.5,
                                                  component: 'span',
@@ -124,21 +140,50 @@ function BookingItem( { item } )
                                    flexWrap="wrap"
                                    direction="row"
                                    alignItems="center"
+                                   justifyContent="space-between"
                                    sx={ { color: 'text.secondary', typography: 'caption' } }
                             >
-                                   <Stack direction="row" alignItems="center">
-                                          <Iconify width={ 16 } icon="solar:calendar-date-bold" sx={ { mr: 0.5, flexShrink: 0 } } />
-                                          { duration }
+                                   <Stack direction="row" alignItems="center" justifyContent="space-between" width={ 1 }>
+                                          <Box alignItems="center" display="flex">
+                                                 <Iconify width={ 16 } icon="solar:calendar-date-bold" sx={ { mr: 0.5, flexShrink: 0 } } />
+                                                 { dayjs( createdAt ).fromNow() }
+                                          </Box>
+
+
+                                          <Typography variant='button' >
+                                                 bafoussam
+                                          </Typography>
                                    </Stack>
 
-                                   <Stack direction="row" alignItems="center">
-                                          <Iconify
-                                                 width={ 16 }
-                                                 icon="solar:users-group-rounded-bold"
-                                                 sx={ { mr: 0.5, flexShrink: 0 } }
-                                          />
-                                          { guests } Guests
+                                   <Stack
+
+                                          flexGrow={ 1 }
+                                          direction="row"
+                                          flexWrap="nowrap"
+                                          justifyContent="space-between"
+                                          sx={ {
+                                                 typography: 'caption',
+                                                 color: 'text.disabled',
+                                          } }
+                                   >
+                                          <Stack direction="row" alignItems="center" >
+                                                 <Iconify icon="eva:message-circle-fill" width={ 16 } />
+                                                 { fShortenNumber( item.totalComments ) }
+                                          </Stack>
+
+                                          <Stack direction="row" alignItems="center" sx={ { mr: 1, ml: 1 } }>
+                                                 <Iconify icon="solar:eye-bold" width={ 16 } />
+                                                 { fShortenNumber( item.totalViews ) }
+                                          </Stack>
+
+                                          <Stack direction="row" alignItems="center" >
+                                                 <Iconify icon="mdi:star-rate" width={ 16 } />
+                                                 {/* <Iconify icon="solar:share-bold" width={ 16 } sx={ { mr: 0.5 } } /> */ }
+                                                 { fShortenNumber( item.totalShares ) }
+                                          </Stack>
                                    </Stack>
+
+
                             </Stack>
                      </Stack>
 

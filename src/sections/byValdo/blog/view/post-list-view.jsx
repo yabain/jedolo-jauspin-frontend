@@ -1,11 +1,18 @@
 import orderBy from 'lodash/orderBy';
 import { useState, useCallback, useEffect, useMemo } from 'react';
 
+
+import { useDispatch, useSelector } from 'react-redux';
+import { io } from 'socket.io-client';
+import { request, resetAfterRequest } from 'src/store/annonces/getUsersAnnonces/reducer';
+import { resetData, setData, addData } from 'src/store/annonces/data/users';
+
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
+import { deleteObjectFromTabObjetc, updateObjectFromTabObjetc } from 'src/1functions/annonces';
 
 import { paths } from 'src/routes/paths';
 import { useBoolean } from 'src/hooks/use-boolean';
@@ -26,7 +33,6 @@ import PostSearch from '../post-search';
 import PostListHorizontal from '../post-list-horizontal';
 import PostList from '../post-list';
 import TourFilters from '../tour-filters';
-
 // ----------------------------------------------------------------------
 
 
@@ -41,7 +47,11 @@ export default function PostListView()
 {
 
 
+
+       const SOCKET_SERVER_URL = "http://localhost:5000"; // L'URL de ton serveur backend
+
        const openFilters = useBoolean();
+       const dispatch = useDispatch()
 
        const settings = useSettingsContext();
 
@@ -55,6 +65,11 @@ export default function PostListView()
        const debouncedQuery = useDebounce( searchQuery );
 
        const { postsLoading } = useGetPosts();
+
+
+       const annonceFromStore = useSelector( ( state ) => state.usersAnnonces.data )
+       const usersAnnonces = useSelector( state => state.getUsersAnnonces.data )
+       const { isPending, isFulled } = useSelector( state => state.getUsersAnnonces )
 
        const posts = useMemo( () =>
        (
@@ -988,7 +1003,7 @@ export default function PostListView()
        {
               if ( posts )
               {
-                     setFilteredPosts( posts );
+                     // setFilteredPosts( posts );
               }
        }, [ posts ] ); // Dépendance : déclenche l'effet chaque fois que `board` change
 
@@ -1022,19 +1037,19 @@ export default function PostListView()
                      {
                             // Si "all" est spécifié ou si le tableau est vide, afficher tous les posts
 
-                            setFilteredPosts( posts );
+                            setFilteredPosts( annonceFromStore );
 
                      } else
                      {
                             // Filtrer les posts si la propriété correspond à l'une des valeurs du tableau
-                            const result = posts.filter( ( item ) => Array.isArray( value ) && value.includes( item[ type ] ) );
+                            const result = annonceFromStore.filter( ( item ) => Array.isArray( value ) && value.includes( item[ type ] ) );
                             setFilteredPosts( result );
                             // console.log( 'Valeur filtrée', result );
                      }
 
                      // console.log( 'Valeur des posts', type, value );
               },
-              [ posts ] // Dépend uniquement de `posts`
+              [ annonceFromStore ] // Dépend uniquement de `posts`
        );
 
 
@@ -1098,6 +1113,152 @@ export default function PostListView()
                      } )
               );
        };
+
+
+
+
+
+
+
+
+
+
+       useEffect( () => () =>
+       {
+
+              dispatch( resetData() )
+              dispatch( resetAfterRequest() )
+
+       }, [ dispatch ] );
+
+
+
+
+
+
+
+
+
+
+       useEffect( () =>
+       {
+
+              if ( !isPending && !isFulled )
+              {
+
+                     dispatch( request() )
+                     // console.log( 'fonction ccccccccccccccccccccccccccccccccccccccc ' );
+
+
+
+              }
+
+       }, [ dispatch, isFulled, isPending ] );
+
+
+
+
+
+
+
+
+
+       useEffect( () =>
+       {
+
+              if ( !isPending && isFulled && annonceFromStore.length === 0 )
+              {
+
+
+                     dispatch( setData( usersAnnonces ) )
+                     // console.log(  usersAnnonces );
+
+              }
+
+
+       }, [ isFulled, isPending, dispatch, usersAnnonces, annonceFromStore ] );
+
+
+
+
+
+
+
+
+
+       useEffect( () =>
+       {
+              setFilteredPosts( annonceFromStore );
+
+       }, [ annonceFromStore ] );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       // Établir la connexion WebSocket
+       useEffect( () =>
+       {
+              const socket = io( SOCKET_SERVER_URL );
+
+              // Écouter l'événement 'new-annonce' pour mettre à jour les annonces en temps réel
+              socket.on( 'new-annonce', ( newAnnonce ) =>
+              {
+                     dispatch( addData( newAnnonce ) )
+                     console.log( 'nouvelle annonce detecter', newAnnonce );
+
+              } );
+
+              // Nettoyer la connexion au déchargement du composant
+              return () =>
+              {
+                     socket.disconnect();
+              };
+       }, [ dispatch ] );
+
+
+
+
+
+
+
+
+
+
+       useEffect( () =>
+       {
+              const socket = io( "http://localhost:5000" );
+              socket.on( 'banned-annonce', ( bannedAnnonce ) =>
+              {
+
+                     dispatch( setData( deleteObjectFromTabObjetc( annonceFromStore, bannedAnnonce ) ) )
+                     console.log( 'nouvelle annonce bannie detecter', bannedAnnonce );
+
+              } );
+
+
+              socket.on( 'update-annonce', ( updateAnnonce ) =>
+              {
+
+                     dispatch( setData( updateObjectFromTabObjetc( annonceFromStore, updateAnnonce ) ) )
+                     console.log( 'nouvelle annonce bannie detecter', updateAnnonce );
+
+              } );
+
+              return () => { socket.disconnect(); };
+
+       }, [ dispatch, annonceFromStore ] );
 
 
 
@@ -1190,6 +1351,7 @@ export default function PostListView()
                                    ajouter post
                             </Button>
                             <Tabs
+
                                    value={ selectedTab }
                                    onChange={ handleFilterPublish }
                                    sx={ {

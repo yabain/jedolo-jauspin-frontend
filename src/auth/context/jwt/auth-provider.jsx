@@ -64,21 +64,29 @@ export function AuthProvider( { children } )
        {
               try
               {
-                     const accessToken = sessionStorage.getItem( STORAGE_KEY );
+                     // const accessToken = sessionStorage.getItem( STORAGE_KEY );
+
+                     const accessToken = localStorage.getItem( STORAGE_KEY );
+                     const storedUser = JSON.parse( localStorage.getItem( 'user' ) );
+
 
                      if ( accessToken && isValidToken( accessToken ) )
                      {
                             setSession( accessToken );
 
-                            const response = await axios.get( endpoints.auth.me );
+                            // const response = await axios.get( endpoints.auth.me );
 
-                            const { user } = response.data;
+                            // const { user } = response.data;
+
+
+
+                            // console.log( 'initiallisation du useer depuis authcontext' );
 
                             dispatch( {
                                    type: 'INITIAL',
                                    payload: {
                                           user: {
-                                                 ...user,
+                                                 ...storedUser,
                                                  accessToken,
                                           },
                                    },
@@ -110,7 +118,7 @@ export function AuthProvider( { children } )
        }, [ initialize ] );
 
        // LOGIN
-       const login = useCallback( async ( email, password ) =>
+       const login = useCallback( async ( email, password, updateUser ) =>
        {
               const data = {
                      email,
@@ -124,11 +132,14 @@ export function AuthProvider( { children } )
               console.log( 'data recu', response.data );
               setSession( accessToken );
 
+              localStorage.setItem( 'user', JSON.stringify( updateUser ) );
+
+
               dispatch( {
                      type: 'LOGIN',
                      payload: {
                             user: {
-                                   ...user,
+                                   ...updateUser,
                                    accessToken,
                             },
                      },
@@ -149,7 +160,9 @@ export function AuthProvider( { children } )
 
               const { accessToken, user } = response.data;
 
-              sessionStorage.setItem( STORAGE_KEY, accessToken );
+              // sessionStorage.setItem( STORAGE_KEY, accessToken );
+
+              localStorage.setItem( STORAGE_KEY, accessToken );
 
               dispatch( {
                      type: 'REGISTER',

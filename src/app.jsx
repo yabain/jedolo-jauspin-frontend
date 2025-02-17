@@ -22,8 +22,13 @@ import { SettingsDrawer, SettingsProvider } from 'src/components/settings';
 import { CheckoutProvider } from 'src/sections/byTemplate/checkout/context';
 
 import { AuthProvider } from 'src/auth/context/jwt';
-import { Provider } from 'react-redux';
+import { Provider, useDispatch } from 'react-redux';
+import { io } from 'socket.io-client';
+import { useEffect } from 'react';
+import moment from 'moment';
+import 'moment/locale/fr';
 import store from './store';
+import { addAdminData } from './store/annonces/data/dataReducer';
 // import { AuthProvider } from 'src/auth/context/auth0';
 // import { AuthProvider } from 'src/auth/context/amplify';
 // import { AuthProvider } from 'src/auth/context/firebase';
@@ -31,8 +36,11 @@ import store from './store';
 
 // ----------------------------------------------------------------------
 
+
 export default function App()
 {
+
+
        const charAt = `
 
   ░░░    ░░░
@@ -46,6 +54,7 @@ export default function App()
        console.info( `%c${ charAt }`, 'color: #5BE49B' );
 
        useScrollToTop();
+
 
        return (
               <AuthProvider>

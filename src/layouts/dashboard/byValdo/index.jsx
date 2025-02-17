@@ -35,7 +35,7 @@ export default function DashboardLayout( { children, show } )
        const renderNavVertical = !show ? null : ( <NavVertical openNav={ nav.value } onCloseNav={ nav.onFalse } /> );
 
 
-       console.log( 'valeur du show', show );
+       // console.log( 'valeur du show', show );
 
 
        if ( isHorizontal && show )

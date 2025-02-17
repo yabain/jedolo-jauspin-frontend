@@ -24,8 +24,10 @@ export const getSlice = createSlice( {
               resetAfterGetListRequete: ( state ) =>
               {
 
+                     state.data = [];
                      state.isGeting = false;
                      state.isGetingSuccess = false;
+                     console.log( "Les données ont été réinitialisées ." );
 
               },
        },
@@ -46,7 +48,8 @@ export const getSlice = createSlice( {
                             state.isGetingSuccess = true;
                             console.log( 'Données chargées avec succès dans Redux:', action.payload.data );
 
-                            // Supposons que `action.payload.data.data.data` est ce que tu veux réellement stocker
+                            // Supposons q
+                            // ue `action.payload.data.data.data` est ce que tu veux réellement stocker
                             state.data = [ ...action.payload.data ];
                      } )
 

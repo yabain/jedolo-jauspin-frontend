@@ -41,17 +41,17 @@ export const route = [
        {
               path: 'home',
               element: (
-                     // <AuthGuard>
-                     <Suspense fallback={ <SplashScreen /> }>
-                            <DashboardLayout show={ false }>
-                                   <Suspense fallback={ <SplashScreen /> }>
-                                          <Suspense fallback={ <LoadingScreen /> }>
-                                                 <Outlet />
+                     <AuthGuard>
+                            <Suspense fallback={ <SplashScreen /> }>
+                                   <DashboardLayout show={ false }>
+                                          <Suspense fallback={ <SplashScreen /> }>
+                                                 <Suspense fallback={ <LoadingScreen /> }>
+                                                        <Outlet />
+                                                 </Suspense>
                                           </Suspense>
-                                   </Suspense>
-                            </DashboardLayout>
-                     </Suspense>
-                     // </AuthGuard>
+                                   </DashboardLayout>
+                            </Suspense>
+                     </AuthGuard>
               ),
               children: [
                      { element: <IndexPage />, index: true },
@@ -63,7 +63,7 @@ export const route = [
                             children: [
                                    { element: <ProductListPage />, index: true },
                                    { path: 'list', element: <ProductListPage /> },
-                                   { path: ':id', element: <ProductDetailsPage /> },
+                                   { path: 'view', element: <ProductDetailsPage /> },
                                    { path: 'new', element: <ProductCreatePage /> },
                                    { path: ':id/edit', element: <ProductEditPage /> },
                                    { path: 'categorie', element: <OrderListPage /> },

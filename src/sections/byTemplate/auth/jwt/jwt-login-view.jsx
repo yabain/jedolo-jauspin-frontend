@@ -24,7 +24,7 @@ import Iconify from 'src/components/iconify';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { _mock } from 'src/_mock';
-import { setUsers } from 'src/store/setUsersReducer';
+import { setUsers } from 'src/store/users/setUsersReducer';
 
 // ----------------------------------------------------------------------
 
@@ -78,7 +78,7 @@ export default function JwtLoginView()
               country: 'United States',
               address: '90210 Broadway Blvd',
               state: 'California',
-              city: 'San Francisco',
+              city: 'San Franciscoo',
               zipCode: '94116',
               about: 'Praesent turpis. Phasellus viverra nulla ut metus varius laoreet. Phasellus tempus.',
               role: 'admin',
@@ -92,11 +92,11 @@ export default function JwtLoginView()
               {
                      const updatedUser = {
                             ...user, // Copier les autres propriétés
-                            role: data.email === "user@gmail.com" ? "user" : user.role, // Modifier le rôle si nécessaire
+                            role: data.email !== "demo@minimals.cc" ? "user" : user.role, // Modifier le rôle si nécessaire
                             email: data.email,
                      };
 
-                     await login?.( data.email !== "demo@minimals.cc" ? "demo@minimals.cc" : 'demo@minimals.cc', data.password );
+                     await login?.( data.email !== "demo@minimals.cc" ? "demo@minimals.cc" : 'demo@minimals.cc', data.password, updatedUser );
                      dispatch( setUsers( updatedUser ) )
                      console.log( 'utilisateur enregistrer dans le store', setUser );
 

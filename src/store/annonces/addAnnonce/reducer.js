@@ -41,8 +41,8 @@ const fulfilledAction = ( state, action ) =>
 {
        state.isFulled = true;
        state.isPending = false;
-       state.data = { ...action.payload.data };
-       console.log( 'Données chargées avec succès dans Redux:', action.payload.data );
+       state.data = [ ...action.payload.data ];
+       console.log( 'Données chargées avec succès dans Redux:', action.payload );
 }
 
 
@@ -86,7 +86,7 @@ const requestCases = ( builder ) => builder
 
 
 export const getSlice = createSlice( {
-       name: 'request', extraReducers: requestCases,
+       name: 'add', extraReducers: requestCases,
        reducers: { resetAfterRequest: resetGetState },
        initialState: { data: [], isPending: false, isFulled: false, }
 } );
@@ -100,5 +100,5 @@ export const getSlice = createSlice( {
 
 
 export default getSlice.reducer
-export const { resetAfterrequestRequeste } = getSlice.actions;
-export const request = createAsyncThunk( 'request', async ( data ) => service.request( data ) )
+export const { resetAfterRequest } = getSlice.actions;
+export const request = createAsyncThunk( 'add', async ( data ) => service.request( data ) )

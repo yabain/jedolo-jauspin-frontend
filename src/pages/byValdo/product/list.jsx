@@ -1,18 +1,162 @@
+import { Button, Tab, Tabs } from '@mui/material';
+import { Box, Container, Stack } from '@mui/system';
+import { useCallback, useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router';
+import { io } from 'socket.io-client';
+import { useAuthContext } from 'src/auth/hooks';
+import Iconify from 'src/components/iconify';
+import { useSettingsContext } from 'src/components/settings';
 import { ProductListView } from 'src/sections/byValdo/product/view';
+
+import ProductListViewUser from 'src/sections/byValdo/product/view/product-list-view-user';
+import ProductListViewUsers from 'src/sections/byValdo/product/view/product-list-view-users';
+import { addAdminData } from 'src/store/annonces/data/dataReducer';
 
 // ----------------------------------------------------------------------
 
+const TABS = [
+       {
+              value: 'one',
+              icon: <Iconify icon="solar:phone-bold" width={ 24 } />,
+              label: 'Mes Annonces',
+       },
+       {
+              value: 'two',
+              icon: <Iconify icon="solar:heart-bold" width={ 24 } />,
+              label: 'Annonces Utilisateurs',
+       },
+       {
+              value: 'three',
+              icon: <Iconify icon="eva:headphones-fill" width={ 24 } />,
+              label: 'Item Three',
+              disabled: true,
+       },
+       {
+              value: 'four',
+              icon: <Iconify icon="eva:headphones-fill" width={ 24 } />,
+              label: 'Item Four',
+       },
+       {
+              value: 'five',
+              icon: <Iconify icon="eva:headphones-fill" width={ 24 } />,
+              label: 'Item Five',
+              disabled: true,
+       },
+       {
+              value: 'six',
+              icon: <Iconify icon="eva:headphones-fill" width={ 24 } />,
+              label: 'Item Six',
+       },
+       {
+              value: 'seven',
+              icon: <Iconify icon="eva:headphones-fill" width={ 24 } />,
+              label: 'Item Seven',
+       },
+];
+
+
+
+
 export default function ProductListPage()
 {
+
+       const SOCKET_SERVER_URL = "http://localhost:5000"; // L'URL de ton serveur backend
+       const naviguate = useNavigate()
+
+       const dispatch = useDispatch()
+       const [ currentTab, setCurrentTab ] = useState( 'one' );
+
+
+       const settings = useSettingsContext();
+       const [ scrollableTab, setScrollableTab ] = useState( 'one' );
+
+
+       const { user } = useAuthContext();
+
+       const handleChangeTab = useCallback( ( event, newValue ) =>
+       {
+              setCurrentTab( newValue );
+       }, [] );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       useEffect( () =>
+       {
+              const socket = io( SOCKET_SERVER_URL );
+              socket.on( 'new-annonce', ( newAnnonce ) =>
+              {
+
+                     dispatch( addAdminData( newAnnonce ) )
+                     console.log( 'nouvelle annonce detecter', newAnnonce );
+
+              } ); return () => { socket.disconnect(); };
+
+       }, [ dispatch ] );
+
        return (
               <>
                      <Helmet>
-                            <title> Dashboard: Product List</title>
+                            <title> Annonces</title>
                      </Helmet>
 
-                     <ProductListView />
+                     { user !== null && user.role === "admin" && ( <Container maxWidth='xl' sx={ {
+                            flexGrow: 1,
+                            display: 'flex',
+                            flexDirection: 'column',
+                     } }>
+
+                            <Box display="flex" justifyContent="space-between" alignItems="center">
+
+                                   <Tabs value={ currentTab } onChange={ handleChangeTab }>
+                                          { TABS.slice( 0, 2 ).map( ( tab ) => (
+                                                 <Tab key={ tab.value } value={ tab.value } label={ tab.label } />
+                                          ) ) }
+                                   </Tabs>
+
+                                   <Button
+                                          // component={ RouterLink }
+                                          // href={ paths.dashboard.product.new }
+                                          onClick={ () => naviguate( '/home/annonces/new' ) }
+
+                                          variant="contained"
+                                          startIcon={ <Iconify icon="mingcute:add-line" /> }
+                                   >
+                                          New Product
+                                   </Button>
+                            </Box>
+
+                            { currentTab === "one" && (
+
+                                   <  ProductListViewUser />
+
+                            ) }
+
+
+                            { currentTab === "two" && (
+
+                                   <  ProductListViewUsers />
+                            ) }
+
+                     </Container>
+                     ) }
+
+                     { user !== null && ( user.role === "user" || user === undefined || user === null ) && <ProductListView /> }
               </>
        );
 }

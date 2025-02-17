@@ -19,6 +19,10 @@ const ROOTS = {
 // ----------------------------------------------------------------------
 
 export const paths = {
+       // valdo route
+       home: '/home',
+
+       // template route
        comingSoon: '/coming-soon',
        maintenance: '/maintenance',
        pricing: '/pricing',
@@ -98,6 +102,8 @@ export const paths = {
                      verify: `${ ROOTS.AUTH_DEMO }/modern/verify`,
               },
        },
+
+
        // DASHBOARD
        dashboard: {
               root: ROOTS.DASHBOARD,

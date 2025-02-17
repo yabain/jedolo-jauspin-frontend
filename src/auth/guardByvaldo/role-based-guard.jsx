@@ -10,21 +10,22 @@ import { ForbiddenIllustration } from 'src/assets/illustrations';
 
 import { varBounce, MotionContainer } from 'src/components/animate';
 import { useSelector } from 'react-redux';
+import { useAuthContext } from '../hooks';
 
 // ----------------------------------------------------------------------
 
 export default function RoleBasedGuard( { hasContent, roles, children, sx } )
 {
 
-       const setUser = useSelector( ( state ) => state.setUsers.selectedUser ); // Assure-toi que `selectedUser` est bien défini dans le store
+       const { user } = useAuthContext();
 
-       // console.log( 'setUser', setUser );
+       // console.log( 'user', user );
 
        // Logic here to get current user role
-       const { user } = useMockedUser();
+       // const { user } = useMockedUser();
 
        // const currentRole = 'user';
-       const currentRole = setUser?.role; // admin;
+       const currentRole = user?.role; // admin;
 
        if ( roles.length === 0 && currentRole === '' ) 
        {

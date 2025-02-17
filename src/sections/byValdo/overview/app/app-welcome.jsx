@@ -71,8 +71,8 @@ export default function AppWelcome( { title, description, action, img, ...other 
                                    publishOptions={ PUBLISH_OPTIONS }
                             />
 
-                            <Grid container  >
-                                   <Grid xs={ 2 } md={ 2 }>
+                            {/* <Grid container  >
+                                   <Grid item xs={ 2 } md={ 2 }>
 
                                           <FormGroup>
                                                  <FormControlLabel
@@ -85,7 +85,7 @@ export default function AppWelcome( { title, description, action, img, ...other 
 
                                           </FormGroup>
                                    </Grid>
-                                   <Grid xs={ 2 } md={ 2 }>
+                                   <Grid item xs={ 2 } md={ 2 }>
 
                                           <FormGroup>
                                                  <FormControlLabel
@@ -98,7 +98,7 @@ export default function AppWelcome( { title, description, action, img, ...other 
 
                                           </FormGroup>
                                    </Grid>
-                                   <Grid xs={ 2 } md={ 2 }>
+                                   <Grid item xs={ 2 } md={ 2 }>
 
                                           <FormGroup>
                                                  <FormControlLabel
@@ -111,7 +111,7 @@ export default function AppWelcome( { title, description, action, img, ...other 
 
                                           </FormGroup>
                                    </Grid>
-                                   <Grid xs={ 2 } md={ 2 }>
+                                   <Grid item xs={ 2 } md={ 2 }>
 
                                           <FormGroup>
                                                  <FormControlLabel
@@ -125,7 +125,7 @@ export default function AppWelcome( { title, description, action, img, ...other 
                                           </FormGroup>
                                    </Grid>
 
-                            </Grid>
+                            </Grid> */}
 
 
                             {/* <Typography

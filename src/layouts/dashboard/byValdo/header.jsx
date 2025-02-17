@@ -18,6 +18,7 @@ import { useResponsive } from 'src/hooks/use-responsive';
 import Label from 'src/components/label';
 
 import { bgBlur } from 'src/theme/css';
+import { useAuthContext } from 'src/auth/hooks';
 
 import Logo from 'src/components/logo';
 import SvgColor from 'src/components/svg-color';
@@ -37,10 +38,11 @@ import NotificationsPopover from '../../common/notifications-popover';
 export default function Header( { onOpenNav } )
 {
 
+       const { user } = useAuthContext();
 
-       const setUser = useSelector( ( state ) => state.setUsers.selectedUser );
+       // const user = useSelector( ( state ) => state.users.selectedUser );
 
-       console.log( 'role du user depuis le header', setUser?.role );
+       // console.log( 'role du user from header', user );
 
        const theme = useTheme();
        const location = useLocation();
@@ -214,7 +216,7 @@ export default function Header( { onOpenNav } )
                                           </Button>
                                    </RoleBasedGuard>
 
-                                   { setUser?.role !== undefined ? (
+                                   { user?.role !== undefined ? (
                                           <RoleBasedGuard hasContent roles={ [ 'user' ] }>
                                                  <Button
                                                         onClick={ () =>

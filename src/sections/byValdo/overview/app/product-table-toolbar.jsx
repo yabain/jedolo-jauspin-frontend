@@ -70,7 +70,7 @@ export default function ProductTableToolbar( {
                      >
 
                             <Grid container  >
-                                   <Grid xs={ 3 } md={ 3 }>
+                                   <Grid item xs={ 3 } md={ 3 }>
 
                                           <Autocomplete
                                                  sx={ {
@@ -111,7 +111,7 @@ export default function ProductTableToolbar( {
                                                  ) }
                                           />
                                    </Grid>
-                                   <Grid xs={ 3 } md={ 3 }>
+                                   <Grid item xs={ 3 } md={ 3 }>
 
                                           <Autocomplete
                                                  sx={ {
@@ -154,7 +154,7 @@ export default function ProductTableToolbar( {
                                           />
                                    </Grid>
 
-                                   <Grid xs={ 3 } md={ 3 }>
+                                   <Grid item xs={ 3 } md={ 3 }>
 
                                           <TextField
 
@@ -176,7 +176,7 @@ export default function ProductTableToolbar( {
                                           />
 
                                    </Grid>
-                                   <Grid xs={ 3 } md={ 3 }
+                                   <Grid item xs={ 3 } md={ 3 }
 
 
                                           sx={ {
@@ -204,7 +204,7 @@ export default function ProductTableToolbar( {
                                                  Rechercher
                                           </Button>
                                    </Grid>
-                            </Grid>
+                            </Grid >
 
 
 

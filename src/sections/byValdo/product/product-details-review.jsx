@@ -20,118 +20,121 @@ import ProductReviewNewForm from './product-review-new-form';
 
 // ----------------------------------------------------------------------
 
-export default function ProductDetailsReview({ totalRatings, totalReviews, ratings, reviews }) {
-  const review = useBoolean();
+export default function ProductDetailsReview( { totalRatings, totalReviews, ratings, reviews } )
+{
+       const review = useBoolean();
+       // console.log( totalReviews );
 
-  const total = sumBy(ratings, (star) => star.starCount);
 
-  const renderSummary = (
-    <Stack spacing={1} alignItems="center" justifyContent="center">
-      <Typography variant="subtitle2">Average rating</Typography>
+       const total = sumBy( ratings, ( star ) => star.starCount );
 
-      <Typography variant="h2">{totalRatings}/5</Typography>
+       const renderSummary = (
+              <Stack spacing={ 1 } alignItems="center" justifyContent="center">
+                     <Typography variant="subtitle2">Average rating</Typography>
 
-      <Rating readOnly value={totalRatings} precision={0.1} />
+                     <Typography variant="h2">{ totalRatings }/5</Typography>
 
-      <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-        ({fShortenNumber(totalReviews)} reviews)
-      </Typography>
-    </Stack>
-  );
+                     <Rating readOnly value={ totalRatings } precision={ 0.1 } />
 
-  const renderProgress = (
-    <Stack
-      spacing={1.5}
-      sx={{
-        py: 5,
-        px: { xs: 3, md: 5 },
-        borderLeft: (theme) => ({
-          md: `dashed 1px ${theme.palette.divider}`,
-        }),
-        borderRight: (theme) => ({
-          md: `dashed 1px ${theme.palette.divider}`,
-        }),
-      }}
-    >
-      {ratings
-        .slice(0)
-        .reverse()
-        .map((rating) => (
-          <Stack key={rating.name} direction="row" alignItems="center">
-            <Typography variant="subtitle2" component="span" sx={{ width: 42 }}>
-              {rating.name}
-            </Typography>
+                     <Typography variant="caption" sx={ { color: 'text.secondary' } }>
+                            ({ fShortenNumber( totalReviews ) } reviews)
+                     </Typography>
+              </Stack>
+       );
 
-            <LinearProgress
-              color="inherit"
-              variant="determinate"
-              value={(rating.starCount / total) * 100}
-              sx={{
-                mx: 2,
-                flexGrow: 1,
-              }}
-            />
+       const renderProgress = (
+              <Stack
+                     spacing={ 1.5 }
+                     sx={ {
+                            py: 5,
+                            px: { xs: 3, md: 5 },
+                            borderLeft: ( theme ) => ( {
+                                   md: `dashed 1px ${ theme.palette.divider }`,
+                            } ),
+                            borderRight: ( theme ) => ( {
+                                   md: `dashed 1px ${ theme.palette.divider }`,
+                            } ),
+                     } }
+              >
+                     { ratings
+                            .slice( 0 )
+                            .reverse()
+                            .map( ( rating ) => (
+                                   <Stack key={ rating.name } direction="row" alignItems="center">
+                                          <Typography variant="subtitle2" component="span" sx={ { width: 42 } }>
+                                                 { rating.name }
+                                          </Typography>
 
-            <Typography
-              variant="body2"
-              component="span"
-              sx={{
-                minWidth: 48,
-                color: 'text.secondary',
-              }}
-            >
-              {fShortenNumber(rating.reviewCount)}
-            </Typography>
-          </Stack>
-        ))}
-    </Stack>
-  );
+                                          <LinearProgress
+                                                 color="inherit"
+                                                 variant="determinate"
+                                                 value={ ( rating.starCount / total ) * 100 }
+                                                 sx={ {
+                                                        mx: 2,
+                                                        flexGrow: 1,
+                                                 } }
+                                          />
 
-  const renderReviewButton = (
-    <Stack alignItems="center" justifyContent="center">
-      <Button
-        size="large"
-        variant="soft"
-        color="inherit"
-        onClick={review.onTrue}
-        startIcon={<Iconify icon="solar:pen-bold" />}
-      >
-        Write your review
-      </Button>
-    </Stack>
-  );
+                                          <Typography
+                                                 variant="body2"
+                                                 component="span"
+                                                 sx={ {
+                                                        minWidth: 48,
+                                                        color: 'text.secondary',
+                                                 } }
+                                          >
+                                                 { fShortenNumber( rating.reviewCount ) }
+                                          </Typography>
+                                   </Stack>
+                            ) ) }
+              </Stack>
+       );
 
-  return (
-    <>
-      <Box
-        display="grid"
-        gridTemplateColumns={{
-          xs: 'repeat(1, 1fr)',
-          md: 'repeat(3, 1fr)',
-        }}
-        sx={{
-          py: { xs: 5, md: 0 },
-        }}
-      >
-        {renderSummary}
+       const renderReviewButton = (
+              <Stack alignItems="center" justifyContent="center">
+                     <Button
+                            size="large"
+                            variant="soft"
+                            color="inherit"
+                            onClick={ review.onTrue }
+                            startIcon={ <Iconify icon="solar:pen-bold" /> }
+                     >
+                            Write your review
+                     </Button>
+              </Stack>
+       );
 
-        {renderProgress}
+       return (
+              <>
+                     <Box
+                            display="grid"
+                            gridTemplateColumns={ {
+                                   xs: 'repeat(1, 1fr)',
+                                   md: 'repeat(3, 1fr)',
+                            } }
+                            sx={ {
+                                   py: { xs: 5, md: 0 },
+                            } }
+                     >
+                            { renderSummary }
 
-        {renderReviewButton}
-      </Box>
+                            { renderProgress }
 
-      <Divider sx={{ borderStyle: 'dashed' }} />
+                            { renderReviewButton }
+                     </Box>
 
-      <ProductReviewList reviews={reviews} />
+                     <Divider sx={ { borderStyle: 'dashed' } } />
 
-      <ProductReviewNewForm open={review.value} onClose={review.onFalse} />
-    </>
-  );
+                     <ProductReviewList reviews={ reviews } />
+
+                     <ProductReviewNewForm open={ review.value } onClose={ review.onFalse } />
+              </>
+       );
 }
 
 ProductDetailsReview.propTypes = {
-  ratings: PropTypes.array,
-  reviews: PropTypes.array,
-  totalRatings: PropTypes.number,
-  totalReviews: PropTypes.number,
+       ratings: PropTypes.array,
+       reviews: PropTypes.array,
+       totalRatings: PropTypes.number,
+       totalReviews: PropTypes.number,
 };

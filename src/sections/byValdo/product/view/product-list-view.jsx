@@ -4,13 +4,20 @@ import { setValeurRef } from 'src/1data/annonces/ref';
 
 
 import { useDispatch, useSelector } from 'react-redux';
+import { useAuthContext } from 'src/auth/hooks';
 import { useNavigate } from 'react-router';
 
-import { setData } from 'src/store/annonces/annoncesReducer';
-import { getList } from 'src/store/annonces/getReducer';
+
+import PropTypes from 'prop-types';
+import { io } from 'socket.io-client';
+
+import { resetData, setData } from 'src/store/annonces/data/dataReducer';
+import { getList, resetAfterGetListRequete } from 'src/store/annonces/getUserAnnonces/getReducer';
+import { request, resetAfterRequest } from 'src/store/annonces/getUsersAnnonces/reducer';
 import isEqual from 'lodash/isEqual';
 import { useState, useEffect, useCallback } from 'react';
 
+import { Box } from '@mui/system';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
@@ -42,6 +49,8 @@ import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
+
+import { dataObject } from 'src/1data/annonces/defaut';
 import ProductTableToolbar from '../product-table-toolbar';
 import ProductTableFiltersResult from '../product-table-filters-result';
 import
@@ -72,8 +81,10 @@ const HIDE_COLUMNS_TOGGLABLE = [ 'category', 'actions' ];
 
 // ----------------------------------------------------------------------
 
-export default function ProductListView()
+export default function ProductListView( { toShow } )
 {
+
+
        const { enqueueSnackbar } = useSnackbar();
        const dispatch = useDispatch()
 
@@ -96,10 +107,14 @@ export default function ProductListView()
        const [ columnVisibilityModel, setColumnVisibilityModel ] = useState( HIDE_COLUMNS );
 
 
-       const user = useSelector( ( state ) => state.setUsers.selectedUser );
+       const { user } = useAuthContext();
        const annonceList = useSelector( ( state ) => state.getAnnonces.data );
-       const { isGeting, isGetingSuccess } = useSelector( ( state ) => state.getAnnonces );
        const annonceFromStore = useSelector( ( state ) => state.annonces.data );
+
+
+       const usersAnnonceList = useSelector( ( state ) => state.getUsersAnnonces.data );
+       const { isFulled, isPending } = useSelector( ( state ) => state.getUsersAnnonces );
+       const { isGeting, isGetingSuccess } = useSelector( ( state ) => state.getAnnonces );
 
        useEffect( () =>
        {
@@ -116,18 +131,45 @@ export default function ProductListView()
 
 
 
+
+       useEffect( () => () =>
+       {
+
+              dispatch( resetData() )
+              dispatch( resetAfterRequest() )
+              dispatch( resetAfterGetListRequete() );
+
+       }, [ dispatch ] );
+
+
+
+
+
+
+
+
+
+
        useEffect( () =>
        {
 
-              if ( annonceList.length === 0 )
+              if ( !isGeting && !isGetingSuccess )
               {
 
-                     dispatch( getList( "user@gmail.com" ) )
-                     console.log( 'recuperation des annonces' );
+                     if ( user === null || user === undefined ) 
+                     {
+
+
+                            return
+                     }
+
+
+                     dispatch( getList( user.email ) )
+
 
               }
 
-       }, [ dispatch, annonceList.length ] );
+       }, [ dispatch, annonceList, user, isGetingSuccess, isGeting, toShow ] );
 
 
 
@@ -140,18 +182,31 @@ export default function ProductListView()
        useEffect( () =>
        {
 
-              if ( !isGeting && isGetingSuccess )
+              if ( !isGeting && isGetingSuccess && annonceFromStore.length === 0 )
               {
 
 
-                     setTableData( annonceList );
-                     console.log( 'annonces recupere', annonceList );
+                     dispatch( setData( annonceList ) )
+
 
               }
 
 
-       }, [ isGetingSuccess, isGeting, annonceList ] );
+       }, [ isGetingSuccess, isGeting, annonceList, dispatch, annonceFromStore ] );
 
+
+
+
+
+
+
+
+
+       useEffect( () =>
+       {
+              setTableData( annonceFromStore );
+
+       }, [ annonceFromStore ] );
 
 
 
@@ -169,6 +224,7 @@ export default function ProductListView()
               }
 
        }, [ dataIsSet, dispatch, annonceFromStore ] );
+
 
 
 
@@ -320,16 +376,16 @@ export default function ProductListView()
 
        return (
               <>
-                     <Container
+                     <Box
                             // maxWidth={ settings.themeStretch ? false : 'lg' }
-                            maxWidth='xl'
+                            // maxWidth='xl'
                             sx={ {
                                    flexGrow: 1,
                                    display: 'flex',
                                    flexDirection: 'column',
                             } }
                      >
-                            <CustomBreadcrumbs
+                            { user.role === "user" && ( <CustomBreadcrumbs
                                    heading="Liste Des Annonces"
                                    links={ [
                                           {
@@ -355,7 +411,7 @@ export default function ProductListView()
                                                  md: 5,
                                           },
                                    } }
-                            />
+                            /> ) }
 
                             <Card
                                    sx={ {
@@ -442,7 +498,7 @@ export default function ProductListView()
                                           } }
                                    />
                             </Card>
-                     </Container>
+                     </Box>
 
                      <ConfirmDialog
                             open={ confirmRows.value }
@@ -489,3 +545,6 @@ function applyFilter( { inputData, filters } )
 
        return inputData;
 }
+
+
+ProductListView.propTypes = { toShow: PropTypes.string };

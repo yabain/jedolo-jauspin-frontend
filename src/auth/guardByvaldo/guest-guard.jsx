@@ -10,48 +10,55 @@ import { useAuthContext } from '../hooks';
 
 // ----------------------------------------------------------------------
 
-export default function GuestGuard({ children }) {
-  const { loading } = useAuthContext();
+export default function GuestGuard( { children } )
+{
+       const { loading } = useAuthContext();
 
-  return <>{loading ? <SplashScreen /> : <Container> {children}</Container>}</>;
+       return <>{ loading ? <SplashScreen /> : <Container> { children }</Container> }</>;
 }
 
 GuestGuard.propTypes = {
-  children: PropTypes.node,
+       children: PropTypes.node,
 };
 
 // ----------------------------------------------------------------------
 
-function Container({ children }) {
-  const router = useRouter();
+function Container( { children } )
+{
+       const router = useRouter();
 
-  const [isChecking, setIsChecking] = useState(true);
+       const [ isChecking, setIsChecking ] = useState( true );
 
-  const searchParams = useSearchParams();
+       const searchParams = useSearchParams();
 
-  const returnTo = searchParams.get('returnTo') || paths.dashboard.root;
+       const returnTo = searchParams.get( 'returnTo' ) || paths.home;
 
-  const { authenticated } = useAuthContext();
+       const { authenticated } = useAuthContext();
 
-  const check = useCallback(() => {
-    if (authenticated) {
-      router.replace(returnTo);
-    } else {
-      setIsChecking(false); // Permet le rendu si non authentifié
-    }
-  }, [authenticated, returnTo, router]);
+       const check = useCallback( () =>
+       {
+              if ( authenticated )
+              {
+                     router.replace( returnTo );
+              } else
+              {
+                     setIsChecking( false ); // Permet le rendu si non authentifié
+              }
+       }, [ authenticated, returnTo, router ] );
 
-  useEffect(() => {
-    check();
-  }, [check]);
+       useEffect( () =>
+       {
+              check();
+       }, [ check ] );
 
-  if (isChecking) {
-    return <SplashScreen />;
-  }
+       if ( isChecking )
+       {
+              return <SplashScreen />;
+       }
 
-  return <>{children}</>;
+       return <>{ children }</>;
 }
 
 Container.propTypes = {
-  children: PropTypes.node,
+       children: PropTypes.node,
 };

@@ -9,30 +9,31 @@ import ProductNewEditForm from '../product-new-edit-form';
 
 // ----------------------------------------------------------------------
 
-export default function ProductCreateView() {
-  const settings = useSettingsContext();
+export default function ProductCreateView()
+{
+       const settings = useSettingsContext();
 
-  return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
-      <CustomBreadcrumbs
-        heading="Create a new product"
-        links={[
-          {
-            name: 'Dashboard',
-            href: paths.dashboard.root,
-          },
-          {
-            name: 'Product',
-            href: paths.dashboard.product.root,
-          },
-          { name: 'New product' },
-        ]}
-        sx={{
-          mb: { xs: 3, md: 5 },
-        }}
-      />
+       return (
+              <Container maxWidth={ settings.themeStretch ? false : 'lg' }>
+                     <CustomBreadcrumbs
+                            heading="Create a new Annonce"
+                            links={ [
+                                   {
+                                          name: 'Home',
+                                          href: paths.dashboard.root,
+                                   },
+                                   {
+                                          name: 'Annonce',
+                                          href: paths.dashboard.product.root,
+                                   },
+                                   { name: 'New Annonce' },
+                            ] }
+                            sx={ {
+                                   mb: { xs: 3, md: 5 },
+                            } }
+                     />
 
-      <ProductNewEditForm />
-    </Container>
-  );
+                     <ProductNewEditForm />
+              </Container>
+       );
 }

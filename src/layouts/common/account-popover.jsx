@@ -19,7 +19,7 @@ import { useAuthContext } from 'src/auth/hooks';
 import { varHover } from 'src/components/animate';
 import { useSnackbar } from 'src/components/snackbar';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
-import { setUsers } from 'src/store/setUsersReducer';
+import { setUsers } from 'src/store/users/setUsersReducer';
 import { useDispatch } from 'react-redux';
 
 // ----------------------------------------------------------------------

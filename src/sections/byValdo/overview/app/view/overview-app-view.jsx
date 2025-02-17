@@ -25,16 +25,17 @@ import SidebarFilter from '../sidebar-filter';
 export default function Home()
 {
 
-       const setUser = useSelector( ( state ) => state.setUsers.selectedUser ); // Assure-toi que `selectedUser` est bien défini dans le store
 
-       const { user } = useMockedUser();
 
        const theme = useTheme();
-
+       const { user } = useMockedUser();
        const settings = useSettingsContext();
+       const annonceFromStore = useSelector( ( state ) => state.usersAnnonces.data )
+       const HeadlineAnnouncement = annonceFromStore.filter( annonce => annonce.aLaUne );
+       // if ( HeadlineAnnouncement.length > 0 ) console.log( "Il y a des annonces à la une :", HeadlineAnnouncement );
 
 
-       console.log( 'setUser', setUser );
+
 
 
 
@@ -80,7 +81,7 @@ export default function Home()
 
 
                                                  <Grid xs={ 12 } md={ 12 }>
-                                                        <BookingNewest title="Annonces à la une" subheader="12 Nouvelles Annonces" list={ _bookingNew } />
+                                                        <BookingNewest title="Annonces à la une" subheader="12 Nouvelles Annonces" list={ HeadlineAnnouncement } />
                                                  </Grid>
 
 
