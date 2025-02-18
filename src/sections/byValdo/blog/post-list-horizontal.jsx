@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Pagination, { paginationClasses } from '@mui/material/Pagination';
 
-import { tabsRef } from 'src/1data/annonces/ref';
+import { postRef, tabsRef } from 'src/1data/annonces/ref';
 import { HEADER } from 'src/layouts/config-layout';
 import { PostItemSkeleton } from './post-skeleton';
 import PostItemHorizontal from './post-item-horizontal';
@@ -13,6 +13,9 @@ export default function PostListHorizontal( { posts, loading } )
        const [ page, setPage ] = useState( 1 );
        const [ hasPageChanged, setHasPageChanged ] = useState( false ); // Ajouter un état pour suivre les changements de page
        const postsPerPage = 24;
+
+       // console.log( 'recu', posts );
+
 
        // Calcul du nombre total de pages
        const totalPages = Math.ceil( posts.length / postsPerPage );
@@ -45,6 +48,7 @@ export default function PostListHorizontal( { posts, loading } )
        return (
               <>
                      <Box
+                            ref={ postRef }
                             gap={ 4 }
                             display="grid"
                             gridTemplateColumns={ {

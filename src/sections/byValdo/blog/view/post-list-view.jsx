@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { io } from 'socket.io-client';
 import { request, resetAfterRequest } from 'src/store/annonces/getUsersAnnonces/reducer';
 import { resetData, setData, addData } from 'src/store/annonces/data/users';
+import { annonceFromStoreRef, filterByArgumentStingRef, globalFilterRef } from 'src/1data/annonces/ref';
 
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
@@ -756,7 +757,7 @@ export default function PostListView()
 
 
 
-       const [ filteredPosts, setFilteredPosts ] = useState( null );
+       const [ filteredPosts, setFilteredPosts ] = useState( [] );
 
 
        const newPost2 =
@@ -1008,6 +1009,29 @@ export default function PostListView()
        }, [ posts ] ); // Dépendance : déclenche l'effet chaque fois que `board` change
 
 
+
+
+
+
+
+
+
+
+
+
+       useEffect( () =>
+       {
+
+              annonceFromStoreRef.current = annonceFromStore;
+
+       }, [ annonceFromStore ] );
+
+
+
+
+
+
+
        const { searchResults, searchLoading } = useSearchPosts( debouncedQuery );
 
        const dataFiltered = applyFilter( {
@@ -1031,26 +1055,68 @@ export default function PostListView()
 
 
        const filterByArguments = useCallback(
-              ( type, value ) =>
+              ( dataToFilter, type, value ) =>
               {
+
+                     // console.log( dataToFilter );
+
                      if ( value[ 0 ] === 'all' )
                      {
                             // Si "all" est spécifié ou si le tableau est vide, afficher tous les posts
 
                             setFilteredPosts( annonceFromStore );
+                            return annonceFromStore
 
                      } else
                      {
                             // Filtrer les posts si la propriété correspond à l'une des valeurs du tableau
-                            const result = annonceFromStore.filter( ( item ) => Array.isArray( value ) && value.includes( item[ type ] ) );
-                            setFilteredPosts( result );
-                            // console.log( 'Valeur filtrée', result );
+                            // const result = filteredPosts.filter( ( item ) => Array.isArray( value ) && value.includes( item[ type ] ) );
+                            const dataFilter = []
+                            dataToFilter.forEach( element =>
+                            {
+
+                                   value.forEach(
+                                          ( optionValue ) =>
+                                          {
+
+                                                 if ( element[ type ] !== undefined && element[ type ] === optionValue )
+                                                 {
+
+                                                        dataFilter.push( element )
+                                                 }
+                                          }
+                                   )
+                            } );
+                            // setFilteredPosts( result );
+                            console.log( 'Valeur filtrée', dataFilter );
+                            return dataFilter;
+
                      }
 
                      // console.log( 'Valeur des posts', type, value );
               },
               [ annonceFromStore ] // Dépend uniquement de `posts`
        );
+
+
+
+
+
+
+
+
+       useEffect( () =>
+       {
+
+              filterByArgumentStingRef.current = filterByArguments;
+
+       }, [ annonceFromStore, filterByArguments ] );
+
+
+
+
+
+
 
 
 
@@ -1094,29 +1160,184 @@ export default function PostListView()
        );
 
 
-       const filterByPriceRange = ( minPrice, maxPrice ) =>
+
+
+
+
+
+
+
+
+
+
+
+       const filterByPriceRange = useCallback(
+
+              ( minPrice, maxPrice ) =>
+              {
+                     setFilteredPosts( () =>
+                            filteredPosts.filter( ( post ) =>
+                            {
+                                   const { price } = post;
+
+                                   // Filtrer par prix minimum ou maximum
+                                   if ( minPrice && !maxPrice ) return price >= minPrice;
+                                   if ( maxPrice && !minPrice ) return price <= maxPrice;
+
+                                   // Filtrer par plage de prix si les deux sont spécifiés
+                                   if ( minPrice && maxPrice ) return price >= minPrice && price <= maxPrice;
+
+                                   // Aucun filtre
+                                   return true;
+                            } )
+                     );
+              }, [ filteredPosts ]
+       );
+
+
+
+
+
+
+
+
+
+
+
+
+
+       const filterByPriceRange2 = useCallback( ( dataToFilter, minPrice, maxPrice ) => dataToFilter.filter( ( post ) =>
        {
-              setFilteredPosts( () =>
-                     filteredPosts.filter( ( post ) =>
+
+              const { price } = post;
+              if ( minPrice && !maxPrice ) return price >= minPrice;
+              if ( maxPrice && !minPrice ) return price <= maxPrice;
+              if ( minPrice && maxPrice ) return price >= minPrice && price <= maxPrice;
+              return true;
+
+       } ), []
+
+       );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       const sortPostsByOrder = useCallback(
+              ( order ) =>
+              {
+                     setFilteredPosts( ( prevPosts ) =>
                      {
-                            const { price } = post;
+                            const validOrders = [ "croissant", "decroissant" ];
 
-                            // Filtrer par prix minimum ou maximum
-                            if ( minPrice && !maxPrice ) return price >= minPrice;
-                            if ( maxPrice && !minPrice ) return price <= maxPrice;
+                            // Si l'ordre est null ou non valide, retourne les posts non triés
+                            if ( !order || !validOrders.includes( order ) )
+                            {
+                                   console.error( "Ordre non valide. Utiliser 'croissant' ou 'decroissant'" );
+                                   return [ ...prevPosts ]; // Retourne une copie non triée
+                            }
 
-                            // Filtrer par plage de prix si les deux sont spécifiés
-                            if ( minPrice && maxPrice ) return price >= minPrice && price <= maxPrice;
-
-                            // Aucun filtre
-                            return true;
-                     } )
-              );
-       };
-
+                            // Trie les posts selon l'ordre spécifié
+                            return [ ...prevPosts ].sort( ( a, b ) =>
+                                   order === "croissant" ? a.price - b.price : b.price - a.price
+                            );
+                     } );
+              }, []
+       );
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+       const sortPostsByOrder2 = useCallback( ( tabToOrder, order ) =>
+       {
+
+              console.log( 'ordre recu', tabToOrder );
+
+              if ( !order || ![ "croissant", "decroissant" ].includes( order ) )
+              { console.error( "Ordre non valide.utiliser croissant, decroissant" ); return tabToOrder; }
+              return [ ...tabToOrder ].sort( ( a, b ) => order === "croissant" ? a.price - b.price : b.price - a.price );
+
+
+       }, [] );
+
+
+
+
+
+
+
+
+
+       const globalFilter = useCallback( ( data ) =>
+       {
+
+              const { categoriesTab, citiesTab, minPrice, maxPrice, order } = data;
+
+
+
+
+
+              let filteredCatg = [];
+              let filteredCity = [];
+              let mergedFilters = []
+              let finallyFilteredPrice = [];
+
+
+
+
+
+              if ( categoriesTab?.length > 0 && citiesTab?.length < 1 ) { mergedFilters = filterByArguments( annonceFromStore, 'categorie', categoriesTab ); }
+              if ( categoriesTab?.length < 1 && citiesTab?.length > 0 ) { mergedFilters = filterByArguments( annonceFromStore, 'city', citiesTab ); }
+              if ( !categoriesTab?.length && !citiesTab?.length ) { mergedFilters = annonceFromStore; }
+
+
+
+
+
+
+              if ( categoriesTab?.length > 0 && citiesTab?.length > 0 )
+              {
+                     filteredCatg = filterByArguments( annonceFromStore, 'categorie', categoriesTab );
+                     filteredCity = filterByArguments( filteredCatg, 'city', citiesTab );
+                     mergedFilters = filteredCity
+              }
+
+
+
+
+
+              finallyFilteredPrice = filterByPriceRange2( mergedFilters, minPrice, maxPrice )
+              const sortedPosts = sortPostsByOrder2( finallyFilteredPrice, order )
+              setFilteredPosts( sortedPosts )
+
+
+
+
+
+
+       }, [ sortPostsByOrder2, filterByArguments, filterByPriceRange2, annonceFromStore ] );
+
+
+       useEffect( () => { globalFilterRef.current = globalFilter }, [ filteredPosts, globalFilter ] )
 
 
 
@@ -1274,7 +1495,9 @@ export default function PostListView()
                      open={ openFilters.value }
                      onOpen={ openFilters.onTrue }
                      onClose={ openFilters.onFalse }
+                     onPriceFilters={ filterByPriceRange }
                      onArgumentFilters={ filterByArguments }
+                     onOrderPriceFilters={ sortPostsByOrder }
 
               />
 
@@ -1339,6 +1562,7 @@ export default function PostListView()
 
 
                      <Stack
+
                             spacing={ 1 }
                             justifyContent="space-between"
                             alignItems={ { xs: 'flex-end', sm: 'center' } }
@@ -1347,7 +1571,7 @@ export default function PostListView()
                                    mb: { xs: 3, md: 5 },
                             } }
                      >
-                            <Button onClick={ () => addPost( newPost2 ) }>
+                            <Button onClick={ () => sortPostsByOrder( 'croissant' ) }>
                                    ajouter post
                             </Button>
                             <Tabs
@@ -1401,7 +1625,7 @@ export default function PostListView()
                             categorie1 et 3
                      </Button> */}
                      {/* <PostList posts={ dataFiltered } loading={ postsLoading } /> */ }
-                     <PostListHorizontal posts={ dataFiltered } loading={ postsLoading } />
+                     <PostListHorizontal posts={ filteredPosts } loading={ postsLoading } />
               </Container>
        );
 }

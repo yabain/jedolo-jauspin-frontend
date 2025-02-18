@@ -1,4 +1,30 @@
-import { setValeurRef } from "src/1data/annonces/ref";
+import { annonceFromStoreRef, filterByArgumentStingRef, globalFilterRef, setValeurRef } from "src/1data/annonces/ref";
+
+
+
+
+
+
+
+
+export function globalFilterFnctCall( data )
+{
+
+       globalFilterRef.current?.( data )
+}
+
+
+
+
+
+
+
+
+export function filteredByArgStriingExported( type, value )
+{
+
+       filterByArgumentStingRef.current?.( annonceFromStoreRef.current, type, value )
+}
 
 
 

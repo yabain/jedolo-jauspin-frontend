@@ -28,7 +28,10 @@ export default function TourFilters( {
        open,
        onOpen,
        onClose,
-       onArgumentFilters
+       onPriceFilters,
+       onArgumentFilters,
+       onOrderPriceFilters
+
 } )
 {
        // const handleFilterServices = useCallback(
@@ -128,7 +131,11 @@ export default function TourFilters( {
                                    <Stack spacing={ 3 }>
 
 
-                                          <SidebarFilter onArgumentFilters={ onArgumentFilters } />
+                                          <SidebarFilter
+
+                                                 onPriceFilters={ onPriceFilters }
+                                                 onArgumentFilters={ onArgumentFilters }
+                                                 onOrderPriceFilters={ onOrderPriceFilters } />
 
                                    </Stack>
                             </Scrollbar>
@@ -145,7 +152,9 @@ TourFilters.propTypes = {
        //   dateError: PropTypes.bool,
        //   filters: PropTypes.object,
        //   onFilters: PropTypes.func,
+       onPriceFilters: PropTypes.func,
        onArgumentFilters: PropTypes.func,
+       onOrderPriceFilters: PropTypes.func,
        //   serviceOptions: PropTypes.array,
        //   tourGuideOptions: PropTypes.array,
        //   destinationOptions: PropTypes.array,

@@ -23,8 +23,8 @@ import Carousel, { useCarousel, CarouselArrows } from 'src/components/carousel';
 import { width } from '@mui/system';
 import moment from 'moment';
 import 'moment/locale/fr';
-import { tabsRef } from 'src/1data/annonces/ref';
 import { fShortenNumber } from 'src/utils/format-number';
+import { tabsRef } from 'src/1data/annonces/ref';
 
 // ----------------------------------------------------------------------
 

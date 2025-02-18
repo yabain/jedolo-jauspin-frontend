@@ -10,54 +10,191 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
-import { Autocomplete, Button, Chip, Grid, InputAdornment, Stack, TextField, Typography } from '@mui/material';
+import { Autocomplete, Button, Chip, FormControlLabel, Grid, InputAdornment, Stack, TextField, Typography } from '@mui/material';
+import { Box } from '@mui/system';
+import { annonceFromStoreRef, postRef } from 'src/1data/annonces/ref';
+import { HEADER } from 'src/layouts/config-layout';
+import { globalFilterFnctCall } from 'src/1functions/annonces';
 
 // ----------------------------------------------------------------------
 
 export default function SidebarFilter( {
        filters,
        onFilters,
-       onArgumentFilters,
        stockOptions,
+       onPriceFilters,
        publishOptions,
+       onArgumentFilters,
+       onOrderPriceFilters
 } )
 {
+
+
+
+
+
        const popover = usePopover();
-
+       const [ minPrice, setValue ] = useState( "" );
        const [ stock, setStock ] = useState( stockOptions );
-
        const [ publish, setPublish ] = useState( stockOptions );
+       const [ cityTable, setCityTable ] = useState( [ 'Bafoussam', 'yaoune', 'Douala', 'Bertoua' ] )
 
 
-       const options = useMemo( () => [ 'valeur1', 'valeur2' ], [] );
-       const [ valueAutoCompleted, setValueCompleted ] = useState( 'valeur1' );
-       const [ inputValue, setInputValue ] = useState( 'valeur1' );
 
-       const handleChangeStock = useCallback( ( event ) =>
-       {
-              const {
-                     target: { value },
-              } = event;
-              setStock( typeof value === 'string' ? value.split( ',' ) : value );
-       }, [] );
 
-       const handleChangePublish = useCallback( ( event ) =>
-       {
-              const {
-                     target: { value },
-              } = event;
-              setPublish( typeof value === 'string' ? value.split( ',' ) : value );
-       }, [] );
+
+
+       const [ order, setOrder ] = useState( '' );
+       const [ maxPrice, setmaxPrice ] = useState( "" );
+       const [ citiesTab, setCitiesTab ] = useState( [] );
+       const [ categoriesTab, setCategoriesTab ] = useState( [] );
+       const cityOptions = useMemo( () => cityTable, [ cityTable ] );
+
+
+
+
+
+
+
+
+
 
        const handleCloseStock = useCallback( () =>
        {
+
               onFilters( 'stock', stock );
+
+
        }, [ onFilters, stock ] );
+
+
+
+
+
+
+
+
+
+
 
        const handleClosePublish = useCallback( () =>
        {
+
               onFilters( 'publish', publish );
+
        }, [ onFilters, publish ] );
+
+
+
+
+
+
+
+
+
+
+
+       const handleChangeStock = useCallback( ( event ) =>
+       {
+
+              const { target: { value }, } = event;
+              setStock( typeof value === 'string' ? value.split( ',' ) : value );
+
+       }, [] );
+
+
+
+
+
+
+
+
+
+
+
+       const handleChangePublish = useCallback( ( event ) =>
+       {
+
+              const { target: { value }, } = event;
+              setPublish( typeof value === 'string' ? value.split( ',' ) : value );
+
+       }, [] );
+
+
+
+
+
+
+
+
+
+       const search = () =>
+       {
+
+              globalFilterFnctCall( { categoriesTab, citiesTab, maxPrice, minPrice, order } )
+              setTimeout( () => { window.scrollTo( { top: postRef.current.offsetTop - HEADER.H_DESKTOP - 100, behavior: 'smooth', } ); }, 1000 );
+
+       }
+
+
+
+
+
+
+
+
+
+
+
+       // Fonction pour formater en milliers
+       const formatToThousands = ( inputValue2 ) =>
+       {
+              if ( !inputValue2 ) return "";
+              const numericValue = inputValue2.replace( /\D/g, "" );
+              return Number( numericValue ).toLocaleString();
+       };
+
+
+
+
+
+       const handleChangeMinPrice = ( event ) =>
+       {
+
+              setValue( event.target.value.replace( /\D/g, "" ) );
+
+       };
+
+
+
+
+
+       const handleChangeMaxPrice = ( event ) =>
+       {
+
+              setmaxPrice( event.target.value.replace( /\D/g ), "" );
+       };
+
+
+
+
+
+
+       const handleKeyPress = ( event ) =>
+       {
+
+              const charCode = event.which || event.keyCode;
+              const char = String.fromCharCode( charCode );
+              if ( !/\d/.test( char ) && charCode !== 8 && charCode !== 46 ) event.preventDefault()
+
+       };
+
+
+
+
+
+
+
 
 
        return (
@@ -70,7 +207,7 @@ export default function SidebarFilter( {
                      >
 
                             <Grid container  >
-                                   <Grid xs={ 12 } md={ 12 }>
+                                   <Grid xs={ 12 } md={ 12 } item >
 
 
                                           <Typography sx={ { color: '#003768', mt: 0, ml: 0, fontSize: 14, fontWeight: "bold", } } >Categorie</Typography>
@@ -81,18 +218,17 @@ export default function SidebarFilter( {
                                                  fullWidth
                                                  multiple
                                                  limitTags={ 3 }
-                                                 options={ top100Films }
+                                                 options={ categorieOpttion }
                                                  onChange={ ( event, newValue ) =>
                                                  {
-                                                        console.log( newValue );
-                                                        const dataToPass = newValue.length > 0 ? newValue : [ 'all' ];
-                                                        onArgumentFilters( 'categorie', dataToPass );
+                                                        // console.log( newValue );
+                                                        const dataToPass = newValue.length > 0 ? newValue : [];
+                                                        setCategoriesTab( dataToPass )
                                                  }
                                                  }
                                                  getOptionLabel={ ( option ) => option }
-                                                 defaultValue={ top100Films.slice( 0, 8 ) }
                                                  renderInput={ ( params ) => (
-                                                        <TextField { ...params } placeholder="categories" />
+                                                        <TextField { ...params } placeholder="Selectioner une categories" />
                                                  ) }
                                                  renderOption={ ( props, option ) => (
                                                         <li { ...props } key={ option }>
@@ -146,130 +282,71 @@ export default function SidebarFilter( {
                      >
 
                             <Grid container  >
-                                   <Grid xs={ 12 } md={ 12 }>
+                                   <Grid xs={ 12 } md={ 12 } item >
 
 
                                           <Typography sx={ { color: '#003768', mt: 2, ml: 0, fontSize: 14, fontWeight: "bold", } } >Prix</Typography>
 
-                                          <Autocomplete
-                                                 sx={ {
 
-                                                        mt: 0.5,
-
-                                                        backgroundColor: 'white',
-                                                        borderRadius: "14px",
-
-                                                 } }
-                                                 fullWidth
-                                                 value={ valueAutoCompleted }
-                                                 options={ options }
-                                                 onChange={ ( event, newValue ) =>
-                                                 {
-                                                        setValueCompleted( newValue );
-                                                        console.log( event, newValue );
-                                                 } }
-                                                 inputValue={ inputValue }
-                                                 onInputChange={ ( event, newInputValue ) =>
-                                                 {
-
-                                                        console.log( event, newInputValue );
-
-                                                        setInputValue( newInputValue );
-
-                                                        // if ( newInputValue === "" )
-                                                        // {
-                                                        //        setInputValue( null );
-                                                        // }
-                                                 } }
-                                                 getOptionLabel={ ( option ) => option }
-                                                 renderInput={ ( params ) => <TextField { ...params } /> }
-                                                 renderOption={ ( props, option ) => (
-                                                        <li { ...props } key={ option }>
-                                                               { option }
-                                                        </li>
-                                                 ) }
-                                          />
 
 
                                           {/* <Typography sx={ { color: '#003768', mt: 1, ml: 0, fontSize: 14, fontWeight: "bold", } } >Prix minimum</Typography> */ }
 
-                                          <Autocomplete
-                                                 sx={ {
+                                          <Box mt={ 1 } flexDirection="column" display="flex">
+                                                 <FormControlLabel
+                                                        key="Croissant"
+                                                        control={ <Checkbox size="medium" color="success" /> }
+                                                        label="Croissant"
+                                                        onChange={ ( event => setOrder( event.target.checked ? 'croissant' : null ) ) }
+                                                        sx={ { textTransform: 'capitalize' } }
+                                                 />
+                                                 <FormControlLabel
+                                                        key="deCroissant"
+                                                        control={ <Checkbox size="medium" color="success" /> }
+                                                        label="Decroissant"
+                                                        onChange={ ( event => setOrder( event.target.checked ? 'decroissant' : null ) ) }
+                                                        sx={ { textTransform: 'capitalize' } }
+                                                 />
+                                          </Box>
 
-                                                        mt: 2.5,
-
-                                                        backgroundColor: 'white',
-                                                        borderRadius: "14px",
-
-                                                 } }
+                                          <TextField
+                                                 sx={ { mt: 3.5 } }
+                                                 type='text'
+                                                 variant='outlined'
                                                  fullWidth
-                                                 value={ valueAutoCompleted }
-                                                 options={ options }
-                                                 onChange={ ( event, newValue ) =>
-                                                 {
-                                                        setValueCompleted( newValue );
-                                                        console.log( event, newValue );
+                                                 value={ formatToThousands( minPrice ) } // Affiche la valeur formatée
+
+                                                 label="Minimum"
+                                                 InputProps=
+                                                 { {
+                                                        startAdornment: <InputAdornment position="start">Kg</InputAdornment>,
+                                                        endAdornment: <InputAdornment position="start"> <Iconify icon="solar:eye-bold" width={ 24 } /></InputAdornment>,
                                                  } }
-                                                 inputValue={ inputValue }
-                                                 onInputChange={ ( event, newInputValue ) =>
-                                                 {
 
-                                                        console.log( event, newInputValue );
+                                                 onChange={ ( event => { handleChangeMinPrice( event ) } ) }
+                                                 onKeyPress={ handleKeyPress } />
 
-                                                        setInputValue( newInputValue );
 
-                                                        // if ( newInputValue === "" )
-                                                        // {
-                                                        //        setInputValue( null );
-                                                        // }
+
+                                          <TextField
+                                                 sx={ { mt: 2.5 } }
+                                                 type='text'
+                                                 variant='outlined'
+                                                 fullWidth
+                                                 value={ formatToThousands( maxPrice ) } // Affiche la valeur formatée
+
+                                                 label="Maximum"
+                                                 InputProps=
+                                                 { {
+                                                        startAdornment: <InputAdornment position="start">Kg</InputAdornment>,
+                                                        endAdornment: <InputAdornment position="start"> <Iconify icon="solar:eye-bold" width={ 24 } /></InputAdornment>,
                                                  } }
-                                                 getOptionLabel={ ( option ) => option }
-                                                 renderInput={ ( params ) => <TextField { ...params } /> }
-                                                 renderOption={ ( props, option ) => (
-                                                        <li { ...props } key={ option }>
-                                                               { option }
-                                                        </li>
-                                                 ) }
+                                                 onChange={ ( event => { handleChangeMaxPrice( event ) } ) }
+                                                 onKeyPress={ handleKeyPress }
+
                                           />
 
-                                          <Autocomplete
-                                                 sx={ {
 
-                                                        mt: 2.5,
-
-                                                        backgroundColor: 'white',
-                                                        borderRadius: "14px",
-
-                                                 } }
-                                                 fullWidth
-                                                 value={ valueAutoCompleted }
-                                                 options={ options }
-                                                 onChange={ ( event, newValue ) =>
-                                                 {
-                                                        setValueCompleted( newValue );
-                                                        console.log( event, newValue );
-                                                 } }
-                                                 inputValue={ inputValue }
-                                                 onInputChange={ ( event, newInputValue ) =>
-                                                 {
-
-                                                        console.log( event, newInputValue );
-
-                                                        setInputValue( newInputValue );
-
-                                                        // if ( newInputValue === "" )
-                                                        // {
-                                                        //        setInputValue( null );
-                                                        // }
-                                                 } }
-                                                 getOptionLabel={ ( option ) => option }
-                                                 renderInput={ ( params ) => <TextField { ...params } /> }
-                                                 renderOption={ ( props, option ) => (
-                                                        <li { ...props } key={ option }>
-                                                               { option }
-                                                        </li>
-                                                 ) }
-                                          />
                                    </Grid>
 
 
@@ -295,48 +372,50 @@ export default function SidebarFilter( {
                      >
 
                             <Grid container  >
-                                   <Grid xs={ 12 } md={ 12 }>
+                                   <Grid xs={ 12 } md={ 12 } item >
 
                                           <Typography sx={ { color: '#003768', mt: 3, ml: 0, fontSize: 14, fontWeight: "bold", mb: 0 } } >Villes</Typography>
 
 
+
+
+
+
                                           <Autocomplete
-                                                 sx={ {
-
-                                                        mt: 2,
-
-                                                        backgroundColor: 'white',
-                                                        borderRadius: "14px",
-
-                                                 } }
+                                                 sx={ { mt: 2.5 } }
                                                  fullWidth
-                                                 value={ valueAutoCompleted }
-                                                 options={ options }
+                                                 multiple
+                                                 limitTags={ 3 }
+                                                 options={ cityOptions }
                                                  onChange={ ( event, newValue ) =>
                                                  {
-                                                        setValueCompleted( newValue );
-                                                        console.log( event, newValue );
-                                                 } }
-                                                 inputValue={ inputValue }
-                                                 onInputChange={ ( event, newInputValue ) =>
-                                                 {
-
-                                                        console.log( event, newInputValue );
-
-                                                        setInputValue( newInputValue );
-
-                                                        // if ( newInputValue === "" )
-                                                        // {
-                                                        //        setInputValue( null );
-                                                        // }
-                                                 } }
+                                                        // console.log( newValue );
+                                                        const dataToPass = newValue.length > 0 ? newValue : [];
+                                                        setCitiesTab( dataToPass );
+                                                 }
+                                                 }
                                                  getOptionLabel={ ( option ) => option }
-                                                 renderInput={ ( params ) => <TextField { ...params } /> }
+                                                 // defaultValue={ categorieOpttion.slice( 0, 8 ) }
+                                                 renderInput={ ( params ) => (
+                                                        <TextField { ...params } placeholder="Selectionner une ville" />
+                                                 ) }
                                                  renderOption={ ( props, option ) => (
                                                         <li { ...props } key={ option }>
                                                                { option }
                                                         </li>
                                                  ) }
+                                                 renderTags={ ( selected, getTagProps ) =>
+                                                        selected.map( ( option, index ) => (
+                                                               <Chip
+                                                                      { ...getTagProps( { index } ) }
+                                                                      key={ option }
+                                                                      label={ option }
+                                                                      size="small"
+                                                                      variant="soft"
+                                                                      color='primary'
+                                                               />
+                                                        ) )
+                                                 }
                                           />
 
 
@@ -351,21 +430,40 @@ export default function SidebarFilter( {
 
                      </FormControl>
 
+                     <Button
+
+                            onClick={ () => search() }
+                            sx={ {
+
+                                   mt: 2,
+
+                                   ml: 3,
+
+                            } }
+                            variant="contained" color="primary"
+                            startIcon={ <Iconify icon="ic:round-filter-list" /> }
+                     >
+                            Apliquer les Filtre
+                     </Button>
+
+
               </>
        );
 }
 
 SidebarFilter.propTypes = {
        filters: PropTypes.object,
-       onArgumentFilters: PropTypes.func,
        onFilters: PropTypes.func,
-       publishOptions: PropTypes.array,
        stockOptions: PropTypes.array,
+       onPriceFilters: PropTypes.func,
+       publishOptions: PropTypes.array,
+       onArgumentFilters: PropTypes.func,
+       onOrderPriceFilters: PropTypes.func,
 };
 
 
 
-const top100Films = [
+const categorieOpttion = [
        'categorie1',
        'categorie2',
        'categorie3',
