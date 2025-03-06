@@ -20,9 +20,14 @@ import usersSAnnoncesReducer from './annonces/data/users';
 import getUsersAnnoncesReducer from './annonces/getUsersAnnonces/reducer';
 
 
-// annonces users Import 
+// annonces comments Import 
 import getUsersAnnoncesCommentsReducer from './comments/get/reducer';
 import addUsersAnnoncesCommentsReducer from './comments/add/reducer';
+
+
+// annonces signal Import 
+import getUserAnnonceSignalsReducer from './signal/get/reducer';
+import addUserAnnonceSignalReducer from './signal/add/reducer';
 
 // Combinaison des réducteurs traditionnels et des slices
 const rootReducer = combineReducers( {
@@ -44,6 +49,10 @@ const rootReducer = combineReducers( {
        // comments
        getUsersAnnoncesComments: getUsersAnnoncesCommentsReducer,
        addUsersAnnoncesComments: addUsersAnnoncesCommentsReducer,
+
+       // annonce
+       getUserAnnonceSignals: getUserAnnonceSignalsReducer,
+       addUserAnnonceSignal: addUserAnnonceSignalReducer,
 
 } );
 

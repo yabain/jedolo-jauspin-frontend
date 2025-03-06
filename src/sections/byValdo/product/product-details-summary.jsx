@@ -1,4 +1,4 @@
-
+import * as Yup from 'yup';
 import { sumBy } from 'lodash';
 import PropTypes from 'prop-types';
 import { useEffect, useCallback } from 'react';
@@ -11,7 +11,7 @@ import Rating from '@mui/material/Rating';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import MenuItem from '@mui/material/MenuItem';
-import { LinearProgress } from '@mui/material';
+import { Dialog, DialogActions, DialogContent, DialogTitle, LinearProgress } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import { formHelperTextClasses } from '@mui/material/FormHelperText';
 
@@ -20,14 +20,17 @@ import { useRouter } from 'src/routes/hooks';
 
 import { fCurrency, fShortenNumber } from 'src/utils/format-number';
 
+import { yupResolver } from '@hookform/resolvers/yup';
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import { ColorPicker } from 'src/components/color-utils';
-import FormProvider, { RHFSelect } from 'src/components/hook-form';
+import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
 import { useBoolean } from 'src/hooks/use-boolean';
-import IncrementerButton from './common/incrementer-button';
+import { LoadingButton } from '@mui/lab';
 
+import IncrementerButton from './common/incrementer-button';
+import DialogSignalAnnonce from './view/dialog-signal-Annonce';
 // ----------------------------------------------------------------------
 
 export default function ProductDetailsSummary( {
@@ -41,6 +44,7 @@ export default function ProductDetailsSummary( {
 {
        const router = useRouter();
        const review = useBoolean();
+       const signal = useBoolean();
 
        const {
               id,
@@ -76,22 +80,47 @@ export default function ProductDetailsSummary( {
               !!items?.length &&
               items.filter( ( item ) => item.id === id ).map( ( item ) => item.quantity )[ 0 ] >= available;
 
+       // const defaultValues = {
+       //        id,
+       //        name,
+       //        coverUrl,
+       //        available,
+       //        price,
+       //        colors: colors[ 0 ],
+       //        size: sizes[ 4 ],
+       //        quantity: available < 1 ? 0 : 1,
+       // };
+
+       // const methods = useForm( {
+       //        defaultValues,
+       // } );
+
+       // const { reset, watch, control, setValue, handleSubmit } = methods;
+
+
+       const ReviewSchema = Yup.object().shape( {
+              // rating: Yup.number().min( 1, 'Rating must be greater than or equal to 1' ),
+              comment: Yup.string().required( 'Comment is required' ),
+       } );
+
+
        const defaultValues = {
-              id,
-              name,
-              coverUrl,
-              available,
-              price,
-              colors: colors[ 0 ],
-              size: sizes[ 4 ],
-              quantity: available < 1 ? 0 : 1,
+              rating: 0,
+              comment: '',
        };
 
        const methods = useForm( {
+              resolver: yupResolver( ReviewSchema ),
               defaultValues,
        } );
 
-       const { reset, watch, control, setValue, handleSubmit } = methods;
+       const {
+              reset, watch,
+              control,
+              handleSubmit,
+              formState: { isSubmitting },
+       } = methods;
+
 
        const values = watch();
 
@@ -108,16 +137,9 @@ export default function ProductDetailsSummary( {
        {
               try
               {
-                     if ( !existProduct )
-                     {
-                            onAddCart?.( {
-                                   ...data,
-                                   colors: [ values.colors ],
-                                   subTotal: data.price * data.quantity,
-                            } );
-                     }
-                     onGotoStep?.( 0 );
-                     router.push( paths.product.checkout );
+                     console.log( 'data', data );
+
+
               } catch ( error )
               {
                      console.error( error );
@@ -361,7 +383,7 @@ export default function ProductDetailsSummary( {
                             sx={ { whiteSpace: 'nowrap', width: '120px' } }
                             variant="contained"
                             color="error"
-                            onClick={ review.onTrue }
+                            onClick={ signal.onTrue }
                             startIcon={ <Iconify icon="solar:pen-bold" /> }
                      >
                             Signaler
@@ -484,7 +506,8 @@ export default function ProductDetailsSummary( {
 
 
        return (
-              <FormProvider methods={ methods } onSubmit={ onSubmit }>
+              <>
+                     {/* <FormProvider methods={ methods } onSubmit={ onSubmit }> */ }
                      <Stack spacing={ 3 } sx={ { pt: 3 } } { ...other }>
                             <Stack spacing={ 2 } alignItems="flex-start">
                                    { renderLabels }
@@ -513,9 +536,41 @@ export default function ProductDetailsSummary( {
                             { renderActions }
 
                             { renderShare }
+
                      </Stack>
 
-              </FormProvider>
+                     {/* </FormProvider> */ }
+
+                     <DialogSignalAnnonce showDialog={ signal } />
+                     {/* <Dialog open={ signal.value } onClose={ signal.onFalse }   >
+                            <FormProvider methods={ methods } onSubmit={ onSubmit }>
+                                   <DialogTitle> Add Review </DialogTitle>
+
+                                   <DialogContent>
+                                          <Stack direction="row" flexWrap="wrap" alignItems="center" spacing={ 1.5 }>
+                                                 <Typography variant="body2">Your review about this product:</Typography>
+
+
+                                          </Stack>
+
+
+                                          <RHFTextField name="comment" label="Commantaire *" multiline rows={ 3 } sx={ { mt: 3 } } />
+
+                                     
+                                   </DialogContent>
+
+                                   <DialogActions>
+                                          <Button color="inherit" variant="outlined" onClick={ signal.onFalse }>
+                                                 Cancel
+                                          </Button>
+
+                                          <LoadingButton type="submit" variant="contained" loading={ false }>
+                                                 Poster
+                                          </LoadingButton>
+                                   </DialogActions>
+                            </FormProvider>
+                     </Dialog> */}
+              </>
        );
 
 

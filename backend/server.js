@@ -437,4 +437,53 @@ app.get( "/comments/:userId", ( req, res ) =>
        res.json( { success: true, comments: userComments } );
 } );
 
+
+
+
+// 🔹 signaler une annonce
+app.post( "/signal/:annonceId", ( req, res ) =>
+{
+       const { annonceId } = req.params; // ID de l'utilisateur sur lequel on commente
+       const signal = req.body; // L'objet représentant le commentaire est passé dans le body
+
+       let data = readData();
+
+
+
+
+       // Créer l'objet comments[userId] s'il n'existe pas
+       if ( !data.signal )
+       {
+              data.signal = {}; // Initialiser l'objet comments s'il n'existe pas
+       }
+       if ( !data.signal[ annonceId ] )
+       {
+              data.signal[ annonceId ] = []; // Initialiser un tableau si l'utilisateur n'a pas encore de commentaires
+       }
+
+       // Ajouter le commentaire à l'objet global des commentaires
+       data.signal[ annonceId ].push( signal );
+
+       writeData( data );
+
+       // Émettre un événement Socket.io pour informer les clients du nouveau signalaire
+       io.emit( "new-signal", { annonceId, signal } );
+
+       res.json( { success: true, signal } );
+} );
+
+app.get( "/signal/:annonceId", ( req, res ) =>
+{
+       const { annonceId } = req.params;
+
+       let data = readData();
+
+
+
+       // Récupérer les commentaires de l'utilisateur
+       const signalAnnonce = data.signal[ annonceId ] || [];
+
+       res.json( { success: true, comments: signalAnnonce } );
+} );
+
 server.listen( PORT, () => console.log( `🚀 Serveur lancé sur http://localhost:${ PORT }` ) );

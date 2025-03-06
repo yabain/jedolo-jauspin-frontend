@@ -38,14 +38,14 @@ export default function ProductReviewNewForm( { annonceId, addData, onClose, ...
 
        const ReviewSchema = Yup.object().shape( {
               rating: Yup.number().min( 1, 'Rating must be greater than or equal to 1' ),
-              review: Yup.string().required( 'Review is required' ),
-              name: Yup.string().required( 'Name is required' ),
-              email: Yup.string().required( 'Email is required' ).email( 'Email must be a valid email address' ),
+              comment: Yup.string().required( 'comment is required' ),
+              // name: Yup.string().required( 'Name is required' ),
+              // email: Yup.string().required( 'Email is required' ).email( 'Email must be a valid email address' ),
        } );
 
        const defaultValues = {
               rating: 0,
-              review: '',
+              comment: '',
               name: '',
               email: '',
        };
@@ -67,8 +67,7 @@ export default function ProductReviewNewForm( { annonceId, addData, onClose, ...
 
 
               // await new Promise( ( resolve ) => setTimeout( resolve, 500 ) );
-              // reset();
-              // onClose();
+
               const data = {
                      ...dataGet,
                      "id": Date.now(),
@@ -80,7 +79,7 @@ export default function ProductReviewNewForm( { annonceId, addData, onClose, ...
               setDataAdded( data )
               dispatch( request( { annonceId: productGet.id, data } ) )
 
-              // console.info( 'DATA', data );
+              console.info( 'DATA', data );
 
 
        } );
@@ -99,10 +98,12 @@ export default function ProductReviewNewForm( { annonceId, addData, onClose, ...
        {
               if ( isFulled && !isPending )
               {
-                     dispatch( resetAfterRequest )
+                     dispatch( resetAfterRequest() )
                      addData( dataAdded )
+                     reset();
+                     onClose();
               }
-       }, [ isPending, isFulled, dataAdded, addData, dispatch ] )
+       }, [ isPending, isFulled, dataAdded, addData, dispatch, reset, onClose ] )
 
        return (
               <Dialog onClose={ onClose } { ...other }>
@@ -132,11 +133,11 @@ export default function ProductReviewNewForm( { annonceId, addData, onClose, ...
 
                                    { !!errors.rating && <FormHelperText error> { errors.rating?.message }</FormHelperText> }
 
-                                   <RHFTextField name="review" label="Review *" multiline rows={ 3 } sx={ { mt: 3 } } />
+                                   <RHFTextField name="comment" label="Commantaire *" multiline rows={ 3 } sx={ { mt: 3 } } />
 
-                                   <RHFTextField name="name" label="Name *" sx={ { mt: 3 } } />
+                                   {/* <RHFTextField name="name" label="Name *" sx={ { mt: 3 } } />
 
-                                   <RHFTextField name="email" label="Email *" sx={ { mt: 3 } } />
+                                   <RHFTextField name="email" label="Email *" sx={ { mt: 3 } } /> */}
                             </DialogContent>
 
                             <DialogActions>
@@ -144,8 +145,8 @@ export default function ProductReviewNewForm( { annonceId, addData, onClose, ...
                                           Cancel
                                    </Button>
 
-                                   <LoadingButton type="submit" variant="contained" loading={ isSubmitting }>
-                                          Post
+                                   <LoadingButton type="submit" variant="contained" loading={ isPending }>
+                                          Poster
                                    </LoadingButton>
                             </DialogActions>
                      </FormProvider>
