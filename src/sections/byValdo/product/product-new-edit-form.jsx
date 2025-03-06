@@ -45,24 +45,37 @@ import FormProvider, {
        RHFMultiCheckbox,
 } from 'src/components/hook-form';
 import { addAnnoncesToUsersList } from 'src/1functions/annonces';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import { addData, setData } from 'src/store/annonces/data/dataReducer';
-import { request } from 'src/store/annonces/addAnnonce/reducer';
+import { request, resetAfterRequest } from 'src/store/annonces/addAnnonce/reducer';
+import { request as updateAnnoncesRequest, resetAfterRequest as resetAfterUpdate } from 'src/store/annonces/updateAnnonce/reducer'
+import { useAuthContext } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
 
-export default function ProductNewEditForm( { currentProduct } )
+export default function ProductNewEditForm( { currentProduct2 } )
 {
 
        const annonceFromStore = useSelector( ( state ) => state.annonces.data );
-       const user = useSelector( ( state ) => state.setUsers.selectedUser );
-       const { isFulled, isPending } = useSelector( ( state ) => state.addAnnonces );
+       const { user } = useAuthContext()
 
+       const { isFulled, isPending } = useSelector( ( state ) => state.addAnnonces );
+       const isFulledUpdate = useSelector( ( state ) => state.updateUserAnnonce.isFulled );
+       const isPendingUpdate = useSelector( ( state ) => state.updateUserAnnonce.isPending );
+
+       const [ selectedTag, setSelectedTag ] = useState( null );
 
 
 
        const redirect = useNavigate();
        const dispatch = useDispatch()
+       const location = useLocation();
+       const currentProduct = location.state?.data;
+       const [ aLaUne, setChecked ] = useState( currentProduct?.aLaUne || false ); // État du switch
+       // const currentProduct = location.state !== null ? location.state.data : undefined;
+       // console.log( currentProduct );
+
+
 
        const router = useRouter();
 
@@ -74,12 +87,12 @@ export default function ProductNewEditForm( { currentProduct } )
        const [ dataToAdd, setDataToAdd ] = useState( [] );
 
        const NewProductSchema = Yup.object().shape( {
-              name: Yup.string().required( 'Name is required' ),
-              images: Yup.array().min( 1, 'Images is required' ),
+              // name: Yup.string().required( 'Name is required' ),
+              // images: Yup.array().min( 1, 'Images is required' ),
               // tags: Yup.array().min( 2, 'Must have at least 2 tags' ),
               // category: Yup.string().required( 'Category is required' ),
-              price: Yup.number().moreThan( 0, 'Price should not be $0.00' ),
-              description: Yup.string().required( 'Description is required' ),
+              // price: Yup.number().moreThan( 0, 'Price should not be $0.00' ),
+              // description: Yup.string().required( 'Description is required' ),
               // not required
               taxes: Yup.number(),
               newLabel: Yup.object().shape( {
@@ -92,6 +105,38 @@ export default function ProductNewEditForm( { currentProduct } )
               } ),
        } );
 
+       const ville = [
+
+
+              'bangante', 'bafoussam', 'dschang',
+              'yaounde',
+              'omnisport',
+              'ngousso',
+              'douala', 'makepe', 'bonaberi'
+
+       ];
+
+       const catgOptions = [
+
+
+              'categorie1',
+              'categorie2',
+              'categorie3',
+              'categorie4',
+
+
+       ];
+
+       const genre = [
+              { label: 'Homme', value: 'Homme' },
+              { label: 'Femme', value: 'Femme' },
+       ];
+
+       const accept = [
+              { label: 'Oui', value: 'Oui' },
+              { label: 'Non', value: 'Non' },
+       ];
+
        const defaultValues = useMemo(
               () => ( {
                      name: currentProduct?.name || '',
@@ -102,12 +147,17 @@ export default function ProductNewEditForm( { currentProduct } )
                      code: currentProduct?.code || '',
                      sku: currentProduct?.sku || '',
                      price: currentProduct?.price || 0,
+                     prixMassage: currentProduct?.prixMassage || 0,
+                     prixNuit: currentProduct?.prixNuit || 0,
+                     prix1coup: currentProduct?.prix1coup || 0,
+                     prix2coup: currentProduct?.prix2coup || 0,
                      quantity: currentProduct?.quantity || 0,
                      priceSale: currentProduct?.priceSale || 0,
-                     tags: currentProduct?.tags || [],
+                     city: currentProduct?.city || [],
+                     categorie: currentProduct?.categorie || [],
                      taxes: currentProduct?.taxes || 0,
-                     gender: currentProduct?.gender || '',
-                     category: currentProduct?.category || '',
+                     seDeplace: currentProduct?.seDeplace || '',
+                     personAccept: currentProduct?.personAccept || '',
                      colors: currentProduct?.colors || [],
                      sizes: currentProduct?.sizes || [],
                      newLabel: currentProduct?.newLabel || { enabled: false, content: '' },
@@ -163,10 +213,44 @@ export default function ProductNewEditForm( { currentProduct } )
               if ( isFulled && !isPending )
               {
 
+                     dispatch( resetAfterRequest() )
                      dispatch( addData( dataToAdd ) )
+                     enqueueSnackbar( 'annonce publier avec succes' );
+                     redirect( -1 );
+
 
               }
-       }, [ isFulled, isPending, dataToAdd, dispatch ] )
+       }, [ isFulled, isPending, dataToAdd, dispatch, redirect, enqueueSnackbar ] )
+
+
+
+
+
+
+
+
+
+
+
+       useEffect( () =>
+       {
+
+
+
+              if ( !isPendingUpdate && isFulledUpdate )
+              {
+
+
+                     dispatch( resetAfterUpdate() )
+                     redirect( -1 );
+
+
+
+                     enqueueSnackbar( 'Annonce mis à jour avec succes!' );
+
+              }
+
+       }, [ enqueueSnackbar, dispatch, redirect, isFulledUpdate, isPendingUpdate ] );
 
 
 
@@ -187,10 +271,11 @@ export default function ProductNewEditForm( { currentProduct } )
               {
 
 
+                     // console.log( 'datat to add', data );
+
                      await new Promise( ( resolve ) => setTimeout( resolve, 500 ) );
 
                      // reset();
-                     enqueueSnackbar( currentProduct ? 'Update success!' : 'Create success!' );
                      // console.log( 'user du send ', user );
 
                      const object = {
@@ -198,9 +283,8 @@ export default function ProductNewEditForm( { currentProduct } )
 
 
                             "publish": "published",
-                            "categorie": "categorie2",
                             "price": "2500",
-                            "profile": "VIP",
+                            "profile": "standard",
                             "metaKeywords": [
                                    "Fitness",
                                    "Nature",
@@ -252,68 +336,6 @@ export default function ProductNewEditForm( { currentProduct } )
                                                         "postedAt": "2025-01-18T10:54:57.988Z"
                                                  }
                                           ]
-                                   },
-                                   {
-                                          "id": "206bab86-4b59-456e-a0c6-2bb7f4500874",
-                                          "name": "Reece Chung",
-                                          "avatarUrl": "https://api-dev-minimal-v510.vercel.app/assets/images/avatar/avatar_5.jpg",
-                                          "message": "He carefully crafted a beautiful sculpture out of clay, his hands skillfully shaping the intricate details.",
-                                          "postedAt": "2025-01-17T09:54:57.988Z",
-                                          "users": [
-                                                 {
-                                                        "id": "e99f09a7-dd88-49d5-b1c8-1daf80c2d7b6",
-                                                        "name": "Lainey Davidson",
-                                                        "avatarUrl": "https://api-dev-minimal-v510.vercel.app/assets/images/avatar/avatar_6.jpg"
-                                                 },
-                                                 {
-                                                        "id": "e99f09a7-dd88-49d5-b1c8-1daf80c2d7b7",
-                                                        "name": "Cristopher Cardenas",
-                                                        "avatarUrl": "https://api-dev-minimal-v510.vercel.app/assets/images/avatar/avatar_7.jpg"
-                                                 },
-                                                 {
-                                                        "id": "e99f09a7-dd88-49d5-b1c8-1daf80c2d7b8",
-                                                        "name": "Melanie Noble",
-                                                        "avatarUrl": "https://api-dev-minimal-v510.vercel.app/assets/images/avatar/avatar_8.jpg"
-                                                 }
-                                          ],
-                                          "replyComment": [
-                                                 {
-                                                        "id": "1dfde117-5005-45a6-a2c5-31ceab23bba1",
-                                                        "userId": "e99f09a7-dd88-49d5-b1c8-1daf80c2d7b6",
-                                                        "message": "The concert was a mesmerizing experience, with the music filling the venue and the crowd cheering in delight.",
-                                                        "postedAt": "2025-01-16T08:54:57.988Z"
-                                                 },
-                                                 {
-                                                        "id": "7955c5a0-a080-43a3-88d9-525bafa8c7ec",
-                                                        "userId": "e99f09a7-dd88-49d5-b1c8-1daf80c2d7b7",
-                                                        "message": "The waves crashed against the shore, creating a soothing symphony of sound.",
-                                                        "postedAt": "2025-01-15T07:54:57.988Z"
-                                                 },
-                                                 {
-                                                        "id": "c0b810c1-f366-4fa2-91d3-b117fc3c3c77",
-                                                        "userId": "e99f09a7-dd88-49d5-b1c8-1daf80c2d7b8",
-                                                        "message": "The scent of blooming flowers wafted through the garden, creating a fragrant paradise.",
-                                                        "postedAt": "2025-01-14T06:54:57.988Z"
-                                                 }
-                                          ]
-                                   },
-                                   {
-                                          "id": "0b16f8a7-0df3-4414-a5f4-99f5343a1dd9",
-                                          "name": "Chase Day",
-                                          "avatarUrl": "https://api-dev-minimal-v510.vercel.app/assets/images/avatar/avatar_9.jpg",
-                                          "message": "She gazed up at the night sky, marveling at the twinkling stars that dotted the darkness.",
-                                          "postedAt": "2025-01-13T05:54:57.988Z",
-                                          "users": [],
-                                          "replyComment": []
-                                   },
-                                   {
-                                          "id": "b2419a3d-fc8b-4c25-befe-3363a009b371",
-                                          "name": "Shawn Manning",
-                                          "avatarUrl": "https://api-dev-minimal-v510.vercel.app/assets/images/avatar/avatar_10.jpg",
-                                          "message": "The professor delivered a captivating lecture, engaging the students with thought-provoking ideas.",
-                                          "postedAt": "2025-01-12T04:54:57.988Z",
-                                          "users": [],
-                                          "replyComment": []
                                    }
                             ],
                             "tags": [
@@ -331,6 +353,7 @@ export default function ProductNewEditForm( { currentProduct } )
                             "totalShares": 6984,
                             "totalComments": 9124,
                             "totalFavorites": 8488,
+                            "totalRating": 12500,
                             "metaDescription": "The starting point for your next project with Minimal UI Kit",
                             "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. ",
                             "author": {
@@ -341,95 +364,35 @@ export default function ProductNewEditForm( { currentProduct } )
                                    {
                                           "name": "Jayvion Simon",
                                           "avatarUrl": "https://api-dev-minimal-v510.vercel.app/assets/images/avatar/avatar_1.jpg"
-                                   },
-                                   {
-                                          "name": "Lucian Obrien",
-                                          "avatarUrl": "https://api-dev-minimal-v510.vercel.app/assets/images/avatar/avatar_2.jpg"
-                                   },
-                                   {
-                                          "name": "Deja Brady",
-                                          "avatarUrl": "https://api-dev-minimal-v510.vercel.app/assets/images/avatar/avatar_3.jpg"
-                                   },
-                                   {
-                                          "name": "Harrison Stein",
-                                          "avatarUrl": "https://api-dev-minimal-v510.vercel.app/assets/images/avatar/avatar_4.jpg"
-                                   },
-                                   {
-                                          "name": "Reece Chung",
-                                          "avatarUrl": "https://api-dev-minimal-v510.vercel.app/assets/images/avatar/avatar_5.jpg"
-                                   },
-                                   {
-                                          "name": "Lainey Davidson",
-                                          "avatarUrl": "https://api-dev-minimal-v510.vercel.app/assets/images/avatar/avatar_6.jpg"
-                                   },
-                                   {
-                                          "name": "Cristopher Cardenas",
-                                          "avatarUrl": "https://api-dev-minimal-v510.vercel.app/assets/images/avatar/avatar_7.jpg"
-                                   },
-                                   {
-                                          "name": "Melanie Noble",
-                                          "avatarUrl": "https://api-dev-minimal-v510.vercel.app/assets/images/avatar/avatar_8.jpg"
-                                   },
-                                   {
-                                          "name": "Chase Day",
-                                          "avatarUrl": "https://api-dev-minimal-v510.vercel.app/assets/images/avatar/avatar_9.jpg"
-                                   },
-                                   {
-                                          "name": "Shawn Manning",
-                                          "avatarUrl": "https://api-dev-minimal-v510.vercel.app/assets/images/avatar/avatar_10.jpg"
-                                   },
-                                   {
-                                          "name": "Soren Durham",
-                                          "avatarUrl": "https://api-dev-minimal-v510.vercel.app/assets/images/avatar/avatar_11.jpg"
-                                   },
-                                   {
-                                          "name": "Cortez Herring",
-                                          "avatarUrl": "https://api-dev-minimal-v510.vercel.app/assets/images/avatar/avatar_12.jpg"
-                                   },
-                                   {
-                                          "name": "Brycen Jimenez",
-                                          "avatarUrl": "https://api-dev-minimal-v510.vercel.app/assets/images/avatar/avatar_13.jpg"
-                                   },
-                                   {
-                                          "name": "Giana Brandt",
-                                          "avatarUrl": "https://api-dev-minimal-v510.vercel.app/assets/images/avatar/avatar_14.jpg"
-                                   },
-                                   {
-                                          "name": "Aspen Schmitt",
-                                          "avatarUrl": "https://api-dev-minimal-v510.vercel.app/assets/images/avatar/avatar_15.jpg"
-                                   },
-                                   {
-                                          "name": "Colten Aguilar",
-                                          "avatarUrl": "https://api-dev-minimal-v510.vercel.app/assets/images/avatar/avatar_16.jpg"
-                                   },
-                                   {
-                                          "name": "Angelique Morse",
-                                          "avatarUrl": "https://api-dev-minimal-v510.vercel.app/assets/images/avatar/avatar_17.jpg"
-                                   },
-                                   {
-                                          "name": "Selina Boyer",
-                                          "avatarUrl": "https://api-dev-minimal-v510.vercel.app/assets/images/avatar/avatar_18.jpg"
-                                   },
-                                   {
-                                          "name": "Lawson Bass",
-                                          "avatarUrl": "https://api-dev-minimal-v510.vercel.app/assets/images/avatar/avatar_19.jpg"
-                                   },
-                                   {
-                                          "name": "Ariana Lang",
-                                          "avatarUrl": "https://api-dev-minimal-v510.vercel.app/assets/images/avatar/avatar_20.jpg"
                                    }
                             ],
 
                             ...data,
-                            id: Date.now(),
-                            userEmail: user !== null ? user.email : 'user@gmail.com',
+                            aLaUne,
+                            id: !currentProduct ? Date.now() : Number( currentProduct.id ),
+                            userEmail: !currentProduct ? user.email : currentProduct.userEmail
 
 
                      }
+                     if ( !currentProduct )
+                     {
 
-                     dispatch( request( object ) )
-                     setDataToAdd( object )
-                     // redirect( -1 );
+                            dispatch( request( object ) )
+                            setDataToAdd( object )
+                            // console.log( 'email du user', user.email, 'user email envoyer', object.userEmail );
+                            // console.log( 'dtaa to add', object );
+
+                     }
+
+
+                     if ( currentProduct )
+                     {
+
+                            dispatch( updateAnnoncesRequest( object ) )
+                            // console.log( 'dtaa to add', object );
+                            // console.log( 'email du user', user.email, 'user email envoyer', object.userEmail );
+
+                     }
 
 
               } catch ( error )
@@ -486,6 +449,13 @@ export default function ProductNewEditForm( { currentProduct } )
               setIncludeTaxes( event.target.checked );
        }, [] );
 
+       const handleChange = ( event ) =>
+       {
+              setChecked( event.target.checked ); // Mettre à jour l'état
+              console.log( "Valeur du Switch :", event.target.checked ); // Log de la valeur
+       };
+
+
        const renderDetails = (
               <>
                      { mdUp && (
@@ -494,7 +464,7 @@ export default function ProductNewEditForm( { currentProduct } )
                                           Details
                                    </Typography>
                                    <Typography variant="body2" sx={ { color: 'text.secondary' } }>
-                                          Title, short description, image...
+                                          titre, courte description, image...
                                    </Typography>
                             </Grid>
                      ) }
@@ -504,14 +474,14 @@ export default function ProductNewEditForm( { currentProduct } )
                                    { !mdUp && <CardHeader title="Details" /> }
 
                                    <Stack spacing={ 3 } sx={ { p: 3 } }>
-                                          <RHFTextField name="name" label="Product Name" />
+                                          <RHFTextField name="name" label="Titre de l'annonce" />
 
-                                          <RHFTextField name="subDescription" label="Sub Description" multiline rows={ 4 } />
+                                          <RHFTextField name="subDescription" label="Description" multiline rows={ 4 } />
 
-                                          <Stack spacing={ 1.5 }>
+                                          {/* <Stack spacing={ 1.5 }>
                                                  <Typography variant="subtitle2">Content</Typography>
                                                  <RHFEditor simple name="description" />
-                                          </Stack>
+                                          </Stack> */}
 
                                           <Stack spacing={ 1.5 }>
                                                  <Typography variant="subtitle2">Images</Typography>
@@ -537,10 +507,10 @@ export default function ProductNewEditForm( { currentProduct } )
                      { mdUp && (
                             <Grid md={ 4 }>
                                    <Typography variant="h6" sx={ { mb: 0.5 } }>
-                                          Properties
+                                          Autre details
                                    </Typography>
                                    <Typography variant="body2" sx={ { color: 'text.secondary' } }>
-                                          Additional functions and attributes...
+                                          Details additionels
                                    </Typography>
                             </Grid>
                      ) }
@@ -559,41 +529,132 @@ export default function ProductNewEditForm( { currentProduct } )
                                                         md: 'repeat(2, 1fr)',
                                                  } }
                                           >
-                                                 <RHFTextField name="code" label="Product Code" />
+                                                 {/* <RHFTextField name="code" label="Product Code" />
 
-                                                 <RHFTextField name="sku" label="Product SKU" />
+                                                 <RHFTextField name="sku" label="Product SKU" /> */}
 
-                                                 <RHFTextField
+                                                 {/* <RHFTextField
                                                         name="quantity"
                                                         label="Quantity"
                                                         placeholder="0"
                                                         type="number"
                                                         InputLabelProps={ { shrink: true } }
+                                                 /> */}
+                                                 <RHFAutocomplete
+                                                        name="city"
+                                                        label="Villes"
+                                                        placeholder="+"
+                                                        multiple
+                                                        freeSolo
+                                                        options={ ville }
+                                                        getOptionLabel={ ( option ) => option }
+                                                        value={ watch( "city" ) } // Utiliser React Hook Form pour stocker la valeur
+
+                                                        // value={ selectedTag ? [ selectedTag ] : [] } // Autoriser uniquement un élément
+                                                        // onChange={ ( event, newValue ) =>
+                                                        // {
+                                                        //        if ( newValue.length > 1 )
+                                                        //        {
+                                                        //               return; // Bloquer l'ajout de plus d'un élément
+                                                        //        }
+                                                        //        setSelectedTag( newValue[ 0 ] || null ); // Stocker uniquement un élément
+                                                        // } }
+                                                        onChange={ ( event, newValue ) =>
+                                                        {
+                                                               if ( newValue.length > 1 )
+                                                               {
+                                                                      return; // Bloquer l'ajout de plus d'un élément
+                                                               }
+                                                               setValue( "city", newValue ); // Mettre à jour React Hook Form
+                                                        } }
+                                                        renderOption={ ( props, option ) => (
+                                                               <li { ...props } key={ option }>
+                                                                      { option }
+                                                               </li>
+                                                        ) }
+                                                        renderTags={ ( selected, getTagProps ) =>
+                                                               selected.map( ( option, index ) => (
+                                                                      <Chip
+                                                                             { ...getTagProps( { index } ) }
+                                                                             key={ option }
+                                                                             label={ option }
+                                                                             size="small"
+                                                                             color="info"
+                                                                             variant="soft"
+                                                                      />
+                                                               ) )
+                                                        }
                                                  />
+                                                 <Stack >
+                                                        <RHFAutocomplete
+                                                               name="categorie"
+                                                               label="categories"
+                                                               placeholder="+"
+                                                               multiple
+                                                               freeSolo
+                                                               options={ catgOptions }
+                                                               getOptionLabel={ ( option ) => option }
+                                                               value={ watch( "categorie" ) } // Utiliser React Hook Form pour stocker la valeur
 
-                                                 <RHFSelect native name="category" label="Category" InputLabelProps={ { shrink: true } }>
-                                                        { PRODUCT_CATEGORY_GROUP_OPTIONS.map( ( category ) => (
-                                                               <optgroup key={ category.group } label={ category.group }>
-                                                                      { category.classify.map( ( classify ) => (
-                                                                             <option key={ classify } value={ classify }>
-                                                                                    { classify }
-                                                                             </option>
-                                                                      ) ) }
-                                                               </optgroup>
-                                                        ) ) }
-                                                 </RHFSelect>
+                                                               // value={ selectedTag ? [ selectedTag ] : [] } // Autoriser uniquement un élément
+                                                               // onChange={ ( event, newValue ) =>
+                                                               // {
+                                                               //        if ( newValue.length > 1 )
+                                                               //        {
+                                                               //               return; // Bloquer l'ajout de plus d'un élément
+                                                               //        }
+                                                               //        setSelectedTag( newValue[ 0 ] || null ); // Stocker uniquement un élément
+                                                               // } }
+                                                               onChange={ ( event, newValue ) =>
+                                                               {
+                                                                      if ( newValue.length > 1 )
+                                                                      {
+                                                                             return; // Bloquer l'ajout de plus d'un élément
+                                                                      }
+                                                                      setValue( "categorie", newValue ); // Mettre à jour React Hook Form
+                                                               } }
+                                                               renderOption={ ( props, option ) => (
+                                                                      <li { ...props } key={ option }>
+                                                                             { option }
+                                                                      </li>
+                                                               ) }
+                                                               renderTags={ ( selected, getTagProps ) =>
+                                                                      selected.map( ( option, index ) => (
+                                                                             <Chip
+                                                                                    { ...getTagProps( { index } ) }
+                                                                                    key={ option }
+                                                                                    label={ option }
+                                                                                    size="small"
+                                                                                    color="info"
+                                                                                    variant="soft"
+                                                                             />
+                                                                      ) )
+                                                               }
+                                                        />
+                                                 </Stack>
 
-                                                 <RHFMultiSelect
+                                                 <Stack >
+                                                        <Typography variant="subtitle2">Personne accepté</Typography>
+                                                        <RHFMultiCheckbox row name="personAccept" spacing={ 2 } options={ genre } />
+                                                 </Stack>
+
+                                                 <Stack >
+                                                        <Typography variant="subtitle2">Se deplace</Typography>
+                                                        <RHFMultiCheckbox row name="seDeplace" spacing={ 2 } options={ accept } />
+                                                 </Stack>
+
+
+                                                 {/* <RHFMultiSelect
                                                         checkbox
                                                         name="colors"
                                                         label="Colors"
                                                         options={ PRODUCT_COLOR_NAME_OPTIONS }
                                                  />
 
-                                                 <RHFMultiSelect checkbox name="sizes" label="Sizes" options={ PRODUCT_SIZE_OPTIONS } />
+                                                 <RHFMultiSelect checkbox name="sizes" label="Sizes" options={ PRODUCT_SIZE_OPTIONS } /> */}
                                           </Box>
 
-                                          <RHFAutocomplete
+                                          {/* <RHFAutocomplete
                                                  name="tags"
                                                  label="Tags"
                                                  placeholder="+ Tags"
@@ -618,16 +679,16 @@ export default function ProductNewEditForm( { currentProduct } )
                                                                />
                                                         ) )
                                                  }
-                                          />
+                                          /> */}
 
-                                          <Stack spacing={ 1 }>
-                                                 <Typography variant="subtitle2">Gender</Typography>
-                                                 <RHFMultiCheckbox row name="gender" spacing={ 2 } options={ PRODUCT_GENDER_OPTIONS } />
-                                          </Stack>
+
+
+
+
 
                                           <Divider sx={ { borderStyle: 'dashed' } } />
 
-                                          <Stack direction="row" alignItems="center" spacing={ 3 }>
+                                          {/* <Stack direction="row" alignItems="center" spacing={ 3 }>
                                                  <RHFSwitch name="saleLabel.enabled" label={ null } sx={ { m: 0 } } />
                                                  <RHFTextField
                                                         name="saleLabel.content"
@@ -645,7 +706,7 @@ export default function ProductNewEditForm( { currentProduct } )
                                                         fullWidth
                                                         disabled={ !values.newLabel.enabled }
                                                  />
-                                          </Stack>
+                                          </Stack> */}
                                    </Stack>
                             </Card>
                      </Grid>
@@ -657,10 +718,10 @@ export default function ProductNewEditForm( { currentProduct } )
                      { mdUp && (
                             <Grid md={ 4 }>
                                    <Typography variant="h6" sx={ { mb: 0.5 } }>
-                                          Pricing
+                                          Tarif
                                    </Typography>
                                    <Typography variant="body2" sx={ { color: 'text.secondary' } }>
-                                          Price related inputs
+                                          Different prix
                                    </Typography>
                             </Grid>
                      ) }
@@ -669,10 +730,10 @@ export default function ProductNewEditForm( { currentProduct } )
                             <Card>
                                    { !mdUp && <CardHeader title="Pricing" /> }
 
-                                   <Stack spacing={ 3 } sx={ { p: 3 } }>
+                                   <Stack direction="row" alignItems="center" flexWrap={ { xs: "wrap", md: "nowrap" } } spacing={ 3 } sx={ { p: 3 } }>
                                           <RHFTextField
-                                                 name="price"
-                                                 label="Regular Price"
+                                                 name="prix1coup"
+                                                 label="1 coup"
                                                  placeholder="0.00"
                                                  type="number"
                                                  InputLabelProps={ { shrink: true } }
@@ -680,7 +741,7 @@ export default function ProductNewEditForm( { currentProduct } )
                                                         startAdornment: (
                                                                <InputAdornment position="start">
                                                                       <Box component="span" sx={ { color: 'text.disabled' } }>
-                                                                             $
+                                                                             fcfa
                                                                       </Box>
                                                                </InputAdornment>
                                                         ),
@@ -688,8 +749,8 @@ export default function ProductNewEditForm( { currentProduct } )
                                           />
 
                                           <RHFTextField
-                                                 name="priceSale"
-                                                 label="Sale Price"
+                                                 name="prix2coup"
+                                                 label="2 coup"
                                                  placeholder="0.00"
                                                  type="number"
                                                  InputLabelProps={ { shrink: true } }
@@ -697,19 +758,19 @@ export default function ProductNewEditForm( { currentProduct } )
                                                         startAdornment: (
                                                                <InputAdornment position="start">
                                                                       <Box component="span" sx={ { color: 'text.disabled' } }>
-                                                                             $
+                                                                             fcfa
                                                                       </Box>
                                                                </InputAdornment>
                                                         ),
                                                  } }
                                           />
 
-                                          <FormControlLabel
+                                          {/* <FormControlLabel
                                                  control={ <Switch checked={ includeTaxes } onChange={ handleChangeIncludeTaxes } /> }
                                                  label="Price includes taxes"
-                                          />
+                                          /> */}
 
-                                          { !includeTaxes && (
+                                          {/* { !includeTaxes && (
                                                  <RHFTextField
                                                         name="taxes"
                                                         label="Tax (%)"
@@ -726,7 +787,67 @@ export default function ProductNewEditForm( { currentProduct } )
                                                                ),
                                                         } }
                                                  />
-                                          ) }
+                                          ) } */}
+                                   </Stack>
+
+                                   <Stack direction="row" alignItems="center" flexWrap={ { xs: "wrap", md: "nowrap" } } spacing={ 3 } sx={ { p: 3 } }>
+                                          <RHFTextField
+                                                 name="prixMassage"
+                                                 label="Massage"
+                                                 placeholder="0.00"
+                                                 type="number"
+                                                 InputLabelProps={ { shrink: true } }
+                                                 InputProps={ {
+                                                        startAdornment: (
+                                                               <InputAdornment position="start">
+                                                                      <Box component="span" sx={ { color: 'text.disabled' } }>
+                                                                             fcfa
+                                                                      </Box>
+                                                               </InputAdornment>
+                                                        ),
+                                                 } }
+                                          />
+
+                                          <RHFTextField
+                                                 name="prixNuit"
+                                                 label="Nuit Entiere"
+                                                 placeholder="0.00"
+                                                 type="number"
+                                                 InputLabelProps={ { shrink: true } }
+                                                 InputProps={ {
+                                                        startAdornment: (
+                                                               <InputAdornment position="start">
+                                                                      <Box component="span" sx={ { color: 'text.disabled' } }>
+                                                                             fcfa
+                                                                      </Box>
+                                                               </InputAdornment>
+                                                        ),
+                                                 } }
+                                          />
+
+                                          {/* <FormControlLabel
+                                                 control={ <Switch checked={ includeTaxes } onChange={ handleChangeIncludeTaxes } /> }
+                                                 label="Price includes taxes"
+                                          /> */}
+
+                                          {/* { !includeTaxes && (
+                                                 <RHFTextField
+                                                        name="taxes"
+                                                        label="Tax (%)"
+                                                        placeholder="0.00"
+                                                        type="number"
+                                                        InputLabelProps={ { shrink: true } }
+                                                        InputProps={ {
+                                                               startAdornment: (
+                                                                      <InputAdornment position="start">
+                                                                             <Box component="span" sx={ { color: 'text.disabled' } }>
+                                                                                    %
+                                                                             </Box>
+                                                                      </InputAdornment>
+                                                               ),
+                                                        } }
+                                                 />
+                                          ) } */}
                                    </Stack>
                             </Card>
                      </Grid>
@@ -737,14 +858,16 @@ export default function ProductNewEditForm( { currentProduct } )
               <>
                      { mdUp && <Grid md={ 4 } /> }
                      <Grid xs={ 12 } md={ 8 } sx={ { display: 'flex', alignItems: 'center' } }>
-                            <FormControlLabel
-                                   control={ <Switch defaultChecked /> }
-                                   label="Publish"
-                                   sx={ { flexGrow: 1, pl: 3 } }
-                            />
 
-                            <LoadingButton type="submit" variant="contained" size="large" loading={ isSubmitting }>
-                                   { !currentProduct ? 'Poster' : 'Save Changes' }
+
+                            { user.role === "admin" && <FormControlLabel
+                                   control={ <Switch checked={ aLaUne } onChange={ handleChange } /> }
+                                   label="A la lune"
+                                   sx={ { flexGrow: 1, pl: 3 } }
+                            /> }
+
+                            <LoadingButton sx={ { marginLeft: "auto" } } type="submit" variant="contained" size="large" loading={ isSubmitting }>
+                                   { !currentProduct ? 'Publier' : 'Modifier' }
                             </LoadingButton>
                      </Grid>
               </>
@@ -766,5 +889,5 @@ export default function ProductNewEditForm( { currentProduct } )
 }
 
 ProductNewEditForm.propTypes = {
-       currentProduct: PropTypes.object,
+       currentProduct2: PropTypes.object,
 };

@@ -14,7 +14,8 @@ export async function request( data )
               {
 
 
-                     response = await axiosInstance.get( `http://localhost:5000/annonces` );
+                     response = await axiosInstance.get( `http://localhost:5000/comments/${ data.annonceId }` );
+
                      // response = await axiosInstance.get( `http://192.168.1.122:5000/annonces` );
 
 
@@ -24,7 +25,7 @@ export async function request( data )
               {
 
 
-                     response = await axiosInstance.get( `http://localhost:5000/annonces/all` );
+                     // response = await axiosInstance.get( `http://localhost:5000/annonces/all` );
 
 
               }

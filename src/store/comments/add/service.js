@@ -22,8 +22,10 @@ export async function request( data )
        {
 
               // const response = await axiosInstance.get( `${ endpoints.user.get }/${ userID }` );
-              const response = await axiosInstance.post( `http://localhost:5000/annonces/${ data.userEmail }`, { ...data } );
-              // console.log( 'Réponse de la requête :', response.data );
+              console.log( 'requette pour ajouter appeler' );
+
+              const response = await axiosInstance.post( `http://localhost:5000/comments/${ data.annonceId }`, { ...data.data } );
+              console.log( 'Réponse de la requête :', response.data );
               return response;
 
 

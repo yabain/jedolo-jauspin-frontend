@@ -23,10 +23,12 @@ const pendingAction = ( state ) =>
 
 
 
-const resetState = ( state ) => 
+const resetGetState = ( state ) => 
 {
        state.isPending = false;
        state.isFulled = false;
+       console.log( 'Réinitialisation du state' );
+
 }
 
 
@@ -41,8 +43,8 @@ const fulfilledAction = ( state, action ) =>
 {
        state.isFulled = true;
        state.isPending = false;
-       state.data = [ { ...action.payload.data.annonce } ];
-       // console.log( 'Données chargées avec succès dans Redux:', action.payload );
+       state.data = action.payload;
+       // console.log( 'fonction appeler:', action.payload );
 }
 
 
@@ -56,7 +58,7 @@ const fulfilledAction = ( state, action ) =>
 const rejectedAction = ( state, action ) => 
 {
        state.isPending = false;
-       state.msg = action?.payload?.data ? action.payload.data.message : action.error.message;
+       state.msg = action?.payload?.data ? action.payload.message : action.error.message;
        console.log( 'Erreur detecter depuis le reducer lors de la recuperation des données:', state.msg );
 }
 
@@ -86,8 +88,8 @@ const requestCases = ( builder ) => builder
 
 
 export const getSlice = createSlice( {
-       name: 'add', extraReducers: requestCases,
-       reducers: { resetAfterRequest: resetState },
+       name: 'getusersAnnoncesComments', extraReducers: requestCases,
+       reducers: { resetAfterRequest: resetGetState },
        initialState: { data: [], isPending: false, isFulled: false, }
 } );
 
@@ -101,4 +103,4 @@ export const getSlice = createSlice( {
 
 export default getSlice.reducer
 export const { resetAfterRequest } = getSlice.actions;
-export const request = createAsyncThunk( 'add', async ( data ) => service.request( data ) )
+export const request = createAsyncThunk( 'getusersAnnoncesComments', async ( data ) => service.request( data ) )

@@ -37,6 +37,7 @@ export default function PostItemHorizontal( { post } )
 
        const {
               categorie,
+              city,
               title,
               author,
               publish,
@@ -47,8 +48,11 @@ export default function PostItemHorizontal( { post } )
               totalComments,
               description,
        } = post;
+       // console.log( post.createdAt );
+       // console.log( categorie );
 
-       const toconvert = post.createdAt
+
+       const toconvert = Number( post.createdAt )
        const createdAt = fDate( toconvert )
        // console.log( post );
 
@@ -62,7 +66,7 @@ export default function PostItemHorizontal( { post } )
                             >
                                    <Stack direction="row" alignItems="center" justifyContent="space-between" sx={ { mb: 2 } }>
                                           <Label variant="soft" color={ ( publish === 'published' && 'info' ) || 'default' }>
-                                                 { categorie }
+                                                 { categorie[ 0 ] }
                                           </Label>
 
                                           <Box component="span" sx={ { typography: 'caption', color: 'text.disabled' } }>
@@ -96,7 +100,7 @@ export default function PostItemHorizontal( { post } )
 
                                           <Box flexDirection="column" display="flex" alignItems="flex-start" width={ 1 } pb={ 1 }>
                                                  <Typography variant='button' >
-                                                        bafoussam
+                                                        { city[ 0 ] }
                                                  </Typography>
                                                  <Box component="span" sx={ { typography: 'caption', color: 'black' } }>
                                                         { createdAt }
@@ -200,7 +204,8 @@ export default function PostItemHorizontal( { post } )
 PostItemHorizontal.propTypes = {
        post: PropTypes.shape( {
               author: PropTypes.object,
-              categorie: PropTypes.string,
+              categorie: PropTypes.arrayOf( PropTypes.string ),
+              city: PropTypes.arrayOf( PropTypes.string ),
               coverUrl: PropTypes.string,
               // createdAt: PropTypes.oneOfType( [ PropTypes.string, PropTypes.instanceOf( Date ) ] ),
               createdAt: PropTypes.number,

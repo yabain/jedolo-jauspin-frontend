@@ -22,7 +22,16 @@ const io = require( "socket.io" )( server, {
 
 
 app.use( express.json() );
-app.use( cors() );
+// Configuration CORS pour Express
+app.use(
+       cors( {
+              origin: "*",  // Accepte toutes les origines
+              methods: "*",  // Accepte toutes les méthodes HTTP
+              allowedHeaders: "*",  // Accepte tous les en-têtes
+              credentials: true,  // Autorise les cookies et autres informations d'authentification
+       } )
+);
+
 
 
 const DATA_FILE = "data.json";
@@ -141,6 +150,8 @@ app.post( "/annonces/:email", ( req, res ) =>
 
 
        data.users[ email.trim() ].annonces.push( newAnnonce );
+       // console.log( 'donne ajouter au user', data.users[ email.trim() ] );
+
        data.annonces.push( newAnnonce );
 
        writeData( data );
@@ -163,6 +174,11 @@ app.get( "/annonces", ( req, res ) =>
 // 🔹 Récupérer toutes les annonces (globale)
 app.get( "/annonces/all", ( req, res ) =>
 {
+       // return res.json( {
+       //        error: "Erreur CORS : L'origine de la requête n'est pas autorisée.",
+       //        origin: req.headers,
+       // } );
+
        let data = readData();
        const publishedAnnonces = data.annonces;
 
@@ -274,23 +290,46 @@ app.patch( "/annonces/banned/:email/:id", ( req, res ) =>
 
 
 
-// 🔹 Supprimer une annonce
-app.delete( "/annonces/:email/:id", ( req, res ) =>
+// // 🔹 Supprimer une annonce
+// app.delete( "/annonces/:email/:id", ( req, res ) =>
+// {
+//        const { email, id } = req.params;
+//        let data = readData();
+
+//        if ( !data.users[ email.trim() ] )
+//        {
+//               return res.status( 404 ).json( { error: "Utilisateur non trouvé." } );
+//        }
+
+//        data.users[ email.trim() ].annonces = data.users[ email.trim() ].annonces.filter( a => a.id != id );
+//        data.annonces = data.annonces.filter( a => a.id != id );
+//        writeData( data );
+//        io.emit( "delete-annonce", req.body ); // Emission de l'événement 'new-annonce'
+
+//        res.json( { success: true, message: "Annonce supprimée." } );
+// } );
+
+// 🔹 Supprimer une annonce avec uniquement l'ID
+app.delete( "/annonces/:id", ( req, res ) =>
 {
-       const { email, id } = req.params;
+       const { id } = req.params;
        let data = readData();
 
-       if ( !data.users[ email.trim() ] )
-       {
-              return res.status( 404 ).json( { error: "Utilisateur non trouvé." } );
-       }
-
-       data.users[ email.trim() ].annonces = data.users[ email.trim() ].annonces.filter( a => a.id != id );
+       // Suppression dans les annonces générales
        data.annonces = data.annonces.filter( a => a.id != id );
+
+       // Suppression chez l'utilisateur
+       Object.keys( data.users ).forEach( email =>
+       {
+              data.users[ email.trim() ].annonces = data.users[ email.trim() ].annonces.filter( a => a.id != id );
+       } );
+
        writeData( data );
+       io.emit( "delete-annonce", { id } ); // Émettre l'ID de l'annonce supprimée
 
        res.json( { success: true, message: "Annonce supprimée." } );
 } );
+
 
 // ✅ **CATÉGORIES**
 // 🔹 Ajouter une catégorie
@@ -337,6 +376,65 @@ app.delete( "/categories/:name", ( req, res ) =>
        writeData( data );
 
        res.json( { success: true, message: "Catégorie supprimée." } );
+} );
+
+
+
+
+
+//comments
+
+
+// 🔹 Ajouter un commentaire 
+
+
+// 🔹 Ajouter un commentaire
+app.post( "/comments/:userId", ( req, res ) =>
+{
+       const { userId } = req.params; // ID de l'utilisateur sur lequel on commente
+       const comment = req.body; // L'objet représentant le commentaire est passé dans le body
+
+       // Vérifier si le commentaire contient les champs obligatoires
+
+
+       let data = readData();
+
+
+
+
+       // Créer l'objet comments[userId] s'il n'existe pas
+       if ( !data.comments )
+       {
+              data.comments = {}; // Initialiser l'objet comments s'il n'existe pas
+       }
+       if ( !data.comments[ userId ] )
+       {
+              data.comments[ userId ] = []; // Initialiser un tableau si l'utilisateur n'a pas encore de commentaires
+       }
+
+       // Ajouter le commentaire à l'objet global des commentaires
+       data.comments[ userId ].push( comment );
+
+       writeData( data );
+
+       // Émettre un événement Socket.io pour informer les clients du nouveau commentaire
+       io.emit( "new-comment", { userId, comment } );
+
+       res.json( { success: true, comment } );
+} );
+
+app.get( "/comments/:userId", ( req, res ) =>
+{
+       const { userId } = req.params;
+
+       let data = readData();
+
+
+
+       // Récupérer les commentaires de l'utilisateur
+       const userComments = data.comments[ userId ] || [];
+
+       res.json( { success: true, comments: userComments } );
 } );
 
 server.listen( PORT, () => console.log( `🚀 Serveur lancé sur http://localhost:${ PORT }` ) );

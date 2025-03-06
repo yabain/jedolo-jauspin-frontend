@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router';
 import PropTypes from 'prop-types';
 import { io } from 'socket.io-client';
 
-import { resetData, setData } from 'src/store/annonces/data/dataReducer';
+import { addData, resetData, setData } from 'src/store/annonces/data/dataReducer';
 import { getList, resetAfterGetListRequete } from 'src/store/annonces/getUserAnnonces/getReducer';
 import { request, resetAfterRequest } from 'src/store/annonces/getUsersAnnonces/reducer';
 import isEqual from 'lodash/isEqual';
@@ -49,6 +49,7 @@ import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 
+import { setValeurRef } from 'src/1data/annonces/ref';
 import { dataObject } from 'src/1data/annonces/defaut';
 import ProductTableToolbar from '../product-table-toolbar';
 import ProductTableFiltersResult from '../product-table-filters-result';
@@ -60,6 +61,8 @@ import
        RenderCellProduct,
        RenderCellCreatedAt,
 } from '../product-table-row';
+import DialogDeleteAnnonces from './modal-delete-Annonces';
+import DialogDeleteAnnonce from './modal-delete-Annonce';
 // ----------------------------------------------------------------------
 
 const PUBLISH_OPTIONS = [
@@ -87,8 +90,11 @@ export default function ProductListView( { toShow } )
        const { enqueueSnackbar } = useSnackbar();
        const dispatch = useDispatch()
 
+
+
+       const confirmOfDel = useBoolean();
        const confirmRows = useBoolean();
-       const naviguate = useNavigate()
+       const navigate = useNavigate()
 
        const router = useRouter();
 
@@ -105,6 +111,7 @@ export default function ProductListView( { toShow } )
 
        const [ columnVisibilityModel, setColumnVisibilityModel ] = useState( HIDE_COLUMNS );
 
+       const [ annonceToDel, setAnnonceToDel ] = useState( {} );
 
        const { user } = useAuthContext();
        const annonceList = useSelector( ( state ) => state.getAnnonces.data );
@@ -181,17 +188,11 @@ export default function ProductListView( { toShow } )
        useEffect( () =>
        {
 
-              if ( !isGeting && isGetingSuccess && annonceFromStore.length === 0 )
-              {
+
+              dispatch( setData( annonceList ) )
 
 
-                     dispatch( setData( annonceList ) )
-
-
-              }
-
-
-       }, [ isGetingSuccess, isGeting, annonceList, dispatch, annonceFromStore ] );
+       }, [ annonceList, dispatch ] );
 
 
 
@@ -207,6 +208,60 @@ export default function ProductListView( { toShow } )
 
        }, [ annonceFromStore ] );
 
+
+
+
+
+
+
+
+
+
+
+       useEffect( () =>
+       {
+              const socket = io( "http://localhost:5000" );
+              socket.on( 'update-annonce', ( update ) =>
+              {
+
+                     dispatch( setData( annoncesFunction.updateAnnonceInArray( annonceFromStore, update ) ) )
+                     console.log( 'nouvelle annonce detecter', update );
+
+              } );
+
+
+              socket.on( 'banned-annonce', ( update ) =>
+              {
+
+                     dispatch( setData( annoncesFunction.updateAnnonceInArray( annonceFromStore, update ) ) )
+
+                     console.log( 'nouvelle annonce detecter', update );
+
+
+              } );
+
+              socket.on( 'delete-annonce', ( del ) =>
+              {
+
+                     console.log( 'annonce a supprimer', del );
+
+
+                     dispatch( setData( annoncesFunction.deleteAnnonceInArray( annonceFromStore, del ) ) )
+              } );
+
+
+
+              // Écouter l'événement 'new-annonce' pour mettre à jour les annonces en temps réel
+              socket.on( 'new-annonce', ( newAnnonce ) =>
+              {
+                     if ( newAnnonce.userEmail === user.email ) dispatch( addData( newAnnonce ) )
+                     console.log( 'nouvelle annonce detecter', newAnnonce );
+
+              } );
+
+              return () => { socket.disconnect(); };
+
+       }, [ dispatch, annonceFromStore, user.email ] );
 
 
 
@@ -272,11 +327,12 @@ export default function ProductListView( { toShow } )
        }, [ enqueueSnackbar, selectedRowIds, tableData ] );
 
        const handleEditRow = useCallback(
-              ( id ) =>
+              ( data ) =>
               {
-                     router.push( paths.dashboard.product.edit( id ) );
+                     navigate( paths.annonces.edit, { state: { data } } );
+
               },
-              [ router ]
+              [ navigate ]
        );
 
        const handleViewRow = useCallback(
@@ -352,7 +408,7 @@ export default function ProductListView( { toShow } )
                                    showInMenu
                                    icon={ <Iconify icon="solar:pen-bold" /> }
                                    label="Edit"
-                                   onClick={ () => handleEditRow( params.row.id ) }
+                                   onClick={ () => handleEditRow( params.row ) }
                             />,
                             <GridActionsCellItem
                                    showInMenu
@@ -360,7 +416,7 @@ export default function ProductListView( { toShow } )
                                    label="Delete"
                                    onClick={ () =>
                                    {
-                                          handleDeleteRow( params.row.id );
+                                          confirmOfDel.onTrue(); setAnnonceToDel( params.row )
                                    } }
                                    sx={ { color: 'error.main' } }
                             />,
@@ -396,7 +452,7 @@ export default function ProductListView( { toShow } )
                                           <Button
                                                  // component={ RouterLink }
                                                  // href={ paths.dashboard.product.new }
-                                                 onClick={ () => naviguate( '/home/annonces/new' ) }
+                                                 onClick={ () => navigate( '/home/annonces/new' ) }
 
                                                  variant="contained"
                                                  startIcon={ <Iconify icon="mingcute:add-line" /> }
@@ -499,29 +555,10 @@ export default function ProductListView( { toShow } )
                             </Card>
                      </Box>
 
-                     <ConfirmDialog
-                            open={ confirmRows.value }
-                            onClose={ confirmRows.onFalse }
-                            title="Delete"
-                            content={
-                                   <>
-                                          Are you sure want to delete <strong> { selectedRowIds.length } </strong> items?
-                                   </>
-                            }
-                            action={
-                                   <Button
-                                          variant="contained"
-                                          color="error"
-                                          onClick={ () =>
-                                          {
-                                                 handleDeleteRows();
-                                                 confirmRows.onFalse();
-                                          } }
-                                   >
-                                          Delete
-                                   </Button>
-                            }
-                     />
+
+
+                     <DialogDeleteAnnonces showDialog={ confirmRows } data={ selectedRowIds } />
+                     <DialogDeleteAnnonce showDialog={ confirmOfDel } data={ annonceToDel } />
               </>
        );
 }

@@ -19,6 +19,11 @@ import bannedUserAnnoncesReducer from './annonces/banAnnonce/reducer'
 import usersSAnnoncesReducer from './annonces/data/users';
 import getUsersAnnoncesReducer from './annonces/getUsersAnnonces/reducer';
 
+
+// annonces users Import 
+import getUsersAnnoncesCommentsReducer from './comments/get/reducer';
+import addUsersAnnoncesCommentsReducer from './comments/add/reducer';
+
 // Combinaison des réducteurs traditionnels et des slices
 const rootReducer = combineReducers( {
 
@@ -35,6 +40,11 @@ const rootReducer = combineReducers( {
        // users 
        usersAnnonces: usersSAnnoncesReducer,
        getUsersAnnonces: getUsersAnnoncesReducer,
+
+       // comments
+       getUsersAnnoncesComments: getUsersAnnoncesCommentsReducer,
+       addUsersAnnoncesComments: addUsersAnnoncesCommentsReducer,
+
 } );
 
 // Configuration du store avec Redux Toolkit

@@ -14,10 +14,9 @@ import { io } from 'socket.io-client';
 import { resetData, setAdminData, setData } from 'src/store/annonces/data/dataReducer';
 import { getList, resetAfterGetListRequete } from 'src/store/annonces/getUserAnnonces/getReducer';
 import { request, resetAfterRequest } from 'src/store/annonces/getUsersAnnonces/reducer';
-import { request as deleteAnnonces } from 'src/store/annonces/deleteAnnonce/reducer';
+import { resetAfterRequest as resetAfterDelete, request as deleteAnnonces } from 'src/store/annonces/deleteAnnonce/reducer';
 import { request as updateAnnonce } from 'src/store/annonces/updateAnnonce/reducer';
-import { request as banAnnonce } from 'src/store/annonces/banAnnonce/reducer';
-
+import { resetAfterRequest as resetAfterBan, request as banAnnonce } from 'src/store/annonces/banAnnonce/reducer';
 import isEqual from 'lodash/isEqual';
 import { useState, useEffect, useCallback } from 'react';
 
@@ -54,6 +53,8 @@ import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 
+
+import { LoadingButton } from '@mui/lab';
 import { dataObject } from 'src/1data/annonces/defaut';
 import ProductTableToolbar from '../product-table-toolbar';
 import ProductTableFiltersResult from '../product-table-filters-result';
@@ -65,6 +66,8 @@ import
        RenderCellProduct,
        RenderCellCreatedAt,
 } from '../product-table-row';
+import DialogDeleteAnnonces from './modal-delete-Annonces';
+import DialogDeleteAnnonce from './modal-delete-Annonce';
 // ----------------------------------------------------------------------
 
 const PUBLISH_OPTIONS = [
@@ -91,7 +94,7 @@ export default function ProductListViewUsers( { toShow } )
 
        const router = useRouter();
        const dispatch = useDispatch()
-       const naviguate = useNavigate()
+       const navigate = useNavigate()
        const settings = useSettingsContext();
        const { enqueueSnackbar } = useSnackbar();
        const { products, productsLoading } = useGetProducts();
@@ -102,6 +105,7 @@ export default function ProductListViewUsers( { toShow } )
 
        const confirmRows = useBoolean();
        const confirmOfBan = useBoolean();
+       const confirmOfDel = useBoolean();
 
 
 
@@ -110,6 +114,7 @@ export default function ProductListViewUsers( { toShow } )
        const [ tableData, setTableData ] = useState( [] );
        const [ dataIsSet, setDataIsSet ] = useState( false );
        const [ annonceToBan, setAnnonceToBan ] = useState( {} );
+       const [ annonceToDel, setAnnonceToDel ] = useState( {} );
        const [ filters, setFilters ] = useState( defaultFilters );
        const [ selectedRowIds, setSelectedRowIds ] = useState( [] );
        const [ columnVisibilityModel, setColumnVisibilityModel ] = useState( HIDE_COLUMNS );
@@ -120,10 +125,18 @@ export default function ProductListViewUsers( { toShow } )
 
 
        const { user } = useAuthContext();
+
+       const { isFulled, isPending } = useSelector( ( state ) => state.getUsersAnnonces );
+
        const annonceList = useSelector( ( state ) => state.getAnnonces.data );
        const annonceFromStore = useSelector( ( state ) => state.annonces.adminData );
        const usersAnnonceList = useSelector( ( state ) => state.getUsersAnnonces.data );
-       const { isFulled, isPending } = useSelector( ( state ) => state.getUsersAnnonces );
+
+       const isFulledDelete = useSelector( ( state ) => state.deleteUserAnnonce.isFulled );
+       const isPendingDelete = useSelector( ( state ) => state.deleteUserAnnonce.isPending );
+
+       const isFulledBan = useSelector( ( state ) => state.bannedUserAnnonce.isFulled );
+       const isPendingBan = useSelector( ( state ) => state.bannedUserAnnonce.isPending );
 
 
 
@@ -136,9 +149,38 @@ export default function ProductListViewUsers( { toShow } )
        function updateAnnonceInArray( annonces, updatedAnnonce )
        {
 
-              const index = annonces.findIndex( annonce => annonce.id === updatedAnnonce.id );
+              console.log( 'updateAnnonceInArray', updatedAnnonce.id );
+              const index = annonces.findIndex( annonce => String( annonce.id ) === String( updatedAnnonce.id ) );
+
+              console.log( `Index trouvé : ${ index }` );
+
               if ( index === -1 ) { console.error( 'Annonce non trouvée dans le tableau' ); return annonces; }
               const newAnnonces = [ ...annonces.slice( 0, index ), updatedAnnonce, ...annonces.slice( index + 1 ), ];
+
+              console.log( 'nouvelle Annonces dans le store', newAnnonces );
+              return newAnnonces;
+       }
+
+
+
+
+
+
+
+
+
+       function deleteAnnonceInArray( annonces, updatedAnnonce )
+       {
+
+              console.log( 'updateAnnonceInArray', updatedAnnonce.id );
+              const index = annonces.findIndex( annonce => String( annonce.id ) === String( updatedAnnonce.id ) );
+
+              console.log( `Index trouvé : ${ index }` );
+
+              if ( index === -1 ) { console.error( 'Annonce non trouvée dans le tableau' ); return annonces; }
+              const newAnnonces = [ ...annonces.slice( 0, index ), ...annonces.slice( index + 1 ), ];
+
+              console.log( 'nouvelle Annonces dans le store', newAnnonces );
               return newAnnonces;
        }
 
@@ -175,20 +217,14 @@ export default function ProductListViewUsers( { toShow } )
               if ( !isPending && !isFulled )
               {
 
-                     if ( user === null || user === undefined ) 
-                     {
 
-                            dispatch( getList( 'user1@gmail.com' ) )
-                            return
-                     }
 
-                     if ( user.role === 'admin' ) 
-                     {
+                     dispatch( request( { type: 'admin' } ) )
 
-                            dispatch( request( user.email ) )
+                     console.log( 'init des useeerlist set ', usersAnnonceList );
 
-                            return
-                     }
+
+                     dispatch( setAdminData( usersAnnonceList ) )
 
 
                      dispatch( getList( user.email ) )
@@ -196,7 +232,7 @@ export default function ProductListViewUsers( { toShow } )
 
               }
 
-       }, [ dispatch, annonceList, user, isFulled, isPending, toShow ] );
+       }, [ dispatch, annonceList, user, isFulled, isPending, toShow, usersAnnonceList ] );
 
 
 
@@ -209,16 +245,15 @@ export default function ProductListViewUsers( { toShow } )
        useEffect( () =>
        {
 
-              if ( !isPending && isFulled && annonceFromStore.length === 0 )
-              {
+
+              console.log( 'update au changement de valeur' );
+
+              dispatch( setAdminData( usersAnnonceList ) )
 
 
-                     dispatch( setAdminData( usersAnnonceList ) )
-
-              }
 
 
-       }, [ isFulled, isPending, usersAnnonceList, dispatch, annonceFromStore ] );
+       }, [ usersAnnonceList, dispatch ] );
 
 
 
@@ -276,7 +311,9 @@ export default function ProductListViewUsers( { toShow } )
               {
 
                      dispatch( setAdminData( updateAnnonceInArray( annonceFromStore, update ) ) )
+
                      console.log( 'nouvelle annonce detecter', update );
+
 
               } );
 
@@ -293,16 +330,73 @@ export default function ProductListViewUsers( { toShow } )
 
 
 
+
+       useEffect( () =>
+       {
+              const socket = io( "http://localhost:5000" );
+
+
+
+              socket.on( 'delete-annonce', ( del ) =>
+              {
+
+                     console.log( 'annonce a supprimer', del );
+
+
+                     dispatch( setAdminData( deleteAnnonceInArray( annonceFromStore, del ) ) )
+              } );
+
+              return () => { socket.disconnect(); };
+
+       }, [ dispatch, annonceFromStore, ] );
+
+
+
+
+
+
+
+
+
+
+
+       useEffect( () =>
+       {
+
+
+
+              if ( !isPendingBan && isFulledBan )
+              {
+
+
+                     dispatch( resetAfterBan() )
+
+
+                     enqueueSnackbar( 'Annonce Banni avec succes!' );
+                     confirmOfBan.onFalse();
+
+              }
+
+       }, [ confirmOfBan, enqueueSnackbar, dispatch, isFulledBan, isPendingBan ] );
+
+
+
+
+
+
+
+
+
+
        const banAnnouncement = useCallback(
               () =>
               {
 
                      const banAnnonceObject = { ...annonceToBan, publish: 'banned' }
-                     enqueueSnackbar( 'Annonce banni avec succes!' );
                      dispatch( banAnnonce( banAnnonceObject ) )
 
               },
-              [ enqueueSnackbar, dispatch, annonceToBan ]
+              [ dispatch, annonceToBan ]
        );
 
 
@@ -355,21 +449,42 @@ export default function ProductListViewUsers( { toShow } )
               setFilters( defaultFilters );
        }, [] );
 
+
+
+
+
+
+
+
+
+
        const handleDeleteRow = useCallback(
               ( id, annonceToDelete ) =>
               {
 
 
-                     const deleteRow = tableData.filter( ( row ) => row.id !== id );
+                     // const deleteRow = tableData.filter( ( row ) => row.id !== id );
 
-                     console.log( annonceToDelete );
+                     console.log( 'annonce a suppppppppppp', annonceToDelete );
 
-                     enqueueSnackbar( 'fonction appeler!' );
+                     // enqueueSnackbar( 'fonction appeler!' );
+
+
+                     dispatch( deleteAnnonces( { id: annonceToDelete.id } ) )
 
                      // setTableData( deleteRow );
               },
-              [ enqueueSnackbar, tableData ]
+              [ dispatch ]
        );
+
+
+
+
+
+
+
+
+
 
 
        const handleDeleteRows = useCallback( () =>
@@ -382,11 +497,12 @@ export default function ProductListViewUsers( { toShow } )
        }, [ enqueueSnackbar, selectedRowIds, tableData ] );
 
        const handleEditRow = useCallback(
-              ( id ) =>
+              ( data ) =>
               {
-                     router.push( paths.dashboard.product.edit( id ) );
+                     navigate( paths.annonces.edit, { state: { data } } );
+
               },
-              [ router ]
+              [ navigate ]
        );
 
        const handleViewRow = useCallback(
@@ -462,7 +578,7 @@ export default function ProductListViewUsers( { toShow } )
                                    showInMenu
                                    icon={ <Iconify icon="solar:pen-bold" /> }
                                    label="Edit"
-                                   onClick={ () => handleEditRow( params.row.id ) }
+                                   onClick={ () => handleEditRow( params.row ) }
                             />,
                             <GridActionsCellItem
                                    showInMenu
@@ -476,7 +592,9 @@ export default function ProductListViewUsers( { toShow } )
                                    label="Delete"
                                    onClick={ () =>
                                    {
-                                          dispatch( deleteAnnonces( params.row ) )
+                                          // dispatch( deleteAnnonces( params.row ) )
+                                          confirmOfDel.onTrue(); setAnnonceToDel( params.row )
+
                                           // handleDeleteRow( params.row.id, params.row );
                                    } }
                                    sx={ { color: 'error.main' } }
@@ -513,7 +631,7 @@ export default function ProductListViewUsers( { toShow } )
                                           <Button
                                                  // component={ RouterLink }
                                                  // href={ paths.dashboard.product.new }
-                                                 onClick={ () => naviguate( '/home/annonces/new' ) }
+                                                 onClick={ () => navigate( '/home/annonces/new' ) }
 
                                                  variant="contained"
                                                  startIcon={ <Iconify icon="mingcute:add-line" /> }
@@ -531,13 +649,17 @@ export default function ProductListViewUsers( { toShow } )
 
                             <Card
                                    sx={ {
-                                          height: { xs: 800, md: 2 },
+
+                                          maxHeight: "max-content",
+                                          minHeight: '600px',
                                           flexGrow: { md: 1 },
-                                          display: { md: 'flex' },
-                                          flexDirection: { md: 'column' },
+                                          display: 'flex',
+                                          flexDirection: 'column',
                                    } }
                             >
                                    <DataGrid
+                                          autoHeight={ false }
+                                          sx={ { flexGrow: 1, } }
                                           checkboxSelection
                                           disableRowSelectionOnClick
                                           rows={ dataFiltered }
@@ -614,37 +736,15 @@ export default function ProductListViewUsers( { toShow } )
                                           } }
                                    />
                             </Card>
-                     </Box>
+                     </Box >
 
-                     <ConfirmDialog
-                            open={ confirmRows.value }
-                            onClose={ confirmRows.onFalse }
-                            title="Delete"
-                            content={
-                                   <>
-                                          Are you sure want to delete <strong> { selectedRowIds.length } </strong> items?
-                                   </>
-                            }
-                            action={
-                                   <Button
-                                          variant="contained"
-                                          color="error"
-                                          onClick={ () =>
-                                          {
-                                                 handleDeleteRows();
-                                                 confirmRows.onFalse();
-                                          } }
-                                   >
-                                          Delete
-                                   </Button>
-                            }
-                     />
+
 
 
                      <ConfirmDialog
                             open={ confirmOfBan.value }
                             onClose={ confirmOfBan.onFalse }
-                            title="Banissement"
+                            title="Banissement de l'annonce"
                             content={
                                    <>
                                           voulez vous vraiment bannir cette annonce ?
@@ -657,13 +757,21 @@ export default function ProductListViewUsers( { toShow } )
                                           onClick={ () =>
                                           {
                                                  banAnnouncement();
-                                                 confirmOfBan.onFalse();
                                           } }
                                    >
                                           Banir
                                    </Button>
+
+
                             }
                      />
+
+
+
+
+                     <DialogDeleteAnnonces showDialog={ confirmRows } data={ selectedRowIds } />
+                     <DialogDeleteAnnonce showDialog={ confirmOfDel } data={ annonceToDel } />
+
               </>
        );
 }

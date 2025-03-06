@@ -115,7 +115,7 @@ export default function ProductDetailsCarousel( { product } )
        const renderLargeImg = (
               <Box
                      sx={ {
-                            width: { xs: 'auto', md: 500 }, // 300px sur mobile, 500px sur grand écran
+                            width: { xs: 'auto', md: 600 }, // 300px sur mobile, 500px sur grand écran
                             height: 'auto',
                             mb: 3,
                             borderRadius: 2,

@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router';
 import PropTypes from 'prop-types';
 import { io } from 'socket.io-client';
 
-import { resetData, setData } from 'src/store/annonces/data/dataReducer';
+import { addData, resetData, setData } from 'src/store/annonces/data/dataReducer';
 import { getList, resetAfterGetListRequete } from 'src/store/annonces/getUserAnnonces/getReducer';
 import { request, resetAfterRequest } from 'src/store/annonces/getUsersAnnonces/reducer';
 import isEqual from 'lodash/isEqual';
@@ -61,6 +61,8 @@ import
        RenderCellProduct,
        RenderCellCreatedAt,
 } from '../product-table-row';
+import DialogDeleteAnnonce from './modal-delete-Annonce';
+import DialogDeleteAnnonces from './modal-delete-Annonces';
 // ----------------------------------------------------------------------
 
 const PUBLISH_OPTIONS = [
@@ -89,7 +91,10 @@ export default function ProductListViewUser( { toShow } )
        const dispatch = useDispatch()
 
        const confirmRows = useBoolean();
-       const naviguate = useNavigate()
+
+       const confirmOfDel = useBoolean();
+
+       const navigate = useNavigate()
 
        const router = useRouter();
 
@@ -99,6 +104,7 @@ export default function ProductListViewUser( { toShow } )
 
        const [ dataIsSet, setDataIsSet ] = useState( false );
        const [ tableData, setTableData ] = useState( [] );
+       const [ annonceToDel, setAnnonceToDel ] = useState( {} );
 
        const [ filters, setFilters ] = useState( defaultFilters );
 
@@ -112,8 +118,6 @@ export default function ProductListViewUser( { toShow } )
        const annonceFromStore = useSelector( ( state ) => state.annonces.data );
 
 
-       const usersAnnonceList = useSelector( ( state ) => state.getUsersAnnonces.data );
-       const { isFulled, isPending } = useSelector( ( state ) => state.getUsersAnnonces );
        const { isGeting, isGetingSuccess } = useSelector( ( state ) => state.getAnnonces );
 
        useEffect( () =>
@@ -155,16 +159,12 @@ export default function ProductListViewUser( { toShow } )
               if ( !isGeting && !isGetingSuccess )
               {
 
-                     if ( user === null || user === undefined ) 
-                     {
-
-                            dispatch( getList( 'user1@gmail.com' ) )
-                            return
-                     }
 
 
                      dispatch( getList( user.email ) )
 
+                     console.log( 'fonction de chargement de data appeler', annonceList );
+                     dispatch( setData( annonceList ) )
 
               }
 
@@ -178,19 +178,80 @@ export default function ProductListViewUser( { toShow } )
 
 
 
+
+       useEffect( () =>
+       {
+              const socket = io( "http://localhost:5000" );
+              socket.on( 'update-annonce', ( update ) =>
+              {
+
+                     dispatch( setData( annoncesFunction.updateAnnonceInArray( annonceFromStore, update ) ) )
+                     console.log( 'nouvelle annonce detecter', update );
+
+              } );
+
+
+              socket.on( 'banned-annonce', ( update ) =>
+              {
+
+                     dispatch( setData( annoncesFunction.updateAnnonceInArray( annonceFromStore, update ) ) )
+
+                     console.log( 'nouvelle annonce detecter', update );
+
+
+              } );
+
+              socket.on( 'delete-annonce', ( del ) =>
+              {
+
+                     console.log( 'annonce a supprimer', del );
+
+
+                     dispatch( setData( annoncesFunction.deleteAnnonceInArray( annonceFromStore, del ) ) )
+              } );
+
+
+
+              // Écouter l'événement 'new-annonce' pour mettre à jour les annonces en temps réel
+              socket.on( 'new-annonce', ( newAnnonce ) =>
+              {
+                     if ( newAnnonce.userEmail === user.email ) dispatch( addData( newAnnonce ) )
+                     console.log( 'nouvelle annonce detecter', newAnnonce );
+
+              } );
+
+              return () => { socket.disconnect(); };
+
+       }, [ dispatch, annonceFromStore, user.email ] );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
        useEffect( () =>
        {
 
-              if ( !isGeting && isGetingSuccess && annonceFromStore.length === 0 )
-              {
+
+              dispatch( setData( annonceList ) )
 
 
-                     dispatch( setData( annonceList ) )
-
-              }
 
 
-       }, [ isGetingSuccess, isGeting, annonceList, dispatch, annonceFromStore ] );
+       }, [ annonceList, dispatch ] );
 
 
 
@@ -271,11 +332,12 @@ export default function ProductListViewUser( { toShow } )
        }, [ enqueueSnackbar, selectedRowIds, tableData ] );
 
        const handleEditRow = useCallback(
-              ( id ) =>
+              ( data ) =>
               {
-                     router.push( paths.dashboard.product.edit( id ) );
+                     navigate( paths.annonces.edit, { state: { data } } );
+
               },
-              [ router ]
+              [ navigate ]
        );
 
        const handleViewRow = useCallback(
@@ -351,7 +413,7 @@ export default function ProductListViewUser( { toShow } )
                                    showInMenu
                                    icon={ <Iconify icon="solar:pen-bold" /> }
                                    label="Edit"
-                                   onClick={ () => handleEditRow( params.row.id ) }
+                                   onClick={ () => handleEditRow( params.row ) }
                             />,
                             <GridActionsCellItem
                                    showInMenu
@@ -359,7 +421,8 @@ export default function ProductListViewUser( { toShow } )
                                    label="Delete"
                                    onClick={ () =>
                                    {
-                                          handleDeleteRow( params.row.id );
+                                          confirmOfDel.onTrue(); setAnnonceToDel( params.row )
+
                                    } }
                                    sx={ { color: 'error.main' } }
                             />,
@@ -395,7 +458,7 @@ export default function ProductListViewUser( { toShow } )
                                           <Button
                                                  // component={ RouterLink }
                                                  // href={ paths.dashboard.product.new }
-                                                 onClick={ () => naviguate( '/home/annonces/new' ) }
+                                                 onClick={ () => navigate( '/home/annonces/new' ) }
 
                                                  variant="contained"
                                                  startIcon={ <Iconify icon="mingcute:add-line" /> }
@@ -413,13 +476,18 @@ export default function ProductListViewUser( { toShow } )
 
                             <Card
                                    sx={ {
-                                          height: { xs: 800, md: 2 },
+                                          height: "max-content",
+                                          minHeight: '600px',
                                           flexGrow: { md: 1 },
-                                          display: { md: 'flex' },
-                                          flexDirection: { md: 'column' },
+                                          display: 'flex',
+                                          flexDirection: 'column',
                                    } }
                             >
                                    <DataGrid
+                                          autoHeight={ false }
+
+                                          sx={ { flexGrow: 1, } }
+
                                           checkboxSelection
                                           disableRowSelectionOnClick
                                           rows={ dataFiltered }
@@ -434,6 +502,8 @@ export default function ProductListViewUser( { toShow } )
                                           } }
                                           onRowSelectionModelChange={ ( newSelectionModel ) =>
                                           {
+                                                 console.log( newSelectionModel );
+
                                                  setSelectedRowIds( newSelectionModel );
                                           } }
                                           columnVisibilityModel={ columnVisibilityModel }
@@ -498,29 +568,9 @@ export default function ProductListViewUser( { toShow } )
                             </Card>
                      </Box>
 
-                     <ConfirmDialog
-                            open={ confirmRows.value }
-                            onClose={ confirmRows.onFalse }
-                            title="Delete"
-                            content={
-                                   <>
-                                          Are you sure want to delete <strong> { selectedRowIds.length } </strong> items?
-                                   </>
-                            }
-                            action={
-                                   <Button
-                                          variant="contained"
-                                          color="error"
-                                          onClick={ () =>
-                                          {
-                                                 handleDeleteRows();
-                                                 confirmRows.onFalse();
-                                          } }
-                                   >
-                                          Delete
-                                   </Button>
-                            }
-                     />
+
+                     <DialogDeleteAnnonces showDialog={ confirmRows } data={ selectedRowIds } />
+                     <DialogDeleteAnnonce showDialog={ confirmOfDel } data={ annonceToDel } />
               </>
        );
 }

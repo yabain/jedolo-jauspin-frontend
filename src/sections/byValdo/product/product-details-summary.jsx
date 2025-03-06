@@ -57,12 +57,20 @@ export default function ProductDetailsSummary( {
               totalReviews,
               profile,
               subDescription,
+              city,
+
+              inventoryType,
               ratings,
               reviews,
        } = product;
 
        const total = sumBy( ratings, ( star ) => star.starCount );
        const existProduct = !!items?.length && items.map( ( item ) => item.id ).includes( id );
+       const profileColors = {
+              'out of stock': 'error',
+              'low stock': 'warning',
+              default: 'success',
+       };
 
        const isMaxQuantity =
               !!items?.length &&
@@ -133,7 +141,7 @@ export default function ProductDetailsSummary( {
 
        const renderPrice = (
               <Box sx={ { typography: 'h5' } }>
-                     { priceSale && (
+                     {/* { priceSale && (
                             <Box
                                    component="span"
                                    sx={ {
@@ -143,16 +151,18 @@ export default function ProductDetailsSummary( {
                                    } }
                             >
                                    { fCurrency( priceSale ) }
-                            </Box>
-                     ) }
 
-                     { fCurrency( price ) }
+                            </Box>
+                     ) } */}
+
+                     {/* { fCurrency( price ) } */ }
+                     Âge: 24 ans
               </Box>
        );
 
        const renderShare = (
               <Stack direction="row" spacing={ 3 } justifyContent="center">
-                     <Link
+                     {/* <Link
                             variant="subtitle2"
                             sx={ {
                                    color: 'text.secondary',
@@ -186,82 +196,64 @@ export default function ProductDetailsSummary( {
                      >
                             <Iconify icon="solar:share-bold" width={ 16 } sx={ { mr: 1 } } />
                             Share
-                     </Link>
+                     </Link> */}
+
+                     <Typography variant="subtitle1" sx={ { flexGrow: 1 } }>
+                            ✅  N&apos;oubliez pas de mentionner <strong>NDOLO</strong> lors de votre appel !
+                     </Typography>
               </Stack>
        );
 
        const renderColorOptions = (
               <Stack direction="row">
-                     <Typography variant="subtitle2" sx={ { flexGrow: 1 } }>
-                            Color
+                     <Typography variant="subtitle1" sx={ { flexGrow: 1 } }>
+                            Publier
                      </Typography>
 
-                     <Controller
-                            name="colors"
-                            control={ control }
-                            render={ ( { field } ) => (
-                                   <ColorPicker
-                                          colors={ colors }
-                                          selected={ field.value }
-                                          onSelectColor={ ( color ) => field.onChange( color ) }
-                                          limit={ 4 }
-                                   />
-                            ) }
-                     />
+                     <Box
+                            component="span"
+
+                     >
+                            <Typography variant="body2" sx={ { color: 'text.secondary', flexGrow: 1 } }>
+                                   22 mars 2025
+                            </Typography>
+                     </Box>
               </Stack>
        );
 
        const renderSizeOptions = (
-              <Stack direction="row">
-                     <Typography variant="subtitle2" sx={ { flexGrow: 1 } }>
-                            Size
+              <Stack direction="row" sx={ { margin: "0 0" } }>
+                     <Typography variant="subtitle1" sx={ { flexGrow: 1 } }>
+                            Ville
                      </Typography>
 
-                     <RHFSelect
-                            name="size"
-                            size="small"
-                            helperText={
-                                   <Link underline="always" color="textPrimary">
-                                          Size Chart
-                                   </Link>
-                            }
-                            sx={ {
-                                   maxWidth: 88,
-                                   [ `& .${ formHelperTextClasses.root }` ]: {
-                                          mx: 0,
-                                          mt: 1,
-                                          textAlign: 'right',
-                                   },
-                            } }
+                     <Box
+                            component="span"
+
                      >
-                            { sizes.map( ( size ) => (
-                                   <MenuItem key={ size } value={ size }>
-                                          { size }
-                                   </MenuItem>
-                            ) ) }
-                     </RHFSelect>
+                            <Typography variant="body2" sx={ { color: 'text.secondary', flexGrow: 1 } }>
+                                   { city[ 0 ] }
+                            </Typography>
+                     </Box>
               </Stack>
        );
 
        const renderQuantity = (
               <Stack direction="row">
-                     <Typography variant="subtitle2" sx={ { flexGrow: 1 } }>
-                            Quantity
+                     <Typography variant="subtitle1" sx={ { flexGrow: 1 } }>
+                            Location
                      </Typography>
 
                      <Stack spacing={ 1 }>
-                            <IncrementerButton
-                                   name="quantity"
-                                   quantity={ values.quantity }
-                                   disabledDecrease={ values.quantity <= 1 }
-                                   disabledIncrease={ values.quantity >= available }
-                                   onIncrease={ () => setValue( 'quantity', values.quantity + 1 ) }
-                                   onDecrease={ () => setValue( 'quantity', values.quantity - 1 ) }
-                            />
+                            <Box
+                                   component="span"
 
-                            <Typography variant="caption" component="div" sx={ { textAlign: 'right' } }>
-                                   Available: { available }
-                            </Typography>
+                            >
+                                   <Typography variant="body2" sx={ { color: 'text.secondary', flexGrow: 1 } }>
+                                          Makepe
+                                   </Typography>
+                            </Box>
+
                      </Stack>
               </Stack>
        );
@@ -345,7 +337,7 @@ export default function ProductDetailsSummary( {
        );
 
        const renderActions = (
-              <Stack direction="row" spacing={ 2 }>
+              <Stack direction="row" justifyContent="space-between" spacing={ 2 }>
                      <Button
 
                             size="medium"
@@ -380,7 +372,8 @@ export default function ProductDetailsSummary( {
 
        const renderSubDescription = (
               <Typography variant="body2" sx={ { color: 'text.secondary' } }>
-                     { subDescription }
+                     {/* { subDescription } */ }
+                     Je suis: Une Femme  Clients acceptés: Tout le monde  Déplacement: Reçoit ou se déplace
               </Typography>
        );
 
@@ -404,11 +397,6 @@ export default function ProductDetailsSummary( {
                      { saleLabel.enabled && <Label color="error">{ saleLabel.content }</Label> }
               </Stack>
        );
-       const profileColors = {
-              'out of stock': 'error',
-              'low stock': 'warning',
-              default: 'success',
-       };
 
        const renderprofile = (
               <Box
@@ -423,47 +411,114 @@ export default function ProductDetailsSummary( {
                      </Label>
               </Box>
        );
+       const renderLabelBox = ( text, text2 ) => (
+              <Box width={ 1 } display="flex" justifyContent="space-between">
+                     { text }
+                     <Label variant="soft" color={ profileColors[ profile ] || profileColors.default }>
+                            { text2 }
+                     </Label>
+              </Box>
+       );
+
+       const allData = <Stack spacing={ 3 } sx={ { pt: 0 } } { ...other }>
+              <Stack spacing={ 2 } alignItems="flex-start">
+                     { renderLabels }
+
+                     { renderprofile }
+
+                     <Typography variant="h6">{ name }</Typography>
+
+                     { renderLabelBox( "Age", profile ) }
+                     { renderLabelBox( "Ville", profile ) }
+                     { renderLabelBox( "Lieux", profile ) }
+                     { renderLabelBox( "publier le", profile ) }
+                     { renderLabelBox( "Sodomie", 'Non' ) }
+                     { renderLabelBox( "Deplacement", profile ) }
+                     { renderLabelBox( "Client Accepté", profile ) }
+                     { renderLabelBox( "Client Accepté", profile ) }
+                     { renderLabelBox( "Preservatif Obligatoire", 'oui' ) }
+
+
+                     {/* { renderPrice }
+
+                                   { renderSubDescription } */}
+              </Stack>
+
+              {/* <Divider sx={ { borderStyle: 'dashed' } } /> */ }
+
+              {/* { renderActions } */ }
+              <Box
+                     display="flex"
+
+                     sx={ {
+                            py: { xs: 5, md: 0 },
+                     } }
+              >
+                     {/* { renderSummary } */ }
+
+                     {/* { renderProgress } */ }
+
+              </Box>
+
+              {/* <Divider sx={ { borderStyle: 'dashed' } } /> */ }
+
+
+              {/* { renderShare } */ }
+       </Stack>
+
+
+       const renderInventoryType = (
+              <Box
+                     component="span"
+                     sx={ {
+                            typography: 'overline',
+                            color:
+                                   ( inventoryType === 'out of stock' && 'error.main' ) ||
+                                   ( inventoryType === 'low stock' && 'warning.main' ) ||
+                                   'success.main',
+                     } }
+              >
+                     { inventoryType }
+              </Box>
+       );
 
 
        return (
               <FormProvider methods={ methods } onSubmit={ onSubmit }>
-                     <Stack spacing={ 3 } sx={ { pt: 0 } } { ...other }>
+                     <Stack spacing={ 3 } sx={ { pt: 3 } } { ...other }>
                             <Stack spacing={ 2 } alignItems="flex-start">
                                    { renderLabels }
 
-                                   { renderprofile }
+                                   { renderInventoryType }
 
-                                   <Typography variant="h6">{ name }</Typography>
+                                   <Typography variant="h3">{ name }</Typography>
 
+                                   { renderRating }
 
                                    { renderPrice }
 
                                    { renderSubDescription }
                             </Stack>
 
-                            {/* <Divider sx={ { borderStyle: 'dashed' } } /> */ }
+                            <Divider sx={ { borderStyle: 'dashed' } } />
+
+                            { renderColorOptions }
+
+                            { renderSizeOptions }
+
+                            { renderQuantity }
+
+                            <Divider sx={ { borderStyle: 'dashed' } } />
 
                             { renderActions }
-                            <Box
-                                   display="flex"
 
-                                   sx={ {
-                                          py: { xs: 5, md: 0 },
-                                   } }
-                            >
-                                   { renderSummary }
-
-                                   { renderProgress }
-
-                            </Box>
-
-                            {/* <Divider sx={ { borderStyle: 'dashed' } } /> */ }
-
-
-                            {/* { renderShare } */ }
+                            { renderShare }
                      </Stack>
+
               </FormProvider>
        );
+
+
 }
 
 ProductDetailsSummary.propTypes = {

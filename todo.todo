@@ -4,8 +4,11 @@
 - [ ] page pour la liste des annonces a la une (boostage des annonces)
 - [ ] creer les diffent standard
 - [ ] definir les var globale dans le config global puis remplacer tous les appels manuels declarer
-- [] gerer les probleme du caroussellorsque le nombre d'item est peu(par exemple 1 2 3) mais l'espace disponible est tres grand
-- [] loader (sekeleton) lorsque les donne ne sont pas encore charger pour le chargement de sdonne
+- [ ] gerer les probleme du caroussellorsque le nombre d'item est peu(par exemple 1 2 3) mais l'espace disponible est tres grand
+- [ ] loader (sekeleton) lorsque les donne ne sont pas encore charger pour le chargement de sdonne
 
-- [] mettre les filtre
-- [] faire persiter les indication des filtre actid lors de l'ouverture de la sidebar de filtre
+- [ ] mettre les filtre
+- [ ] faire persiter les indication des filtre actid lors de l'ouverture de la sidebar de filtre
+- [ ] ajouter le chamo a la une sur chaque tableau affichant la liste des annonces
+- [ ] probleme dans log quand la categorie n'est pas def (tableau vide)
+- [ ] probleme de design quand il y'a pas de description

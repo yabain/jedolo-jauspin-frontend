@@ -102,12 +102,12 @@ export default function ProductListPage()
               socket.on( 'new-annonce', ( newAnnonce ) =>
               {
 
-                     dispatch( addAdminData( newAnnonce ) )
+                     if ( newAnnonce.userEmail === user.email ) dispatch( addAdminData( newAnnonce ) )
                      console.log( 'nouvelle annonce detecter', newAnnonce );
 
               } ); return () => { socket.disconnect(); };
 
-       }, [ dispatch ] );
+       }, [ dispatch, user.email ] );
 
        return (
               <>

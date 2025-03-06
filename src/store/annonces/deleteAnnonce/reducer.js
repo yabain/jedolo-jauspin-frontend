@@ -13,6 +13,7 @@ import * as service from './service';
 const pendingAction = ( state ) => 
 {
        state.isPending = true;
+       state.isFulled = false;
 }
 
 
@@ -23,7 +24,7 @@ const pendingAction = ( state ) =>
 
 
 
-const resetGetState = ( state ) => 
+const resetDeleteState = ( state ) => 
 {
        state.isPending = false;
        state.isFulled = false;
@@ -42,7 +43,7 @@ const fulfilledAction = ( state, action ) =>
        state.isFulled = true;
        state.isPending = false;
        state.data = action.payload.data;
-       console.log( 'Données supprimer:', action.payload.data );
+       // console.log( 'Données supprimer:', action.payload.data );
 }
 
 
@@ -87,7 +88,7 @@ const requestCases = ( builder ) => builder
 
 export const getSlice = createSlice( {
        name: 'delete', extraReducers: requestCases,
-       reducers: { resetAfterRequest: resetGetState },
+       reducers: { resetAfterRequest: resetDeleteState },
        initialState: { data: [], isPending: false, isFulled: false, }
 } );
 

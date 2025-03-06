@@ -65,7 +65,7 @@ export const route = [
                                    { path: 'list', element: <ProductListPage /> },
                                    { path: 'view', element: <ProductDetailsPage /> },
                                    { path: 'new', element: <ProductCreatePage /> },
-                                   { path: ':id/edit', element: <ProductEditPage /> },
+                                   { path: 'edit', element: <ProductEditPage /> },
                                    { path: 'categorie', element: <OrderListPage /> },
                             ],
                      },

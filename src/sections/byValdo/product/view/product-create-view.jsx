@@ -16,17 +16,17 @@ export default function ProductCreateView()
        return (
               <Container maxWidth={ settings.themeStretch ? false : 'lg' }>
                      <CustomBreadcrumbs
-                            heading="Create a new Annonce"
+                            heading="Publier une annonce"
                             links={ [
                                    {
-                                          name: 'Home',
-                                          href: paths.dashboard.root,
+                                          name: 'Acceuil',
+                                          href: paths.home,
                                    },
                                    {
                                           name: 'Annonce',
-                                          href: paths.dashboard.product.root,
+                                          href: paths.AnnoncesList,
                                    },
-                                   { name: 'New Annonce' },
+                                   { name: 'Nouvel Annonce' },
                             ] }
                             sx={ {
                                    mb: { xs: 3, md: 5 },

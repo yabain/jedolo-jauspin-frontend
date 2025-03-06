@@ -93,3 +93,45 @@ export function updateObjectFromTabObjetc( annonces, updatedAnnonce )
        return newAnnonces;
 
 }
+
+
+
+
+
+
+
+
+
+export function deleteAnnonceInArray( annonces, updatedAnnonce )
+{
+
+
+       const index = annonces.findIndex( annonce => String( annonce.id ) === String( updatedAnnonce.id ) );
+       if ( index === -1 ) { console.error( 'Annonce non trouvée dans le tableau' ); return annonces; }
+       const newAnnonces = [ ...annonces.slice( 0, index ), ...annonces.slice( index + 1 ), ];
+       return newAnnonces;
+
+}
+
+
+
+
+
+
+
+
+
+export function updateAnnonceInArray( annonces, updatedAnnonce )
+{
+
+       console.log( 'updateAnnonceInArray', updatedAnnonce.id );
+       const index = annonces.findIndex( annonce => String( annonce.id ) === String( updatedAnnonce.id ) );
+
+       console.log( `Index trouvé : ${ index }` );
+
+       if ( index === -1 ) { console.error( 'Annonce non trouvée dans le tableau' ); return annonces; }
+       const newAnnonces = [ ...annonces.slice( 0, index ), updatedAnnonce, ...annonces.slice( index + 1 ), ];
+
+       console.log( 'nouvelle Annonces dans le store', newAnnonces );
+       return newAnnonces;
+}

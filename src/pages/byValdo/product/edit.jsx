@@ -2,7 +2,7 @@ import { Helmet } from 'react-helmet-async';
 
 import { useParams } from 'src/routes/hooks';
 
-import { ProductEditView } from 'src/sections/byTemplate/product/view';
+import { ProductEditView } from 'src/sections/byValdo/product/view';
 
 // ----------------------------------------------------------------------
 

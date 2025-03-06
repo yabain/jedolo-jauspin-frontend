@@ -60,7 +60,11 @@ export default function BookingNewest( { title, subheader, list, sx, ...other } 
        } );
 
        return (
-              <Box ref={ tabsRef } sx={ { py: 2, ...sx } } { ...other }>
+              <Box ref={ tabsRef } sx={ {
+                     py: 2, ...sx,
+                     padding: "11px",
+                     borderRadius: "20px",
+              } } { ...other }>
                      <CardHeader
                             title={ title }
                             subheader={ subheader }
@@ -71,7 +75,9 @@ export default function BookingNewest( { title, subheader, list, sx, ...other } 
                             } }
                      />
 
-                     <Carousel sx={ { width: "100px" } } ref={ carousel.carouselRef } { ...carousel.carouselSettings }>
+                     <Carousel sx={ {
+                            width: "100px",
+                     } } ref={ carousel.carouselRef } { ...carousel.carouselSettings }>
                             { list.map( ( item ) => (
                                    <BookingItem key={ item.id } item={ item } />
                             ) ) }
@@ -105,7 +111,8 @@ function BookingItem( { item } )
                             mr: 3,
                             borderRadius: 2,
                             position: 'relative',
-                            bgcolor: 'background.neutral',
+                            // bgcolor: 'background.neutral',
+                            bgcolor: "rgb(255 192 203 / 18%)",
                      } }
               >
                      <Box sx={ { p: 1, position: 'relative' } }>

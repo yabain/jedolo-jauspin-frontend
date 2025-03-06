@@ -8,7 +8,7 @@ export async function getList( email )
        {
               // const response = await axiosInstance.get( `${ endpoints.user.get }/${ userID }` );
               const response = await axiosInstance.get( `http://localhost:5000/annonces/${ email }` );
-              // console.log( 'Réponse de la requête :', response.data );
+              console.log( 'Réponse de la requête :', response.data );
               return response;
        } catch ( error )
        {

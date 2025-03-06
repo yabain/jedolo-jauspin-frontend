@@ -11,7 +11,7 @@ const MOCK_TITLE = _postTitles[ 2 ];
 const ROOTS = {
        AUTH: '/auth',
        AUTH_DEMO: '/auth-demo',
-       // DASHBOARD: '/home',
+       home: '/home',
 
        DASHBOARD: '/dashboard',
 };
@@ -21,6 +21,13 @@ const ROOTS = {
 export const paths = {
        // valdo route
        home: '/home',
+       AnnoncesList: '/home/annonces/list',
+
+
+       annonces: {
+              edit: `${ ROOTS.home }/annonces/edit`,
+
+       },
 
        // template route
        comingSoon: '/coming-soon',

@@ -1,6 +1,10 @@
 import sumBy from 'lodash/sumBy';
 import PropTypes from 'prop-types';
 
+import { request, resetAfterRequest } from 'src/store/comments/get/reducer';
+import { useAuthContext } from 'src/auth/hooks';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useMemo, useState } from 'react';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Rating from '@mui/material/Rating';
@@ -9,6 +13,8 @@ import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 import LinearProgress from '@mui/material/LinearProgress';
 
+import { useLocation } from 'react-router';
+import { reviewRef } from 'src/1data/annonces/ref';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { fShortenNumber } from 'src/utils/format-number';
@@ -20,10 +26,81 @@ import ProductReviewNewForm from './product-review-new-form';
 
 // ----------------------------------------------------------------------
 
-export default function ProductDetailsReview( { totalRatings, totalReviews, ratings, reviews } )
+export default function ProductDetailsReview( { totalRatings, totalReviews, ratings } )
 {
        const review = useBoolean();
+       const location = useLocation();
+       const { user } = useAuthContext()
+       const [ reviews, setReviews ] = useState( [] )
+       const dispatch = useDispatch()
+       const { data, isPending, isFulled } = useSelector( state => state.getUsersAnnoncesComments )
+       const productGet = useMemo( () => location.state?.annonce || null, [ location ] );
+
+
+
+
+
+
+
        // console.log( totalReviews );
+       // console.log( productGet );
+       // console.log( user );
+
+
+
+
+
+       useEffect( () => () => dispatch( resetAfterRequest() ), [ dispatch ] );
+
+
+
+
+
+       useEffect( () =>
+       {
+
+              if ( !isPending && !isFulled )
+              {
+
+                     dispatch( request( { type: 'user', annonceId: productGet.id } ) )
+
+              }
+
+       }, [ dispatch, isFulled, isPending, productGet.id, data.length ] );
+
+
+
+
+
+
+       useEffect( () =>
+       {
+
+              if ( !isPending && isFulled )
+              {
+
+                     setReviews( data.comments )
+                     // console.log( data )
+
+              }
+
+       }, [ isFulled, isPending, data ] );
+
+
+
+
+
+
+
+
+
+       const addNewReviewToLocalReview = ( newItem ) =>
+       {
+
+              setReviews( ( prevItems ) => [ ...prevItems, newItem ] );
+
+       };
+
 
 
        const total = sumBy( ratings, ( star ) => star.starCount );
@@ -103,10 +180,11 @@ export default function ProductDetailsReview( { totalRatings, totalReviews, rati
                      </Button>
               </Stack>
        );
+       // console.log( reviews );
 
        return (
               <>
-                     <Box
+                     <Box ref={ reviewRef }
                             display="grid"
                             gridTemplateColumns={ {
                                    xs: 'repeat(1, 1fr)',
@@ -127,14 +205,14 @@ export default function ProductDetailsReview( { totalRatings, totalReviews, rati
 
                      <ProductReviewList reviews={ reviews } />
 
-                     <ProductReviewNewForm open={ review.value } onClose={ review.onFalse } />
+                     <ProductReviewNewForm addData={ addNewReviewToLocalReview } open={ review.value } onClose={ review.onFalse } />
               </>
        );
 }
 
 ProductDetailsReview.propTypes = {
        ratings: PropTypes.array,
-       reviews: PropTypes.array,
+
        totalRatings: PropTypes.number,
        totalReviews: PropTypes.number,
 };
