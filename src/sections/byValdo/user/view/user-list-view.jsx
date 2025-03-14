@@ -40,6 +40,7 @@ import
        TablePaginationCustom,
 } from 'src/components/table';
 
+import DialogDisable from 'src/1VALDO/components/user/dialog-disable';
 import UserTableRow from '../user-table-row';
 import UserTableToolbar from '../user-table-toolbar';
 import UserTableFiltersResult from '../user-table-filters-result';
@@ -114,6 +115,17 @@ export default function UserListView()
        {
               setFilters( defaultFilters );
        }, [] );
+       // Nouvelle fonction pour désactiver un utilisateur
+       const handleDisableRow = useCallback( ( id ) =>
+       {
+
+              console.log( 'fonction supp', id );
+              setTableData( ( prevTableData ) =>
+                     prevTableData.map( ( user ) =>
+                            user.id === id ? { ...user, isPublic: false } : user
+                     )
+              );
+       }, [] );
 
        const handleDeleteRow = useCallback(
               ( id ) =>
@@ -159,8 +171,38 @@ export default function UserListView()
               [ handleFilters ]
        );
 
+
+
+
+
+
+
+
+
+
+       const showDialog = useBoolean();
+       const [ idClick, setIdClick ] = useState( '' );
+       const [ dataPass, setDataPass ] = useState( {} );
+
+       const actionDialog = ( id, dataGetByRow ) =>
+       {
+              showDialog.onTrue()
+              setIdClick( id )
+              // console.log( dataGetByRow );
+
+              setDataPass( dataGetByRow )
+
+       }
+       const disable2 = () => handleDisableRow( idClick )
+
        return (
               <>
+                     <DialogDisable
+                            showDialog={ showDialog }
+                            dataGet={ dataPass }
+                            updateDataAfterSucces={ disable2 }
+                     />
+
                      <Container
                             //       maxWidth={settings.themeStretch ? false : 'lg'}
                             maxWidth='xl'
@@ -293,6 +335,7 @@ export default function UserListView()
                                                                                     onSelectRow={ () => table.onSelectRow( row.id ) }
                                                                                     onDeleteRow={ () => handleDeleteRow( row.id ) }
                                                                                     onEditRow={ () => handleEditRow( row.id ) }
+                                                                                    onDisableRow={ actionDialog } // Passer la fonction
                                                                              />
                                                                       ) ) }
 

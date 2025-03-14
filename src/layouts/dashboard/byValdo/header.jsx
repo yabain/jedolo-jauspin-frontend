@@ -212,7 +212,7 @@ export default function Header( { onOpenNav } )
                                                  variant={ location.pathname === '/home/annonces/categorie' ? "contained" : "outlined" } color="primary"
                                           // startIcon={ <Iconify icon="eva:search-fill" /> }
                                           >
-                                                 Catégories
+                                                 Sponsors
                                           </Button>
                                    </RoleBasedGuard>
 
@@ -242,6 +242,24 @@ export default function Header( { onOpenNav } )
                                           </Button>
                                    ) }
 
+
+                                   <RoleBasedGuard hasContent roles={ [ 'admin', 'user' ] }  >
+                                          <Button
+
+                                                 onClick={ () => { naviguate( '/home/transactions/list' ) } }
+                                                 sx={ {
+
+                                                        mt: 2,
+
+                                                        // ml: 3,
+
+                                                 } }
+                                                 variant={ location.pathname === '/home/transactions/list' ? "contained" : "outlined" } color="primary"
+                                          // startIcon={ <Iconify icon="eva:search-fill" /> }
+                                          >
+                                                 Transactions
+                                          </Button>
+                                   </RoleBasedGuard>
 
                                    <RoleBasedGuard hasContent roles={ [ 'admin' ] }  >
                                           <Button

@@ -132,6 +132,29 @@ app.delete( "/users/:email", ( req, res ) =>
        res.json( { success: true, message: "Utilisateur supprimé." } );
 } );
 
+// 🔹 Désactiver un compte utilisateur (mettre isPublic à false)
+app.patch( "/user/disable/:email", ( req, res ) =>
+{
+       const { email } = req.params; // Récupérer l'email depuis les paramètres
+       let data = readData();
+
+       // Vérifier si l'utilisateur existe
+       if ( !data.users[ email.trim() ] )
+       {
+              return res.status( 404 ).json( { error: "Utilisateur non trouvé." } );
+       }
+
+       // Mettre à jour le champ isPublic à false
+       data.users[ email.trim() ].isPublic = false;
+       writeData( data );
+
+       // (Optionnel) Émettre un événement Socket.io pour informer les clients
+       io.emit( "user-disabled", { email: email.trim(), isPublic: false } );
+
+       res.json( { success: true, message: "Compte utilisateur désactivé.", user: data.users[ email.trim() ] } );
+} );
+
+
 // ✅ **ANNONCES**
 // 🔹 Ajouter une annonce
 app.post( "/annonces/:email", ( req, res ) =>
@@ -332,34 +355,69 @@ app.delete( "/annonces/:id", ( req, res ) =>
 
 
 // ✅ **CATÉGORIES**
-// 🔹 Ajouter une catégorie
-app.post( "/categories", ( req, res ) =>
+// 🔹 Ajouter un sponsor
+app.post( "/sponsor", ( req, res ) =>
 {
-       const { name } = req.body;
+       let data = readData();
+       const sponsor = req.body; // Récupère l'objet entier du body
+       const sponsorId = sponsor.id; // Suppose que l'objet contient un champ 'id'
+
+       if ( !sponsorId ) return res.status( 400 ).json( { error: "L'ID de la catégorie est requis.", dataSend: sponsor } );
+
+       // Initialise sponsor comme objet s'il n'existe pas
+       if ( !data.sponsor || Array.isArray( data.sponsor ) )
+       {
+              data.sponsor = [];
+       }
+
+       // Ajoute l'objet catégorie avec son ID comme clé
+       data.sponsor.push( sponsor );
+       writeData( data );
+       // console.log( data.sponsor );
+
+
+       res.json( { success: true, sponsor } );
+} );
+
+
+// 🔹 Modifier un sponsor
+app.patch( "/sponsor/:id", ( req, res ) =>
+{
+       const { id } = req.params; // Récupérer l'ID du sponsor depuis les paramètres
+       const updatedSponsor = req.body; // Récupérer les nouvelles données du sponsor depuis le body
        let data = readData();
 
-       if ( !name )
+       // Vérifier si sponsor existe dans les données
+       if ( !data.sponsor || !Array.isArray( data.sponsor ) )
        {
-              return res.status( 400 ).json( { error: "Le nom de la catégorie est obligatoire." } );
+              return res.status( 400 ).json( { error: "Aucun sponsor n'existe dans la base de données." } );
        }
 
-       if ( data.categories.includes( name ) )
+       // Trouver l'index du sponsor à modifier
+       const sponsorIndex = data.sponsor.findIndex( s => s.id == id );
+       if ( sponsorIndex === -1 )
        {
-              return res.status( 400 ).json( { error: "Catégorie déjà existante." } );
+              return res.status( 404 ).json( { error: "Sponsor non trouvé." } );
        }
 
-       data.categories.push( name );
+       // Mettre à jour le sponsor en fusionnant les anciennes et nouvelles données
+       data.sponsor[ sponsorIndex ] = { ...data.sponsor[ sponsorIndex ], ...updatedSponsor };
        writeData( data );
 
-       res.json( { success: true, categories: data.categories } );
+       // Émettre un événement Socket.io pour informer les clients de la mise à jour
+       io.emit( "update-sponsor", data.sponsor[ sponsorIndex ] );
+
+       res.json( { success: true, sponsor: data.sponsor[ sponsorIndex ] } );
 } );
 
+
 // 🔹 Récupérer toutes les catégories
-app.get( "/categories", ( req, res ) =>
+app.get( "/sponsor", ( req, res ) =>
 {
        const data = readData();
-       res.json( data.categories );
+       res.json( data.sponsor );
 } );
+
 
 // 🔹 Supprimer une catégorie
 app.delete( "/categories/:name", ( req, res ) =>
@@ -484,6 +542,88 @@ app.get( "/signal/:annonceId", ( req, res ) =>
        const signalAnnonce = data.signal[ annonceId ] || [];
 
        res.json( { success: true, comments: signalAnnonce } );
+} );
+
+
+// 🔹 Ajouter une transaction
+app.post( "/transactions/:transactorEmail", ( req, res ) =>
+{
+       const { transactorEmail } = req.params; // Email du transactor
+       const transaction = req.body; // Objet de la transaction reçu dans le body
+
+       let data = readData();
+
+       // Vérifier si l'utilisateur existe
+       if ( !data.users[ transactorEmail.trim() ] )
+       {
+              return res.status( 404 ).json( { error: "Utilisateur non trouvé." } );
+       }
+
+       // Initialiser le tableau des transactions s'il n'existe pas
+       if ( !data.transactions )
+       {
+              data.transactions = {};
+       }
+
+       // Initialiser le tableau des transactions pour cet utilisateur s'il n'existe pas
+       if ( !data.transactions[ transactorEmail.trim() ] )
+       {
+              data.transactions[ transactorEmail.trim() ] = [];
+       }
+
+       // Ajouter la transaction à la liste des transactions de l'utilisateur
+       data.transactions[ transactorEmail.trim() ].push( transaction );
+       writeData( data );
+
+       // Émettre un événement Socket.io pour informer les clients de la nouvelle transaction
+       io.emit( "new-transaction", { transactorEmail: transactorEmail.trim(), transaction } );
+
+       res.json( { success: true, transaction } );
+} );
+
+
+
+
+
+
+// 🔹 Récupérer toutes les transactions (retourne un tableau plat)
+app.get( "/transactions", ( req, res ) =>
+{
+       let data = readData();
+
+       // Si aucune transaction n'existe, retourner un tableau vide
+       if ( !data.transactions )
+       {
+              return res.json( { success: true, transactions: [] } );
+       }
+
+       // Récupérer toutes les transactions dans un tableau plat
+       const allTransactions = Object.values( data.transactions ).flat();
+
+       res.json( { success: true, transactions: allTransactions } );
+} );
+
+
+
+
+
+
+
+
+
+// 🔹 Récupérer les transactions par email
+app.get( "/transactions/:email", ( req, res ) =>
+{
+       const { email } = req.params; // Email de l'utilisateur
+       let data = readData();
+
+       // Si aucune transaction n'existe pour cet email, retourner un tableau vide
+       if ( !data.transactions || !data.transactions[ email.trim() ] )
+       {
+              return res.json( { success: true, transactions: [] } );
+       }
+
+       res.json( { success: true, transactions: data.transactions[ email.trim() ] } );
 } );
 
 server.listen( PORT, () => console.log( `🚀 Serveur lancé sur http://localhost:${ PORT }` ) );

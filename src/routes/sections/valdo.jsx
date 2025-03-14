@@ -22,6 +22,10 @@ const ProductCreatePage = lazy( () => import( 'src/pages/byValdo/product/new' ) 
 const ProductEditPage = lazy( () => import( 'src/pages/byValdo/product/edit' ) );
 
 
+// ANNONCES 
+const TransactionListPage = lazy( () => import( 'src/pages/byValdo/transaction/list' ) );
+
+
 // USER
 const UserProfilePage = lazy( () => import( 'src/pages/byValdo/user/profile' ) );
 const UserCardsPage = lazy( () => import( 'src/pages/byValdo/user/cards' ) );
@@ -63,6 +67,20 @@ export const route = [
                             children: [
                                    { element: <ProductListPage />, index: true },
                                    { path: 'list', element: <ProductListPage /> },
+                                   { path: 'view', element: <ProductDetailsPage /> },
+                                   { path: 'new', element: <ProductCreatePage /> },
+                                   { path: 'edit', element: <ProductEditPage /> },
+                                   { path: 'categorie', element: <OrderListPage /> },
+                            ],
+                     },
+
+
+
+                     {
+                            path: 'transactions',
+                            children: [
+                                   { element: <ProductListPage />, index: true },
+                                   { path: 'list', element: <TransactionListPage /> },
                                    { path: 'view', element: <ProductDetailsPage /> },
                                    { path: 'new', element: <ProductCreatePage /> },
                                    { path: 'edit', element: <ProductEditPage /> },

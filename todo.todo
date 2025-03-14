@@ -12,3 +12,5 @@
 - [ ] ajouter le chamo a la une sur chaque tableau affichant la liste des annonces
 - [ ] probleme dans log quand la categorie n'est pas def (tableau vide)
 - [ ] probleme de design quand il y'a pas de description
+
+-[ ] remplacer les loader par les skeleton dans la liste des annonces

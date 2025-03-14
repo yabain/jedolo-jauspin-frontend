@@ -43,6 +43,8 @@ import
 import OrderTableRow from '../order-table-row';
 import OrderTableToolbar from '../order-table-toolbar';
 import OrderTableFiltersResult from '../order-table-filters-result';
+import DialogAddSponsor from '../components/dialog-add-sponsor';
+import { useGetSponsor } from '../service/get-sponsor';
 
 // ----------------------------------------------------------------------
 
@@ -78,9 +80,10 @@ export default function OrderListView()
        const router = useRouter();
 
        const confirm = useBoolean();
+       const showDialog = useBoolean();
 
-       const [ tableData, setTableData ] = useState( _orders );
-
+       const [ tableData, setTableData ] = useState( [] );
+       const addData = ( dataGet ) => { console.log( dataGet ); setTableData( dataGet ) }
        const [ filters, setFilters ] = useState( defaultFilters );
 
        const dateError = isAfter( filters.startDate, filters.endDate );
@@ -165,6 +168,9 @@ export default function OrderListView()
               [ handleFilters ]
        );
 
+
+       useGetSponsor( addData )
+
        return (
               <>
                      <Container
@@ -189,6 +195,7 @@ export default function OrderListView()
                                    action={
                                           <Button
 
+                                                 onClick={ () => { showDialog.onTrue() } }
                                                  variant="contained"
                                                  startIcon={ <Iconify icon="mingcute:add-line" /> }
                                           >
@@ -356,6 +363,8 @@ export default function OrderListView()
                                    </Button>
                             }
                      />
+
+                     <DialogAddSponsor showDialog={ showDialog } />
               </>
        );
 }

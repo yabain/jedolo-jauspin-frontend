@@ -41,6 +41,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 
 import { useGetProducts } from 'src/api/product';
 import { PRODUCT_STOCK_OPTIONS } from 'src/_mock';
+import DialogALaUneBuy from 'src/1VALDO/components/annonces/dialog-aLaUne-buy';
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
@@ -48,8 +49,10 @@ import EmptyContent from 'src/components/empty-content';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
+import DialogSponsorBuy from 'src/1VALDO/components/sponsor/dialog-sponsor-buy';
 
 
+import DialogPaimentInProcess from 'src/1VALDO/components/sponsor/dialog-paiment-inProcess';
 import { dataObject } from 'src/1data/annonces/defaut';
 import ProductTableToolbar from '../product-table-toolbar';
 import ProductTableFiltersResult from '../product-table-filters-result';
@@ -92,6 +95,10 @@ export default function ProductListViewUser( { toShow } )
 
        const confirmRows = useBoolean();
 
+       const buySponsor = useBoolean();
+       const startPaiment = useBoolean();
+       const aLaUneBuy = useBoolean();
+
        const confirmOfDel = useBoolean();
 
        const navigate = useNavigate()
@@ -100,7 +107,7 @@ export default function ProductListViewUser( { toShow } )
 
        const settings = useSettingsContext();
 
-       const { products, productsLoading } = useGetProducts();
+       const [ productsLoading, setProductLoad ] = useState( true );
 
        const [ dataIsSet, setDataIsSet ] = useState( false );
        const [ tableData, setTableData ] = useState( [] );
@@ -163,12 +170,41 @@ export default function ProductListViewUser( { toShow } )
 
                      dispatch( getList( user.email ) )
 
-                     console.log( 'fonction de chargement de data appeler', annonceList );
-                     dispatch( setData( annonceList ) )
+                     // console.log( 'fonction de chargement de data appeler', annonceList );
+
 
               }
 
        }, [ dispatch, annonceList, user, isGetingSuccess, isGeting, toShow ] );
+
+
+
+
+
+
+
+
+
+
+       useEffect( () =>
+       {
+
+              if ( !isGeting && isGetingSuccess )
+              {
+
+
+
+                     setTimeout( () =>
+                     {
+                            setProductLoad( false )
+                     }, 1000 );
+                     // console.log( 'chargeeeeeeeeeeeeeeeeeeeeee' );
+                     dispatch( setData( annonceList ) )
+
+
+              }
+
+       }, [ isGetingSuccess, isGeting, annonceList, dispatch ] );
 
 
 
@@ -242,16 +278,16 @@ export default function ProductListViewUser( { toShow } )
 
 
 
-       useEffect( () =>
-       {
+       // useEffect( () =>
+       // {
 
 
-              dispatch( setData( annonceList ) )
+       //        dispatch( setData( annonceList ) )
 
 
 
 
-       }, [ annonceList, dispatch ] );
+       // }, [ annonceList, dispatch ] );
 
 
 
@@ -406,19 +442,31 @@ export default function ProductListViewUser( { toShow } )
                             <GridActionsCellItem
                                    showInMenu
                                    icon={ <Iconify icon="solar:eye-bold" /> }
-                                   label="View"
+                                   label="Voir"
                                    onClick={ () => handleViewRow( params.row.id ) }
                             />,
                             <GridActionsCellItem
                                    showInMenu
                                    icon={ <Iconify icon="solar:pen-bold" /> }
-                                   label="Edit"
+                                   label="Mettre à la une"
+                                   onClick={ () => aLaUneBuy.onTrue() }
+                            />,
+                            <GridActionsCellItem
+                                   showInMenu
+                                   icon={ <Iconify icon="solar:pen-bold" /> }
+                                   label="Sponsoriser"
+                                   onClick={ () => buySponsor.onTrue() }
+                            />,
+                            <GridActionsCellItem
+                                   showInMenu
+                                   icon={ <Iconify icon="solar:pen-bold" /> }
+                                   label="Editer"
                                    onClick={ () => handleEditRow( params.row ) }
                             />,
                             <GridActionsCellItem
                                    showInMenu
                                    icon={ <Iconify icon="solar:trash-bin-trash-bold" /> }
-                                   label="Delete"
+                                   label="Supprimer"
                                    onClick={ () =>
                                    {
                                           confirmOfDel.onTrue(); setAnnonceToDel( params.row )
@@ -437,6 +485,9 @@ export default function ProductListViewUser( { toShow } )
 
        return (
               <>
+                     <DialogSponsorBuy showDialog={ buySponsor } startPaiement={ startPaiment } />
+                     <DialogPaimentInProcess showDialog={ startPaiment } />
+                     <DialogALaUneBuy showDialog={ aLaUneBuy } startPaiement={ startPaiment } />
                      <Box
                             // maxWidth={ settings.themeStretch ? false : 'lg' }
                             // maxWidth='xl'
