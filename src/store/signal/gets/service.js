@@ -9,8 +9,9 @@ export async function request( data )
 
 
 
+              const response = await axiosInstance.get( `http://localhost:5000/signal` );
 
-              const response = await axiosInstance.get( `http://localhost:5000/signal/${ data.annonceId }` );
+              // response = await axiosInstance.get( `http://192.168.1.122:5000/annonces` );
 
 
 

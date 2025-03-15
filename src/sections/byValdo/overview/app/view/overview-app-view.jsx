@@ -6,7 +6,7 @@ import { useTheme } from '@mui/material/styles';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Unstable_Grid2';
 
-import { Box } from '@mui/system';
+import { Box, display } from '@mui/system';
 import { useMockedUser } from 'src/hooks/use-mocked-user';
 
 import { SeoIllustration } from 'src/assets/illustrations';
@@ -19,6 +19,8 @@ import { useSettingsContext } from 'src/components/settings';
 import { Typography } from '@mui/material';
 import AppWelcome from '../app-welcome';
 import SidebarFilter from '../sidebar-filter';
+import TownTabs from 'src/sections/byValdo/blog/view/TownTabs';
+import { handleFilterByTownSelectedRef, selectedTownTabRef } from 'src/1data/annonces/ref';
 
 // ----------------------------------------------------------------------
 
@@ -65,22 +67,26 @@ export default function Home()
                             </Grid>
 
 
-                            <Grid xs={ 12 } md={ 12 }>
-                                   <Container maxWidth={ settings.themeStretch ? false : 'xl' }>
+                            <Grid xs={ 12 } md={ 12 } pl="0px" pr="0px">
+                                   <Container maxWidth={ settings.themeStretch ? false : 'xl' } sx={ { pl: { sm: "0", xs: "0", md: "0" }, pr: { sm: "0", xs: "0", md: "0" } } }>
 
 
 
 
 
+                                          <TownTabs
+                                                 // selectedTownTab={ selectedTownTabRef.current }
+                                                 handleFilterByTownSelected={ handleFilterByTownSelectedRef.current }
+                                          />
 
 
 
 
-                                          <Grid container spacing={ 3 }>
+                                          <Grid container spacing={ 0 }>
 
 
 
-                                                 <Grid xs={ 12 } md={ 12 }>
+                                                 <Grid xs={ 12 } md={ 12 } pl="0" pr="0">
                                                         <BookingNewest title="Annonces à la une" subheader="12 Nouvelles Annonces" list={ HeadlineAnnouncement } />
                                                  </Grid>
 

@@ -5,9 +5,11 @@ import { Helmet } from 'react-helmet-async';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { io } from 'socket.io-client';
+import { useGetSignalAnnonces } from 'src/1VALDO/hook/annonce/signalsGets';
 import { useAuthContext } from 'src/auth/hooks';
 import Iconify from 'src/components/iconify';
 import { useSettingsContext } from 'src/components/settings';
+import { JobListView } from 'src/sections/byValdo/job/view';
 import { ProductListView } from 'src/sections/byValdo/product/view';
 
 import ProductListViewUser from 'src/sections/byValdo/product/view/product-list-view-user';
@@ -30,7 +32,7 @@ const TABS = [
        {
               value: 'three',
               icon: <Iconify icon="eva:headphones-fill" width={ 24 } />,
-              label: 'Item Three',
+              label: 'Annonce Signalées',
               disabled: true,
        },
        {
@@ -67,6 +69,7 @@ export default function ProductListPage()
 
        const dispatch = useDispatch()
        const [ currentTab, setCurrentTab ] = useState( 'one' );
+       const [ signalAnnonces, setSignalAnnonces ] = useState( [] )
 
 
        const settings = useSettingsContext();
@@ -79,6 +82,18 @@ export default function ProductListPage()
        {
               setCurrentTab( newValue );
        }, [] );
+
+
+
+
+
+       const updateSignalAnnonces = ( dataGet ) => setSignalAnnonces( dataGet )
+
+
+
+
+
+       useGetSignalAnnonces( updateSignalAnnonces, currentTab === 'three' )
 
 
 
@@ -124,7 +139,7 @@ export default function ProductListPage()
                             <Box display="flex" justifyContent="space-between" alignItems="center">
 
                                    <Tabs value={ currentTab } onChange={ handleChangeTab }>
-                                          { TABS.slice( 0, 2 ).map( ( tab ) => (
+                                          { TABS.slice( 0, 3 ).map( ( tab ) => (
                                                  <Tab key={ tab.value } value={ tab.value } label={ tab.label } />
                                           ) ) }
                                    </Tabs>
@@ -151,6 +166,11 @@ export default function ProductListPage()
                             { currentTab === "two" && (
 
                                    <  ProductListViewUsers />
+                            ) }
+
+                            { currentTab === "three" && (
+
+                                   <  JobListView dataGet={ signalAnnonces } />
                             ) }
 
                      </Container>

@@ -44,6 +44,7 @@ export default function AppWelcome( { title, description, action, img, ...other 
                             position: 'relative',
                             color: 'primary.darker',
                             backgroundColor: 'common.white',
+                            display: { sm: 'none', xs: 'none', md: "flex" }
                      } }
                      { ...other }
               >

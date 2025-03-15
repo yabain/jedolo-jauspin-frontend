@@ -294,7 +294,7 @@ export default function ProductTableToolbar( {
                                                  fullWidth
                                                  value={ formatToThousands( maxPriceFormat ) } // Affiche la valeur formatée
 
-                                                 label="Prix"
+                                                 label="Prix maximum"
                                                  InputProps=
                                                  { {
                                                         startAdornment: <InputAdornment position="start">Kg</InputAdornment>,

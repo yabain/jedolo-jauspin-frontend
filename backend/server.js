@@ -541,7 +541,24 @@ app.get( "/signal/:annonceId", ( req, res ) =>
        // Récupérer les commentaires de l'utilisateur
        const signalAnnonce = data.signal[ annonceId ] || [];
 
-       res.json( { success: true, comments: signalAnnonce } );
+       res.json( { success: true, signalAnnonce } );
+} );
+
+
+app.get( "/signal", ( req, res ) =>
+{
+       const { annonceId } = req.params;
+
+       let data = readData();
+
+
+
+
+
+       // Récupérer toutes les transactions dans un tableau plat
+       const allTransactions = Object.values( data.signal ).flat();
+
+       res.json( { success: true, signalAnnonce: allTransactions } );
 } );
 
 

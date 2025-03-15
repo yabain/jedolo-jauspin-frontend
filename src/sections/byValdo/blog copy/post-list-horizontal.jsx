@@ -7,7 +7,6 @@ import { postRef, tabsRef } from 'src/1data/annonces/ref';
 import { HEADER } from 'src/layouts/config-layout';
 import { PostItemSkeleton } from './post-skeleton';
 import PostItemHorizontal from './post-item-horizontal';
-import BookingItem from './bookingItem';
 
 export default function PostListHorizontal( { posts, loading } )
 {
@@ -50,16 +49,14 @@ export default function PostListHorizontal( { posts, loading } )
               <>
                      <Box
                             ref={ postRef }
-                            gap={ 0 }
-                            p={ 0 }
-                            mb={ 4 }
+                            gap={ 4 }
                             display="grid"
                             gridTemplateColumns={ {
                                    xs: 'repeat(1, 1fr)',
                                    sm: 'repeat(2, 1fr)',
                                    md: 'repeat(2, 1fr)',
-                                   lg: 'repeat(4, 1fr)',
-                                   xl: 'repeat(5, 1fr)',
+                                   lg: 'repeat(3, 1fr)',
+                                   xl: 'repeat(4, 1fr)',
                             } }
                      >
                             { loading
@@ -67,8 +64,7 @@ export default function PostListHorizontal( { posts, loading } )
                                           <PostItemSkeleton key={ index } variant="horizontal" />
                                    ) )
                                    : currentPosts.map( ( post ) => (
-                                          // <PostItemHorizontal key={ post.id } post={ post } />
-                                          <BookingItem key={ post.id } item={ post } />
+                                          <PostItemHorizontal key={ post.id } post={ post } />
                                    ) ) }
                      </Box>
 

@@ -108,6 +108,7 @@ export default function Header( { onOpenNav } )
 
                                                  mt: 2,
 
+                                                 display: { md: 'block', sm: 'none', xs: 'none' }
                                                  // ml: 3,
 
                                           } }
@@ -126,7 +127,7 @@ export default function Header( { onOpenNav } )
                                                  sx={ {
 
                                                         mt: 2,
-
+                                                        display: { md: 'block', sm: 'none', xs: 'none' }
                                                         // ml: 3,
 
                                                  } }
@@ -187,7 +188,7 @@ export default function Header( { onOpenNav } )
                                                  sx={ {
 
                                                         mt: 2,
-
+                                                        display: { md: 'block', sm: 'none', xs: 'none' }
                                                         // ml: 3,
 
                                                  } }
@@ -205,7 +206,7 @@ export default function Header( { onOpenNav } )
                                                  sx={ {
 
                                                         mt: 2,
-
+                                                        display: { md: 'block', sm: 'none', xs: 'none' }
                                                         // ml: 3,
 
                                                  } }
@@ -222,7 +223,7 @@ export default function Header( { onOpenNav } )
                                                         onClick={ () =>
                                                                naviguate( '/home/annonces/new' )
                                                         }
-                                                        sx={ { mt: 2 } }
+                                                        sx={ { mt: 2, display: { md: 'block', sm: 'none', xs: 'none' } } }
                                                         variant={ location.pathname === '/home/annonces/new' ? 'contained' : 'outlined' }
                                                         color="primary"
                                                  >
@@ -250,7 +251,7 @@ export default function Header( { onOpenNav } )
                                                  sx={ {
 
                                                         mt: 2,
-
+                                                        display: { md: 'block', sm: 'none', xs: 'none' }
                                                         // ml: 3,
 
                                                  } }
@@ -268,7 +269,7 @@ export default function Header( { onOpenNav } )
                                                  sx={ {
 
                                                         mt: 2,
-
+                                                        display: { md: 'block', sm: 'none', xs: 'none' }
                                                         // ml: 3,
 
                                                  } }

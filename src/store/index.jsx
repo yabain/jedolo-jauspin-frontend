@@ -33,6 +33,9 @@ import addUsersAnnoncesCommentsReducer from './comments/add/reducer';
 import getUserAnnonceSignalsReducer from './signal/get/reducer';
 import addUserAnnonceSignalReducer from './signal/add/reducer';
 
+// annonces signals Import 
+import getUsersAnnonceSignalsReducer from './signal/gets/reducer';
+
 
 // annonces Sponsor Import 
 import addSponsorReducer from './sponsor/add/reducer';
@@ -78,9 +81,14 @@ const rootReducer = combineReducers( {
 
 
 
-       // annonce
+       // signal
        getUserAnnonceSignals: getUserAnnonceSignalsReducer,
        addUserAnnonceSignal: addUserAnnonceSignalReducer,
+
+
+
+       // signals
+       getUsersAnnonceSignals: getUsersAnnonceSignalsReducer,
 
 
 

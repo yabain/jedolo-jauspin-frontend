@@ -26,77 +26,7 @@ import 'moment/locale/fr';
 import { fShortenNumber } from 'src/utils/format-number';
 import { tabsRef } from 'src/1data/annonces/ref';
 
-// ----------------------------------------------------------------------
-
-export default function BookingNewest( { title, subheader, list, sx, ...other } )
-{
-
-       const theme = useTheme();
-
-       const carousel = useCarousel( {
-              slidesToShow: 4,
-              autoplay: true,  // Active le défilement automatique
-              autoplaySpeed: 2500,  // Temps d'affichage de chaque slide (en ms)
-              responsive: [
-                     {
-                            breakpoint: theme.breakpoints.values.lg,
-                            settings: {
-                                   slidesToShow: 3,
-                            },
-                     },
-                     {
-                            breakpoint: theme.breakpoints.values.md,
-                            settings: {
-                                   slidesToShow: 2,
-                            },
-                     },
-                     {
-                            breakpoint: theme.breakpoints.values.sm,
-                            settings: {
-                                   slidesToShow: 1,
-                            },
-                     },
-              ],
-       } );
-
-       return (
-              <Box ref={ tabsRef } sx={ {
-                     py: 2, ...sx,
-                     padding: "11px 0",
-                     borderRadius: "20px",
-              } } { ...other }>
-                     <CardHeader
-                            title={ title }
-                            subheader={ subheader }
-                            action={ <CarouselArrows onNext={ carousel.onNext } onPrev={ carousel.onPrev } /> }
-                            sx={ {
-                                   p: 0,
-                                   mb: 3,
-                            } }
-                     />
-
-                     <Carousel sx={ {
-                            width: "100px",
-                     } } ref={ carousel.carouselRef } { ...carousel.carouselSettings }>
-                            { list.map( ( item ) => (
-                                   <BookingItem key={ item.id } item={ item } />
-                            ) ) }
-                     </Carousel>
-
-              </Box>
-       );
-}
-
-BookingNewest.propTypes = {
-       list: PropTypes.array,
-       subheader: PropTypes.string,
-       sx: PropTypes.object,
-       title: PropTypes.string,
-};
-
-// ----------------------------------------------------------------------
-
-function BookingItem( { item } )
+export default function BookingItem( { item } )
 {
 
        const { avatarUrl, name, createdAt, guests, coverUrl, price, isHot } = item;
@@ -210,7 +140,3 @@ function BookingItem( { item } )
               </Paper>
        );
 }
-
-BookingItem.propTypes = {
-       item: PropTypes.object,
-};
