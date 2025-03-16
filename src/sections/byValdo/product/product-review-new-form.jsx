@@ -21,6 +21,7 @@ import { User } from '@auth0/auth0-react';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocation } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
+import { useSnackbar } from 'notistack';
 
 // ----------------------------------------------------------------------
 
@@ -30,6 +31,7 @@ export default function ProductReviewNewForm( { annonceId, addData, onClose, ...
 
        const location = useLocation();
        const dispatch = useDispatch()
+       const { enqueueSnackbar } = useSnackbar();
        const productGet = useMemo( () => location.state?.annonce || null, [ location ] );
        const { isPending, isFulled } = useSelector( state => state.addUsersAnnoncesComments )
 
@@ -46,8 +48,8 @@ export default function ProductReviewNewForm( { annonceId, addData, onClose, ...
        const defaultValues = {
               rating: 0,
               comment: '',
-              name: '',
-              email: '',
+              name: user?.nom || user?.displayName,
+              email: user?.email,
        };
 
        const methods = useForm( {
@@ -71,7 +73,7 @@ export default function ProductReviewNewForm( { annonceId, addData, onClose, ...
               const data = {
                      ...dataGet,
                      "id": Date.now(),
-                     "commenterId": user.id,
+                     "commenterId": user?.id,
                      "postedAt": Date.now(),
                      "isPurchased": false,
                      "avatarUrl": "https://api-dev-minimal-v510.vercel.app/assets/images/avatar/avatar_8.jpg"
@@ -79,7 +81,7 @@ export default function ProductReviewNewForm( { annonceId, addData, onClose, ...
               setDataAdded( data )
               dispatch( request( { annonceId: productGet.id, data } ) )
 
-              console.info( 'DATA', data );
+              console.info( 'DATA', dataGet );
 
 
        } );
@@ -99,20 +101,21 @@ export default function ProductReviewNewForm( { annonceId, addData, onClose, ...
               if ( isFulled && !isPending )
               {
                      dispatch( resetAfterRequest() )
-                     addData( dataAdded )
+                     if ( addData ) addData( dataAdded )
                      reset();
                      onClose();
+                     enqueueSnackbar( "Votre avis a étét ajouté avec success !" )
               }
-       }, [ isPending, isFulled, dataAdded, addData, dispatch, reset, onClose ] )
+       }, [ isPending, isFulled, dataAdded, addData, dispatch, reset, onClose, enqueueSnackbar ] )
 
        return (
               <Dialog onClose={ onClose } { ...other }>
                      <FormProvider methods={ methods } onSubmit={ onSubmit }>
-                            <DialogTitle> Add Review </DialogTitle>
+                            <DialogTitle> Ajouter un avis </DialogTitle>
 
                             <DialogContent>
                                    <Stack direction="row" flexWrap="wrap" alignItems="center" spacing={ 1.5 }>
-                                          <Typography variant="body2">Your review about this product:</Typography>
+                                          <Typography variant="body2">Votre note pour cette annonce:</Typography>
 
                                           <Controller
                                                  name="rating"

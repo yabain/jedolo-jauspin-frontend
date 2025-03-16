@@ -33,7 +33,7 @@ export function useGetTransaction( dataGet, isActive = true )
 
        useEffect( () => () => handleReset(), [ handleReset ] );
        useEffect( () => { if ( isFulled && !isPending && isActive ) handleEnque(); }, [ isFulled, isPending, isActive, handleEnque ] );
-       useEffect( () => { if ( !isFulled && !isPending && isActive ) dispatch( request( { email: user.email } ) ); }, [ user.email, isFulled, isPending, isActive, dispatch ] );
+       useEffect( () => { if ( !isFulled && !isPending && isActive ) dispatch( request( { email: user?.email } ) ); }, [ user?.email, isFulled, isPending, isActive, dispatch ] );
        useEffect( () => { if ( isFulled && !isPending && isActive && !isLoad ) { dataGet( data.transactions ); setIsLoad( true ) } }, [ isLoad, isFulled, isPending, isActive, dataGet, data ] );
 
 

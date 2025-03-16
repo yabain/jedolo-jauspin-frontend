@@ -77,18 +77,51 @@ export default function AuthClassicLayout( { children, image, title } )
                             mx: 'auto',
                             maxWidth: 480,
                             px: { xs: 2, md: 8 },
-                            pt: { xs: 15, md: 20 },
-                            pb: { xs: 15, md: 0 },
+                            pt: { xs: 2, md: 20 },
+                            pb: { xs: 5, md: 0 },
                      } }
               >
                      { children }
               </Stack>
        );
-
+       const rendLogType = ( { showOnMobile, showOnDesktop } ) => (
+              <Stack
+                     sx={ {
+                            // Masquer ou afficher en fonction de showOnMobile et showOnDesktop
+                            display: {
+                                   xs: showOnMobile ? 'flex' : 'none', // Afficher sur mobile si showOnMobile est true
+                                   sm: showOnDesktop ? 'flex' : 'none', // Afficher sur desktop si showOnDesktop est true
+                            },
+                     } }
+                     direction="row"
+                     justifyContent="center"
+                     spacing={ 2 }
+              >
+                     { METHODS.map( ( option ) => (
+                            <Tooltip key={ option.label } title={ option.label }>
+                                   <Link component={ RouterLink } href={ option.path }>
+                                          <Box
+                                                 component="img"
+                                                 alt={ option.label }
+                                                 src={ option.icon }
+                                                 sx={ {
+                                                        width: 32,
+                                                        height: 32,
+                                                        ...( method !== option.id && {
+                                                               filter: 'grayscale(100%)',
+                                                        } ),
+                                                 } }
+                                          />
+                                   </Link>
+                            </Tooltip>
+                     ) ) }
+              </Stack>
+       );
        const renderSection = (
               <Stack
-                     flexGrow={ 1 }
-                     spacing={ 10 }
+                     flexGrow={ { md: 1, sm: 0, xs: 0 } }
+                     spacing={ { md: 10, sm: 2, xs: 2 } }
+                     mt={ { sm: 12, xs: 12 } }
                      alignItems="center"
                      justifyContent="center"
                      sx={ {
@@ -102,7 +135,7 @@ export default function AuthClassicLayout( { children, image, title } )
                      } }
               >
                      <Typography variant="h3" sx={ { maxWidth: 480, textAlign: 'center' } }>
-                            { title || 'Hi, Welcome To PRIMUS' }
+                            { title || 'Bienvenu sur Ndolo' }
                      </Typography>
 
                      <Box
@@ -111,7 +144,7 @@ export default function AuthClassicLayout( { children, image, title } )
                             src={ image || '/assets/illustrations/illustration_dashboard.png' }
                             sx={ {
                                    maxWidth: {
-                                          xs: 480,
+                                          xs: 300,
                                           lg: 560,
                                           xl: 720,
                                    },
@@ -119,41 +152,26 @@ export default function AuthClassicLayout( { children, image, title } )
                      />
 
                      <Stack direction="row" spacing={ 2 }>
-                            { METHODS.map( ( option ) => (
-                                   <Tooltip key={ option.label } title={ option.label }>
-                                          <Link component={ RouterLink } href={ option.path }>
-                                                 <Box
-                                                        component="img"
-                                                        alt={ option.label }
-                                                        src={ option.icon }
-                                                        sx={ {
-                                                               width: 32,
-                                                               height: 32,
-                                                               ...( method !== option.id && {
-                                                                      filter: 'grayscale(100%)',
-                                                               } ),
-                                                        } }
-                                                 />
-                                          </Link>
-                                   </Tooltip>
-                            ) ) }
+                            { rendLogType( { showOnMobile: false, showOnDesktop: true } ) }
                      </Stack>
-              </Stack>
+              </Stack >
        );
+
 
        return (
               <Stack
                      component="main"
-                     direction="row"
+                     direction={ { md: 'row', sm: 'column', xs: 'column' } }
                      sx={ {
                             minHeight: '100vh',
                      } }
               >
                      { renderLogo }
 
-                     { mdUp && renderSection }
+                     { renderSection }
 
                      { renderContent }
+                     {/* { rendLogType( { showOnMobile: true, showOnDesktop: false } ) } */ }
               </Stack>
        );
 }

@@ -10,4 +10,5 @@ export const annonceFromStoreRef = createRef();
 export const setSelectedTownTabRef = createRef();
 export const filterByArgumentStingRef = createRef();
 export const handleFilterByTownSelectedRef = createRef();
+export const handleAddNewReviewToLocalReviewdRef = createRef();
 

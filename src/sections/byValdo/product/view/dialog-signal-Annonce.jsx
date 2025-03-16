@@ -11,9 +11,9 @@ import PropTypes from 'prop-types';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Rating, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
+import { useLocation } from 'react-router';
 import { request } from 'src/store/signal/add/reducer';
 import { useAddSignal } from '../service/addSignal';
-import { useLocation } from 'react-router';
 
 export default function DialogSignalAnnonce( { showDialog } )
 {
@@ -51,7 +51,7 @@ export default function DialogSignalAnnonce( { showDialog } )
 
 
        const { reset, handleSubmit } = methods;
-       const resetAfterSuccess = () => { reset(); setSubmiting( false ), showDialog.onFalse() }
+       const resetAfterSuccess = () => { reset(); setSubmiting( false ); showDialog.onFalse() }
        const onSubmit = handleSubmit( ( data ) => { setSubmiting( true ); dispatch( request( { annonceId: annonce.id, data: { ...data, signalerId: user.id, date: new Date() } } ) ) } );
 
 

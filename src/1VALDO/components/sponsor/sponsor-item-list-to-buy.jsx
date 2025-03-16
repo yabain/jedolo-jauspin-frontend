@@ -22,6 +22,7 @@ export default function SponsorItem( {
        shipping,
        discount,
        subTotal,
+       // totalAmount
 } )
 {
 
@@ -155,5 +156,5 @@ SponsorItem.propTypes = {
        shipping: PropTypes.number,
        subTotal: PropTypes.number,
        taxes: PropTypes.number,
-       totalAmount: PropTypes.number,
+       // totalAmount: PropTypes.number,
 };

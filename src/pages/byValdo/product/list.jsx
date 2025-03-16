@@ -117,12 +117,12 @@ export default function ProductListPage()
               socket.on( 'new-annonce', ( newAnnonce ) =>
               {
 
-                     if ( newAnnonce.userEmail === user.email ) dispatch( addAdminData( newAnnonce ) )
+                     if ( newAnnonce.userEmail === user?.email ) dispatch( addAdminData( newAnnonce ) )
                      console.log( 'nouvelle annonce detecter', newAnnonce );
 
               } ); return () => { socket.disconnect(); };
 
-       }, [ dispatch, user.email ] );
+       }, [ dispatch, user?.email ] );
 
        return (
               <>
@@ -130,7 +130,7 @@ export default function ProductListPage()
                             <title> Annonces</title>
                      </Helmet>
 
-                     { user !== null && user.role === "admin" && ( <Container maxWidth='xl' sx={ {
+                     { user !== null && user?.role === "admin" && ( <Container maxWidth='xl' sx={ {
                             flexGrow: 1,
                             display: 'flex',
                             flexDirection: 'column',
@@ -176,7 +176,7 @@ export default function ProductListPage()
                      </Container>
                      ) }
 
-                     { user !== null && ( user.role === "user" || user === undefined || user === null ) && <ProductListView /> }
+                     { user !== null && ( user?.role === "user" || user === undefined || user === null ) && <ProductListView /> }
               </>
        );
 }

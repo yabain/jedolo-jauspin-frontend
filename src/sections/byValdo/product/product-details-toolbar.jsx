@@ -12,6 +12,7 @@ import { RouterLink } from 'src/routes/components';
 
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import { useNavigate } from 'react-router';
 
 // ----------------------------------------------------------------------
 
@@ -27,6 +28,7 @@ export default function ProductDetailsToolbar( {
 } )
 {
        const popover = usePopover();
+       const navigate = useNavigate()
 
        return (
               <>
@@ -40,11 +42,11 @@ export default function ProductDetailsToolbar( {
                             { ...other }
                      >
                             <Button
-                                   component={ RouterLink }
-                                   href={ backLink }
+                                   // component={ RouterLink }
+                                   onClick={ () => { navigate( - 1 ) } }
                                    startIcon={ <Iconify icon="eva:arrow-ios-back-fill" width={ 16 } /> }
                             >
-                                   Back
+                                   Retour
                             </Button>
 
                             <Box sx={ { flexGrow: 1 } } />
@@ -74,7 +76,7 @@ export default function ProductDetailsToolbar( {
                             >
                                    Profil
                             </LoadingButton>
-                     </Stack>
+                     </Stack >
 
                      <CustomPopover
                             open={ popover.open }

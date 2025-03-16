@@ -25,11 +25,17 @@ import moment from 'moment';
 import 'moment/locale/fr';
 import { fShortenNumber } from 'src/utils/format-number';
 import { tabsRef } from 'src/1data/annonces/ref';
+import { useNavigate } from 'react-router';
 
 export default function BookingItem( { item } )
 {
 
-       const { avatarUrl, name, createdAt, guests, coverUrl, price, isHot } = item;
+       const { avatarUrl, name, createdAt, guests, coverUrl, price, sponsored } = item;
+
+       // console.log( sponsored );
+
+       const navigate = useNavigate();
+
 
 
        dayjs.extend( relativeTime );
@@ -37,8 +43,10 @@ export default function BookingItem( { item } )
 
        return (
               <Paper
+                     onClick={ () => navigate( 'annonces/view', { state: { annonce: item } } ) }
                      sx={ {
-                            mr: 3,
+                            cursor: "pointer",
+                            // mr: 3,
                             borderRadius: 2,
                             position: 'relative',
                             // bgcolor: 'background.neutral',
@@ -47,6 +55,18 @@ export default function BookingItem( { item } )
               >
                      <Box sx={ { p: 1, position: 'relative' } }>
                             <Image alt={ coverUrl } src={ coverUrl } ratio="1/1" sx={ { borderRadius: 1.5 } } />
+                            { sponsored && sponsored !== '' && <Label
+                                   variant="filled"
+                                   color={ sponsored === "top" ? "primary" : "info" }
+                                   sx={ {
+                                          left: 16,
+                                          zIndex: 9,
+                                          bottom: 16,
+                                          position: 'absolute',
+                                   } }
+                            >
+                                   { sponsored }
+                            </Label> }
                      </Box>
 
                      <Stack
@@ -133,10 +153,32 @@ export default function BookingItem( { item } )
                                    position: 'absolute',
                             } }
                      >
-                            { isHot && '🔥' } { price } FCFA
+                            { price } FCFA
                      </Label>
+
+
 
 
               </Paper>
        );
 }
+
+
+BookingItem.propTypes = {
+       item: PropTypes.shape( {
+              avatarUrl: PropTypes.string,
+              name: PropTypes.string,
+              createdAt: PropTypes.oneOfType( [
+                     PropTypes.string,
+                     PropTypes.number,
+                     PropTypes.instanceOf( Date ),
+              ] ),
+              guests: PropTypes.number,
+              coverUrl: PropTypes.string,
+              price: PropTypes.number,
+              sponsored: PropTypes.string,
+              totalComments: PropTypes.number,
+              totalViews: PropTypes.number,
+              totalShares: PropTypes.number,
+       } ).isRequired,
+};

@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { reviewRef } from 'src/1data/annonces/ref';
@@ -11,7 +12,7 @@ export default function ProductReviewList( { reviews } )
 {
        const [ page, setPage ] = useState( 1 );
        const [ hasPageChanged, setHasPageChanged ] = useState( false );
-       const reviewsPerPage = 5; // Vous pouvez ajuster ce nombre selon vos besoins
+       const reviewsPerPage = 3; // Vous pouvez ajuster ce nombre selon vos besoins
 
        // Calcul du nombre total de pages
        const totalPages = Math.ceil( reviews.length / reviewsPerPage );

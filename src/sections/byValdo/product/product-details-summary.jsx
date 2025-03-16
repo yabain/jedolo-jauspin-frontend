@@ -3,6 +3,7 @@ import { sumBy } from 'lodash';
 import PropTypes from 'prop-types';
 import { useEffect, useCallback } from 'react';
 import { useForm, Controller } from 'react-hook-form';
+import { handleAddNewReviewToLocalReviewdRef } from 'src/1data/annonces/ref';
 
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
@@ -31,6 +32,7 @@ import { LoadingButton } from '@mui/lab';
 
 import IncrementerButton from './common/incrementer-button';
 import DialogSignalAnnonce from './view/dialog-signal-Annonce';
+import ProductReviewNewForm from './product-review-new-form';
 // ----------------------------------------------------------------------
 
 export default function ProductDetailsSummary( {
@@ -310,7 +312,7 @@ export default function ProductDetailsSummary( {
                             // } ),
                      } }
               >
-                     { ratings
+                     {/* { ratings
                             .slice( 0 )
                             .reverse()
                             .map( ( rating ) => (
@@ -340,23 +342,11 @@ export default function ProductDetailsSummary( {
                                                  { fShortenNumber( rating.reviewCount ) }
                                           </Typography>
                                    </Stack>
-                            ) ) }
+                            ) ) } */}
               </Stack>
        );
 
-       const renderReviewButton = (
-              <Stack alignItems="center" justifyContent="center">
-                     <Button
-                            size="large"
-                            variant="soft"
-                            color="inherit"
-                            onClick={ review.onTrue }
-                            startIcon={ <Iconify icon="solar:pen-bold" /> }
-                     >
-                            Write your review
-                     </Button>
-              </Stack>
-       );
+
 
        const renderActions = (
               <Stack direction="row" justifyContent="space-between" spacing={ 2 }>
@@ -374,8 +364,9 @@ export default function ProductDetailsSummary( {
                      </Button>
 
                      <Button
+                            onClick={ () => { review.onTrue() } }
                             sx={ { whiteSpace: 'nowrap', width: '120px' } } size="medium" type="submit" variant="contained"  >
-                            Commmenter
+                            Commenter
                      </Button>
 
                      <Button
@@ -536,6 +527,8 @@ export default function ProductDetailsSummary( {
                             { renderActions }
 
                             { renderShare }
+
+                            <ProductReviewNewForm open={ review.value } onClose={ review.onFalse } />
 
                      </Stack>
 

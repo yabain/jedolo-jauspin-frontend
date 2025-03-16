@@ -1,6 +1,7 @@
 import sumBy from 'lodash/sumBy';
 import { useState, useCallback, useEffect } from 'react';
 
+import { Box } from '@mui/system';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import Card from '@mui/material/Card';
@@ -49,7 +50,6 @@ import InvoiceAnalytic from '../invoice-analytic';
 import InvoiceTableRow from '../invoice-table-row';
 import InvoiceTableToolbar from '../invoice-table-toolbar';
 import InvoiceTableFiltersResult from '../invoice-table-filters-result';
-import { Box } from '@mui/system';
 
 // ----------------------------------------------------------------------
 

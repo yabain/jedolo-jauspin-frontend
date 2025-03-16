@@ -110,12 +110,12 @@ export default function ProductListPage()
        //        socket.on( 'new-annonce', ( newAnnonce ) =>
        //        {
 
-       //               if ( newAnnonce.userEmail === user.email ) dispatch( addAdminData( newAnnonce ) )
+       //               if ( newAnnonce.userEmail === user?.email ) dispatch( addAdminData( newAnnonce ) )
        //               console.log( 'nouvelle annonce detecter', newAnnonce );
 
        //        } ); return () => { socket.disconnect(); };
 
-       // }, [ dispatch, user.email ] );
+       // }, [ dispatch, user?.email ] );
 
        return (
               <>
@@ -134,7 +134,7 @@ export default function ProductListPage()
                                    <Tabs value={ currentTab } onChange={ handleChangeTab }                                   >
                                           { TABS.slice( 0, 2 ).map( ( tab ) =>
                                           {
-                                                 if ( tab.value === 'two' && user.role !== 'admin' ) return null;
+                                                 if ( tab.value === 'two' && user?.role !== 'admin' ) return null;
 
                                                  return (
                                                         <Tab key={ tab.value } value={ tab.value } label={ tab.label } />
@@ -162,7 +162,7 @@ export default function ProductListPage()
                             ) }
 
 
-                            { user.role === 'admin' && currentTab === 'two' && (
+                            { user?.role === 'admin' && currentTab === 'two' && (
                                    <InvoiceListView dataGet={ transactions } />
                             ) }
 

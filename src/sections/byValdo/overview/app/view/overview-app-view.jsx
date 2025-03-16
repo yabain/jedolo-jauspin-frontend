@@ -15,12 +15,11 @@ import BookingNewest from 'src/sections/byValdo/booking/booking-newest';
 import { _appAuthors, _appRelated, _appFeatured, _appInvoices, _appInstalled, _bookingNew } from 'src/_mock';
 
 import { useSettingsContext } from 'src/components/settings';
+import { handleFilterByTownSelectedRef, selectedTownTabRef } from 'src/1data/annonces/ref';
+import TownTabs from 'src/sections/byValdo/blog/view/TownTabs';
 
 import { Typography } from '@mui/material';
 import AppWelcome from '../app-welcome';
-import SidebarFilter from '../sidebar-filter';
-import TownTabs from 'src/sections/byValdo/blog/view/TownTabs';
-import { handleFilterByTownSelectedRef, selectedTownTabRef } from 'src/1data/annonces/ref';
 
 // ----------------------------------------------------------------------
 

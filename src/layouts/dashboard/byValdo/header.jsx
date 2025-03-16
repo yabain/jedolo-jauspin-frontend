@@ -101,22 +101,25 @@ export default function Header( { onOpenNav } )
                                    justifyContent="flex-end"
                                    spacing={ { xs: 2, sm: 1 } }
                             >
-                                   <Button
 
-                                          onClick={ () => { naviguate( '/home' ) } }
-                                          sx={ {
+                                   <RoleBasedGuard hasContent roles={ [ 'admin', 'user' ] }  >
+                                          <Button
 
-                                                 mt: 2,
+                                                 onClick={ () => { naviguate( '/home' ) } }
+                                                 sx={ {
 
-                                                 display: { md: 'block', sm: 'none', xs: 'none' }
-                                                 // ml: 3,
+                                                        mt: 2,
 
-                                          } }
-                                          variant={ location.pathname === '/home' ? "contained" : "outlined" } color="primary"
-                                   // startIcon={ <Iconify icon="eva:search-fill" /> }
-                                   >
-                                          Acceuil
-                                   </Button>
+                                                        display: { md: 'block', sm: 'none', xs: 'none' }
+                                                        // ml: 3,
+
+                                                 } }
+                                                 variant={ location.pathname === '/home' ? "contained" : "outlined" } color="primary"
+                                          // startIcon={ <Iconify icon="eva:search-fill" /> }
+                                          >
+                                                 Acceuil
+                                          </Button>
+                                   </RoleBasedGuard>
 
 
 
@@ -144,18 +147,18 @@ export default function Header( { onOpenNav } )
                                    <RoleBasedGuard hasContent roles={ [] }  >
                                           <Button
 
-                                                 onClick={ () => { naviguate( '/home/annonces/list' ) } }
+                                                 onClick={ () => { naviguate( '/auth/jwt/register' ) } }
                                                  sx={ {
 
                                                         mt: 2,
-
+                                                        // display: { md: 'block', sm: 'none', xs: 'none' }
                                                         // ml: 3,
 
                                                  } }
-                                                 variant={ location.pathname === '/home/annonces/list' ? "contained" : "outlined" } color="primary"
+                                                 variant={ location.pathname === '/auth/jwt/register' ? "contained" : "outlined" } color="primary"
                                           // startIcon={ <Iconify icon="eva:search-fill" /> }
                                           >
-                                                 Inscritpion
+                                                 Inscription
                                           </Button>
                                    </RoleBasedGuard>
 
@@ -165,15 +168,15 @@ export default function Header( { onOpenNav } )
                                    <RoleBasedGuard hasContent roles={ [] }  >
                                           <Button
 
-                                                 onClick={ () => { naviguate( '/home/annonces/list' ) } }
+                                                 onClick={ () => { naviguate( '/auth/jwt/login' ) } }
                                                  sx={ {
 
                                                         mt: 2,
-
+                                                        // display: { md: 'block', sm: 'none', xs: 'none' }
                                                         // ml: 3,
 
                                                  } }
-                                                 variant={ location.pathname === '/home/annonces/list' ? "contained" : "outlined" } color="primary"
+                                                 variant={ location.pathname === '/auth/jwt/login' ? "contained" : "outlined" } color="primary"
                                           // startIcon={ <Iconify icon="eva:search-fill" /> }
                                           >
                                                  Connexion
@@ -223,7 +226,7 @@ export default function Header( { onOpenNav } )
                                                         onClick={ () =>
                                                                naviguate( '/home/annonces/new' )
                                                         }
-                                                        sx={ { mt: 2, display: { md: 'block', sm: 'none', xs: 'none' } } }
+                                                        sx={ { mt: 2, display: { md: 'block', sm: 'none', xs: 'none', display: { md: 'block', sm: 'none', xs: 'none' } } } }
                                                         variant={ location.pathname === '/home/annonces/new' ? 'contained' : 'outlined' }
                                                         color="primary"
                                                  >
@@ -235,7 +238,7 @@ export default function Header( { onOpenNav } )
                                                  onClick={ () =>
                                                         naviguate( '/auth/jwt/login' )
                                                  }
-                                                 sx={ { mt: 2 } }
+                                                 sx={ { mt: 2, display: { md: 'block', sm: 'none', xs: 'none' } } }
                                                  variant={ location.pathname === '/home/annonces/new' ? 'contained' : 'outlined' }
                                                  color="primary"
                                           >

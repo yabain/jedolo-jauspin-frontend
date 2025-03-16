@@ -25,6 +25,7 @@ import moment from 'moment';
 import 'moment/locale/fr';
 import { fShortenNumber } from 'src/utils/format-number';
 import { tabsRef } from 'src/1data/annonces/ref';
+import { useNavigate } from 'react-router';
 
 // ----------------------------------------------------------------------
 
@@ -99,15 +100,18 @@ BookingNewest.propTypes = {
 function BookingItem( { item } )
 {
 
-       const { avatarUrl, name, createdAt, guests, coverUrl, price, isHot } = item;
+       const { avatarUrl, name, createdAt, guests, coverUrl, price, sponsored } = item;
 
 
+       const navigate = useNavigate();
        dayjs.extend( relativeTime );
        dayjs.locale( 'fr' );
 
        return (
               <Paper
+                     onClick={ () => navigate( 'annonces/view', { state: { annonce: item } } ) }
                      sx={ {
+                            cursor: "pointer",
                             mr: 3,
                             borderRadius: 2,
                             position: 'relative',
@@ -117,6 +121,18 @@ function BookingItem( { item } )
               >
                      <Box sx={ { p: 1, position: 'relative' } }>
                             <Image alt={ coverUrl } src={ coverUrl } ratio="1/1" sx={ { borderRadius: 1.5 } } />
+                            { sponsored && sponsored !== '' && <Label
+                                   variant="filled"
+                                   color={ sponsored === "top" ? "primary" : "info" }
+                                   sx={ {
+                                          left: 16,
+                                          zIndex: 9,
+                                          bottom: 16,
+                                          position: 'absolute',
+                                   } }
+                            >
+                                   { sponsored }
+                            </Label> }
                      </Box>
 
                      <Stack
@@ -203,7 +219,7 @@ function BookingItem( { item } )
                                    position: 'absolute',
                             } }
                      >
-                            { isHot && '🔥' } { price } FCFA
+                            { price } FCFA
                      </Label>
 
 

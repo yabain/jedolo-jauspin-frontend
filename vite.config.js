@@ -9,6 +9,7 @@ export default defineConfig( {
        plugins: [
               react(),
               checker( {
+                     // Supprimez ou commentez la section ESLint
                      eslint: {
                             lintCommand: 'eslint "./src/**/*.{js,jsx,ts,tsx}"',
                      },
@@ -32,7 +33,6 @@ export default defineConfig( {
        },
        server: {
               port: 3030,
-
               overlay: {
                      warnings: false,
               },

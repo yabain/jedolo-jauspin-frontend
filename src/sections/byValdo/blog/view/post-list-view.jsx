@@ -1168,7 +1168,7 @@ export default function PostListView()
               },
               [ filterByArguments, annonceFromStore, selectedTownTab ]
        );
-       console.log( annonceFromStore.city );
+       // console.log( annonceFromStore.city );
 
        useEffect( () =>
        {
@@ -1564,7 +1564,7 @@ export default function PostListView()
 
 
        return (
-              <Container maxWidth={ settings.themeStretch ? false : 'xl' }>
+              <Container sx={ { pl: { sm: "0", xs: "0", md: "0" }, pr: { sm: "0", xs: "0", md: "0" } } } maxWidth={ settings.themeStretch ? false : 'xl' }>
                      {/* <CustomBreadcrumbs
                             heading="List"
                             links={ [

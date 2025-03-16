@@ -65,7 +65,7 @@ export default function ProductDetailsCarousel( { product } )
 {
        const theme = useTheme();
 
-       // const slides = product.images.map( ( img ) => ( {
+       // const slides = product?.images.map( ( img ) => ( {
        //        src: img,
        // } ) );
        const imageTab = [
@@ -75,7 +75,7 @@ export default function ProductDetailsCarousel( { product } )
               'https://i.pinimg.com/736x/e1/7f/07/e17f072a6c834839d0270bfeaeea4929.jpg'
 
        ]
-       const slides = product.favoritePerson.map( ( img, index ) => ( {
+       const slides = product?.favoritePerson?.map( ( img, index ) => ( {
               src: imageTab[ index % imageTab.length ],
        } ) );
 

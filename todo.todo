@@ -14,3 +14,5 @@
 - [ ] probleme de design quand il y'a pas de description
 
 -[ ] remplacer les loader par les skeleton dans la liste des annonces
+-[ ] ajouter le annoonce id dans les objet sponsored
+-[ ] mettre l'annonce a top ou premmium apres l'achat d'un sponsor sur une annonce

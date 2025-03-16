@@ -1,5 +1,5 @@
 import { enqueueSnackbar } from "notistack";
-import axiosInstance from "src/utils/axios";
+import { HOST_PORT, HOST_URL } from "src/config-global"; import axiosInstance from "src/utils/axios";
 
 export async function request( data )
 {
@@ -10,24 +10,25 @@ export async function request( data )
 
               let response
 
-              if ( data.type === 'user' )
-              {
-
-
-                     response = await axiosInstance.get( `http://localhost:5000/annonces` );
-                     // response = await axiosInstance.get( `http://192.168.1.122:5000/annonces` );
-
-
-              }
+              console.log( `${ HOST_URL }:${ HOST_PORT }/annonces` );
+              console.log( 'http://192.168.1.122:5000/annonces' );
+              console.log( data.type );
 
               if ( data.type === 'admin' )
               {
 
 
-                     response = await axiosInstance.get( `http://localhost:5000/annonces/all` );
-
+                     response = await axiosInstance.get( `${ HOST_URL }:${ HOST_PORT }/annonces/all` );
+                     return response.data;
 
               }
+
+              response = await axiosInstance.get( `${ HOST_URL }:${ HOST_PORT }/annonces` );
+              console.log( `${ HOST_URL }:${ HOST_PORT }/annonces` );
+              console.log( 'http://192.168.1.122:5000/annonces' );
+
+              // response = await axiosInstance.get( `http://192.168.1.122:5000/annonces` );
+
               return response.data;
 
               // console.log( 'Réponse retourner :', response );

@@ -1,3 +1,9 @@
+
+
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import 'dayjs/locale/fr';
+
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
@@ -15,6 +21,11 @@ import Iconify from 'src/components/iconify';
 
 export default function ProductReviewItem( { review } )
 {
+
+
+       dayjs.extend( relativeTime );
+       dayjs.locale( 'fr' );
+
        const { name, rating, comment, postedAt, avatarUrl, attachments, isPurchased } = review;
 
        const renderInfo = (
@@ -40,7 +51,7 @@ export default function ProductReviewItem( { review } )
 
                      <ListItemText
                             primary={ name }
-                            secondary={ fDate( postedAt ) }
+                            // secondary={ fDate( postedAt ) }
                             primaryTypographyProps={ {
                                    noWrap: true,
                                    typography: 'subtitle2',
@@ -76,6 +87,20 @@ export default function ProductReviewItem( { review } )
                      <Typography variant="body2">{ comment }</Typography>
 
 
+                     <ListItemText
+                            // primary={ name }
+                            secondary={ dayjs( postedAt ).fromNow() }
+                            primaryTypographyProps={ {
+                                   noWrap: true,
+                                   typography: 'subtitle2',
+                                   mb: 0.5,
+                            } }
+                            secondaryTypographyProps={ {
+                                   noWrap: true,
+                                   typography: 'caption',
+                                   component: 'span',
+                            } }
+                     />
 
 
               </Stack>

@@ -1,5 +1,5 @@
 import { enqueueSnackbar } from "notistack";
-import axiosInstance from "src/utils/axios";
+import { HOST_PORT, HOST_URL } from "src/config-global"; import axiosInstance from "src/utils/axios";
 
 
 
@@ -23,7 +23,7 @@ export async function request( data )
 
               console.log( 'requette pour ajouter appeler' );
 
-              const response = await axiosInstance.post( `http://localhost:5000/transactions/${ data.transactorEmail }`, { ...data.data } );
+              const response = await axiosInstance.post( `${ HOST_URL }:${ HOST_PORT }/transactions/${ data.transactorEmail }`, { ...data.data } );
               console.log( 'Réponse de la requête :', response.data );
               return response;
 

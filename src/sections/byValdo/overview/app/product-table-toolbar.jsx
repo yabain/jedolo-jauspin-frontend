@@ -297,8 +297,8 @@ export default function ProductTableToolbar( {
                                                  label="Prix maximum"
                                                  InputProps=
                                                  { {
-                                                        startAdornment: <InputAdornment position="start">Kg</InputAdornment>,
-                                                        endAdornment: <InputAdornment position="start"> <Iconify icon="solar:eye-bold" width={ 24 } /></InputAdornment>,
+                                                        // startAdornment: <InputAdornment position="start">Kg</InputAdornment>,
+                                                        endAdornment: <InputAdornment position="start">FCFA</InputAdornment>,
                                                  } }
                                                  onChange={ ( event => { handleChangeMaxPrice( event ) } ) }
                                                  onKeyPress={ handleKeyPress }

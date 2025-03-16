@@ -45,65 +45,66 @@ export const route = [
        {
               path: 'home',
               element: (
-                     <AuthGuard>
-                            <Suspense fallback={ <SplashScreen /> }>
-                                   <DashboardLayout show={ false }>
-                                          <Suspense fallback={ <SplashScreen /> }>
-                                                 <Suspense fallback={ <LoadingScreen /> }>
-                                                        <Outlet />
-                                                 </Suspense>
-                                          </Suspense>
-                                   </DashboardLayout>
+                     <DashboardLayout show={ false }>
+                            <Suspense fallback={ <LoadingScreen /> }>
+                                   <Outlet />
                             </Suspense>
-                     </AuthGuard>
+                     </DashboardLayout>
               ),
               children: [
-                     { element: <IndexPage />, index: true },
+                     // INDEX PUBLIC
+                     { index: true, element: <IndexPage /> },
 
-
+                     // GARDE PRIVÉE
+                     {
+                            element: <AuthGuard><Outlet /></AuthGuard>,
+                            children: [
+                                   {
+                                          path: 'annonces',
+                                          children: [
+                                                 { index: true, element: <ProductListPage /> },
+                                                 { path: 'list', element: <ProductListPage /> },
+                                                 // { path: 'view', element: <ProductDetailsPage /> },
+                                                 { path: 'new', element: <ProductCreatePage /> },
+                                                 { path: 'edit', element: <ProductEditPage /> },
+                                                 { path: 'categorie', element: <OrderListPage /> },
+                                          ],
+                                   },
+                                   {
+                                          path: 'transactions',
+                                          children: [
+                                                 { index: true, element: <TransactionListPage /> },
+                                                 { path: 'list', element: <TransactionListPage /> },
+                                                 { path: 'view', element: <ProductDetailsPage /> },
+                                                 { path: 'new', element: <ProductCreatePage /> },
+                                                 { path: 'edit', element: <ProductEditPage /> },
+                                                 { path: 'categorie', element: <OrderListPage /> },
+                                          ],
+                                   },
+                                   {
+                                          path: 'user',
+                                          children: [
+                                                 { index: true, element: <UserProfilePage /> },
+                                                 { path: 'profile', element: <UserProfilePage /> },
+                                                 { path: 'cards', element: <UserCardsPage /> },
+                                                 { path: 'list', element: <UserListPage /> },
+                                                 { path: 'new', element: <UserCreatePage /> },
+                                                 { path: ':id/edit', element: <UserEditPage /> },
+                                                 { path: 'account', element: <UserAccountPage /> },
+                                          ],
+                                   },
+                            ],
+                     },
 
                      {
                             path: 'annonces',
                             children: [
-                                   { element: <ProductListPage />, index: true },
-                                   { path: 'list', element: <ProductListPage /> },
                                    { path: 'view', element: <ProductDetailsPage /> },
-                                   { path: 'new', element: <ProductCreatePage /> },
-                                   { path: 'edit', element: <ProductEditPage /> },
-                                   { path: 'categorie', element: <OrderListPage /> },
                             ],
                      },
-
-
-
-                     {
-                            path: 'transactions',
-                            children: [
-                                   { element: <ProductListPage />, index: true },
-                                   { path: 'list', element: <TransactionListPage /> },
-                                   { path: 'view', element: <ProductDetailsPage /> },
-                                   { path: 'new', element: <ProductCreatePage /> },
-                                   { path: 'edit', element: <ProductEditPage /> },
-                                   { path: 'categorie', element: <OrderListPage /> },
-                            ],
-                     },
-                     {
-                            path: 'user',
-                            children: [
-                                   { element: <UserProfilePage />, index: true },
-                                   { path: 'profile', element: <UserProfilePage /> },
-                                   { path: 'cards', element: <UserCardsPage /> },
-                                   { path: 'list', element: <UserListPage /> },
-                                   { path: 'new', element: <UserCreatePage /> },
-                                   { path: ':id/edit', element: <UserEditPage /> },
-                                   { path: 'account', element: <UserAccountPage /> },
-                            ],
-                     },
-
               ],
+       }
 
-
-       },
 
 
 ];

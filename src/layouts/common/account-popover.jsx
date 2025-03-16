@@ -152,6 +152,12 @@ export default function AccountPopover()
                                                  if ( option.label === 'Annonces' && user?.role === 'user' )
                                                  {
                                                         return null; // Ne pas afficher cette option
+                                                 } if ( option.label === 'Sponsors' && user?.role === 'user' )
+                                                 {
+                                                        return null; // Ne pas afficher cette option
+                                                 } if ( option.label === 'Utilisateurs' && user?.role === 'user' )
+                                                 {
+                                                        return null; // Ne pas afficher cette option
                                                  }
 
 
