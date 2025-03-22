@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+import PropTypes, { string } from 'prop-types';
 
 
 import dayjs from 'dayjs';
@@ -26,11 +26,13 @@ import 'moment/locale/fr';
 import { fShortenNumber } from 'src/utils/format-number';
 import { tabsRef } from 'src/1data/annonces/ref';
 import { useNavigate } from 'react-router';
+import { request } from 'src/store/annonces/updateAnnonce/reducer';
+import { useDispatch } from 'react-redux';
 
 export default function BookingItem( { item } )
 {
 
-       const { avatarUrl, name, createdAt, guests, coverUrl, price, sponsored } = item;
+       const { avatarUrl, name, createdAt, guests, coverUrl, price, sponsored, rating } = item;
 
        // console.log( sponsored );
 
@@ -40,10 +42,19 @@ export default function BookingItem( { item } )
 
        dayjs.extend( relativeTime );
        dayjs.locale( 'fr' );
+       const dispatch = useDispatch()
+
+       const AnnonceClicked = () =>
+       {
+              navigate( 'annonces/view', { state: { annonce: item } } )
+
+              const nbrView = item.nbrView !== undefined ? item.nbrView + 1 : 1
+              dispatch( request( { ...item, nbrView } ) )
+       }
 
        return (
               <Paper
-                     onClick={ () => navigate( 'annonces/view', { state: { annonce: item } } ) }
+                     onClick={ () => AnnonceClicked() }
                      sx={ {
                             cursor: "pointer",
                             // mr: 3,
@@ -81,6 +92,12 @@ export default function BookingItem( { item } )
                                    <Avatar alt={ name } src={ avatarUrl } />
                                    <ListItemText
                                           primary={ name }
+                                          primaryTypographyProps={ {
+                                                 noWrap: true,
+                                                 variant: "subtitle2",
+                                                 width: '240px' // ← équivalent au style par défaut
+
+                                          } }
                                           secondary={ fDateTime( createdAt ) }
                                           secondaryTypographyProps={ {
                                                  mt: 0.5,
@@ -108,7 +125,7 @@ export default function BookingItem( { item } )
 
 
                                           <Typography variant='button' >
-                                                 bafoussam
+                                                 { item.city[ 0 ] }
                                           </Typography>
                                    </Stack>
 
@@ -125,18 +142,18 @@ export default function BookingItem( { item } )
                                    >
                                           <Stack direction="row" alignItems="center" >
                                                  <Iconify icon="eva:message-circle-fill" width={ 16 } />
-                                                 { fShortenNumber( item.totalComments ) }
+                                                 { fShortenNumber( item.nbrComment || 0 ) }
                                           </Stack>
 
                                           <Stack direction="row" alignItems="center" sx={ { mr: 1, ml: 1 } }>
                                                  <Iconify icon="solar:eye-bold" width={ 16 } />
-                                                 { fShortenNumber( item.totalViews ) }
+                                                 { fShortenNumber( item.nbrView || 0 ) }
                                           </Stack>
 
                                           <Stack direction="row" alignItems="center" >
                                                  <Iconify icon="mdi:star-rate" width={ 16 } />
                                                  {/* <Iconify icon="solar:share-bold" width={ 16 } sx={ { mr: 0.5 } } /> */ }
-                                                 { fShortenNumber( item.totalShares ) }
+                                                 { fShortenNumber( item.rating || 0 ) } / 5
                                           </Stack>
                                    </Stack>
 
@@ -178,7 +195,11 @@ BookingItem.propTypes = {
               price: PropTypes.number,
               sponsored: PropTypes.string,
               totalComments: PropTypes.number,
+              rating: PropTypes.string,
               totalViews: PropTypes.number,
+              nbrComment: PropTypes.number,
+              nbrView: PropTypes.number,
+              city: PropTypes.arrayOf( string ),
               totalShares: PropTypes.number,
        } ).isRequired,
 };

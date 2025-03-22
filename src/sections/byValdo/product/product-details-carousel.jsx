@@ -75,9 +75,7 @@ export default function ProductDetailsCarousel( { product } )
               'https://i.pinimg.com/736x/e1/7f/07/e17f072a6c834839d0270bfeaeea4929.jpg'
 
        ]
-       const slides = product?.favoritePerson?.map( ( img, index ) => ( {
-              src: imageTab[ index % imageTab.length ],
-       } ) );
+       const slides = [ { src: imageTab[ 0 ] }, { src: imageTab[ 2 ] }, { src: imageTab[ 1 ] } ];
 
 
        const lightbox = useLightBox( slides );
@@ -95,7 +93,7 @@ export default function ProductDetailsCarousel( { product } )
               focusOnSelect: true,
               variableWidth: true,
               centerPadding: '0px',
-              slidesToShow: slides.length > 3 ? 3 : slides.length,
+              slidesToShow: slides?.length > 3 ? 3 : slides?.length,
        } );
 
        useEffect( () =>
@@ -115,7 +113,7 @@ export default function ProductDetailsCarousel( { product } )
        const renderLargeImg = (
               <Box
                      sx={ {
-                            width: { xs: 'auto', md: 600 }, // 300px sur mobile, 500px sur grand écran
+                            width: { xs: 'auto', md: 'auto', lg: 600 }, // 300px sur mobile, 500px sur grand écran
                             height: 'auto',
                             mb: 3,
                             borderRadius: 2,
@@ -128,7 +126,7 @@ export default function ProductDetailsCarousel( { product } )
                             asNavFor={ carouselThumb.nav }
                             ref={ carouselLarge.carouselRef }
                      >
-                            { slides.map( ( slide ) => (
+                            { slides?.map( ( slide ) => (
                                    <Image
                                           key={ slide.src }
                                           alt={ slide.src }
@@ -142,7 +140,7 @@ export default function ProductDetailsCarousel( { product } )
 
                      <CarouselArrowIndex
                             index={ carouselLarge.currentIndex }
-                            total={ slides.length }
+                            total={ slides?.length }
                             onNext={ carouselThumb.onNext }
                             onPrev={ carouselThumb.onPrev }
                      />
@@ -150,13 +148,13 @@ export default function ProductDetailsCarousel( { product } )
        );
 
        const renderThumbnails = (
-              <StyledThumbnailsContainer length={ slides.length }>
+              <StyledThumbnailsContainer length={ slides?.length }>
                      <Carousel
                             { ...carouselThumb.carouselSettings }
                             asNavFor={ carouselLarge.nav }
                             ref={ carouselThumb.carouselRef }
                      >
-                            { slides.map( ( item, index ) => (
+                            { slides?.map( ( item, index ) => (
                                    <Box key={ item.src } sx={ { px: 0.5 } }>
                                           <Avatar
                                                  key={ item.src }

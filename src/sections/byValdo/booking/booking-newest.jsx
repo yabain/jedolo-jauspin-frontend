@@ -26,6 +26,8 @@ import 'moment/locale/fr';
 import { fShortenNumber } from 'src/utils/format-number';
 import { tabsRef } from 'src/1data/annonces/ref';
 import { useNavigate } from 'react-router';
+import { request } from 'src/store/annonces/updateAnnonce/reducer';
+import { useDispatch } from 'react-redux';
 
 // ----------------------------------------------------------------------
 
@@ -105,11 +107,20 @@ function BookingItem( { item } )
 
        const navigate = useNavigate();
        dayjs.extend( relativeTime );
+       const dispatch = useDispatch()
        dayjs.locale( 'fr' );
+
+       const AnnonceClicked = () =>
+       {
+              navigate( 'annonces/view', { state: { annonce: item } } )
+
+              const nbrView = item.nbrView !== undefined ? item.nbrView + 1 : 1
+              dispatch( request( { ...item, nbrView } ) )
+       }
 
        return (
               <Paper
-                     onClick={ () => navigate( 'annonces/view', { state: { annonce: item } } ) }
+                     onClick={ () => AnnonceClicked() }
                      sx={ {
                             cursor: "pointer",
                             mr: 3,
@@ -147,6 +158,11 @@ function BookingItem( { item } )
                                    <Avatar alt={ name } src={ avatarUrl } />
                                    <ListItemText
                                           primary={ name }
+                                          primaryTypographyProps={ {
+                                                 noWrap: true,
+                                                 variant: "subtitle2"  // ← équivalent au style par défaut
+
+                                          } }
                                           secondary={ fDateTime( createdAt ) }
                                           secondaryTypographyProps={ {
                                                  mt: 0.5,
@@ -174,7 +190,7 @@ function BookingItem( { item } )
 
 
                                           <Typography variant='button' >
-                                                 bafoussam
+                                                 { item.city[ 0 ] }
                                           </Typography>
                                    </Stack>
 
@@ -191,18 +207,18 @@ function BookingItem( { item } )
                                    >
                                           <Stack direction="row" alignItems="center" >
                                                  <Iconify icon="eva:message-circle-fill" width={ 16 } />
-                                                 { fShortenNumber( item.totalComments ) }
+                                                 { fShortenNumber( item.nbrComment || 0 ) }
                                           </Stack>
 
                                           <Stack direction="row" alignItems="center" sx={ { mr: 1, ml: 1 } }>
                                                  <Iconify icon="solar:eye-bold" width={ 16 } />
-                                                 { fShortenNumber( item.totalViews ) }
+                                                 { fShortenNumber( item.nbrView || 0 ) }
                                           </Stack>
 
                                           <Stack direction="row" alignItems="center" >
                                                  <Iconify icon="mdi:star-rate" width={ 16 } />
                                                  {/* <Iconify icon="solar:share-bold" width={ 16 } sx={ { mr: 0.5 } } /> */ }
-                                                 { fShortenNumber( item.totalShares ) }
+                                                 { fShortenNumber( item.rating || 0 ) } / 5
                                           </Stack>
                                    </Stack>
 

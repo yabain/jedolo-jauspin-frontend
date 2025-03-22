@@ -17,13 +17,13 @@ import { HOST_PORT, HOST_URL } from "src/config-global"; import axiosInstance fr
 export async function request( data )
 {
 
-       console.log( 'Envoi de la requête pour modifer ', data );
+       // console.log( 'Envoi de la requête pour modifer ', data );
        try
        {
 
               // const response = await axiosInstance.get( `${ endpoints.user.get }/${ userID }` );
               const response = await axiosInstance.patch( `${ HOST_URL }:${ HOST_PORT }/annonces/${ data.userEmail }/${ data.id }`, data );
-              console.log( 'Réponse de la requête :', response.data );
+              // console.log( 'Réponse de la requête :', response.data );
               return response;
 
 
@@ -32,7 +32,7 @@ export async function request( data )
 
 
               enqueueSnackbar( error.message, { variant: 'error', } );
-              console.error( 'Erreur lors de la requête :', error );
+              // console.error( 'Erreur lors de la requête :', error );
               throw error;
 
 

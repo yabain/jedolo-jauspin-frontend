@@ -17,17 +17,23 @@ import FormHelperText from '@mui/material/FormHelperText';
 
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
 import { request, resetAfterRequest } from 'src/store/comments/add/reducer';
+import { request as updateAnnonce } from 'src/store/annonces/updateAnnonce/reducer';
 import { User } from '@auth0/auth0-react';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocation } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
+import { useUpdate } from 'src/1VALDO/hook/annonce/useUpdate';
+import { calculerMoyenneEtoiles, updateRatingsWithNewComment, updateRatingsWithNewCommentWhithoutState } from 'src/1functions/annonces';
 
 // ----------------------------------------------------------------------
 
-export default function ProductReviewNewForm( { annonceId, addData, onClose, ...other } )
+export default function ProductReviewNewForm( { rating, annonce, annonceId, addData, onClose, ...other } )
 {
        const { user } = useAuthContext()
+       const [ ratingLocal, setRatingLocal ] = useState( rating )
+       const [ locaComment, setLocalComment ] = useState( annonce.nbrComment )
+       const [ ratingToAdd, setRatingToAdd ] = useState( [] )
 
        const location = useLocation();
        const dispatch = useDispatch()
@@ -35,7 +41,9 @@ export default function ProductReviewNewForm( { annonceId, addData, onClose, ...
        const productGet = useMemo( () => location.state?.annonce || null, [ location ] );
        const { isPending, isFulled } = useSelector( state => state.addUsersAnnoncesComments )
 
-
+       useEffect( () => setRatingLocal( rating ), [ rating ] )
+       // console.log( 'donnnnnnne 1111111', calculerMoyenneEtoiles( ratingLocal ) );
+       // console.log( 'donnnnnnne 22222222', calculerMoyenneEtoiles( rating ) );
        const [ dataAdded, setDataAdded ] = useState( {} )
 
        const ReviewSchema = Yup.object().shape( {
@@ -81,7 +89,11 @@ export default function ProductReviewNewForm( { annonceId, addData, onClose, ...
               setDataAdded( data )
               dispatch( request( { annonceId: productGet.id, data } ) )
 
-              console.info( 'DATA', dataGet );
+              const uprating = updateRatingsWithNewCommentWhithoutState( dataGet, ratingLocal )
+              setRatingToAdd( uprating )
+
+
+              // console.info( 'DATA', annonce );
 
 
        } );
@@ -105,9 +117,21 @@ export default function ProductReviewNewForm( { annonceId, addData, onClose, ...
                      reset();
                      onClose();
                      enqueueSnackbar( "Votre avis a étét ajouté avec success !" )
-              }
-       }, [ isPending, isFulled, dataAdded, addData, dispatch, reset, onClose, enqueueSnackbar ] )
+                     const note = calculerMoyenneEtoiles( ratingToAdd )
 
+                     console.log( locaComment, 'valeur init de nbrcomment' );
+                     const nbrComment = locaComment !== undefined ? locaComment + 1 : 0
+                     setLocalComment( nbrComment )
+
+                     console.log( note, nbrComment );
+
+                     dispatch( updateAnnonce( { ...annonce, nbrComment, rating: note } ) )
+              }
+       }, [ isPending, isFulled, dataAdded, ratingToAdd, locaComment, addData, dispatch, reset, onClose, enqueueSnackbar, annonce, ratingLocal ] )
+
+
+
+       useUpdate()
        return (
               <Dialog onClose={ onClose } { ...other }>
                      <FormProvider methods={ methods } onSubmit={ onSubmit }>
@@ -160,5 +184,7 @@ export default function ProductReviewNewForm( { annonceId, addData, onClose, ...
 ProductReviewNewForm.propTypes = {
        onClose: PropTypes.func,
        addData: PropTypes.func,
-       annonceId: PropTypes.string
+       annonceId: PropTypes.string,
+       annonce: PropTypes.object,
+       rating: PropTypes.array
 };

@@ -3,7 +3,7 @@ import { Box } from '@mui/system';
 import PropTypes from 'prop-types';
 import orderBy from 'lodash/orderBy';
 import isEqual from 'lodash/isEqual';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
@@ -139,6 +139,12 @@ export default function JobListView( { dataGet } )
        //               query: inputValue,
        //        } ) );
        // }, [] );
+
+
+
+
+
+       useEffect( () => { setData( dataGet ) }, [ dataGet ] )
 
 
        const renderFilters = (

@@ -11,14 +11,13 @@ import { useMockedUser } from 'src/hooks/use-mocked-user';
 
 import { SeoIllustration } from 'src/assets/illustrations';
 import { PostListView } from 'src/sections/byValdo/blog/view';
-import BookingNewest from 'src/sections/byValdo/booking/booking-newest';
 import { _appAuthors, _appRelated, _appFeatured, _appInvoices, _appInstalled, _bookingNew } from 'src/_mock';
 
 import { useSettingsContext } from 'src/components/settings';
 import { handleFilterByTownSelectedRef, selectedTownTabRef } from 'src/1data/annonces/ref';
 import TownTabs from 'src/sections/byValdo/blog/view/TownTabs';
 
-import { Typography } from '@mui/material';
+import BookingNewest from 'src/sections/byValdo/booking/booking-newest';
 import AppWelcome from '../app-welcome';
 
 // ----------------------------------------------------------------------
@@ -111,6 +110,7 @@ export default function Home()
 
 
                      </Grid>
+
               </Container>
        );
 }

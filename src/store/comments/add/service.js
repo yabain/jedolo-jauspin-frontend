@@ -17,15 +17,15 @@ import { HOST_PORT, HOST_URL } from "src/config-global"; import axiosInstance fr
 export async function request( data )
 {
 
-       console.log( `Envoi d'une requête pour ajouter ${ data }` );
+       // console.log( `Envoi d'une requête pour ajouter ${ data }` );
        try
        {
 
               // const response = await axiosInstance.get( `${ endpoints.user.get }/${ userID }` );
-              console.log( 'requette pour ajouter appeler' );
+              // console.log( 'requette pour ajouter appeler' );
 
               const response = await axiosInstance.post( `${ HOST_URL }:${ HOST_PORT }/comments/${ data.annonceId }`, { ...data.data } );
-              console.log( 'Réponse de la requête :', response.data );
+              // console.log( 'Réponse de la requête :', response.data );
               return response;
 
 
@@ -34,7 +34,7 @@ export async function request( data )
 
 
               enqueueSnackbar( error.message, { variant: 'error', } );
-              console.error( 'Erreur lors de la requête :', error );
+              // console.error( 'Erreur lors de la requête :', error );
               throw error;
 
 

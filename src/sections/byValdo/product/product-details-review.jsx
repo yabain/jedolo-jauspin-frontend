@@ -26,7 +26,7 @@ import ProductReviewNewForm from './product-review-new-form';
 
 // ----------------------------------------------------------------------
 
-export default function ProductDetailsReview( { totalRatings, totalReviews, getChildValue } )
+export default function ProductDetailsReview( { annonce, totalRatings, totalReviews, getChildValue } )
 {
        const review = useBoolean();
        const location = useLocation();
@@ -38,27 +38,27 @@ export default function ProductDetailsReview( { totalRatings, totalReviews, getC
        const [ ratings, setRating ] = useState( [
               {
                      "name": "1 etoile",
-                     "starCount": 250,
+                     "starCount": 0,
 
               },
               {
                      "name": "2 etoile",
-                     "starCount": 20,
+                     "starCount": 0,
 
               },
               {
                      "name": "3 etoile",
-                     "starCount": 70,
+                     "starCount": 0,
 
               },
               {
                      "name": "4 etoile",
-                     "starCount": 12,
+                     "starCount": 0,
 
               },
               {
                      "name": "5 etoile",
-                     "starCount": 100,
+                     "starCount": 0,
 
               }
        ] )
@@ -114,7 +114,7 @@ export default function ProductDetailsReview( { totalRatings, totalReviews, getC
               }, [ data, getChildValue ]
        )
 
-       function calculerMoyenneEtoiles( data2 )
+       const calculerMoyenneEtoiles = ( data2 ) =>
        {
               let totalVotes = 0;
               let totalPoints = 0;
@@ -324,7 +324,7 @@ export default function ProductDetailsReview( { totalRatings, totalReviews, getC
 
                      <ProductReviewList reviews={ reviews } />
 
-                     <ProductReviewNewForm addData={ addNewReviewToLocalReview } open={ review.value } onClose={ review.onFalse } />
+                     <ProductReviewNewForm rating={ ratings } annonce={ annonce } addData={ addNewReviewToLocalReview } open={ review.value } onClose={ review.onFalse } />
               </>
        );
 }
@@ -333,4 +333,5 @@ ProductDetailsReview.propTypes = {
        getChildValue: PropTypes.func,
        totalRatings: PropTypes.number,
        totalReviews: PropTypes.number,
+       annonce: PropTypes.object
 };

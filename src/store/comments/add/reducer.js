@@ -42,7 +42,7 @@ const fulfilledAction = ( state, action ) =>
        state.isFulled = true;
        state.isPending = false;
        state.data = [ { ...action.payload.data.annonce } ];
-       console.log( 'Données chargées avec succès dans Redux:', action.payload );
+       // console.log( 'Données chargées avec succès dans Redux:', action.payload );
 }
 
 

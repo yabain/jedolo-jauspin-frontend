@@ -6,6 +6,8 @@ import { paths } from 'src/routes/paths';
 const PORT = 5000
 const HOST_DEV1 = 'http://localhost'
 const HOST_DEV2 = 'http://192.168.1.122'
+const HOST_DEV3 = 'http://192.168.213.1'
+const HOST_DEV4 = 'http://192.168.1.127'
 const HOST_PROD = ''
 
 
@@ -29,7 +31,7 @@ export const HOST_URL = HOST_DEV2;
 
 
 
-// ################ BUY TEMPLATE ######################
+// ################ BY TEMPLATE ######################
 export const HOST_API = import.meta.env.VITE_HOST_API;
 export const ASSETS_API = import.meta.env.VITE_ASSETS_API;
 

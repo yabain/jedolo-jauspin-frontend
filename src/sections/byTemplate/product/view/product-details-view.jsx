@@ -53,7 +53,7 @@ const SUMMARY = [
 export default function ProductDetailsView( { id } )
 {
        const { product, productLoading, productError } = useGetProduct( id );
-       // console.log( product );
+       console.log( product );
 
 
        const settings = useSettingsContext();

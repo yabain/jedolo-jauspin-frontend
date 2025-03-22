@@ -152,7 +152,7 @@ export default function ProductListPage()
                                           variant="contained"
                                           startIcon={ <Iconify icon="mingcute:add-line" /> }
                                    >
-                                          New Product
+                                          Nouvel Annonce
                                    </Button>
                             </Box>
 

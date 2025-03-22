@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
-import { sumBy } from 'lodash';
+import { isArray, sumBy } from 'lodash';
 import PropTypes from 'prop-types';
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { handleAddNewReviewToLocalReviewdRef } from 'src/1data/annonces/ref';
 
@@ -19,6 +19,7 @@ import { formHelperTextClasses } from '@mui/material/FormHelperText';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
+import { fDate } from 'src/utils/format-time';
 import { fCurrency, fShortenNumber } from 'src/utils/format-number';
 
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -30,7 +31,8 @@ import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form'
 import { useBoolean } from 'src/hooks/use-boolean';
 import { LoadingButton } from '@mui/lab';
 
-import IncrementerButton from './common/incrementer-button';
+import { calculateRatingCounts, calculerMoyenneEtoiles, findMatchingWord } from 'src/1functions/annonces';
+import { useGet } from 'src/1VALDO/hook/comment/useGet';
 import DialogSignalAnnonce from './view/dialog-signal-Annonce';
 import ProductReviewNewForm from './product-review-new-form';
 // ----------------------------------------------------------------------
@@ -47,6 +49,33 @@ export default function ProductDetailsSummary( {
        const router = useRouter();
        const review = useBoolean();
        const signal = useBoolean();
+       const [ ratings, setRating ] = useState( [
+              {
+                     "name": "1 etoile",
+                     "starCount": 0,
+
+              },
+              {
+                     "name": "2 etoile",
+                     "starCount": 0,
+
+              },
+              {
+                     "name": "3 etoile",
+                     "starCount": 0,
+
+              },
+              {
+                     "name": "4 etoile",
+                     "starCount": 0,
+
+              },
+              {
+                     "name": "5 etoile",
+                     "starCount": 0,
+
+              }
+       ] )
 
        const {
               id,
@@ -62,15 +91,16 @@ export default function ProductDetailsSummary( {
               totalRatings,
               totalReviews,
               profile,
-              subDescription,
+              createdAt,
               city,
-
+              contact,
+              nbrView,
               inventoryType,
-              ratings,
-              reviews,
+              location,
        } = product;
+       // console.log( 'product', product );
 
-       const total = sumBy( ratings, ( star ) => star.starCount );
+
        const existProduct = !!items?.length && items.map( ( item ) => item.id ).includes( id );
        const profileColors = {
               'out of stock': 'error',
@@ -150,18 +180,66 @@ export default function ProductDetailsSummary( {
 
        const handleAddCart = useCallback( () =>
        {
-              try
+              const phoneNumber = `237${ contact }`;
+              // const phoneNumber = `237696080087`;
+              const message = encodeURIComponent( 'Bonjour, j\'ai vu votre annonce sur Ndolo, je suis intéressé par vos services. Pouvez-vous me donner plus de détails ?' );
+              const whatsappUrl = `https://wa.me/${ phoneNumber }?text=${ message }`;
+
+              window.open( whatsappUrl, '_blank' );
+
+       }, [ contact ] );
+
+
+
+
+
+
+
+       const setratingGet = ( data ) =>
+       {
+
+              setRating( calculateRatingCounts( data.comments, setRating ) )
+
+
+       }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       let seDeplaceText = '';
+       if ( product.seDeplace !== '' )
+       {
+              const result = findMatchingWord( product.seDeplace, [ 'oui', 'non' ] );
+              if ( result === 'oui' )
               {
-                     onAddCart?.( {
-                            ...values,
-                            colors: [ values.colors ],
-                            subTotal: values.price * values.quantity,
-                     } );
-              } catch ( error )
+                     seDeplaceText = ' Se déplace uniquement.';
+              } else if ( result === 'non' )
               {
-                     console.error( error );
+                     seDeplaceText = ' Reçoit uniquement.';
+              } else if ( result === 'tout le monde' )
+              {
+                     seDeplaceText = ' Reçoit et se déplace.';
               }
-       }, [ onAddCart, values ] );
+       }
+
+
+
+
+
+
+
+
+       useGet( setratingGet, product )
 
        const renderPrice = (
               <Box sx={ { typography: 'h5' } }>
@@ -239,7 +317,7 @@ export default function ProductDetailsSummary( {
 
                      >
                             <Typography variant="body2" sx={ { color: 'text.secondary', flexGrow: 1 } }>
-                                   22 mars 2025
+                                   { fDate( createdAt ) }
                             </Typography>
                      </Box>
               </Stack>
@@ -265,7 +343,7 @@ export default function ProductDetailsSummary( {
        const renderQuantity = (
               <Stack direction="row">
                      <Typography variant="subtitle1" sx={ { flexGrow: 1 } }>
-                            Location
+                            Localisation
                      </Typography>
 
                      <Stack spacing={ 1 }>
@@ -274,7 +352,7 @@ export default function ProductDetailsSummary( {
 
                             >
                                    <Typography variant="body2" sx={ { color: 'text.secondary', flexGrow: 1 } }>
-                                          Makepe
+                                          { location !== undefined ? location : "pas definir lors de la creation" }
                                    </Typography>
                             </Box>
 
@@ -356,7 +434,7 @@ export default function ProductDetailsSummary( {
 
                             color="success"
                             variant="contained"
-                            startIcon={ <Iconify icon="solar:cart-plus-bold" width={ 24 } /> }
+                            startIcon={ <Iconify icon="ic:baseline-whatsapp" width={ 24 } /> }
                             onClick={ handleAddCart }
                             sx={ { whiteSpace: 'nowrap', width: '120px' } }
                      >
@@ -386,7 +464,7 @@ export default function ProductDetailsSummary( {
        const renderSubDescription = (
               <Typography variant="body2" sx={ { color: 'text.secondary' } }>
                      {/* { subDescription } */ }
-                     Je suis: Une Femme  Clients acceptés: Tout le monde  Déplacement: Reçoit ou se déplace
+                     Je suis Une Femme  Clients accepte { findMatchingWord( product.personAccept || [ 'femme' ], [ "Homme", 'femme' ] ) }  { ( isArray( product.personAccept ) && product.personAccept.length < 2 && 'uniquement' ) }.{ seDeplaceText }
               </Typography>
        );
 
@@ -399,15 +477,16 @@ export default function ProductDetailsSummary( {
                             typography: 'body2',
                      } }
               >
-                     <Rating size="small" value={ totalRatings } precision={ 0.1 } readOnly sx={ { mr: 1 } } />
-                     { `(${ fShortenNumber( totalReviews ) } reviews)` }
+                     <Rating size="small" value={ Number( product.rating ) || 0 } precision={ 0.1 } readOnly sx={ { mr: 1 } } />
+                     {/* { `(${ fShortenNumber( totalReviews ) } reviews)` } */ }
               </Stack>
        );
 
-       const renderLabels = ( newLabel.enabled || saleLabel.enabled ) && (
+       const renderLabels = (
               <Stack direction="row" alignItems="center" spacing={ 1 }>
-                     { newLabel.enabled && <Label color="info">{ newLabel.content }</Label> }
-                     { saleLabel.enabled && <Label color="error">{ saleLabel.content }</Label> }
+                     <Label color="info">{ nbrView || 0 } vues</Label>
+                     <Label color={ product.certified ? "info" : 'error' } >{ product.certified ? "Compte Certifier" : 'Compte non Certifier' } </Label>
+                     <Label color={ product.sponsored ? "info" : 'error' } >{ product.sponsored ? "Sponsoriser" : 'Non Sponsoriser' } </Label>
               </Stack>
        );
 
@@ -491,7 +570,7 @@ export default function ProductDetailsSummary( {
                                    'success.main',
                      } }
               >
-                     { inventoryType }
+                     kkk
               </Box>
        );
 
@@ -503,7 +582,7 @@ export default function ProductDetailsSummary( {
                             <Stack spacing={ 2 } alignItems="flex-start">
                                    { renderLabels }
 
-                                   { renderInventoryType }
+                                   {/* { renderInventoryType } */ }
 
                                    <Typography variant="h3">{ name }</Typography>
 
@@ -528,7 +607,7 @@ export default function ProductDetailsSummary( {
 
                             { renderShare }
 
-                            <ProductReviewNewForm open={ review.value } onClose={ review.onFalse } />
+                            <ProductReviewNewForm rating={ ratings } annonce={ product } open={ review.value } onClose={ review.onFalse } />
 
                      </Stack>
 

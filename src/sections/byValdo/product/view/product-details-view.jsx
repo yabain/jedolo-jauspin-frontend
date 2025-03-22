@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { useState, useEffect, useCallback, useMemo } from 'react';
 
+import { Chip } from '@mui/material';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
@@ -11,7 +12,7 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
 
-import { useLocation } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
@@ -31,23 +32,6 @@ import ProductDetailsCarousel from '../product-details-carousel';
 import ProductDetailsDescription from '../product-details-description';
 // ----------------------------------------------------------------------
 
-const SUMMARY = [
-       {
-              title: '100% Original',
-              description: 'Chocolate bar candy canes ice cream toffee cookie halvah.',
-              icon: 'solar:verified-check-bold',
-       },
-       {
-              title: '10 Day Replacement',
-              description: 'Marshmallow biscuit donut dragée fruitcake wafer.',
-              icon: 'solar:clock-circle-bold',
-       },
-       {
-              title: 'Year Warranty',
-              description: 'Cotton candy gingerbread cake I love sugar sweet.',
-              icon: 'solar:shield-check-bold',
-       },
-];
 
 // ----------------------------------------------------------------------
 
@@ -57,8 +41,10 @@ export default function ProductDetailsView( { id } )
 
 
        const location = useLocation();
+       const navigate = useNavigate()
        const settings = useSettingsContext();
        const [ publish, setPublish ] = useState( '' );
+       const [ hasConsulted, setHasConsulted ] = useState( false );
 
        const [ totalReviews, setTotalReviews ] = useState( 0 )
        const [ currentTab, setCurrentTab ] = useState( 'description' );
@@ -85,12 +71,28 @@ export default function ProductDetailsView( { id } )
               {
                      setProductLoading( false );
                      setProductError( false );
+
+
+
+                     setHasConsulted( true );
               } else
               {
                      setProductError( true );
+                     // console.log( 'erreurrrrrrrrrrrrrr' );
               }
-       }, [ product ] );
-       // console.log( product );
+
+
+       }, [ product, hasConsulted ] );
+
+
+       useEffect( () =>
+       {
+              setHasConsulted( true );
+       }, [ location.key ] );
+
+
+
+       // console.log( productGet );
 
 
        useEffect( () =>
@@ -110,6 +112,66 @@ export default function ProductDetailsView( { id } )
        {
               setCurrentTab( newValue );
        }, [] );
+
+       const service = '<li><p>The foam sockliner feels soft and comfortable</p></li>'
+       const descriptSend = `
+
+
+
+<h6>Prix minimum</h6>
+              
+<br/>
+<ol>
+  <li>Tout Services</li>
+  <li>${ product.price } FCFA</li>
+</ol>
+
+<br/> 
+<br/>
+<br/>
+
+<h6>Services Offerts</h6>
+<br/>
+<ul>
+ ${ product.categorie.map( element => `<li>${ element }</li>` ).join( "" ) }
+</ul>
+
+<br/>
+<br/>
+
+<h6>Description</h6>
+<br/>
+<ul> 
+
+<p>${ product.subDescription }</p> 
+  
+</ul>
+
+<br/>
+<br/>
+ `
+
+
+       const SUMMARY = [
+              {
+                     title: 'Compte Certifier',
+                     description: product.certified && product.certified ? 'oui' : 'non',
+                     icon: 'solar:verified-check-bold',
+              },
+              {
+                     title: 'Annonce Sponsoriser',
+                     description: product.sponsored !== '' ? 'oui' : 'non',
+                     icon: 'solar:clock-circle-bold',
+              },
+              {
+                     title: 'Compte Verifier',
+                     description: product.verified && product.verified ? 'oui' : 'non',
+                     icon: 'solar:shield-check-bold',
+              },
+       ];
+
+       console.log( 'dddddd', product.sponsored !== '' ? 'oui' : 'non', );
+
 
        const renderSkeleton = <ProductDetailsSkeleton />;
 
@@ -142,7 +204,7 @@ export default function ProductDetailsView( { id } )
                             publishOptions={ PRODUCT_PUBLISH_OPTIONS }
                      />
 
-                     <Grid container spacing={ { xs: 3, md: 5, lg: 8 } }>
+                     <Grid container spacing={ { xs: 3, md: 5, lg: 8 } } >
                             <Grid xs={ 12 } md={ 6 } lg={ 7 }>
                                    <ProductDetailsCarousel product={ product } />
                             </Grid>
@@ -152,7 +214,7 @@ export default function ProductDetailsView( { id } )
                             </Grid>
                      </Grid>
 
-                     <Box
+                     {/* <Box
                             gap={ 5 }
                             display="grid"
                             gridTemplateColumns={ {
@@ -163,20 +225,24 @@ export default function ProductDetailsView( { id } )
                      >
                             { SUMMARY.map( ( item ) => (
                                    <Box key={ item.title } sx={ { textAlign: 'center', px: 5 } }>
+
+
                                           <Iconify icon={ item.icon } width={ 32 } sx={ { color: 'primary.main' } } />
 
                                           <Typography variant="subtitle1" sx={ { mb: 1, mt: 2 } }>
                                                  { item.title }
                                           </Typography>
 
-                                          <Typography variant="body2" sx={ { color: 'text.secondary' } }>
-                                                 { item.description }
-                                          </Typography>
-                                   </Box>
+                                           <Chip
+                                                 variant='soft'
+                                                 label={ item.description }
+                                                 color={ item.description === 'oui' ? 'info' : 'error' }
+                                          />
+                                    </Box>
                             ) ) }
-                     </Box>
+                     </Box> */}
 
-                     <Card>
+                     <Card sx={ { mt: 10, } }>
                             <Tabs
                                    value={ currentTab }
                                    onChange={ handleChangeTab }
@@ -200,11 +266,12 @@ export default function ProductDetailsView( { id } )
                             </Tabs>
 
                             { currentTab === 'description' && (
-                                   <ProductDetailsDescription description={ product?.description } />
+                                   <ProductDetailsDescription description={ descriptSend } />
                             ) }
 
                             { currentTab === 'reviews' && (
                                    <ProductDetailsReview
+                                          annonce={ product }
                                           getChildValue={ getChildValue }
                                           ratings={ product.ratings }
                                           reviews={ product.reviews }
