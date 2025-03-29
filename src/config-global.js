@@ -4,15 +4,29 @@ import { paths } from 'src/routes/paths';
 // ----------------------------------------------------------------------
 
 const PORT = 5000
-const HOST_DEV1 = 'http://localhost'
-const HOST_DEV2 = 'http://192.168.1.122'
-const HOST_DEV3 = 'http://192.168.213.1'
-const HOST_DEV4 = 'http://192.168.1.127'
-const HOST_PROD = ''
+const HOST_DEV1 = 'http://localhost:5000'
+const HOST_DEV2 = 'http://192.168.1.122:5000'
+const HOST_DEV3 = 'http://192.168.213.1:5000'
+const HOST_DEV4 = 'http://192.168.1.127:5000'
+const HOST_DEV5 = 'http://192.168.58.1:5000'
+
+
+
+
+const HOST_FRONT_DEV1 = 'http://localhost:3030'
+const HOST_FRONT_DEV2 = 'http://192.168.1.122:3030'
+const HOST_FRONT_DEV3 = 'http://192.168.213.1:3030'
+const HOST_FRONT_DEV4 = 'http://192.168.1.127:3030'
+const HOST_FRONT_DEV5 = 'http://192.168.58.1:5000'
+
+
+const HOST_FRONT_PROD = 'https://ndolo-backend.yaba-in.com'
+const HOST_BACK_PROD = ''
 
 
 export const HOST_PORT = PORT;
-export const HOST_URL = HOST_DEV2;
+export const HOST_BACKEND_URL = HOST_FRONT_PROD;
+export const HOST_FRONTEND_URL = HOST_FRONT_DEV1;
 
 
 

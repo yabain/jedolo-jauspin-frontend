@@ -143,6 +143,26 @@ export default function Header( { onOpenNav } )
 
 
 
+                                   <RoleBasedGuard hasContent roles={ [ 'user' ] }  >
+                                          <Button
+
+                                                 onClick={ () => { naviguate( '/home/annonces/signal' ) } }
+                                                 sx={ {
+
+                                                        mt: 2,
+                                                        display: { md: 'block', sm: 'none', xs: 'none' }
+                                                        // ml: 3,
+
+                                                 } }
+                                                 variant={ location.pathname === '/home/annonces/signal' ? "contained" : "outlined" } color="primary"
+                                          // startIcon={ <Iconify icon="eva:search-fill" /> }
+                                          >
+                                                 Annonces  Signaler
+                                          </Button>
+                                   </RoleBasedGuard>
+
+
+
 
                                    <RoleBasedGuard hasContent roles={ [] }  >
                                           <Button

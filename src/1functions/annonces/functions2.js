@@ -18,3 +18,33 @@ export function findMatchingWord( arr1, arr2 )
 
        return null;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+export function normalizeString( name )
+{
+       if ( !name ) return '';
+
+       // Convertir en minuscules
+       name = name.toLowerCase();
+
+       // Supprimer les accents et autres caractères spéciaux
+       name = name.normalize( "NFD" ).replace( /[\u0300-\u036f]/g, "" );
+
+       // Supprimer les espaces supplémentaires et les caractères non alphabétiques
+       name = name.replace( /\s+/g, ' ' ).trim();
+
+       return name;
+}

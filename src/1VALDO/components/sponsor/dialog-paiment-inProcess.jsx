@@ -87,7 +87,7 @@ export default function DialogPaimentInProcess( { showDialog, dataGet, updateDat
        const resetAfterSuccess = () => { reset(); setSubmiting( false ); showDialog.onFalse() }
        const onSubmit = handleSubmit( ( data ) => { setSubmiting( true ); dispatch( request( { ...dataGet, ...data } ) ) } );
 
-       useGetSponsor( addData )
+       // useGetSponsor( addData )
 
 
 

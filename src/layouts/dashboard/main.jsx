@@ -7,6 +7,7 @@ import { useResponsive } from 'src/hooks/use-responsive';
 import { useSettingsContext } from 'src/components/settings';
 
 import { NAV, HEADER } from '../config-layout';
+import Footer from '../main/footerByValdo';
 
 // ----------------------------------------------------------------------
 
@@ -52,20 +53,22 @@ export default function Main( { children, sx, ...other } )
                             minHeight: 1,
                             display: 'flex',
                             flexDirection: 'column',
-                            py: `${ HEADER.H_MOBILE + SPACING }px`,
+                            pt: `${ HEADER.H_MOBILE + SPACING }px`,
                             ...( lgUp && {
-                                   px: 2,
-                                   py: `${ HEADER.H_DESKTOP + SPACING }px`,
-                                   width: `calc(100% - ${ NAV.W_VERTICAL }px)`,
-                                   ...( isNavMini && {
-                                          width: `calc(100% - ${ NAV.W_MINI }px)`,
-                                   } ),
+                                   // px: 2,
+                                   pt: `${ HEADER.H_DESKTOP + SPACING }px`,
+                                   // width: `calc(100% - ${ NAV.W_VERTICAL }px)`,
+                                   // ...( isNavMini && {
+                                   //        width: `calc(100% - ${ NAV.W_MINI }px)`,
+                                   // } ),
                             } ),
                             ...sx,
                      } }
                      { ...other }
               >
                      { children }
+
+                     <Footer />
               </Box>
        );
 }

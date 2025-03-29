@@ -81,32 +81,12 @@ export default function DashboardLayout( { children, show } )
 
        return (
               <>
-                     <Box sx={ {
-                            scrollbarWidth: 'none', // Firefox
-                            '&::-webkit-scrollbar': {
-                                   display: 'none', // Chrome, Safari, Edge
-                            },
-                            overflow: 'hidden'
-                     } }>
+                     <Box display='flex' flexDirection='column' height={ 1 } >
                             <Header onOpenNav={ nav.onTrue } />
 
-                            <Box
-                                   sx={ {
-                                          minHeight: 1,
-                                          display: 'flex',
-                                          flexDirection: { xs: 'column', lg: 'row' },
 
+                            <Main>  { children } </Main>
 
-                                   } }
-                            >
-                                   { renderNavVertical }
-
-                                   <Main>{ children }</Main>
-
-
-                            </Box>
-
-                            <Footer />
                      </Box>
               </>
        );

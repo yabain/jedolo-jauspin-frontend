@@ -7,6 +7,8 @@ import { useState, useCallback, useEffect } from 'react';
 
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
+import { useNavigate } from 'react-router';
+import { useAuthContext } from 'src/auth/hooks';
 import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
@@ -56,6 +58,8 @@ export default function JobListView( { dataGet } )
        const settings = useSettingsContext();
 
        const openFilters = useBoolean();
+       const { user } = useAuthContext();
+       const navigate = useNavigate()
 
        const [ sortBy, setSortBy ] = useState( 'latest' );
        const [ data, setData ] = useState( dataGet );
@@ -164,7 +168,7 @@ export default function JobListView( { dataGet } )
                      // hrefItem={ ( id ) => paths.dashboard.job.details( id ) }
                      />
 
-                     <Stack direction="row" spacing={ 1 } flexShrink={ 0 }>
+                     {/* <Stack direction="row" spacing={ 1 } flexShrink={ 0 }>
                             <JobFilters
                                    open={ openFilters.value }
                                    onOpen={ openFilters.onTrue }
@@ -184,7 +188,7 @@ export default function JobListView( { dataGet } )
                             />
 
                             <JobSort sort={ sortBy } onSort={ handleSortBy } sortOptions={ JOB_SORT_OPTIONS } />
-                     </Stack>
+                     </Stack> */}
               </Stack>
        );
 
@@ -202,20 +206,46 @@ export default function JobListView( { dataGet } )
 
        return (
               <Box >
+                     {
+                            user.role === "user" && ( <CustomBreadcrumbs
+                                   heading="Annonces Signaler"
+                                   links={ [
+                                          {
+                                                 name: '',
+                                                 href: paths.dashboard.product.root,
+                                          }
+                                   ] }
+                                   action={
+                                          <Button
+                                                 // component={ RouterLink }
+                                                 // href={ paths.dashboard.product.new }
+                                                 onClick={ () => navigate( '/home/annonces/new' ) }
 
-
+                                                 variant="contained"
+                                                 startIcon={ <Iconify icon="mingcute:add-line" /> }
+                                          >
+                                                 Nouvel annonce
+                                          </Button>
+                                   }
+                                   sx={ {
+                                          mb: {
+                                                 xs: 3,
+                                                 md: 5,
+                                          },
+                                   } }
+                            /> ) }
                      <Stack
                             spacing={ 2.5 }
                             sx={ {
-                                   mb: { xs: 3, md: 5 },
+                                   mb: { xs: 1, md: 1 },
                             } }
                      >
                             { renderFilters }
 
                             { canReset && renderResults }
+                            { dataFiltered.length === 0 && <EmptyContent filled title="Aucune annonce signaler" sx={ { py: 10 } } /> }
                      </Stack>
 
-                     { notFound && <EmptyContent filled title="No Data" sx={ { py: 10 } } /> }
 
                      <JobList jobs={ dataFiltered } />
               </Box>

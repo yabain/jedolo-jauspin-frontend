@@ -1,5 +1,5 @@
 import { enqueueSnackbar } from "notistack";
-import { HOST_PORT, HOST_URL } from "src/config-global"; import axiosInstance from "src/utils/axios";
+import { HOST_PORT, HOST_BACKEND_URL } from "src/config-global"; import axiosInstance from "src/utils/axios";
 
 export async function request( data )
 {
@@ -14,15 +14,15 @@ export async function request( data )
               // console.log( 'Réponse de la requête :', response.data );
               // console.log( `Envoi d'une requête pour récupérer l'utilisateur avec ID ${ email }` );
               // const response = await axiosInstance.get( `${ endpoints.user.get }/${ userID }` );
-              // if ( data.type === 'user' ) response = await axiosInstance.get( `${HOST_URL}sponsor` )
-              // if ( data.type === 'admin' ) response = await axiosInstance.get( `${HOST_URL}annonces/all` )              
+              // if ( data.type === 'user' ) response = await axiosInstance.get( `${HOST_BACKEND_URL}sponsor` )
+              // if ( data.type === 'admin' ) response = await axiosInstance.get( `${HOST_BACKEND_URL}annonces/all` )              
 
 
 
 
 
-              // const response = await axiosInstance.patch( `${HOST_URL}sponsor/${ data.id }` );
-              const response = await axiosInstance.patch( `${ HOST_URL }:${ HOST_PORT }/user/disable/user@gmail.com` );
+              // const response = await axiosInstance.patch( `${HOST_BACKEND_URL}sponsor/${ data.id }` );
+              const response = await axiosInstance.patch( `${ HOST_BACKEND_URL }/user/disable/user@gmail.com` );
               return response.data;
 
 

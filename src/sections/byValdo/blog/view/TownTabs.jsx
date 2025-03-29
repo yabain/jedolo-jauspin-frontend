@@ -1,19 +1,62 @@
 import { Tabs, Tab } from '@mui/material';
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { postRef } from 'src/1data/annonces/ref';
+import { globalFilterFnctCall } from 'src/1functions/annonces';
+import { useGet } from 'src/1VALDO/hook/city/useGet';
 import Label from 'src/components/label'; // adapte le chemin si besoin
+import { HEADER } from 'src/layouts/config-layout';
 
 export default function TownTabs( { handleFilterByTownSelected } )
 {
-       const [ currentTab, setCurrentTab ] = useState( 'Yaounde' );
+       const [ cityTabs, setCityTabs ] = useState( [] )
+       const [ currentTab, setCurrentTab ] = useState( cityTabs[ 0 ]?.ville );
+       const handleGet = ( dataGet ) => { setCityTabs( dataGet.cities ) };
+
+
+
+
+       useGet( handleGet )
+       useEffect( () => { setCurrentTab( cityTabs[ 0 ]?.ville ) }, [ cityTabs ] )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       const search = ( selectedCity ) =>
+       {
+
+              globalFilterFnctCall( { categoriesTab: [], citiesTab: selectedCity, maxPrice: "", minPrice: null, order: '' } )
+              setTimeout( () => { window.scrollTo( { top: postRef.current.offsetTop - HEADER.H_DESKTOP - 100, behavior: 'smooth', } ); }, 700 );
+
+       }
+
+
+
+
+
+
 
        return (
               <Tabs
                      value={ currentTab }
                      onChange={ ( event, newValue ) =>
                      {
-                            const selected = handleFilterByTownSelected?.( event, newValue );
-                            setCurrentTab( selected ); // ✅ c’est ici qu’on met la valeur retournée
+                            const selected = search( [ newValue ] );
+                            setCurrentTab( newValue ); // ✅ c’est ici qu’on met la valeur retournée
                      } }
                      // scrollButtons // Activer les boutons de défilement
                      // allowScrollButtonsMobile // Forcer l'affichage des boutons de défilement sur les petits écrans
@@ -28,21 +71,21 @@ export default function TownTabs( { handleFilterByTownSelected } )
 
                      } }
               >
-                     { [ 'Yaounde', 'Bafoussam', 'Douala', 'Bertoua' ].map( ( tab ) => (
+                     { cityTabs.map( ( tab ) => (
                             <Tab
-                                   key={ tab }
-                                   value={ tab }
-                                   label={ tab }
+                                   key={ tab.ville }
+                                   value={ tab.ville }
+                                   label={ tab.ville }
                                    iconPosition="end"
                                    icon={
                                           <Label
-                                                 variant={ tab === currentTab ? 'filled' : 'soft' }
-                                                 color={ tab === 'Yaounde' ? 'info' : 'default' }
+                                                 variant={ tab.ville === currentTab ? 'filled' : 'soft' }
+                                                 color={ tab.ville === currentTab ? 'info' : 'default' }
                                           >
-                                                 { tab === 'Yaounde' && 100 }
-                                                 { tab === 'Bafoussam' && 55 }
+                                                 { tab.count }
+                                                 {/* { tab === 'Bafoussam' && 55 }
                                                  { tab === 'Douala' && 37 }
-                                                 { tab === 'Bertoua' && 20 }
+                                                 { tab === 'Bertoua' && 20 } */}
                                           </Label>
                                    }
                                    sx={ { textTransform: 'capitalize' } }
@@ -51,6 +94,7 @@ export default function TownTabs( { handleFilterByTownSelected } )
               </Tabs>
        );
 }
+
 
 TownTabs.propTypes = {
        handleFilterByTownSelected: PropTypes.func,

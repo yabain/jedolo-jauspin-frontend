@@ -15,6 +15,7 @@ import { Autocomplete, Button, Chip, Grid, InputAdornment, TextField } from '@mu
 import { filteredByArgStriingExported, globalFilterFnctCall } from 'src/1functions/annonces';
 import { Box } from '@mui/system';
 import { HEADER } from 'src/layouts/config-layout';
+import { city } from 'src/assets/data/location.service';
 
 // ----------------------------------------------------------------------
 
@@ -35,8 +36,10 @@ export default function ProductTableToolbar( {
 
 
 
-       const cityOption = useMemo( () => [ 'Bafoussam', 'Yaounde', 'Bertou' ], [] );
-       const optionCategorie = useMemo( () => [ 'categorie3', 'categorie4', 'categorie5', 'categorie6', 'categorie2' ], [] );
+
+       const ville = city;
+       const cityOption = useMemo( () => [ ...new Set( ville.map( ( item ) => item.name ) ) ], [ ville ] );
+       const optionCategorie = useMemo( () => [ 'Pipe', 'Chatte', 'Vaginal', 'Anal', 'Massage', 'Partouze', ], [] );
 
 
 
@@ -243,7 +246,7 @@ export default function ProductTableToolbar( {
                                                  getOptionLabel={ ( option ) => option }
                                                  // defaultValue={ categorieOpttion.slice( 0, 8 ) }
                                                  renderInput={ ( params ) => (
-                                                        <TextField { ...params } placeholder="Selectionner une Categorie" label="categories"
+                                                        <TextField { ...params } placeholder="Selectionner un service" label="Services"
                                                         />
                                                  ) }
                                                  renderOption={ ( props, option ) => (

@@ -198,7 +198,9 @@ export default function ProductDetailsSummary( {
        const setratingGet = ( data ) =>
        {
 
-              setRating( calculateRatingCounts( data.comments, setRating ) )
+              console.log( 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee', data );
+
+              setRating( calculateRatingCounts( data.comments || [], setRating ) )
 
 
        }
@@ -452,6 +454,7 @@ export default function ProductDetailsSummary( {
                             sx={ { whiteSpace: 'nowrap', width: '120px' } }
                             variant="contained"
                             color="error"
+                            // onClick={ ()=>{dialogToShow()} }
                             onClick={ signal.onTrue }
                             startIcon={ <Iconify icon="solar:pen-bold" /> }
                      >

@@ -102,7 +102,7 @@ export default function AccountPopover()
                             } }
                      >
                             <Avatar
-                                   src={ user?.photoURL }
+                                   src={ user?.photoURL !== "" && user.photoURL }
                                    alt={ user?.displayName }
                                    sx={ {
                                           width: 36,
@@ -110,7 +110,7 @@ export default function AccountPopover()
                                           border: ( theme ) => `solid 2px ${ theme.palette.background.default }`,
                                    } }
                             >
-                                   { user?.displayName?.charAt( 0 ).toUpperCase() }
+                                   { user?.displayName?.charAt( 1 ).toUpperCase() }
                             </Avatar>
                      </IconButton>
 
@@ -136,6 +136,7 @@ export default function AccountPopover()
                                                  { label: 'Accueil', linkTo: '/home' },
                                                  { label: 'Annonces', linkTo: '/home/annonces/list' },
                                                  { label: 'Mes Annonces', linkTo: '/home/annonces/list' },
+                                                 { label: 'Annonces Signaler', linkTo: '/home/annonces/signal' },
                                                  { label: 'Publier', linkTo: '/home/annonces/new' },
                                                  { label: 'Utilisateurs', linkTo: '/home/user/list' },
                                                  { label: 'Sponsors', linkTo: '/home/annonces/categorie' },
@@ -144,6 +145,10 @@ export default function AccountPopover()
                                           {
 
                                                  if ( option.label === 'Mes Annonces' && user?.role !== 'user' )
+                                                 {
+                                                        return null; // Ne pas afficher cette option
+                                                 }
+                                                 if ( option.label === 'Annonces Signaler' && user?.role !== 'user' )
                                                  {
                                                         return null; // Ne pas afficher cette option
                                                  }
@@ -180,7 +185,8 @@ export default function AccountPopover()
                             <Stack sx={ { p: 1 } }>
                                    { OPTIONS.map( ( option ) =>
                                    (
-                                          <MenuItem key={ option.label } onClick={ () => handleClickItem( option.linkTo ) }>
+                                          <MenuItem key={ option.label } >
+                                                 {/* <MenuItem key={ option.label } onClick={ () => handleClickItem( option.linkTo ) }> */ }
                                                  <Typography
                                                         variant="body2"
                                                         sx={ getConditionalStyles( currentPath, option.linkTo ) } // Appliquer les styles conditionnels
@@ -199,7 +205,7 @@ export default function AccountPopover()
                             >
                                    Logout
                             </MenuItem>
-                     </CustomPopover>
+                     </CustomPopover >
               </>
        );
 }

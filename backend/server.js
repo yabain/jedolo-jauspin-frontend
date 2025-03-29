@@ -62,7 +62,7 @@ app.use( ( err, req, res, next ) =>
 } );
 // ✅ **UTILISATEURS**
 // 🔹 Ajouter un utilisateur avec des champs dynamiques
-app.post( "/users", ( req, res ) =>
+app.post( "/auth/register", ( req, res ) =>
 {
        const { email, ...rest } = req.body;
        let data = readData();
@@ -75,27 +75,32 @@ app.post( "/users", ( req, res ) =>
 
        if ( data.users[ email.trim() ] )
        {
-              return res.status( 400 ).json( { error: "L'email existe déjà." } );
+              return res.status( 400 ).json( { message: "L'email existe déjà." } );
        }
 
-       data.users[ email.trim() ] = { ...rest, annonces: [] };
+       data.users[ email.trim() ] = { ...req.body, id: Date.now() }
        writeData( data );
 
        res.json( { success: true, user: data.users[ email.trim() ] } );
 } );
 
 // 🔹 Récupérer un utilisateur
-app.get( "/users/:email", ( req, res ) =>
+app.post( "/auth/login", ( req, res ) =>
 {
-       const { email } = req.params;
+       const { email, ...rest } = req.body;
        let data = readData();
 
        if ( !data.users[ email.trim() ] )
        {
-              return res.status( 404 ).json( { error: "Utilisateur non trouvé." } );
+              return res.status( 404 ).json( { message: "Utilisateur non trouvé." } );
        }
 
-       res.json( data.users[ email.trim() ] );
+       const access_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG4uZG9lQGV4YW1wbGUuY29tIiwicm9sZSI6IlVTRVIiLCJzdWIiOiI2N2UxODVlMzFkN2RlYjFhNjZhYzFhMDAiLCJpYXQiOjE3NDMwMDQxOTcsImV4cCI6MTc0MzA0MDE5N30.rUdmlHDO2i2PM9tTGjgwh3xBrD9Fp673e1pli3GSMiY"
+       const user = data.users[ email.trim() ]
+       res.json( {
+              user: user,
+              access_token: access_token,
+       } );
 } );
 
 // 🔹 Modifier un utilisateur (ajout/modification de champs dynamiques)
@@ -164,15 +169,15 @@ app.post( "/annonces/:email", ( req, res ) =>
        let data = readData();
 
 
-       if ( !data.users[ email.trim() ] )
-       {
-              return res.status( 404 ).json( { "error": "Utilisateur non trouvé." } );
-       }
+       // if ( !data.users[ email.trim() ] )
+       // {
+       //        return res.status( 404 ).json( { "error": "Utilisateur non trouvé." } );
+       // }
 
        const newAnnonce = { "id": Date.now(), ...rest };
 
 
-       data.users[ email.trim() ].annonces.push( newAnnonce );
+       // data.users[ email.trim() ].annonces.push( newAnnonce );
        // console.log( 'donne ajouter au user', data.users[ email.trim() ] );
 
        data.annonces.push( newAnnonce );
@@ -223,17 +228,23 @@ app.get( "/annonces/a-la-une", ( req, res ) =>
 } );
 
 // 🔹 Récupérer les annonces d'un utilisateur
+// 🔹 Récupérer les annonces d'un utilisateur (parcourir les annonces globales)
 app.get( "/annonces/:email", ( req, res ) =>
 {
        const { email } = req.params;
        let data = readData();
 
-       if ( !data.users[ email.trim() ] )
+       // Parcourir les annonces globales et filtrer celles dont l'email correspond
+       const userAnnonces = data.annonces.filter( annonce => annonce.userEmail === email.trim() );
+
+       // Si aucune annonce n'est trouvée, retourner un tableau vide
+       if ( userAnnonces.length === 0 )
        {
-              return res.status( 404 ).json( { error: "Utilisateur non trouvé." } );
+              return res.status( 404 ).json( { error: "Aucune annonce trouvée pour cet utilisateur." } );
        }
 
-       res.json( data.users[ email.trim() ].annonces );
+       // Retourner les annonces filtrées
+       res.json( userAnnonces );
 } );
 
 // 🔹 Modifier une annonce
@@ -250,13 +261,12 @@ app.patch( "/annonces/:email/:id", ( req, res ) =>
               return res.status( 404 ).json( { error: "Utilisateur non trouvé." } );
        }
 
-       let annonce = data.users[ email.trim() ].annonces.find( a => a.id == id );
-       if ( !annonce )
-       {
-              return res.status( 404 ).json( { error: "Annonce non trouvée." } );
-       }
+       // let annonce = data.users[ email.trim() ].annonces.find( a => a.id == id );
+       // if ( !annonce )
+       // {
+       //        return res.status( 404 ).json( { error: "Annonce non trouvée." } );
+       // }
 
-       Object.assign( annonce, req.body );
 
        // Modifier l'annonce dans la liste globale
        let annonceGlobale = data.annonces.find( a => a.id == id );
@@ -267,9 +277,11 @@ app.patch( "/annonces/:email/:id", ( req, res ) =>
 
        writeData( data );
 
+       console.log( req.body );
+
        io.emit( "update-annonce", req.body ); // Emission de l'événement 'new-annonce'
 
-       res.json( { success: true, annonce } );
+       res.json( { success: true, annonce: annonceGlobale } );
 } );
 
 
@@ -289,13 +301,13 @@ app.patch( "/annonces/banned/:email/:id", ( req, res ) =>
               return res.status( 404 ).json( { error: "Utilisateur non trouvé." } );
        }
 
-       let annonce = data.users[ email.trim() ].annonces.find( a => a.id == id );
-       if ( !annonce )
-       {
-              return res.status( 404 ).json( { error: "Annonce non trouvée." } );
-       }
+       // let annonce = data.users[ email.trim() ].annonces.find( a => a.id == id );
+       // if ( !annonce )
+       // {
+       //        return res.status( 404 ).json( { error: "Annonce non trouvée." } );
+       // }
 
-       Object.assign( annonce, req.body );
+       // Object.assign( annonce, req.body );
 
        // Modifier l'annonce dans la liste globale
        let annonceGlobale = data.annonces.find( a => a.id == id );
@@ -308,7 +320,7 @@ app.patch( "/annonces/banned/:email/:id", ( req, res ) =>
 
        io.emit( "banned-annonce", req.body ); // Emission de l'événement 'new-annonce'
 
-       res.json( { success: true, annonce } );
+       res.json( { success: true, annonce: annonceGlobale } );
 } );
 
 
@@ -342,10 +354,10 @@ app.delete( "/annonces/:id", ( req, res ) =>
        data.annonces = data.annonces.filter( a => a.id != id );
 
        // Suppression chez l'utilisateur
-       Object.keys( data.users ).forEach( email =>
-       {
-              data.users[ email.trim() ].annonces = data.users[ email.trim() ].annonces.filter( a => a.id != id );
-       } );
+       // Object.keys( data.users ).forEach( email =>
+       // {
+       //        data.users[ email.trim() ].annonces = data.users[ email.trim() ].annonces.filter( a => a.id != id );
+       // } );
 
        writeData( data );
        io.emit( "delete-annonce", { id } ); // Émettre l'ID de l'annonce supprimée
@@ -499,28 +511,25 @@ app.get( "/comments/:userId", ( req, res ) =>
 
 
 // 🔹 signaler une annonce
-app.post( "/signal/:annonceId", ( req, res ) =>
+app.post( "/signal/:annonceId/:signaledUserId", ( req, res ) =>
 {
-       const { annonceId } = req.params; // ID de l'utilisateur sur lequel on commente
-       const signal = req.body; // L'objet représentant le commentaire est passé dans le body
+       const { annonceId, signaledUserId } = req.params;
+       const signal = req.body;
 
        let data = readData();
 
 
 
 
-       // Créer l'objet comments[userId] s'il n'existe pas
-       if ( !data.signal )
-       {
-              data.signal = {}; // Initialiser l'objet comments s'il n'existe pas
-       }
-       if ( !data.signal[ annonceId ] )
-       {
-              data.signal[ annonceId ] = []; // Initialiser un tableau si l'utilisateur n'a pas encore de commentaires
-       }
+       if ( !data.signal ) { data.signal = {} }
+       if ( !data.signaledUserAnnonces ) { data.signaledUserAnnonces = {} }
 
-       // Ajouter le commentaire à l'objet global des commentaires
+
+       if ( !data.signal[ annonceId ] ) { data.signal[ annonceId ] = []; }
+       if ( !data.signaledUserAnnonces[ signaledUserId ] ) { data.signaledUserAnnonces[ signaledUserId ] = []; }
+
        data.signal[ annonceId ].push( signal );
+       data.signaledUserAnnonces[ signaledUserId ].push( signal );
 
        writeData( data );
 
@@ -530,16 +539,15 @@ app.post( "/signal/:annonceId", ( req, res ) =>
        res.json( { success: true, signal } );
 } );
 
-app.get( "/signal/:annonceId", ( req, res ) =>
+app.get( "/signal/:userId", ( req, res ) =>
 {
-       const { annonceId } = req.params;
+       const { userId } = req.params;
 
        let data = readData();
 
 
 
-       // Récupérer les commentaires de l'utilisateur
-       const signalAnnonce = data.signal[ annonceId ] || [];
+       const signalAnnonce = data.signaledUserAnnonces[ userId ] || [];
 
        res.json( { success: true, signalAnnonce } );
 } );
@@ -642,5 +650,112 @@ app.get( "/transactions/:email", ( req, res ) =>
 
        res.json( { success: true, transactions: data.transactions[ email.trim() ] } );
 } );
+
+
+
+
+
+
+
+
+
+
+
+// 🔹 Récupérer les 5 villes avec le plus d'annonces
+app.get( "/top-cities", ( req, res ) =>
+{
+       console.log( 'Requête appelée' );
+       let data = readData();
+
+       // Vérifier si des annonces existent
+       if ( !data.annonces || data.annonces.length === 0 )
+       {
+              return res.json( { success: true, cities: [] } );
+       }
+
+       // Créer une map pour compter les annonces par ville
+       const cityCounts = {};
+
+       data.annonces.forEach( ( annonce ) =>
+       {
+              let ville = annonce.city[ 0 ]; // Supposons que chaque annonce a un champ "city"
+
+              if ( ville )
+              {
+                     // Normaliser le nom de la ville
+                     ville = normalizeCityName( ville );
+
+                     // Compter les annonces par ville normalisée
+                     cityCounts[ ville ] = ( cityCounts[ ville ] || 0 ) + 1;
+              }
+       } );
+
+       // Convertir la map en un tableau de { ville, count }
+       const cityArray = Object.keys( cityCounts ).map( ( ville ) => ( {
+              ville,
+              count: cityCounts[ ville ],
+       } ) );
+
+       // Trier les villes par nombre d'annonces (descendant)
+       cityArray.sort( ( a, b ) => b.count - a.count );
+
+       // Retourner les 5 premières villes
+       const topCities = cityArray.slice( 0, 5 );
+
+       res.json( { success: true, cities: topCities } );
+} );
+
+// Fonction pour normaliser un nom de ville
+function normalizeCityName( name )
+{
+       if ( !name ) return '';
+
+       // Convertir en minuscules
+       name = name.toLowerCase();
+
+       // Supprimer les accents et autres caractères spéciaux
+       name = name.normalize( "NFD" ).replace( /[\u0300-\u036f]/g, "" );
+
+       // Supprimer les espaces supplémentaires et les caractères non alphabétiques
+       name = name.replace( /\s+/g, ' ' ).trim();
+
+       return name;
+}
+
+
+
+
+
+
+
+
+
+
+
+// 🔹 Récupérer le nombre de nouvelles annonces créées récemment
+app.get( "/recent-count", ( req, res ) =>
+{
+       // console.log( 'requete appler' );
+
+       let data = readData();
+
+       // Vérifier si des annonces existent
+       if ( !data.annonces || data.annonces.length === 0 )
+       {
+              return res.json( { success: true, count: 0 } );
+       }
+
+       // Définir une limite de temps (par exemple, les annonces créées dans les dernières 24 heures)
+       const now = Date.now(); // Timestamp actuel
+       const timeLimit = 7 * 24 * 60 * 60 * 1000; // 24 heures en millisecondes
+       const recentAnnonces = data.annonces.filter( annonce =>
+       {
+              return annonce.createdAt && ( now - annonce.createdAt <= timeLimit );
+       } );
+
+       // Retourner le nombre d'annonces récentes
+       res.json( { success: true, count: recentAnnonces.length } );
+} );
+
 
 server.listen( PORT, () => console.log( `🚀 Serveur lancé sur http://localhost:${ PORT }` ) );

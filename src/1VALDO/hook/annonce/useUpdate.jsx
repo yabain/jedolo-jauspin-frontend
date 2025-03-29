@@ -8,7 +8,7 @@ import { resetAfterRequest } from "src/store/annonces/updateAnnonce/reducer";
 
 
 
-export function useUpdate( reset )
+export function useUpdate( reset, afterRequestSuccess, msgAfterReqSuccess = false )
 {
 
        const dispatch = useDispatch();
@@ -26,7 +26,8 @@ export function useUpdate( reset )
 
        // useEffect( () => { if ( isFulled && !isPending && reset ) reset() }, [ isFulled, isPending, reset ] );
        useEffect( () => { if ( isFulled && !isPending ) handleReset(); }, [ isFulled, isPending, handleReset ] );
-       useEffect( () => { if ( isFulled && !isPending ) handleEnque(); }, [ isFulled, isPending, handleEnque ] );
+       useEffect( () => { if ( isFulled && !isPending && afterRequestSuccess ) afterRequestSuccess(); }, [ isFulled, isPending, afterRequestSuccess ] );
+       useEffect( () => { if ( isFulled && !isPending && msgAfterReqSuccess ) handleEnque(); }, [ isFulled, isPending, handleEnque, msgAfterReqSuccess ] );
 
 
 

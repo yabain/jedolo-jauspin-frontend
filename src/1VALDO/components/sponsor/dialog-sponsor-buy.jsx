@@ -15,8 +15,9 @@ import { Box, Button, Chip, Dialog, DialogActions, DialogContent, DialogTitle, F
 import { height, Stack, width } from '@mui/system';
 import Label from 'src/components/label';
 import { useDisable } from 'src/1VALDO/hook/user/disable';
-import { request } from 'src/store/users/disable/reducer';
+import { request } from 'src/store/transaction/add/reducer';
 import { useGetSponsor } from 'src/sections/byValdo/order/service/get-sponsor';
+import { useAdd } from 'src/1VALDO/hook/transaction/add';
 import SponsorItem from './sponsor-item-list-to-buy';
 
 
@@ -64,6 +65,7 @@ export default function DialogSponsorBuy( { showDialog, dataGet, updateDataAfter
 
 
        const descriptionValidation = Yup.string().required( 'Description is required' );
+       const dataTransaction = useCallback( () => ( { id: Date.now(), transactorEmail: user.email, type: 'achat Sponsor', dataType: [ 'top' ], date: Date.now(), montant: 5000, statut: 'paid', anonnceId: dataGet?.id, anonnceName: dataGet?.name } ), [ user.email, dataGet?.name, dataGet?.id ] );
        // const ReviewSchema = Yup.object().shape( { description: descriptionValidation } );
        const methods = useForm( { defaultValues, } );
 
@@ -84,8 +86,10 @@ export default function DialogSponsorBuy( { showDialog, dataGet, updateDataAfter
 
        const { reset, setValue, handleSubmit, watch } = methods;
        const resetAfterSuccess = () => { reset(); setSubmiting( false ); showDialog.onFalse() }
-       const onSubmit = handleSubmit( ( data ) => { startPaiement.onTrue(); showDialog.onFalse() } );
+       const afterTransactionadd = () => { startPaiement.onTrue(); showDialog.onFalse() }
+       const onSubmit = handleSubmit( ( data ) => { dispatch( request( { transactorEmail: user.email, data: dataTransaction() } ) ) } );
 
+       useAdd( undefined, afterTransactionadd )
        useGetSponsor( addData )
 
 

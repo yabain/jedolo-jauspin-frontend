@@ -26,10 +26,7 @@ export function CreationAnnonceTransaction( reset )
 
        // useEffect( () => { if ( isFulled && !isPending && reset ) reset() }, [ isFulled, isPending, reset ] );
        useEffect( () => { if ( isFulled && !isPending ) handleReset(); }, [ isFulled, isPending, handleReset ] );
-       useEffect( () =>
-       {
-              if ( isFulled && !isPending ) handleEnque(); console.log( 'Transaction effectuer avec success' );
-       }, [ isFulled, isPending, handleEnque ] );
+       useEffect( () => { if ( isFulled && !isPending ) handleEnque(); console.log( 'Transaction effectuer avec success' ); }, [ isFulled, isPending, handleEnque ] );
 
 
 

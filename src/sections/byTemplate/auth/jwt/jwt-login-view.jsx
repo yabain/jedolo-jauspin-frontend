@@ -56,8 +56,10 @@ export default function JwtLoginView()
        } );
 
        const defaultValues = {
-              email: 'demo@minimals.cc',
-              password: 'demo1234',
+              // email: 'demo@minimals.cc',
+              // password: 'demo1234',
+              email: '',
+              password: '',
        };
 
        const methods = useForm( {
@@ -131,9 +133,9 @@ export default function JwtLoginView()
                             email: data.email,
                      };
 
-                     await login?.( data.email !== "demo@minimals.cc" ? "demo@minimals.cc" : 'demo@minimals.cc', data.password, updatedUser );
-                     dispatch( setUsers( updatedUser ) )
-                     console.log( 'utilisateur enregistrer dans le store', setUser );
+                     await login?.( data.email, data.password );
+                     // dispatch( setUsers( updatedUser ) )
+                     // console.log( 'utilisateur enregistrer dans le store', setUser );
 
 
                      router.push( returnTo || '/home' );
@@ -169,7 +171,7 @@ export default function JwtLoginView()
                             }
 
                             , mt: {
-                                   xs: 2, // Afficher sur mobile si showOnMobile est true
+                                   xs: 5, // Afficher sur mobile si showOnMobile est true
                                    sm: 8, // Afficher sur desktop si showOnDesktop est true
                             },
                      } }
@@ -202,6 +204,7 @@ export default function JwtLoginView()
                      <RHFTextField name="email" label="Email address" />
 
                      <RHFTextField
+                            sx={ { mt: { xs: 0.5, md: 2 } } }
                             name="password"
                             label="Password"
                             type={ password.value ? 'text' : 'password' }
@@ -231,7 +234,7 @@ export default function JwtLoginView()
                             Connexion
                      </LoadingButton>
 
-                     { rendLogType( { showOnMobile: true, showOnDesktop: true } ) }
+                     {/* { rendLogType( { showOnMobile: true, showOnDesktop: true } ) } */ }
               </Stack>
        );
 

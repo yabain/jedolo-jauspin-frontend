@@ -1,7 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 
-import { GuestGuard } from 'src/auth/guard';
+import { GuestGuard } from 'src/auth/guardByvaldo';
 import CompactLayout from 'src/layouts/compact';
 import AuthClassicLayout from 'src/layouts/auth/classic';
 
@@ -94,7 +94,7 @@ const authJwt = {
                      path: 'login',
                      element: (
                             <GuestGuard>
-                                   <AuthClassicLayout>
+                                   <AuthClassicLayout imageSize={ 350 } contentSizeMd={ 0.5 } contentSizeLg={ 0.35 }>
                                           <JwtLoginPage />
                                    </AuthClassicLayout>
                             </GuestGuard>

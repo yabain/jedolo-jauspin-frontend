@@ -44,7 +44,7 @@ const fulfilledAction = ( state, action ) =>
        state.isFulled = true;
        state.isPending = false;
        state.data = action.payload;
-       // console.log( 'fonction appeler:', action.payload );
+       console.log( 'fonction appeler:', action.payload );
 }
 
 

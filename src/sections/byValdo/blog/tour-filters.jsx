@@ -101,15 +101,18 @@ export default function TourFilters( {
        return (
               <>
                      <Button
+                            sx={ { display: { xs: 'blcok', sm: 'none', md: 'none' } } }
+                            fullWidth
                             disableRipple
-                            color="inherit"
+                            variant='contained'
+                            color="success"
                             endIcon={
                                    <Iconify icon="ic:round-filter-list" />
 
                             }
                             onClick={ onOpen }
                      >
-                            Filters
+                            Filtrer
                      </Button>
 
                      <Drawer

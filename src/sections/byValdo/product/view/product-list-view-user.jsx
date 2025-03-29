@@ -17,10 +17,21 @@ import { request, resetAfterRequest } from 'src/store/annonces/getUsersAnnonces/
 import isEqual from 'lodash/isEqual';
 import { useState, useEffect, useCallback } from 'react';
 
+
+import DialogSponsorBuy from 'src/1VALDO/components/sponsor/dialog-sponsor-buy';
+import DialogPaimentInProcess from 'src/1VALDO/components/sponsor/dialog-paiment-inProcess';
+import DialogALaUneBuy from 'src/1VALDO/components/annonces/dialog-aLaUne-buy';
+import DialogPaimentInProcessALaUne from 'src/1VALDO/components/sponsor/dialog-paiment-inProcess-aLaUne';
+import DialogPaimentInProcessSponsorBuy from 'src/1VALDO/components/sponsor/dialog-paiment-inProcess-sponsorBuy';
+
+
+
+
 import { Box } from '@mui/system';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
+import { useMediaQuery, useTheme } from '@mui/material';
 import Container from '@mui/material/Container';
 import
 {
@@ -41,19 +52,13 @@ import { useBoolean } from 'src/hooks/use-boolean';
 
 import { useGetProducts } from 'src/api/product';
 import { PRODUCT_STOCK_OPTIONS } from 'src/_mock';
-import DialogALaUneBuy from 'src/1VALDO/components/annonces/dialog-aLaUne-buy';
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 import EmptyContent from 'src/components/empty-content';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
-import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-import DialogSponsorBuy from 'src/1VALDO/components/sponsor/dialog-sponsor-buy';
-
-
-import DialogPaimentInProcess from 'src/1VALDO/components/sponsor/dialog-paiment-inProcess';
-import { dataObject } from 'src/1data/annonces/defaut';
+import CustomBreadcrumbs from 'src/components/custom-breadcrumbs'; import { dataObject } from 'src/1data/annonces/defaut';
 import ProductTableToolbar from '../product-table-toolbar';
 import ProductTableFiltersResult from '../product-table-filters-result';
 import
@@ -63,6 +68,10 @@ import
        RenderCellPublish,
        RenderCellProduct,
        RenderCellCreatedAt,
+       RenderCellNbrComment,
+       RenderCellProductXs,
+       RenderCellALaUne,
+       RenderCellSponsored,
 } from '../product-table-row';
 import DialogDeleteAnnonce from './modal-delete-Annonce';
 import DialogDeleteAnnonces from './modal-delete-Annonces';
@@ -95,9 +104,21 @@ export default function ProductListViewUser( { toShow } )
 
        const confirmRows = useBoolean();
 
+
+
+
+
+
        const buySponsor = useBoolean();
-       const startPaiment = useBoolean();
+       const startPaimentSponsor = useBoolean();
+       const startPaimentALaUne = useBoolean();
        const aLaUneBuy = useBoolean();
+       const [ annonceClick, setAnnonceClick ] = useState( {} );
+       const [ annonceToSponsor, setAnnonceToSponsor ] = useState( {} );
+
+
+
+
 
        const confirmOfDel = useBoolean();
 
@@ -108,6 +129,7 @@ export default function ProductListViewUser( { toShow } )
        const settings = useSettingsContext();
 
        const [ productsLoading, setProductLoad ] = useState( true );
+
 
        const [ dataIsSet, setDataIsSet ] = useState( false );
        const [ tableData, setTableData ] = useState( [] );
@@ -126,6 +148,32 @@ export default function ProductListViewUser( { toShow } )
 
 
        const { isGeting, isGetingSuccess } = useSelector( ( state ) => state.getAnnonces );
+
+
+
+
+
+       const theme = useTheme();
+       const isSmallScreen = useMediaQuery( theme.breakpoints.down( 'sm' ) );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
        useEffect( () =>
        {
@@ -307,6 +355,36 @@ export default function ProductListViewUser( { toShow } )
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+       useEffect( () =>
+       {
+              setColumnVisibilityModel( {
+                     name: !isSmallScreen,
+                     name0: isSmallScreen,
+                     nbrView: !isSmallScreen,
+                     nbrComment: !isSmallScreen,
+                     rating: !isSmallScreen,
+                     publish: !isSmallScreen,
+                     sponsored: !isSmallScreen,
+                     aLaUne: !isSmallScreen,
+                     actions: !isSmallScreen,
+              } );
+       }, [ isSmallScreen ] );
+
+
+
+
+
        useEffect( () =>
        {
 
@@ -385,47 +463,115 @@ export default function ProductListViewUser( { toShow } )
        );
 
        const columns = [
+              // {
+              //        field: 'category',
+              //        headerName: 'Category',
+              //        filterable: false,
+              // },
               {
-                     field: 'category',
-                     headerName: 'Category',
-                     filterable: false,
+                     field: 'name0',
+                     headerName: 'Annonce',
+                     flex: 1.5,
+                     minWidth: 260,
+                     width: 260,
+                     hideable: true,
+                     valueGetter: ( params ) => params.row.name, // 🔥 Utilise la même valeur que "name"
+                     renderCell: ( params ) => <RenderCellProductXs params={ params }
+                            Sponsoriser={ () => { buySponsor.onTrue(); setAnnonceToSponsor( params.row ) } } mettreALaUne={ () => { aLaUneBuy.onTrue(); setAnnonceClick( params.row ) } } onEdit={ () => { handleEditRow( params.row ) } } onDelete={ () => { confirmOfDel.onTrue(); setAnnonceToDel( params.row ) } } />,
               },
               {
                      field: 'name',
-                     headerName: 'Product',
-                     flex: 1,
-                     minWidth: 360,
-                     hideable: false,
+                     headerName: 'Annonce',
+                     flex: 1.9,
+                     minWidth: 260,
+                     width: 260,
+                     hideable: true,
                      renderCell: ( params ) => <RenderCellProduct params={ params } />,
               },
               {
-                     field: 'createdAt',
-                     headerName: 'Create at',
+                     field: 'nbrView',
+                     headerName: 'Vues',
                      width: 160,
-                     renderCell: ( params ) => <RenderCellCreatedAt params={ params } />,
-              },
-              {
-                     field: 'inventoryType',
-                     headerName: 'Stock',
-                     width: 160,
+
+                     minWidth: 90,
+
+                     flex: 1.1,
+                     hide: true, // 🔥 Masque la colonne directement selon la taille
+
                      type: 'singleSelect',
                      valueOptions: PRODUCT_STOCK_OPTIONS,
                      renderCell: ( params ) => <RenderCellStock params={ params } />,
               },
               {
-                     field: 'price',
-                     headerName: 'Price',
+                     field: 'nbrComment',
+                     headerName: 'Commentaire',
+                     width: 160,
+                     minWidth: 140,
+
+                     flex: 1.1,
+                     hide: true, // 🔥 Masque la colonne directement selon la taille
+
+                     renderCell: ( params ) => <RenderCellNbrComment params={ params } />,
+              },
+
+              {
+                     field: 'aLaUne',
+                     headerName: 'A La Une',
                      width: 140,
+
+
+                     minWidth: 90,
+
+                     flex: 1.1,
+                     hide: isSmallScreen, // 🔥 Masque la colonne directement selon la taille
+
+                     editable: true,
+                     renderCell: ( params ) => <RenderCellALaUne params={ params } />,
+              },
+
+
+              {
+                     field: 'rating',
+                     headerName: 'Note',
+                     width: 140,
+
+
+                     minWidth: 90,
+
+                     flex: 1.1,
+                     hide: isSmallScreen, // 🔥 Masque la colonne directement selon la taille
+
                      editable: true,
                      renderCell: ( params ) => <RenderCellPrice params={ params } />,
               },
               {
+                     field: 'sponsored',
+                     headerName: 'sponsorisé',
+                     width: 140,
+
+
+                     minWidth: 90,
+
+                     flex: 1.1,
+                     hide: isSmallScreen, // 🔥 Masque la colonne directement selon la taille
+
+                     editable: true,
+                     renderCell: ( params ) => <RenderCellSponsored params={ params } />,
+              },
+              {
                      field: 'publish',
-                     headerName: 'Publish',
+                     headerName: 'status',
                      width: 110,
+
+
+                     minWidth: 90,
+
+                     flex: 1.1,
                      type: 'singleSelect',
                      editable: true,
                      valueOptions: PUBLISH_OPTIONS,
+                     hide: true, // 🔥 Masque la colonne directement selon la taille
+
                      renderCell: ( params ) => <RenderCellPublish params={ params } />,
               },
               {
@@ -435,27 +581,28 @@ export default function ProductListViewUser( { toShow } )
                      align: 'right',
                      headerAlign: 'right',
                      width: 80,
+                     flex: 0.1,
                      sortable: false,
                      filterable: false,
                      disableColumnMenu: true,
                      getActions: ( params ) => [
-                            <GridActionsCellItem
-                                   showInMenu
-                                   icon={ <Iconify icon="solar:eye-bold" /> }
-                                   label="Voir"
-                                   onClick={ () => handleViewRow( params.row.id ) }
-                            />,
+                            // <GridActionsCellItem
+                            //        showInMenu
+                            //        icon={ <Iconify icon="solar:eye-bold" /> }
+                            //        label="Voir"
+                            //        onClick={ () => handleViewRow( params.row.id ) }
+                            // />,
                             <GridActionsCellItem
                                    showInMenu
                                    icon={ <Iconify icon="solar:pen-bold" /> }
                                    label="Mettre à la une"
-                                   onClick={ () => aLaUneBuy.onTrue() }
+                                   onClick={ () => { aLaUneBuy.onTrue(); setAnnonceClick( params.row ) } }
                             />,
                             <GridActionsCellItem
                                    showInMenu
                                    icon={ <Iconify icon="solar:pen-bold" /> }
                                    label="Sponsoriser"
-                                   onClick={ () => buySponsor.onTrue() }
+                                   onClick={ () => { buySponsor.onTrue(); setAnnonceToSponsor( params.row ) } }
                             />,
                             <GridActionsCellItem
                                    showInMenu
@@ -485,9 +632,12 @@ export default function ProductListViewUser( { toShow } )
 
        return (
               <>
-                     <DialogSponsorBuy showDialog={ buySponsor } startPaiement={ startPaiment } />
-                     <DialogPaimentInProcess showDialog={ startPaiment } />
-                     <DialogALaUneBuy showDialog={ aLaUneBuy } startPaiement={ startPaiment } />
+                     <DialogSponsorBuy showDialog={ buySponsor } startPaiement={ startPaimentSponsor } />
+                     <DialogPaimentInProcessSponsorBuy dataGet={ annonceToSponsor } showDialog={ startPaimentSponsor } />
+
+                     <DialogALaUneBuy showDialog={ aLaUneBuy } startPaiement={ startPaimentALaUne } />
+                     <DialogPaimentInProcessALaUne dataGet={ annonceClick } showDialog={ startPaimentALaUne } />
+
                      <Box
                             // maxWidth={ settings.themeStretch ? false : 'lg' }
                             // maxWidth='xl'
@@ -514,7 +664,7 @@ export default function ProductListViewUser( { toShow } )
                                                  variant="contained"
                                                  startIcon={ <Iconify icon="mingcute:add-line" /> }
                                           >
-                                                 New Product
+                                                 Nouvel annonce
                                           </Button>
                                    }
                                    sx={ {
@@ -539,10 +689,12 @@ export default function ProductListViewUser( { toShow } )
 
                                           sx={ { flexGrow: 1, } }
 
-                                          checkboxSelection
+                                          // checkboxSelection
                                           disableRowSelectionOnClick
                                           rows={ dataFiltered }
                                           columns={ columns }
+
+                                          disableColumnMenu
                                           loading={ productsLoading }
                                           getRowHeight={ () => 'auto' }
                                           pageSizeOptions={ [ 5, 10, 25 ] }
@@ -563,12 +715,12 @@ export default function ProductListViewUser( { toShow } )
                                                  toolbar: () => (
                                                         <>
                                                                <GridToolbarContainer>
-                                                                      <ProductTableToolbar
+                                                                      {/* <ProductTableToolbar
                                                                              filters={ filters }
                                                                              onFilters={ handleFilters }
                                                                              stockOptions={ PRODUCT_STOCK_OPTIONS }
                                                                              publishOptions={ PUBLISH_OPTIONS }
-                                                                      />
+                                                                      /> */}
 
                                                                       <GridToolbarQuickFilter />
 
@@ -590,9 +742,9 @@ export default function ProductListViewUser( { toShow } )
                                                                                     </Button>
                                                                              ) }
 
-                                                                             <GridToolbarColumnsButton />
+                                                                             {/* <GridToolbarColumnsButton />
                                                                              <GridToolbarFilterButton />
-                                                                             <GridToolbarExport />
+                                                                             <GridToolbarExport /> */}
                                                                       </Stack>
                                                                </GridToolbarContainer>
 

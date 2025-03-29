@@ -1,5 +1,5 @@
 import { enqueueSnackbar } from "notistack";
-import { HOST_PORT, HOST_URL } from "src/config-global"; import axiosInstance from "src/utils/axios";
+import { HOST_PORT, HOST_BACKEND_URL } from "src/config-global"; import axiosInstance from "src/utils/axios";
 
 export async function request( data )
 {
@@ -10,7 +10,7 @@ export async function request( data )
 
 
 
-              const response = await axiosInstance.get( `${ HOST_URL }:${ HOST_PORT }/signal/${ data.annonceId }` );
+              const response = await axiosInstance.get( `${ HOST_BACKEND_URL }/signal/${ data.userId }` );
 
 
 

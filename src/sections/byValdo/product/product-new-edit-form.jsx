@@ -52,6 +52,7 @@ import { request as updateAnnoncesRequest, resetAfterRequest as resetAfterUpdate
 import { useAuthContext } from 'src/auth/hooks';
 import DialogAnnonceBuy from 'src/1VALDO/components/annonces/dialog-annonce-buy';
 import { useBoolean } from 'src/hooks/use-boolean';
+import { city } from 'src/assets/data/location.service';
 
 // ----------------------------------------------------------------------
 
@@ -111,16 +112,12 @@ export default function ProductNewEditForm( { currentProduct2 } )
               } ),
        } );
 
-       const ville = [
+       const ville = city;
+       const villeNames = [ ...new Set( ville.map( ( item ) => item.name ) ) ];
+       // console.log( ville );
+       // console.log( villeNames );
 
 
-              'bangante', 'bafoussam', 'dschang',
-              'yaounde',
-              'omnisport',
-              'ngousso',
-              'douala', 'makepe', 'bonaberi'
-
-       ];
 
        const catgOptions = [
 
@@ -316,8 +313,10 @@ export default function ProductNewEditForm( { currentProduct2 } )
                      {
 
                             // dispatch( request( object ) )
+
                             setDataToAdd( object )
                             showDialog.onTrue()
+
                             // console.log( 'email du user', user.email, 'user email envoyer', object.userEmail );
                             // console.log( 'dtaa to add', object );
 
@@ -485,7 +484,7 @@ export default function ProductNewEditForm( { currentProduct2 } )
                                                         placeholder="+"
                                                         multiple
                                                         freeSolo
-                                                        options={ ville }
+                                                        options={ villeNames }
                                                         getOptionLabel={ ( option ) => option }
                                                         value={ watch( "city" ) } // Utiliser React Hook Form pour stocker la valeur
 

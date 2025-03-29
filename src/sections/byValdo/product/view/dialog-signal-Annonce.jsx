@@ -52,7 +52,7 @@ export default function DialogSignalAnnonce( { showDialog } )
 
        const { reset, handleSubmit } = methods;
        const resetAfterSuccess = () => { reset(); setSubmiting( false ); showDialog.onFalse() }
-       const onSubmit = handleSubmit( ( data ) => { setSubmiting( true ); dispatch( request( { annonceId: annonce.id, data: { ...data, signalerId: user.id, date: new Date() } } ) ) } );
+       const onSubmit = handleSubmit( ( data ) => { setSubmiting( true ); dispatch( request( { annonceId: annonce.id, data: { ...data, signalerId: user.id, date: new Date(), signalerEmail: user.email }, signaledUserAnnonceId: annonce.userEmail } ) ) } );
 
 
 

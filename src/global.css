@@ -20,6 +20,3 @@
 @import 'yet-another-react-lightbox/plugins/thumbnails.css';
 
 /* ===== Cacher la scrollbar globalement ===== */
-body {
-  /* overflow-x: hidden; */
-}

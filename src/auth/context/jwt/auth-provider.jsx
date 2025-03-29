@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import { useMemo, useEffect, useReducer, useCallback } from 'react';
 
 import axios, { endpoints } from 'src/utils/axios';
+import { HOST_BACKEND_URL } from 'src/config-global';
 
 import { AuthContext } from './auth-context';
 import { setSession, isValidToken } from './utils';
@@ -118,61 +119,58 @@ export function AuthProvider( { children } )
        }, [ initialize ] );
 
        // LOGIN
-       const login = useCallback( async ( email, password, updateUser ) =>
+       const login = useCallback( async ( email, password ) =>
        {
               const data = {
                      email,
                      password,
               };
 
-              const response = await axios.post( endpoints.auth.login, data );
+              const response = await axios.post( `${ HOST_BACKEND_URL }/auth/login`, data );
 
-              const { accessToken, user } = response.data;
+              const { access_token, user } = response.data;
 
               console.log( 'data recu', response.data );
-              setSession( accessToken );
+              setSession( access_token );
 
-              localStorage.setItem( 'user', JSON.stringify( updateUser ) );
+              localStorage.setItem( 'user', JSON.stringify( user ) );
 
 
               dispatch( {
                      type: 'LOGIN',
                      payload: {
                             user: {
-                                   ...updateUser,
-                                   accessToken,
+                                   ...user,
+                                   accessToken: access_token,
                             },
                      },
               } );
        }, [] );
 
        // REGISTER
-       const register = useCallback( async ( email, password, firstName, lastName ) =>
+       const register = useCallback( async ( data ) =>
        {
-              const data = {
-                     email,
-                     password,
-                     firstName,
-                     lastName,
-              };
 
-              const response = await axios.post( endpoints.auth.register, data );
+
+              const response = await axios.post( `${ HOST_BACKEND_URL }/auth/register`, data );
+
+              console.log( 'data recu', response );
 
               const { accessToken, user } = response.data;
 
               // sessionStorage.setItem( STORAGE_KEY, accessToken );
 
-              localStorage.setItem( STORAGE_KEY, accessToken );
+              // localStorage.setItem( STORAGE_KEY, accessToken );
 
-              dispatch( {
-                     type: 'REGISTER',
-                     payload: {
-                            user: {
-                                   ...user,
-                                   accessToken,
-                            },
-                     },
-              } );
+              // dispatch( {
+              //        type: 'REGISTER',
+              //        payload: {
+              //               user: {
+              //                      ...user,
+              //                      accessToken,
+              //               },
+              //        },
+              // } );
        }, [] );
 
        // LOGOUT

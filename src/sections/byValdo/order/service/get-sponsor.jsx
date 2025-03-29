@@ -32,7 +32,7 @@ export function useGetSponsor( dataGet )
        useEffect( () => () => handleReset(), [ handleReset ] );
        useEffect( () => { if ( !isFulled && !isPending ) dispatch( request() ); }, [ isFulled, isPending, dispatch ] );
        useEffect( () => { if ( isFulled && !isPending && !isLoad ) { dataGet( data ); setIsLoad( true ) } }, [ isLoad, isFulled, isPending, dataGet, data ] );
-       useEffect( () => { if ( isFulled && !isPending ) handleEnque(); }, [ isFulled, isPending, handleEnque ] );
+       // useEffect( () => { if ( isFulled && !isPending ) handleEnque(); }, [ isFulled, isPending, handleEnque ] );
 
 
 

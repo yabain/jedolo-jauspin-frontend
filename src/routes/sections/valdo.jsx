@@ -1,7 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 
-import { AuthGuard, GuestGuard } from 'src/auth/guard';
+import { AuthGuard, GuestGuard } from 'src/auth/guardByvaldo';
 import DashboardLayout from 'src/layouts/dashboard/byValdo';
 
 import { LoadingScreen, SplashScreen } from 'src/components/loading-screen';
@@ -18,6 +18,7 @@ const OrderDetailsPage = lazy( () => import( 'src/pages/byValdo/order/details' )
 // ANNONCES
 const ProductDetailsPage = lazy( () => import( 'src/pages/byValdo/product/details' ) );
 const ProductListPage = lazy( () => import( 'src/pages/byValdo/product/list' ) );
+const AnnoncesSignal = lazy( () => import( 'src/pages/byValdo/anoncesSignalUser/list' ) );
 const ProductCreatePage = lazy( () => import( 'src/pages/byValdo/product/new' ) );
 const ProductEditPage = lazy( () => import( 'src/pages/byValdo/product/edit' ) );
 
@@ -64,6 +65,7 @@ export const route = [
                                           children: [
                                                  { index: true, element: <ProductListPage /> },
                                                  { path: 'list', element: <ProductListPage /> },
+                                                 { path: 'signal', element: <AnnoncesSignal /> },
                                                  // { path: 'view', element: <ProductDetailsPage /> },
                                                  { path: 'new', element: <ProductCreatePage /> },
                                                  { path: 'edit', element: <ProductEditPage /> },

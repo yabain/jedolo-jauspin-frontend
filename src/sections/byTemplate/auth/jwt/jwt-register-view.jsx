@@ -18,10 +18,12 @@ import { useRouter, useSearchParams } from 'src/routes/hooks';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { useAuthContext } from 'src/auth/hooks';
-import { PATH_AFTER_LOGIN } from 'src/config-global';
+import { HOST_BACKEND_URL, HOST_FRONTEND_URL, PATH_AFTER_LOGIN } from 'src/config-global';
 
 import Iconify from 'src/components/iconify';
-import FormProvider, { RHFTextField } from 'src/components/hook-form';
+import FormProvider, { RHFAutocomplete, RHFTextField } from 'src/components/hook-form';
+import { city } from 'src/assets/data/location.service';
+import { useSnackbar } from 'notistack';
 
 // ----------------------------------------------------------------------
 
@@ -29,6 +31,7 @@ export default function JwtRegisterView()
 {
        const { register } = useAuthContext();
 
+       const { enqueueSnackbar } = useSnackbar();
        const router = useRouter();
 
        const [ errorMsg, setErrorMsg ] = useState( '' );
@@ -37,20 +40,39 @@ export default function JwtRegisterView()
 
        const returnTo = searchParams.get( 'returnTo' );
 
+       const ville = city;
+       const villeNames = [ ...new Set( ville.map( ( item ) => item.name ) ) ];
+
        const password = useBoolean();
 
+       // Schéma de validation avec messages en français
        const RegisterSchema = Yup.object().shape( {
-              firstName: Yup.string().required( 'First name required' ),
-              lastName: Yup.string().required( 'Last name required' ),
-              email: Yup.string().required( 'Email is required' ).email( 'Email must be a valid email address' ),
-              password: Yup.string().required( 'Password is required' ),
+              firstName: Yup.string().required( "Le prénom est requis" ),
+              lastName: Yup.string().required( "Le nom est requis" ),
+              email: Yup.string()
+                     .required( "L'email est requis" )
+                     .email( "L'email doit être une adresse email valide" ),
+              password: Yup.string().required( "Le mot de passe est requis" ),
+              age: Yup.string().required( "L'âge est requis" ),
+              country: Yup.string().required( "Le pays est requis" ),
+              city: Yup.string().required( "La ville est requise" ),
+              localisation: Yup.string().required( "Le quartier est requis" ),
+              gender: Yup.string().required( "Le sexe est requis" ),
+              phoneNumber: Yup.string().required( "Le numéro de téléphone est requis" ),
        } );
 
+       // Valeurs par défaut vides
        const defaultValues = {
               firstName: '',
               lastName: '',
               email: '',
               password: '',
+              age: '',
+              country: 'Cameroun',
+              city: '',
+              localisation: '',
+              gender: '',
+              phoneNumber: '',
        };
 
        const methods = useForm( {
@@ -68,13 +90,16 @@ export default function JwtRegisterView()
        {
               try
               {
-                     await register?.( data.email, data.password, data.firstName, data.lastName );
+                     const dateToSend = { ...data, "photoURL": "", "about": "", "role": "user", "isPublic": true, displayName: ` ${ data.firstName } ${ data.lastName }` }
+                     await register?.( dateToSend );
+                     enqueueSnackbar( "Compte créer avec success !" )
+                     router.push( `/auth/jwt/login` );
 
-                     router.push( returnTo || PATH_AFTER_LOGIN );
+                     reset();
+                     console.log( dateToSend )
               } catch ( error )
               {
                      console.error( error );
-                     reset();
                      setErrorMsg( typeof error === 'string' ? error : error.message );
               }
        } );
@@ -103,13 +128,13 @@ export default function JwtRegisterView()
                             color: 'text.secondary',
                      } }
               >
-                     { 'By signing up, I agree to ' }
+                     { 'En m\'inscrivant, j\'accepte les   ' }
                      <Link underline="always" color="text.primary">
-                            Terms of Service
+                            { 'Conditions d\'utilisation' }
                      </Link>
-                     { ' and ' }
+                     { ' et la ' }
                      <Link underline="always" color="text.primary">
-                            Privacy Policy
+                            Politique de confidentialité.
                      </Link>
                      .
               </Typography>
@@ -117,16 +142,62 @@ export default function JwtRegisterView()
 
        const renderForm = (
               <Stack spacing={ 2.5 }>
-                     <Stack direction={ { xs: 'column', sm: 'row' } } spacing={ 2 }>
-                            <RHFTextField name="firstName" label="First name" />
-                            <RHFTextField name="lastName" label="Last name" />
+                     <Stack direction={ { xs: 'row', sm: 'row' } } spacing={ 2 }>
+                            <RHFTextField name="firstName" label="Nom" />
+                            <RHFTextField name="lastName" label="Prenom" />
                      </Stack>
 
-                     <RHFTextField name="email" label="Email address" />
+
+                     <Stack direction={ { xs: 'row', sm: 'row' } } spacing={ 2 }>
+                            <RHFTextField
+                                   type='number'
+                                   name="age"
+                                   label="Age"
+                                   sx={ { flex: 1 } } // Largeur flexible
+                            />
+                            <RHFTextField
+                                   name="country"
+                                   label="Pays"
+                                   sx={ { flex: 1 } } // Largeur flexible
+                            />
+                            <RHFAutocomplete
+                                   name="city"
+                                   label="Villes"
+                                   freeSolo
+                                   options={ villeNames }
+                                   getOptionLabel={ ( option ) => option }
+                                   renderOption={ ( props, option ) => (
+                                          <li { ...props } key={ option }>
+                                                 { option }
+                                          </li>
+                                   ) }
+                                   sx={ { flex: 1 } } // Largeur flexible
+                            />
+                     </Stack>
+
+                     <Stack direction={ { xs: 'row', sm: 'row' } } spacing={ 2 }>
+                            <RHFTextField sx={ { flex: 1 } } name="localisation" label="Quartier" />
+                            <RHFAutocomplete
+                                   name="gender"
+                                   label="Sexe"
+                                   freeSolo
+                                   options={ [ 'Homme', 'Femme' ] }
+                                   getOptionLabel={ ( option ) => option }
+                                   renderOption={ ( props, option ) => (
+                                          <li { ...props } key={ option }>
+                                                 { option }
+                                          </li>
+                                   ) }
+                                   sx={ { flex: 1 } } // Largeur flexible
+                            />
+                            <RHFTextField sx={ { flex: 1 } } type='number' name="phoneNumber" label="Telephone" />
+                     </Stack>
+
+                     <RHFTextField name="email" label="Address Mail" />
 
                      <RHFTextField
                             name="password"
-                            label="Password"
+                            label="Mot de passe"
                             type={ password.value ? 'text' : 'password' }
                             InputProps={ {
                                    endAdornment: (

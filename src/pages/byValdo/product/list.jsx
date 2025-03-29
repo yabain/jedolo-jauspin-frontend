@@ -145,6 +145,8 @@ export default function ProductListPage()
                                    </Tabs>
 
                                    <Button
+
+                                          sx={ { display: { xs: 'none' } } }
                                           // component={ RouterLink }
                                           // href={ paths.dashboard.product.new }
                                           onClick={ () => naviguate( '/home/annonces/new' ) }
@@ -176,7 +178,13 @@ export default function ProductListPage()
                      </Container>
                      ) }
 
-                     { user !== null && ( user?.role === "user" || user === undefined || user === null ) && <ProductListView /> }
+                     { user !== null && ( user?.role === "user" || user === undefined || user === null ) &&
+
+                            <Container maxWidth='xl' sx={ {
+                                   flexGrow: 1,
+                                   display: 'flex',
+                                   flexDirection: 'column',
+                            } }><ProductListView /></Container> }
               </>
        );
 }

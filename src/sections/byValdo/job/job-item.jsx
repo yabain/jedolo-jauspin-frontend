@@ -27,22 +27,23 @@ export default function JobItem( { job, onView, onEdit, onDelete } )
 {
        const popover = usePopover();
 
-       const { id, anonnceName, sponsorAnnonce, aLaUne, company, date, signalerEmail, comment } =
+       const { id, anonnceName, sponsorAnnonce, aLaUne, coverUrl, date, signalerEmail, comment } =
               job;
 
        return (
               <>
                      <Card>
                             <IconButton onClick={ popover.onOpen } sx={ { position: 'absolute', top: 8, right: 8 } }>
+                                   banir
                                    <Iconify icon="eva:more-vertical-fill" />
                             </IconButton>
 
                             <Stack sx={ { p: 3, pb: 2 } }>
                                    <Avatar
-                                          alt={ company?.name }
-                                          src={ company?.logo }
+                                          alt={ coverUrl }
+                                          src={ coverUrl }
                                           variant="rounded"
-                                          sx={ { width: 48, height: 48, mb: 2 } }
+                                          sx={ { width: 132, height: 132, mb: 2 } }
                                    />
 
                                    <ListItemText
@@ -147,10 +148,10 @@ export default function JobItem( { job, onView, onEdit, onDelete } )
                                    } }
                             >
                                    <Iconify icon="solar:eye-bold" />
-                                   View
+                                   Banir
                             </MenuItem>
 
-                            <MenuItem
+                            {/* <MenuItem
                                    onClick={ () =>
                                    {
                                           popover.onClose();
@@ -171,7 +172,7 @@ export default function JobItem( { job, onView, onEdit, onDelete } )
                             >
                                    <Iconify icon="solar:trash-bin-trash-bold" />
                                    Delete
-                            </MenuItem>
+                            </MenuItem> */}
                      </CustomPopover>
               </>
        );

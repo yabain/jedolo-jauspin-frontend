@@ -22,6 +22,7 @@ import disableUsersReducer from './users/disable/reducer';
 // annonces users Import 
 import usersSAnnoncesReducer from './annonces/data/users';
 import getUsersAnnoncesReducer from './annonces/getUsersAnnonces/reducer';
+import getLastAnnoncesPostNbrReducer from './annonces/getLastAnnoncesPostNbr/reducer';
 
 
 // annonces comments Import 
@@ -51,6 +52,9 @@ import getTransactionReducer from './transaction/get/reducer';
 // annonce transactions Import 
 import getTransactionsReducer from './transaction/gets/reducer';
 
+// city Import 
+import getTopCityReducer from './city/topCity/reducer';
+
 // Combinaison des réducteurs traditionnels et des slices
 const rootReducer = combineReducers( {
 
@@ -72,6 +76,7 @@ const rootReducer = combineReducers( {
        // users 
        usersAnnonces: usersSAnnoncesReducer,
        getUsersAnnonces: getUsersAnnoncesReducer,
+       getLastAnnoncesPostNbr: getLastAnnoncesPostNbrReducer,
 
 
 
@@ -111,6 +116,11 @@ const rootReducer = combineReducers( {
 
        // transactions
        getTransactions: getTransactionsReducer,
+
+
+
+       // city
+       getTopCity: getTopCityReducer,
 } );
 
 // Configuration du store avec Redux Toolkit

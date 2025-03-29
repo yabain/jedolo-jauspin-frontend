@@ -2,7 +2,7 @@ import { useSnackbar } from "notistack";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useAuthContext } from "src/auth/hooks";
-import { request, resetAfterRequest } from "src/store/transaction/get/reducer";
+import { request, resetAfterRequest } from "src/store/signal/get/reducer";
 
 
 
@@ -16,14 +16,14 @@ export function useGetSignalAnnonces( dataGet, isActive = true )
        const { user } = useAuthContext()
        const { enqueueSnackbar } = useSnackbar();
        const [ isLoad, setIsLoad ] = useState( false )
-       const { data, isFulled, isPending, isError } = useSelector( ( state ) => state.getTransaction );
+       const { data, isFulled, isPending, isError } = useSelector( ( state ) => state.getUserAnnonceSignals );
 
 
 
 
 
        const handleReset = useCallback( () => dispatch( resetAfterRequest() ), [ dispatch ] );
-       const handleEnque = useCallback( () => enqueueSnackbar( "Transaction recuperer avec success !" ), [ enqueueSnackbar ] )
+       const handleEnque = useCallback( () => enqueueSnackbar( "Annonces Signaler recuperer avec success !" ), [ enqueueSnackbar ] )
        const handleError = useCallback( () => enqueueSnackbar( "Une erreur lors de la requette!", { variant: "error" } ), [ enqueueSnackbar ] );
 
 
@@ -33,8 +33,8 @@ export function useGetSignalAnnonces( dataGet, isActive = true )
 
        useEffect( () => () => handleReset(), [ handleReset ] );
        useEffect( () => { if ( isFulled && !isPending && isActive ) handleEnque(); }, [ isFulled, isPending, isActive, handleEnque ] );
-       useEffect( () => { if ( !isFulled && !isPending && isActive ) dispatch( request( { email: user.email } ) ); }, [ user.email, isFulled, isPending, isActive, dispatch ] );
-       useEffect( () => { if ( isFulled && !isPending && isActive && !isLoad ) { dataGet( data.transactions ); setIsLoad( true ) } }, [ isLoad, isFulled, isPending, isActive, dataGet, data ] );
+       useEffect( () => { if ( !isFulled && !isPending && isActive ) dispatch( request( { userId: user.email } ) ); }, [ isFulled, isPending, isActive, user.email, dispatch ] );
+       useEffect( () => { if ( isFulled && !isPending && isActive && !isLoad ) { dataGet( data.signalAnnonce ); setIsLoad( true ) } }, [ isLoad, isFulled, isPending, isActive, dataGet, data ] );
 
 
 

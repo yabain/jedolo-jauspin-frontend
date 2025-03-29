@@ -1,6 +1,6 @@
 
-export const city = () =>
-(
+export const city =
+
        // Cameroun
        [ {
               id: 1,
@@ -83,6 +83,9 @@ export const city = () =>
               name: 'Yaoundé'
        },
 
+       ];
+
+const otherCity = [
 
        // Congo
        {
@@ -474,4 +477,5 @@ export const city = () =>
               id: 4,
               name: 'Nsang'
        }
-       ] );
+
+]

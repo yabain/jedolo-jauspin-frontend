@@ -1,4 +1,5 @@
 import orderBy from 'lodash/orderBy';
+import PropTypes from 'prop-types';
 import { useState, useCallback, useEffect, useMemo } from 'react';
 
 
@@ -6,7 +7,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { io } from 'socket.io-client';
 import { request, resetAfterRequest } from 'src/store/annonces/getUsersAnnonces/reducer';
 import { resetData, setData, addData } from 'src/store/annonces/data/users';
-import { annonceFromStoreRef, filterByArgumentStingRef, globalFilterRef, handleFilterByTownSelectedRef, selectedTownTabRef, setSelectedTownTabRef } from 'src/1data/annonces/ref';
+import { useGet } from 'src/1VALDO/hook/annonce/useGetNbrNew';
+import { annonceFromStoreRef, filterByArgumentStingRef, globalFilterRef, handleFilterByTownSelectedRef, selectedTownTabRef, setSelectedTownTabRef, setSelectedUpdateData } from 'src/1data/annonces/ref';
 
 
 import { CardHeader } from '@mui/material';
@@ -15,7 +17,7 @@ import Tabs from '@mui/material/Tabs';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
-import { deleteAnnonceInArray, deleteObjectFromTabObjetc, updateObjectFromTabObjetc } from 'src/1functions/annonces';
+import { deleteAnnonceInArray, deleteObjectFromTabObjetc, normalizeString, updateObjectFromTabObjetc } from 'src/1functions/annonces';
 
 import { paths } from 'src/routes/paths';
 import { useBoolean } from 'src/hooks/use-boolean';
@@ -48,7 +50,7 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function PostListView()
+export default function PostListView( { setAfterFilter } )
 {
 
 
@@ -57,6 +59,7 @@ export default function PostListView()
 
        const openFilters = useBoolean();
        const dispatch = useDispatch()
+       const [ nbrNewAnnonces, setNbrNewAnnonce ] = useState( 0 )
 
        const settings = useSettingsContext();
 
@@ -93,7 +96,16 @@ export default function PostListView()
               console.log( 'fonctio appeler', updatedPosts );
 
               setFilteredPosts( updatedPosts );
+
        };
+
+
+
+
+
+
+       const afterReqNbrNewAnnonceSuccess = ( data ) => { setNbrNewAnnonce( data.count ); }
+       useGet( afterReqNbrNewAnnonceSuccess )
 
 
 
@@ -150,7 +162,7 @@ export default function PostListView()
                      // console.log( dataToFilter[ 0 ].city, type, value );
                      // console.log( type, 'value', value );
 
-                     if ( value[ 0 ] === 'all' || value[ 0 ] === 'Tout' )
+                     if ( value[ 0 ] === normalizeString( 'all' ) || value[ 0 ] === normalizeString( 'Tout' ) )
                      {
                             // Si "all" est spécifié ou si le tableau est vide, afficher tous les posts
 
@@ -159,7 +171,7 @@ export default function PostListView()
 
                      }
                      const dataFilter = []
-                     if ( value[ 0 ] !== 'all' && value[ 0 ] !== 'Tout' )
+                     if ( value[ 0 ] !== normalizeString( 'all' ) && value[ 0 ] !== normalizeString( 'Tout' ) )
                      {
                             // Filtrer les posts si la propriété correspond à l'une des valeurs du tableau
                             // const result = filteredPosts.filter( ( item ) => Array.isArray( value ) && value.includes( item[ type ] ) );
@@ -171,11 +183,11 @@ export default function PostListView()
                                           ( optionValue ) =>
                                           {
 
-                                                 const normalizeOption = optionValue.trim().toLowerCase();
+                                                 const normalizeOption = normalizeString( optionValue );
                                                  // console.log( 'dans le tbaleau:', element.city, 'recu:', normalizeOption );
                                                  // console.log( element[ type ].includes( normalizeOption ) );
 
-                                                 if ( element[ type ] !== undefined && element[ type ].includes( normalizeOption ) )
+                                                 if ( element[ type ] !== undefined && element[ type ].map( item => normalizeString( item ) ).includes( normalizeOption ) )
                                                  {
                                                         // console.log( 'touver', element );
 
@@ -250,9 +262,10 @@ export default function PostListView()
        const handleFilterByTownSelected = useCallback(
               ( event, newValue ) =>
               {
-                     console.log( 'fonction appelée' );
+                     console.log( 'fonction appelée', newValue );
 
                      const dataFilteredByProfil = filterByArguments( annonceFromStore, 'profile', [ selectedTownTab ] );
+                     console.log( 'fonction appelée', annonceFromStore );
                      setFilteredPosts( filterByArguments( annonceFromStore, 'city', [ newValue ] ) );
 
                      return newValue; // ✅ retour de la valeur sélectionnée
@@ -461,6 +474,7 @@ export default function PostListView()
 
               finallyFilteredPrice = filterByPriceRange2( mergedFilters, minPrice, maxPrice )
               const sortedPosts = sortPostsByOrder2( finallyFilteredPrice, order )
+              setAfterFilter( sortedPosts )
               setFilteredPosts( sortedPosts )
 
 
@@ -468,7 +482,7 @@ export default function PostListView()
 
 
 
-       }, [ sortPostsByOrder2, filterByArguments, filterByPriceRange2, annonceFromStore ] );
+       }, [ sortPostsByOrder2, filterByArguments, filterByPriceRange2, annonceFromStore, setAfterFilter ] );
 
 
        useEffect( () => { globalFilterRef.current = globalFilter }, [ filteredPosts, globalFilter ] )
@@ -637,18 +651,18 @@ export default function PostListView()
 
 
 
-       const renderFilters = (
-              <TourFilters
-                     open={ openFilters.value }
-                     onOpen={ openFilters.onTrue }
-                     onClose={ openFilters.onFalse }
-                     onPriceFilters={ filterByPriceRange }
-                     onArgumentFilters={ filterByArguments }
-                     onOrderPriceFilters={ sortPostsByOrder }
+       //  const renderFilters = (
+       //        <TourFilters
+       //               open={ openFilters.value }
+       //               onOpen={ openFilters.onTrue }
+       //               onClose={ openFilters.onFalse }
+       //               onPriceFilters={ filterByPriceRange }
+       //               onArgumentFilters={ filterByArguments }
+       //               onOrderPriceFilters={ sortPostsByOrder }
 
-              />
+       //        />
 
-       );
+       // );
 
 
 
@@ -720,7 +734,7 @@ export default function PostListView()
                      >
                             <CardHeader
                                    title='Dernière annonces'
-                                   subheader='200 nouvelle annonces'
+                                   subheader={ `${ nbrNewAnnonces } nouvelle annonces` }
                                    // action={ <CarouselArrows onNext={ carousel.onNext  onPrev={ carousel.onPrev } /> }
                                    sx={ {
                                           p: 0,
@@ -807,7 +821,6 @@ export default function PostListView()
                                    /> */}
                             </Box>
 
-                            { renderFilters }
 
                      </Stack>
 
@@ -860,3 +873,12 @@ const applyFilter = ( { inputData, filters, sortBy } ) =>
 
        return inputData;
 };
+
+
+
+
+PostListView.propTypes = {
+       setAfterFilter: PropTypes.func,
+};
+
+

@@ -52,7 +52,7 @@ const METHODS = [
        },
 ];
 
-export default function AuthClassicLayout( { children, image, title } )
+export default function AuthClassicLayout( { children, contentSizeMd, contentSizeLg, image, imageSize, title } )
 {
        const { method } = useAuthContext();
 
@@ -75,9 +75,9 @@ export default function AuthClassicLayout( { children, image, title } )
                      sx={ {
                             width: 1,
                             mx: 'auto',
-                            maxWidth: 480,
+                            maxWidth: { md: contentSizeMd || 0.5, lg: contentSizeLg || 0.5, sm: 1 },
                             px: { xs: 2, md: 8 },
-                            pt: { xs: 2, md: 20 },
+                            pt: { xs: 4, md: 20 },
                             pb: { xs: 5, md: 0 },
                      } }
               >
@@ -120,8 +120,8 @@ export default function AuthClassicLayout( { children, image, title } )
        const renderSection = (
               <Stack
                      flexGrow={ { md: 1, sm: 0, xs: 0 } }
-                     spacing={ { md: 10, sm: 2, xs: 2 } }
-                     mt={ { sm: 12, xs: 12 } }
+                     spacing={ { md: 10, sm: 2, xs: 0.5 } }
+                     pt={ { sm: 0, xs: 5 } }
                      alignItems="center"
                      justifyContent="center"
                      sx={ {
@@ -134,7 +134,7 @@ export default function AuthClassicLayout( { children, image, title } )
                             } ),
                      } }
               >
-                     <Typography variant="h3" sx={ { maxWidth: 480, textAlign: 'center' } }>
+                     <Typography variant="h3" sx={ { maxWidth: 480, textAlign: 'center', mb: { xs: 2 } } }>
                             { title || 'Bienvenu sur Ndolo' }
                      </Typography>
 
@@ -144,16 +144,16 @@ export default function AuthClassicLayout( { children, image, title } )
                             src={ image || '/assets/illustrations/illustration_dashboard.png' }
                             sx={ {
                                    maxWidth: {
-                                          xs: 300,
+                                          xs: imageSize || 270,
                                           lg: 560,
                                           xl: 720,
                                    },
                             } }
                      />
 
-                     <Stack direction="row" spacing={ 2 }>
+                     {/* <Stack direction="row" spacing={ 2 }>
                             { rendLogType( { showOnMobile: false, showOnDesktop: true } ) }
-                     </Stack>
+                     </Stack> */}
               </Stack >
        );
 
@@ -166,7 +166,7 @@ export default function AuthClassicLayout( { children, image, title } )
                             minHeight: '100vh',
                      } }
               >
-                     { renderLogo }
+                     {/* { renderLogo } */ }
 
                      { renderSection }
 
@@ -179,5 +179,8 @@ export default function AuthClassicLayout( { children, image, title } )
 AuthClassicLayout.propTypes = {
        children: PropTypes.node,
        image: PropTypes.string,
+       imageSize: PropTypes.number,
+       contentSizeLg: PropTypes.number,
+       contentSizeMd: PropTypes.number,
        title: PropTypes.string,
 };

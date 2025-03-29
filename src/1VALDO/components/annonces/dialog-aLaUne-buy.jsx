@@ -10,12 +10,13 @@ import { LoadingButton } from '@mui/lab';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { RHFAutocomplete, RHFTextField, RHFUploadAvatar } from 'src/components/hook-form';
 import PropTypes from 'prop-types';
+import { useAdd } from 'src/1VALDO/hook/transaction/add';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Box, Button, Chip, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, InputAdornment, Rating, Switch, Typography } from '@mui/material';
 import { height, Stack, width } from '@mui/system';
 import Label from 'src/components/label';
 import { useDisable } from 'src/1VALDO/hook/user/disable';
-import { request } from 'src/store/users/disable/reducer';
+import { request } from 'src/store/transaction/add/reducer';
 import { useGetSponsor } from 'src/sections/byValdo/order/service/get-sponsor';
 import SponsorItem from '../sponsor/sponsor-item-list-to-buy';
 
@@ -74,6 +75,7 @@ export default function DialogALaUneBuy( { showDialog, dataGet, updateDataAfterS
        // fonction use
 
        const log = ( message ) => { console.log( message ); };
+       const dataTransaction = useCallback( () => ( { id: Date.now(), transactorEmail: user.email, type: 'mise a la une', dataType: [], date: Date.now(), montant: 6000, statut: 'paid', anonnceId: dataGet?.id, anonnceName: dataGet?.name } ), [ user.email, dataGet?.name, dataGet?.id ] );
 
 
 
@@ -84,9 +86,12 @@ export default function DialogALaUneBuy( { showDialog, dataGet, updateDataAfterS
 
        const { reset, setValue, handleSubmit, watch } = methods;
        const resetAfterSuccess = () => { reset(); setSubmiting( false ); showDialog.onFalse() }
-       const onSubmit = handleSubmit( ( data ) => { startPaiement.onTrue(); showDialog.onFalse() } );
+       const afterTransactionadd = () => { startPaiement.onTrue(); showDialog.onFalse() }
+       const onSubmit = handleSubmit( ( data ) => { dispatch( request( { transactorEmail: user.email, data: dataTransaction() } ) ) } );
 
-       useGetSponsor( addData )
+
+
+       useAdd( undefined, afterTransactionadd )
 
 
 

@@ -1,0 +1,309 @@
+ 
+
+// recupere le nombre d'annonce recment publier (dans mon cas  les 7 derniers jours. mais ajustable ci possible)
+get: "recent-count",
+reponse: {
+    "success": true,
+    "count": 14
+}
+
+
+// recupere les 5 ville avec les plus grande annonces (classe par nombre decroissant)
+get:  "/top-cities"
+reponse: {
+    "success": true,
+    "cities": [
+        {
+            "ville": "bafoussam",
+            "count": 16
+        },
+        {
+            "ville": "yaounde",
+            "count": 7
+        },
+        {
+            "ville": "bangangte",
+            "count": 2
+        },
+        {
+            "ville": "douala",
+            "count": 1
+        },
+        {
+            "ville": "omnisport",
+            "count": 1
+        }
+    ]
+}
+
+
+// recupere les transaction d'un utilisateur
+get /transactions/:id
+reponse : {
+    "success": true,
+    "transactions": [
+        {
+            "id": 1742953188734,
+            "transactorEmail": "tchindavaldoblair@gmail.com",
+            "type": "creation annonce",
+            "dataType": [],
+            "date": 1742953188734,
+            "montant": 2600,
+            "statut": "paid",
+            "anonnceId": 1742953172387,
+            "anonnceName": "doval test 99"
+        }]}
+
+
+
+// recupere toutes les transactions
+get /transactions        
+reposne: {"success": true,
+    "transactions": [
+        {
+            "id": 1741808809401,
+            "transactorEmail": "demo@minimals.cc",
+            "anonnceName": "aanonce payé ",
+            "montant": 2600,
+            "statut": "pending",
+            "type": "creation annonce",
+            "dataType": [],
+            "date": 1741808809401
+        },
+        {
+            "id": 1741808895520,
+            "transactorEmail": "demo@minimals.cc",
+            "anonnceName": "aanonce payé ",
+            "montant": 2600,
+            "statut": "pending",
+            "type": "creation annonce",
+            "dataType": [],
+            "date": 1741808895520
+        },
+    ]}
+
+
+
+    // ajoute une transaction
+    post /transactions/:transactorEmail
+    reposne: {"success": true,
+    "transactions": [
+        {
+            "id": 1741808809401,
+            "transactorEmail": "demo@minimals.cc",
+            "anonnceName": "aanonce payé ",
+            "montant": 2600,
+            "statut": "pending",
+            "type": "creation annonce",
+            "dataType": [],
+            "date": 1741808809401
+        },]}
+
+
+
+// recuper toutes les annonce signaler
+get /signal
+reponse :{
+    "success": true,
+    "signalAnnonce": [
+        {
+            "id": "id-1",
+            "signalerId": "e99f09a7-dd88-49d5-b1c8-1daf80c2d7b84",
+            "comment": "nullo",
+            "date": 1741808809401,
+            "signalerEmail": "melanie@example.com",
+            "anonnceName": "Appartement Meublé",
+            "sponsorAnnonce": false
+        },]}
+
+
+        
+
+// recuper toutes les annonce signaler pour un utilisateur
+get /signal/:userId
+reponse :{
+    "success": true,
+    "signalAnnonce": [
+        {
+            "id": "id-1",
+            "signalerId": "e99f09a7-dd88-49d5-b1c8-1daf80c2d7b84",
+            "comment": "nullo",
+            "date": 1741808809401,
+            "signalerEmail": "melanie@example.com",
+            "anonnceName": "Appartement Meublé",
+            "sponsorAnnonce": false
+        },]}
+
+
+        
+        
+
+//  signaler une annonce
+post /signal/:annonceId/:signaledUserId
+reponse :{
+    "success": true,
+    "signal": 
+        {
+            "id": "id-1",
+            "signalerId": "e99f09a7-dd88-49d5-b1c8-1daf80c2d7b84",
+            "comment": "nullo",
+            "date": 1741808809401,
+            "signalerEmail": "melanie@example.com",
+            "anonnceName": "Appartement Meublé",
+            "sponsorAnnonce": false
+        }}
+
+
+        
+// recupere touts les commentaire d'une annonce 
+get /comments/:annonceId
+reponse:{
+    "success": true,
+    "comments": [
+        {
+            "id": "1",
+            "commenterId": "e99f09a7-dd88-49d5-b1c8-1daf80c2d7b84",
+            "name": "Melanie Noble",
+            "postedAt": "2025-02-09T02:52:25.238Z",
+            "comment": "The waves crashed against the shore, creating a soothing symphony of sound.",
+            "isPurchased": false,
+            "rating": 2.8,
+            "avatarUrl": "https://api-dev-minimal-v510.vercel.app/assets/images/avatar/avatar_8.jpg"
+        },]}
+
+
+        
+
+
+        
+// ajouter un commentaire a une annonce 
+post /comments/:annonceId
+reponse:{
+    "success": true,
+    "comment": 
+        {
+            "id": "1",
+            "commenterId": "e99f09a7-dd88-49d5-b1c8-1daf80c2d7b84",
+            "name": "Melanie Noble",
+            "postedAt": "2025-02-09T02:52:25.238Z",
+            "comment": "The waves crashed against the shore, creating a soothing symphony of sound.",
+            "isPurchased": false,
+            "rating": 2.8,
+            "avatarUrl": "https://api-dev-minimal-v510.vercel.app/assets/images/avatar/avatar_8.jpg"
+        }}
+
+
+        
+// recuperr tous les sponsor
+get /sponsor
+reponse : [
+    {
+        "description": "repositione une annonce au top de la liste apres 1 heure",
+        "titre": "top",
+        "avatarUrl": null,
+        "montant": 5000,
+        "validite": 3,
+        "heure": 4,
+        "id": 1741440268517,
+        "createUserId": "8864c717-587d-472a-929a-8e5f298024da-0",
+        "date": "2025-03-08T13:24:28.517Z"
+    }
+]
+
+// modifier un sponsor 
+patch /sponsor/:id
+reponse : {
+    "success": true,
+    "sponsor": 
+        {
+        "description": "repositione une annonce au top de la liste apres 1 heure",
+        "titre": "top",
+        "avatarUrl": null,
+        "montant": 5000,
+        "validite": 3,
+        "heure": 4,
+        "id": 1741440268517,
+        "createUserId": "8864c717-587d-472a-929a-8e5f298024da-0",
+        "date": "2025-03-08T13:24:28.517Z"
+    }
+        }
+
+
+// ajouter un sponsor
+post /sponsor
+reponse :  {
+    "success": true,
+    "sponsor": 
+        {
+        "description": "repositione une annonce au top de la liste apres 1 heure",
+        "titre": "top",
+        "avatarUrl": null,
+        "montant": 5000,
+        "validite": 3,
+        "heure": 4,
+        "id": 1741440268517,
+        "createUserId": "8864c717-587d-472a-929a-8e5f298024da-0",
+        "date": "2025-03-08T13:24:28.517Z"
+    }
+        }
+
+
+
+
+
+a faire        endpoint supprimer un sponsor 
+              endpoint upload photo qui renvoi le lien de la photo
+              endpoint update une annonce
+              la desactivation d'un compte desactive tous ces annonces ( "publish":"banned")
+
+
+chaque action effectuer sur une  annonce (ajout modification suppression ) doit emettre un evenement avec io.ement avec le nom correspondant comme dans le fichier server.js ()
+
+
+
+
+attribut finale pour une annonce
+ {
+      "id": 1742919001617,
+      "publish": "published || banned",
+      "price": 22222222222,
+      "profile": "standard",
+      "createdAt": 1742920836939,
+      "coverUrl": "",
+      "saleLabel": {},
+      "newLabel": {},
+      "taxes": 0,
+      "name": "doval test 7 modifier",
+      "subDescription": "jjjj",
+      "images": [
+        {
+          "path": "04 gettyimages-627505342_resized.jpg",
+          "preview": "blob:http://192.168.1.122:3030/29ab5be1-331a-4ce9-ba83-8833dfcf763e"
+        },
+        {
+          "path": "08 gettyimages-995223270_resized.jpg",
+          "preview": "blob:http://192.168.1.122:3030/504b0352-b59d-487c-88a6-1c8cc7043f4b"
+        }
+      ],
+      "city": [
+        "Bafia"
+      ],
+      "categorie": [
+        "Chatte"
+      ],
+      "localisation": "mosquée ",
+      "seDeplace": [
+        "Oui",
+        "Non"
+      ],
+      "personAccept": [
+        "Homme",
+        "Femme"
+      ],
+      "aLaUne": true,
+      "userEmail": "tchindavaldoblair@gmail.com",
+      "nbrView": 2,
+      "nbrComment": 0,
+      "rating": "3.00",
+      "sponsored": "top"
+    },

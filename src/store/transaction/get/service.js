@@ -1,5 +1,5 @@
 import { enqueueSnackbar } from "notistack";
-import { HOST_PORT, HOST_URL } from "src/config-global"; import axiosInstance from "src/utils/axios";
+import { HOST_PORT, HOST_BACKEND_URL } from "src/config-global"; import axiosInstance from "src/utils/axios";
 
 export async function request( data )
 {
@@ -9,7 +9,7 @@ export async function request( data )
 
               // console.log( 'reauette envoye :', data.email );
 
-              const response = await axiosInstance.get( `${ HOST_URL }:${ HOST_PORT }/transactions/${ data.email }` );
+              const response = await axiosInstance.get( `${ HOST_BACKEND_URL }/transactions/${ data.email }` );
 
               // response = await axiosInstance.get( `http://192.168.1.122:5000/annonces` );
 

@@ -15,6 +15,7 @@ import { Box } from '@mui/system';
 import { annonceFromStoreRef, postRef } from 'src/1data/annonces/ref';
 import { HEADER } from 'src/layouts/config-layout';
 import { globalFilterFnctCall } from 'src/1functions/annonces';
+import { city } from 'src/assets/data/location.service';
 
 // ----------------------------------------------------------------------
 
@@ -49,6 +50,16 @@ export default function SidebarFilter( {
        const [ citiesTab, setCitiesTab ] = useState( [] );
        const [ categoriesTab, setCategoriesTab ] = useState( [] );
        const cityOptions = useMemo( () => cityTable, [ cityTable ] );
+
+
+
+
+
+
+       const ville = city;
+       const cityOption = useMemo( () => [ ...new Set( ville.map( ( item ) => item.name ) ) ], [ ville ] );
+       const optionCategorie = useMemo( () => [ 'Pipe', 'Chatte', 'Vaginal', 'Anal', 'Massage', 'Partouze', ], [] );
+
 
 
 
@@ -210,7 +221,7 @@ export default function SidebarFilter( {
                                    <Grid xs={ 12 } md={ 12 } item >
 
 
-                                          <Typography sx={ { color: '#003768', mt: 0, ml: 0, fontSize: 14, fontWeight: "bold", } } >Categorie</Typography>
+                                          <Typography sx={ { color: '#003768', mt: 0, ml: 0, fontSize: 14, fontWeight: "bold", } } >Services</Typography>
 
 
 
@@ -218,7 +229,7 @@ export default function SidebarFilter( {
                                                  fullWidth
                                                  multiple
                                                  limitTags={ 3 }
-                                                 options={ categorieOpttion }
+                                                 options={ optionCategorie }
                                                  onChange={ ( event, newValue ) =>
                                                  {
                                                         // console.log( newValue );
@@ -228,7 +239,7 @@ export default function SidebarFilter( {
                                                  }
                                                  getOptionLabel={ ( option ) => option }
                                                  renderInput={ ( params ) => (
-                                                        <TextField { ...params } placeholder="Selectioner une categories" />
+                                                        <TextField { ...params } placeholder="Selectioner un service" />
                                                  ) }
                                                  renderOption={ ( props, option ) => (
                                                         <li { ...props } key={ option }>
@@ -319,8 +330,8 @@ export default function SidebarFilter( {
                                                  label="Minimum"
                                                  InputProps=
                                                  { {
-                                                        startAdornment: <InputAdornment position="start">Kg</InputAdornment>,
-                                                        endAdornment: <InputAdornment position="start"> <Iconify icon="solar:eye-bold" width={ 24 } /></InputAdornment>,
+                                                        // startAdornment: <InputAdornment position="start">Kg</InputAdornment>,
+                                                        endAdornment: <InputAdornment position="start"> FCFA</InputAdornment>,
                                                  } }
 
                                                  onChange={ ( event => { handleChangeMinPrice( event ) } ) }
@@ -338,8 +349,8 @@ export default function SidebarFilter( {
                                                  label="Maximum"
                                                  InputProps=
                                                  { {
-                                                        startAdornment: <InputAdornment position="start">Kg</InputAdornment>,
-                                                        endAdornment: <InputAdornment position="start"> <Iconify icon="solar:eye-bold" width={ 24 } /></InputAdornment>,
+                                                        // startAdornment: <InputAdornment position="start">Kg</InputAdornment>,
+                                                        endAdornment: <InputAdornment position="start"> FCFA</InputAdornment>,
                                                  } }
                                                  onChange={ ( event => { handleChangeMaxPrice( event ) } ) }
                                                  onKeyPress={ handleKeyPress }
@@ -386,7 +397,7 @@ export default function SidebarFilter( {
                                                  fullWidth
                                                  multiple
                                                  limitTags={ 3 }
-                                                 options={ cityOptions }
+                                                 options={ cityOption }
                                                  onChange={ ( event, newValue ) =>
                                                  {
                                                         // console.log( newValue );
@@ -462,9 +473,3 @@ SidebarFilter.propTypes = {
 };
 
 
-
-const categorieOpttion = [
-       'categorie1',
-       'categorie2',
-       'categorie3',
-]
