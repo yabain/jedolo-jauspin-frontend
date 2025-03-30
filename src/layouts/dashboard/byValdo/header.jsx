@@ -10,6 +10,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Iconify from 'src/components/iconify';
 import { useTheme } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
+import { useRouter } from 'src/routes/hooks';
 
 import { useLocation, useNavigate } from 'react-router';
 
@@ -40,9 +41,10 @@ export default function Header( { onOpenNav } )
 
        const { user } = useAuthContext();
 
+       const { logout } = useAuthContext();
        // const user = useSelector( ( state ) => state.users.selectedUser );
 
-       // console.log( 'role du user from header', user );
+       console.log( 'role du user from header', user );
 
        const theme = useTheme();
        const location = useLocation();
@@ -61,6 +63,21 @@ export default function Header( { onOpenNav } )
 
        const offsetTop = offset && !isNavHorizontal;
 
+       const router = useRouter();
+       const handleLogout = async () =>
+       {
+              try
+              {
+                     await logout();
+                     router.replace( '/home' );
+              } catch ( error )
+              {
+
+                     console.log( error );
+
+
+              }
+       };
        const renderContent = (
               <>
 
@@ -167,7 +184,13 @@ export default function Header( { onOpenNav } )
                                    <RoleBasedGuard hasContent roles={ [] }  >
                                           <Button
 
-                                                 onClick={ () => { naviguate( '/auth/jwt/register' ) } }
+                                                 onClick={ () =>
+                                                 {
+
+                                                        naviguate( '/auth/jwt/register' )
+                                                        // handleLogout()
+
+                                                 } }
                                                  sx={ {
 
                                                         mt: 2,

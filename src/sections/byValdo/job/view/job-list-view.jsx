@@ -207,7 +207,7 @@ export default function JobListView( { dataGet } )
        return (
               <Box >
                      {
-                            user.role === "user" && ( <CustomBreadcrumbs
+                            user?.role === "user" && ( <CustomBreadcrumbs
                                    heading="Annonces Signaler"
                                    links={ [
                                           {

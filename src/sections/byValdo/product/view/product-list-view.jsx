@@ -4,7 +4,7 @@ import * as annoncesFunction from 'src/1functions/annonces'
 
 import { useDispatch, useSelector } from 'react-redux';
 import { useAuthContext } from 'src/auth/hooks';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import { IconButton, useMediaQuery, useTheme } from '@mui/material';
 
 
@@ -98,7 +98,7 @@ const HIDE_COLUMNS_TOGGLABLE = [ 'category', 'actions' ];
 
 // ----------------------------------------------------------------------
 
-export default function ProductListView( { toShow } )
+export default function ProductListView( { toShow, clickFromProfile } )
 {
 
 
@@ -163,6 +163,18 @@ export default function ProductListView( { toShow } )
 
 
 
+       const location = useLocation();
+       const { email } = location.state || {};
+
+
+
+
+
+
+
+
+
+
        useEffect( () =>
        {
 
@@ -216,7 +228,7 @@ export default function ProductListView( { toShow } )
 
               }
 
-       }, [ dispatch, annonceList, user, isGetingSuccess, isGeting, toShow ] );
+       }, [ dispatch, annonceList, user, isGetingSuccess, isGeting, toShow, email ] );
 
 
 
@@ -323,14 +335,14 @@ export default function ProductListView( { toShow } )
               // Écouter l'événement 'new-annonce' pour mettre à jour les annonces en temps réel
               socket.on( 'new-annonce', ( newAnnonce ) =>
               {
-                     if ( newAnnonce.userEmail === user.email ) dispatch( addData( newAnnonce ) )
+                     if ( newAnnonce.userEmail === ( email !== undefined ? email : user?.email ) ) dispatch( addData( newAnnonce ) )
                      console.log( 'nouvelle annonce detecter', newAnnonce );
 
               } );
 
               return () => { socket.disconnect(); };
 
-       }, [ dispatch, annonceFromStore, user.email ] );
+       }, [ dispatch, annonceFromStore, user?.email, email ] );
 
 
 
@@ -427,6 +439,7 @@ export default function ProductListView( { toShow } )
                      hideable: true,
                      valueGetter: ( params ) => params.row.name, // 🔥 Utilise la même valeur que "name"
                      renderCell: ( params ) => <RenderCellProductXs params={ params }
+                            clickFromProfile={ clickFromProfile }
                             Sponsoriser={ () => { buySponsor.onTrue(); setAnnonceToSponsor( params.row ) } } mettreALaUne={ () => { aLaUneBuy.onTrue(); setAnnonceClick( params.row ) } } onEdit={ () => { handleEditRow( params.row ) } } onDelete={ () => { confirmOfDel.onTrue(); setAnnonceToDel( params.row ) } } />,
               },
               {
@@ -534,49 +547,54 @@ export default function ProductListView( { toShow } )
                      sortable: false,
                      filterable: false,
                      disableColumnMenu: true,
-                     getActions: ( params ) => [
-                            // <GridActionsCellItem
-                            //        showInMenu
-                            //        icon={ <Iconify icon="solar:eye-bold" /> }
-                            //        label="View"
-                            //        onClick={ () => handleViewRow( params.row.id ) }
-                            // />,
-                            // <GridActionsCellItem
-                            //        showInMenu
-                            //        icon={ <Iconify icon="solar:eye-bold" /> }
-                            //        label="Voir"
-                            //        onClick={ () => handleViewRow( params.row.id ) }
-                            // />,
-                            <GridActionsCellItem
-                                   showInMenu
-                                   icon={ <Iconify icon="solar:pen-bold" /> }
-                                   label="Mettre à la une"
-                                   onClick={ () => aLaUneBuy.onTrue() }
-                            />,
-                            <GridActionsCellItem
-                                   showInMenu
-                                   icon={ <Iconify icon="solar:pen-bold" /> }
-                                   label="Sponsoriser"
-                                   onClick={ () => buySponsor.onTrue() }
-                            />,
-                            <GridActionsCellItem
-                                   showInMenu
-                                   icon={ <Iconify icon="solar:pen-bold" /> }
-                                   label="Edit"
-                                   onClick={ () => handleEditRow( params.row ) }
-                            />,
-                            <GridActionsCellItem
-                                   showInMenu
-                                   icon={ <Iconify icon="solar:trash-bin-trash-bold" /> }
-                                   label="Delete"
-                                   onClick={ () =>
-                                   {
-                                          confirmOfDel.onTrue(); setAnnonceToDel( params.row )
-                                   } }
-                                   sx={ { color: 'error.main' } }
-                            />,
-                     ],
-              },
+                     getActions: ( params ) =>
+                     {
+                            if ( clickFromProfile === undefined )
+                            {
+                                   return [
+                                          <GridActionsCellItem
+                                                 showInMenu
+                                                 icon={ <Iconify icon="solar:pen-bold" /> }
+                                                 label="Mettre à la une"
+                                                 onClick={ () => { aLaUneBuy.onTrue(); setAnnonceClick( params.row ) } }
+                                          />,
+                                          < GridActionsCellItem
+                                                 showInMenu
+                                                 icon={ < Iconify icon="solar:pen-bold" /> }
+                                                 label="Sponsoriser"
+                                                 onClick={ () => { buySponsor.onTrue(); setAnnonceToSponsor( params.row ) }
+                                                 }
+                                          />,
+                                          < GridActionsCellItem
+                                                 showInMenu
+                                                 icon={ < Iconify icon="solar:pen-bold" /> }
+                                                 label="Edit"
+                                                 onClick={ () => handleEditRow( params.row ) }
+                                          />,
+                                          < GridActionsCellItem
+                                                 showInMenu
+                                                 icon={ < Iconify icon="solar:trash-bin-trash-bold" /> }
+                                                 label="Delete"
+                                                 onClick={ () =>
+                                                 {
+                                                        confirmOfDel.onTrue();
+                                                        setAnnonceToDel( params.row )
+                                                 } }
+                                                 sx={ { color: 'error.main' } }
+                                          />
+                                   ];
+                            }
+
+                            return [
+                                   <GridActionsCellItem
+                                          showInMenu
+                                          icon={ <Iconify icon="solar:pen-bold" /> }
+                                          label="Voir"
+                                          onClick={ () => clickFromProfile( params.row ) }
+                                   />
+                            ];
+                     }
+              }
        ];
 
        const getTogglableColumns = () =>
@@ -601,7 +619,7 @@ export default function ProductListView( { toShow } )
                                    flexDirection: 'column',
                             } }
                      >
-                            { user.role === "user" && ( <CustomBreadcrumbs
+                            { user?.role === "user" && clickFromProfile === undefined && ( <CustomBreadcrumbs
                                    heading="Liste Des Annonces"
                                    links={ [
                                           {
@@ -770,4 +788,7 @@ function applyFilter( { inputData, filters } )
 }
 
 
-ProductListView.propTypes = { toShow: PropTypes.string };
+ProductListView.propTypes = {
+       toShow: PropTypes.string,
+       clickFromProfile: PropTypes.func
+};

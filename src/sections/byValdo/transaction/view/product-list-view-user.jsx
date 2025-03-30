@@ -300,7 +300,7 @@ export default function ProductListViewUser( { toShow, dataGet } )
                                    flexDirection: 'column',
                             } }
                      >
-                            { user.role === "user" && ( <CustomBreadcrumbs
+                            { user?.role === "user" && ( <CustomBreadcrumbs
                                    heading="Liste Des Annonces"
                                    links={ [
                                           {

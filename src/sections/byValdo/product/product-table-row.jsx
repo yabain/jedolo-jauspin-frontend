@@ -116,12 +116,12 @@ RenderCellStock.propTypes = {
        } ),
 };
 
-export function RenderCellProductXs( { params, mettreALaUne, Sponsoriser, onEdit, onDelete } )
+export function RenderCellProductXs( { params, mettreALaUne, Sponsoriser, onEdit, onDelete, clickFromProfile } )
 {
        return (
               <Stack sx={ { py: 2, width: 1 } }>
 
-                     <JobItem job={ params.row } Sponsoriser={ Sponsoriser } mettreALaUne={ mettreALaUne } onEdit={ onEdit } onDelete={ onDelete } />
+                     <JobItem clickFromProfile={ clickFromProfile } job={ params.row } Sponsoriser={ Sponsoriser } mettreALaUne={ mettreALaUne } onEdit={ onEdit } onDelete={ onDelete } />
 
 
               </Stack>
@@ -198,4 +198,5 @@ RenderCellProductXs.propTypes = {
        Sponsoriser: PropTypes.func,
        onDelete: PropTypes.func,
        onEdit: PropTypes.func,
+       clickFromProfile: PropTypes.func
 };

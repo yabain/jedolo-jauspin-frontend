@@ -1,14 +1,14 @@
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import { useAuthContext } from 'src/auth/hooks';
-import { useSnackbar } from 'notistack';
+// import { useSnackbar } from 'notistack';
 import { useLocation } from 'react-router';
-import { fData } from 'src/utils/format-number';
-import { Controller, FormProvider, useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { LoadingButton } from '@mui/lab';
-import { ConfirmDialog } from 'src/components/custom-dialog';
-import { RHFAutocomplete, RHFTextField, RHFUploadAvatar } from 'src/components/hook-form';
+// import { fData } from 'src/utils/format-number';
+// import { Controller, FormProvider, useForm } from 'react-hook-form';
+// import { yupResolver } from '@hookform/resolvers/yup';
+// import { LoadingButton } from '@mui/lab';
+// import { ConfirmDialog } from 'src/components/custom-dialog';
+// import { RHFAutocomplete, RHFTextField, RHFUploadAvatar } from 'src/components/hook-form';
 import PropTypes from 'prop-types';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Box, Button, Chip, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, InputAdornment, Rating, Switch, Typography } from '@mui/material';
@@ -57,7 +57,7 @@ export default function DialogAnnoncePaimentInProcess( { showDialog, dataGet, up
 
 
 
-       const dataTransaction = useCallback( () => ( { id: Date.now(), transactorEmail: user.email, type: 'creation annonce', dataType: [], date: Date.now(), montant: 2600, statut: 'paid', anonnceId: dataGet.id, anonnceName: dataGet.name } ), [ user.email, dataGet.name, dataGet.id ] );
+       const dataTransaction = useCallback( () => ( { id: Date.now(), transactorEmail: user?.email, type: 'creation annonce', dataType: [], date: Date.now(), montant: 2600, statut: 'paid', anonnceId: dataGet.id, anonnceName: dataGet.name } ), [ user?.email, dataGet.name, dataGet.id ] );
 
 
 
@@ -90,7 +90,7 @@ export default function DialogAnnoncePaimentInProcess( { showDialog, dataGet, up
                             setMessageStyle( { color: 'green' } ); // Styliser en vert
                             // console.log( 'mis à jour' );
                             dispatch( request( dataGet ) )
-                            dispatch( buyAnnonceCreationRequest( { transactorEmail: user.email, data: dataTransaction() } ) )
+                            dispatch( buyAnnonceCreationRequest( { transactorEmail: user?.email, data: dataTransaction() } ) )
                      }, 5000 );
 
                      const closeTimeout = setTimeout( () =>
@@ -112,7 +112,7 @@ export default function DialogAnnoncePaimentInProcess( { showDialog, dataGet, up
 
               // Retour explicite dans le cas où la condition if échoue
               return undefined;
-       }, [ showDialog, dispatch, dataGet, user.email, dataTransaction ] ); // Ce useEffect dépend de la valeur de showDialog
+       }, [ showDialog, dispatch, dataGet, user?.email, dataTransaction ] ); // Ce useEffect dépend de la valeur de showDialog
 
 
        // console.log( 'mesaaaaaage', message );

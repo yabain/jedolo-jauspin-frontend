@@ -22,6 +22,7 @@ import { useRouter } from 'src/routes/hooks';
 import { fDate } from 'src/utils/format-time';
 import { fCurrency, fShortenNumber } from 'src/utils/format-number';
 
+import { useAuthContext } from 'src/auth/hooks';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -33,6 +34,7 @@ import { LoadingButton } from '@mui/lab';
 
 import { calculateRatingCounts, calculerMoyenneEtoiles, findMatchingWord } from 'src/1functions/annonces';
 import { useGet } from 'src/1VALDO/hook/comment/useGet';
+import DialogConnect from 'src/1VALDO/components/user/dialog-connect';
 import DialogSignalAnnonce from './view/dialog-signal-Annonce';
 import ProductReviewNewForm from './product-review-new-form';
 // ----------------------------------------------------------------------
@@ -47,8 +49,10 @@ export default function ProductDetailsSummary( {
 } )
 {
        const router = useRouter();
+       const { user } = useAuthContext()
        const review = useBoolean();
        const signal = useBoolean();
+       const connectDialog = useBoolean();
        const [ ratings, setRating ] = useState( [
               {
                      "name": "1 etoile",
@@ -92,8 +96,8 @@ export default function ProductDetailsSummary( {
               totalReviews,
               profile,
               createdAt,
+              age,
               city,
-              contact,
               nbrView,
               inventoryType,
               location,
@@ -180,14 +184,18 @@ export default function ProductDetailsSummary( {
 
        const handleAddCart = useCallback( () =>
        {
-              const phoneNumber = `237${ contact }`;
+              const phoneNumber = `237${ user?.phoneNumber }`;
+              // const phoneNumber = `237${ user.phoneNumber }`;
+              // console.log(phoneNumber);
+
               // const phoneNumber = `237696080087`;
+
+
               const message = encodeURIComponent( 'Bonjour, j\'ai vu votre annonce sur Ndolo, je suis intéressé par vos services. Pouvez-vous me donner plus de détails ?' );
               const whatsappUrl = `https://wa.me/${ phoneNumber }?text=${ message }`;
-
               window.open( whatsappUrl, '_blank' );
 
-       }, [ contact ] );
+       }, [ user?.phoneNumber ] );
 
 
 
@@ -260,7 +268,7 @@ export default function ProductDetailsSummary( {
                      ) } */}
 
                      {/* { fCurrency( price ) } */ }
-                     Âge: 24 ans
+                     Âge: { age } ans
               </Box>
        );
 
@@ -444,7 +452,7 @@ export default function ProductDetailsSummary( {
                      </Button>
 
                      <Button
-                            onClick={ () => { review.onTrue() } }
+                            onClick={ () => ( user ? review.onTrue() : connectDialog.onTrue() ) }
                             sx={ { whiteSpace: 'nowrap', width: '120px' } } size="medium" type="submit" variant="contained"  >
                             Commenter
                      </Button>
@@ -455,7 +463,7 @@ export default function ProductDetailsSummary( {
                             variant="contained"
                             color="error"
                             // onClick={ ()=>{dialogToShow()} }
-                            onClick={ signal.onTrue }
+                            onClick={ () => ( user ? signal.onTrue() : connectDialog.onTrue() ) }
                             startIcon={ <Iconify icon="solar:pen-bold" /> }
                      >
                             Signaler
@@ -591,7 +599,7 @@ export default function ProductDetailsSummary( {
 
                                    { renderRating }
 
-                                   { renderPrice }
+                                   { age && renderPrice }
 
                                    { renderSubDescription }
                             </Stack>
@@ -602,7 +610,7 @@ export default function ProductDetailsSummary( {
 
                             { renderSizeOptions }
 
-                            { renderQuantity }
+                            { location && renderQuantity }
 
                             <Divider sx={ { borderStyle: 'dashed' } } />
 
@@ -617,6 +625,7 @@ export default function ProductDetailsSummary( {
                      {/* </FormProvider> */ }
 
                      <DialogSignalAnnonce showDialog={ signal } />
+                     <DialogConnect showDialog={ connectDialog } />
                      {/* <Dialog open={ signal.value } onClose={ signal.onFalse }   >
                             <FormProvider methods={ methods } onSubmit={ onSubmit }>
                                    <DialogTitle> Add Review </DialogTitle>

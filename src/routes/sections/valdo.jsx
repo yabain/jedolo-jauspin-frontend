@@ -92,7 +92,7 @@ export const route = [
                                                  { path: 'list', element: <UserListPage /> },
                                                  { path: 'new', element: <UserCreatePage /> },
                                                  { path: ':id/edit', element: <UserEditPage /> },
-                                                 { path: 'account', element: <UserAccountPage /> },
+                                                 { path: 'setting', element: <UserAccountPage /> },
                                           ],
                                    },
                             ],

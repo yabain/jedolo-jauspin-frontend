@@ -7,11 +7,11 @@ import { alpha } from '@mui/material/styles';
 import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
-import { useMockedUser } from 'src/hooks/use-mocked-user';
+// import { useMockedUser } from 'src/hooks/use-mocked-user';
 import { useAuthContext } from 'src/auth/hooks';
 import { varHover } from 'src/components/animate';
 import { useSnackbar } from 'src/components/snackbar';
@@ -25,11 +25,11 @@ const OPTIONS = [
 
        {
               label: 'Profile',
-              linkTo: paths.dashboard.user.profile,
+              linkTo: '/home/user/profile',
        },
        {
               label: 'Settings',
-              linkTo: paths.dashboard.user.account,
+              linkTo: '/home/user/setting',
        },
 ];
 
@@ -58,6 +58,7 @@ export default function AccountPopover()
        // const { user } = useMockedUser();
        const { user } = useAuthContext()
        const dispatch = useDispatch();
+       const navigate = useNavigate()
        const { logout } = useAuthContext();
        const { enqueueSnackbar } = useSnackbar();
        const popover = usePopover();
@@ -80,7 +81,21 @@ export default function AccountPopover()
        const handleClickItem = ( path ) =>
        {
               popover.onClose();
-              router.push( path );
+
+              if ( path === '/home/user/profile' )
+              {
+                     navigate(
+                            path,
+                            {
+                                   state: { email: user?.email }  // En supposant que `user?.email` est disponible
+                            } );
+                     console.log( 'emaaaaaaaaaaaaaaaaaaaaaaillllllllll paserr' );
+
+              } else
+              {
+                     router.push( path );
+                     console.log( 'noooooooooooooooooooooooonnnnnnnnn paserr' );
+              }
        };
 
        return (
@@ -185,7 +200,7 @@ export default function AccountPopover()
                             <Stack sx={ { p: 1 } }>
                                    { OPTIONS.map( ( option ) =>
                                    (
-                                          <MenuItem key={ option.label } >
+                                          <MenuItem key={ option.label } onClick={ () => handleClickItem( option.linkTo ) }>
                                                  {/* <MenuItem key={ option.label } onClick={ () => handleClickItem( option.linkTo ) }> */ }
                                                  <Typography
                                                         variant="body2"

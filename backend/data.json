@@ -35,6 +35,57 @@
       "isPublic": true,
       "displayName": " tchinda valdo",
       "id": 1743010167976
+    },
+    "tchindavaldoblair3@gmail.com": {
+      "phoneNumber": "696080087",
+      "gender": "Homme",
+      "location": "charter",
+      "city": "Bafoussam",
+      "country": "Cameroun",
+      "age": "24",
+      "password": "Mapoulette31!",
+      "email": "tchindavaldoblair3@gmail.com",
+      "lastName": "valdo",
+      "firstName": "tchinda",
+      "about": "",
+      "displayName": " tchinda valdo",
+      "id": 1743345783005
+    },
+    "tchindavaldoblair4@gmail.com": {
+      "phoneNumber": "696080087",
+      "gender": "Homme",
+      "location": "charter",
+      "city": "Bafia",
+      "country": "Cameroun",
+      "age": "22",
+      "password": "Mapoulette31!",
+      "email": "tchindavaldoblair4@gmail.com",
+      "lastName": "valdo",
+      "firstName": "tchinda",
+      "photoURL": "",
+      "about": "",
+      "role": "user",
+      "isPublic": true,
+      "displayName": " tchinda valdo",
+      "id": 1743347177100
+    },
+    "tchindavaldoblair6@gmail.com": {
+      "phoneNumber": "696080087",
+      "gender": "Homme",
+      "location": "charter",
+      "city": "Bafoussam",
+      "country": "Cameroun",
+      "age": "24",
+      "password": "Mapoulette31!",
+      "email": "tchindavaldoblair6@gmail.com",
+      "lastName": "valdo",
+      "firstName": "tchinda",
+      "photoURL": "",
+      "about": "",
+      "role": "user",
+      "isPublic": true,
+      "displayName": " tchinda valdo",
+      "id": 1743348112788
     }
   },
   "sponsor": [
@@ -2214,7 +2265,7 @@
       ],
       "aLaUne": true,
       "userEmail": "tchindavaldoblair@gmail.com",
-      "nbrView": 2,
+      "nbrView": 5,
       "nbrComment": 0,
       "rating": "3.00",
       "sponsored": "top"
@@ -2258,7 +2309,7 @@
       ],
       "aLaUne": true,
       "userEmail": "tchindavaldoblair@gmail.com",
-      "nbrView": 1,
+      "nbrView": 2,
       "sponsored": "top"
     },
     {
@@ -2362,7 +2413,7 @@
       "aLaUne": true,
       "userEmail": "tchindavaldoblair@gmail.com",
       "sponsored": "top",
-      "nbrView": 1,
+      "nbrView": 2,
       "nbrComment": 0,
       "rating": 0
     },
@@ -2444,6 +2495,120 @@
       ],
       "aLaUne": false,
       "userEmail": "tchindavaldoblair2@gmail.com"
+    },
+    {
+      "id": 1743256456297,
+      "publish": "published",
+      "price": 4422,
+      "profile": "standard",
+      "createdAt": 1743256456297,
+      "coverUrl": "https://api-dev-minimal-v510.vercel.app/assets/images/cover/cover_2.jpg",
+      "saleLabel": {},
+      "newLabel": {},
+      "taxes": 0,
+      "name": "toooopp",
+      "subDescription": "llllllllllll",
+      "images": [],
+      "city": [
+        "Bangangté"
+      ],
+      "categorie": [
+        "Chatte"
+      ],
+      "localisation": "charter",
+      "seDeplace": "",
+      "personAccept": "",
+      "aLaUne": false,
+      "userEmail": "tchindavaldoblair@gmail.com",
+      "sponsored": "top",
+      "nbrView": 1
+    },
+    {
+      "id": 1743346680244,
+      "publish": "published",
+      "price": 0,
+      "profile": "standard",
+      "createdAt": 1743346680244,
+      "coverUrl": "https://api-dev-minimal-v510.vercel.app/assets/images/cover/cover_2.jpg",
+      "saleLabel": {},
+      "newLabel": {},
+      "taxes": 0,
+      "name": "tchhhhhhhhhh3333333333",
+      "subDescription": "dd",
+      "images": [],
+      "city": [],
+      "categorie": [],
+      "localisation": "",
+      "seDeplace": "",
+      "personAccept": "",
+      "aLaUne": false,
+      "userEmail": "tchindavaldoblair3@gmail.com"
+    },
+    {
+      "id": 1743347228110,
+      "publish": "published",
+      "price": 222,
+      "profile": "standard",
+      "createdAt": 1743347228110,
+      "coverUrl": "https://api-dev-minimal-v510.vercel.app/assets/images/cover/cover_2.jpg",
+      "saleLabel": {},
+      "newLabel": {},
+      "taxes": 0,
+      "name": "tch444",
+      "subDescription": "ddddd",
+      "images": [],
+      "city": [
+        "Bangangté"
+      ],
+      "categorie": [
+        "Chatte"
+      ],
+      "localisation": "",
+      "seDeplace": [
+        "Oui"
+      ],
+      "personAccept": [
+        "Femme"
+      ],
+      "aLaUne": true,
+      "userEmail": "tchindavaldoblair4@gmail.com",
+      "nbrView": 2,
+      "sponsored": "top",
+      "nbrComment": 0,
+      "rating": "2.00"
+    },
+    {
+      "id": 1743348155361,
+      "publish": "published",
+      "price": 4422,
+      "profile": "standard",
+      "createdAt": 1743348155360,
+      "coverUrl": "https://api-dev-minimal-v510.vercel.app/assets/images/cover/cover_2.jpg",
+      "saleLabel": {},
+      "newLabel": {},
+      "taxes": 0,
+      "name": "tchh6666666",
+      "subDescription": "tchh6666666",
+      "images": [],
+      "city": [
+        "Bafia"
+      ],
+      "categorie": [
+        "Chatte"
+      ],
+      "localisation": "charter",
+      "seDeplace": [
+        "Oui"
+      ],
+      "personAccept": [
+        "Femme"
+      ],
+      "aLaUne": true,
+      "userEmail": "tchindavaldoblair6@gmail.com",
+      "sponsored": "top",
+      "nbrView": 1,
+      "nbrComment": 0,
+      "rating": "2.00"
     }
   ],
   "comments": {
@@ -2962,6 +3127,32 @@
         "isPurchased": false,
         "avatarUrl": "https://api-dev-minimal-v510.vercel.app/assets/images/avatar/avatar_8.jpg"
       }
+    ],
+    "1743347228110": [
+      {
+        "rating": 2,
+        "comment": "ddd",
+        "name": " tchinda valdo",
+        "email": "tchindavaldoblair4@gmail.com",
+        "id": 1743347390764,
+        "commenterId": 1743347177100,
+        "postedAt": 1743347390764,
+        "isPurchased": false,
+        "avatarUrl": "https://api-dev-minimal-v510.vercel.app/assets/images/avatar/avatar_8.jpg"
+      }
+    ],
+    "1743348155361": [
+      {
+        "rating": 2,
+        "comment": "ggg",
+        "name": " tchinda valdo",
+        "email": "tchindavaldoblair6@gmail.com",
+        "id": 1743348352382,
+        "commenterId": 1743348112788,
+        "postedAt": 1743348352382,
+        "isPurchased": false,
+        "avatarUrl": "https://api-dev-minimal-v510.vercel.app/assets/images/avatar/avatar_8.jpg"
+      }
     ]
   },
   "signal": {
@@ -3096,6 +3287,22 @@
         "comment": "singal show user",
         "signalerId": 1742912329323,
         "date": "2025-03-26T16:52:16.168Z"
+      }
+    ],
+    "1743347228110": [
+      {
+        "comment": "fff",
+        "signalerId": 1743347177100,
+        "date": "2025-03-30T15:09:57.079Z",
+        "signalerEmail": "tchindavaldoblair4@gmail.com"
+      }
+    ],
+    "1743348155361": [
+      {
+        "comment": "gggg",
+        "signalerId": 1743348112788,
+        "date": "2025-03-30T15:25:56.304Z",
+        "signalerEmail": "tchindavaldoblair6@gmail.com"
       }
     ]
   },
@@ -3964,6 +4171,72 @@
         "date": 1742972424789,
         "montant": 5000,
         "statut": "paid"
+      },
+      {
+        "id": 1743256463664,
+        "transactorEmail": "tchindavaldoblair@gmail.com",
+        "type": "creation annonce",
+        "dataType": [],
+        "date": 1743256463664,
+        "montant": 2600,
+        "statut": "paid",
+        "anonnceId": 1743256456297,
+        "anonnceName": "toooopp"
+      },
+      {
+        "id": 1743256523959,
+        "transactorEmail": "tchindavaldoblair@gmail.com",
+        "type": "achat Sponsor",
+        "dataType": [
+          "top"
+        ],
+        "date": 1743256523959,
+        "montant": 5000,
+        "statut": "paid"
+      },
+      {
+        "id": 1743256585953,
+        "transactorEmail": "tchindavaldoblair@gmail.com",
+        "type": "achat Sponsor",
+        "dataType": [
+          "top"
+        ],
+        "date": 1743256585953,
+        "montant": 5000,
+        "statut": "paid"
+      },
+      {
+        "id": 1743256586007,
+        "transactorEmail": "tchindavaldoblair@gmail.com",
+        "type": "achat Sponsor",
+        "dataType": [
+          "top"
+        ],
+        "date": 1743256586007,
+        "montant": 5000,
+        "statut": "paid"
+      },
+      {
+        "id": 1743256819739,
+        "transactorEmail": "tchindavaldoblair@gmail.com",
+        "type": "achat Sponsor",
+        "dataType": [
+          "top"
+        ],
+        "date": 1743256819739,
+        "montant": 5000,
+        "statut": "paid"
+      },
+      {
+        "id": 1743257470197,
+        "transactorEmail": "tchindavaldoblair@gmail.com",
+        "type": "achat Sponsor",
+        "dataType": [
+          "top"
+        ],
+        "date": 1743257470197,
+        "montant": 5000,
+        "statut": "paid"
       }
     ],
     "tchindavaldoblair2@gmail.com": [
@@ -3977,6 +4250,112 @@
         "statut": "paid",
         "anonnceId": 1743011690684,
         "anonnceName": "terrain a vendre a bannekane tch2"
+      }
+    ],
+    "tchindavaldoblair3@gmail.com": [
+      {
+        "id": 1743346687110,
+        "transactorEmail": "tchindavaldoblair3@gmail.com",
+        "type": "creation annonce",
+        "dataType": [],
+        "date": 1743346687110,
+        "montant": 2600,
+        "statut": "paid",
+        "anonnceId": 1743346680244,
+        "anonnceName": "tchhhhhhhhhh3333333333"
+      }
+    ],
+    "tchindavaldoblair4@gmail.com": [
+      {
+        "id": 1743347234090,
+        "transactorEmail": "tchindavaldoblair4@gmail.com",
+        "type": "creation annonce",
+        "dataType": [],
+        "date": 1743347234090,
+        "montant": 2600,
+        "statut": "paid",
+        "anonnceId": 1743347228110,
+        "anonnceName": "tch444"
+      },
+      {
+        "id": 1743347287860,
+        "transactorEmail": "tchindavaldoblair4@gmail.com",
+        "type": "achat Sponsor",
+        "dataType": [
+          "top"
+        ],
+        "date": 1743347287860,
+        "montant": 5000,
+        "statut": "paid"
+      },
+      {
+        "id": 1743347305541,
+        "transactorEmail": "tchindavaldoblair4@gmail.com",
+        "type": "mise a la une",
+        "dataType": [],
+        "date": 1743347305541,
+        "montant": 6000,
+        "statut": "paid"
+      },
+      {
+        "id": 1743347499216,
+        "transactorEmail": "tchindavaldoblair4@gmail.com",
+        "type": "mise a la une",
+        "dataType": [],
+        "date": 1743347499216,
+        "montant": 6000,
+        "statut": "paid"
+      },
+      {
+        "id": 1743347750574,
+        "transactorEmail": "tchindavaldoblair4@gmail.com",
+        "type": "mise a la une",
+        "dataType": [],
+        "date": 1743347750574,
+        "montant": 6000,
+        "statut": "paid"
+      }
+    ],
+    "tchindavaldoblair6@gmail.com": [
+      {
+        "id": 1743348162074,
+        "transactorEmail": "tchindavaldoblair6@gmail.com",
+        "type": "creation annonce",
+        "dataType": [],
+        "date": 1743348162074,
+        "montant": 2600,
+        "statut": "paid",
+        "anonnceId": 1743348155361,
+        "anonnceName": "tchh6666666"
+      },
+      {
+        "id": 1743348214260,
+        "transactorEmail": "tchindavaldoblair6@gmail.com",
+        "type": "achat Sponsor",
+        "dataType": [
+          "top"
+        ],
+        "date": 1743348214260,
+        "montant": 5000,
+        "statut": "paid"
+      },
+      {
+        "id": 1743348227259,
+        "transactorEmail": "tchindavaldoblair6@gmail.com",
+        "type": "mise a la une",
+        "dataType": [],
+        "date": 1743348227259,
+        "montant": 6000,
+        "statut": "paid"
+      },
+      {
+        "id": 1743348251008,
+        "transactorEmail": "tchindavaldoblair6@gmail.com",
+        "type": "mise a la une",
+        "dataType": [],
+        "date": 1743348251008,
+        "montant": 6000,
+        "statut": "paid"
       }
     ]
   },
@@ -3992,6 +4371,22 @@
         "signalerId": 1742912329323,
         "date": "2025-03-26T17:15:08.929Z",
         "signalerEmail": "tchindavaldoblair@gmail.com"
+      }
+    ],
+    "tchindavaldoblair4@gmail.com": [
+      {
+        "comment": "fff",
+        "signalerId": 1743347177100,
+        "date": "2025-03-30T15:09:57.079Z",
+        "signalerEmail": "tchindavaldoblair4@gmail.com"
+      }
+    ],
+    "tchindavaldoblair6@gmail.com": [
+      {
+        "comment": "gggg",
+        "signalerId": 1743348112788,
+        "date": "2025-03-30T15:25:56.304Z",
+        "signalerEmail": "tchindavaldoblair6@gmail.com"
       }
     ]
   }

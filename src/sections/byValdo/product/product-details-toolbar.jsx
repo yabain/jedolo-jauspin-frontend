@@ -23,12 +23,15 @@ export default function ProductDetailsToolbar( {
        liveLink,
        publishOptions,
        onChangePublish,
+       data,
        sx,
        ...other
 } )
 {
        const popover = usePopover();
        const navigate = useNavigate()
+
+       console.log( data, 'toooooooooooooooo' );
 
        return (
               <>
@@ -70,11 +73,21 @@ export default function ProductDetailsToolbar( {
                                    variant="contained"
                                    loading={ !publish }
                                    loadingIndicator="Loading…"
-                                   endIcon={ <Iconify icon="eva:arrow-ios-downward-fill" /> }
-                                   // onClick={ popover.onOpen }
+                                   onClick={
+                                          () =>
+                                          {
+                                                 navigate(
+                                                        '/home/user/profile',
+                                                        {
+                                                               state: { email: data.userEmail, data }  // En supposant que `user?.email` est disponible
+                                                        } )
+                                          }
+
+                                   }
                                    sx={ { textTransform: 'capitalize' } }
                             >
-                                   Profil
+                                   Profil de l&apos;annonceur
+
                             </LoadingButton>
                      </Stack >
 
@@ -111,5 +124,6 @@ ProductDetailsToolbar.propTypes = {
        onChangePublish: PropTypes.func,
        publish: PropTypes.string,
        publishOptions: PropTypes.array,
+       data: PropTypes.object,
        sx: PropTypes.object,
 };

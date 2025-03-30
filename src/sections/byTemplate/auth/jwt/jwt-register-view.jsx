@@ -52,11 +52,17 @@ export default function JwtRegisterView()
               email: Yup.string()
                      .required( "L'email est requis" )
                      .email( "L'email doit être une adresse email valide" ),
-              password: Yup.string().required( "Le mot de passe est requis" ),
+              password: Yup.string()
+                     .required( "Le mot de passe est requis" )
+                     .min( 8, "Le mot de passe doit contenir au moins 8 caractères" )
+                     .matches(
+                            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
+                            "Le mot de passe doit contenir au moins une majuscule, une minuscule, un chiffre et un caractère spécial"
+                     ),
               age: Yup.string().required( "L'âge est requis" ),
               country: Yup.string().required( "Le pays est requis" ),
               city: Yup.string().required( "La ville est requise" ),
-              localisation: Yup.string().required( "Le quartier est requis" ),
+              location: Yup.string().required( "Le quartier est requis" ),
               gender: Yup.string().required( "Le sexe est requis" ),
               phoneNumber: Yup.string().required( "Le numéro de téléphone est requis" ),
        } );
@@ -70,7 +76,7 @@ export default function JwtRegisterView()
               age: '',
               country: 'Cameroun',
               city: '',
-              localisation: '',
+              location: '',
               gender: '',
               phoneNumber: '',
        };
@@ -176,7 +182,7 @@ export default function JwtRegisterView()
                      </Stack>
 
                      <Stack direction={ { xs: 'row', sm: 'row' } } spacing={ 2 }>
-                            <RHFTextField sx={ { flex: 1 } } name="localisation" label="Quartier" />
+                            <RHFTextField sx={ { flex: 1 } } name="location" label="Quartier" />
                             <RHFAutocomplete
                                    name="gender"
                                    label="Sexe"

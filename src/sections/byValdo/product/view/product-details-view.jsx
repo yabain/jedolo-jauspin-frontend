@@ -202,6 +202,7 @@ export default function ProductDetailsView( { id } )
                             publish={ publish || '' }
                             onChangePublish={ handleChangePublish }
                             publishOptions={ PRODUCT_PUBLISH_OPTIONS }
+                            data={ product }
                      />
 
                      <Grid container spacing={ { xs: 3, md: 5, lg: 8 } } >

@@ -17,7 +17,7 @@ import Tabs from '@mui/material/Tabs';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
-import { deleteAnnonceInArray, deleteObjectFromTabObjetc, normalizeString, updateObjectFromTabObjetc } from 'src/1functions/annonces';
+import { deleteAnnonceInArray, deleteObjectFromTabObjetc, normalizeString, trierAnnonces, updateObjectFromTabObjetc } from 'src/1functions/annonces';
 
 import { paths } from 'src/routes/paths';
 import { useBoolean } from 'src/hooks/use-boolean';
@@ -474,8 +474,10 @@ export default function PostListView( { setAfterFilter } )
 
               finallyFilteredPrice = filterByPriceRange2( mergedFilters, minPrice, maxPrice )
               const sortedPosts = sortPostsByOrder2( finallyFilteredPrice, order )
-              setAfterFilter( sortedPosts )
-              setFilteredPosts( sortedPosts )
+              setAfterFilter( trierAnnonces( sortedPosts ) )
+              // console.log(sortedPosts);
+
+              setFilteredPosts( trierAnnonces( sortedPosts ) )
 
 
 
@@ -557,7 +559,18 @@ export default function PostListView( { setAfterFilter } )
 
        useEffect( () =>
        {
-              setFilteredPosts( annonceFromStore );
+              if ( annonceFromStore.length !== 0 )
+              {
+
+                     setFilteredPosts( trierAnnonces( annonceFromStore ) );
+
+              } else
+              {
+                     setFilteredPosts( annonceFromStore )
+
+                            ;
+              }
+
 
        }, [ annonceFromStore ] );
 

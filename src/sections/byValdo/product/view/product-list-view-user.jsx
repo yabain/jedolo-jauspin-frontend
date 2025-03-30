@@ -216,7 +216,7 @@ export default function ProductListViewUser( { toShow } )
 
 
 
-                     dispatch( getList( user.email ) )
+                     dispatch( getList( user?.email ) )
 
                      // console.log( 'fonction de chargement de data appeler', annonceList );
 
@@ -299,14 +299,14 @@ export default function ProductListViewUser( { toShow } )
               // Écouter l'événement 'new-annonce' pour mettre à jour les annonces en temps réel
               socket.on( 'new-annonce', ( newAnnonce ) =>
               {
-                     if ( newAnnonce.userEmail === user.email ) dispatch( addData( newAnnonce ) )
+                     if ( newAnnonce.userEmail === user?.email ) dispatch( addData( newAnnonce ) )
                      console.log( 'nouvelle annonce detecter', newAnnonce );
 
               } );
 
               return () => { socket.disconnect(); };
 
-       }, [ dispatch, annonceFromStore, user.email ] );
+       }, [ dispatch, annonceFromStore, user?.email ] );
 
 
 
@@ -647,7 +647,7 @@ export default function ProductListViewUser( { toShow } )
                                    flexDirection: 'column',
                             } }
                      >
-                            { user.role === "user" && ( <CustomBreadcrumbs
+                            { user?.role === "user" && ( <CustomBreadcrumbs
                                    heading="Liste Des Annonces"
                                    links={ [
                                           {

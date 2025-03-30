@@ -33,7 +33,7 @@ export function useGetSignalAnnonces( dataGet, isActive = true )
 
        useEffect( () => () => handleReset(), [ handleReset ] );
        useEffect( () => { if ( isFulled && !isPending && isActive ) handleEnque(); }, [ isFulled, isPending, isActive, handleEnque ] );
-       useEffect( () => { if ( !isFulled && !isPending && isActive ) dispatch( request( { userId: user.email } ) ); }, [ isFulled, isPending, isActive, user.email, dispatch ] );
+       useEffect( () => { if ( !isFulled && !isPending && isActive ) dispatch( request( { userId: user?.email } ) ); }, [ isFulled, isPending, isActive, user?.email, dispatch ] );
        useEffect( () => { if ( isFulled && !isPending && isActive && !isLoad ) { dataGet( data.signalAnnonce ); setIsLoad( true ) } }, [ isLoad, isFulled, isPending, isActive, dataGet, data ] );
 
 

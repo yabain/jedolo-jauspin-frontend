@@ -6,6 +6,7 @@ import Button from '@mui/material/Button';
 import { useTheme } from '@mui/material/styles';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Unstable_Grid2';
+import { trierAnnonces } from 'src/1functions/annonces';
 
 import { Box, display } from '@mui/system';
 import { useMockedUser } from 'src/hooks/use-mocked-user';
@@ -55,8 +56,10 @@ export default function Home()
 
        useEffect( () =>
        {
-              setHeadlineAnnouncement( setAlaUne( annonceFromStore ) )
+              setHeadlineAnnouncement( trierAnnonces( setAlaUne( annonceFromStore ) ) )
               // console.log( setAlaUne( annonceFromStore ) );
+              // console.table( HeadlineAnnouncement.map( item => ( { sponsored: item.sponsored } ) ) );
+
 
 
 

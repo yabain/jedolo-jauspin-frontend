@@ -10,6 +10,8 @@ const HOST_DEV3 = 'http://192.168.213.1:5000'
 const HOST_DEV4 = 'http://192.168.1.127:5000'
 const HOST_DEV5 = 'http://192.168.58.1:5000'
 
+const HOST_DEV6 = 'http://localhost:3000'
+
 
 
 
@@ -25,7 +27,7 @@ const HOST_BACK_PROD = ''
 
 
 export const HOST_PORT = PORT;
-export const HOST_BACKEND_URL = HOST_FRONT_PROD;
+export const HOST_BACKEND_URL = HOST_DEV1;
 export const HOST_FRONTEND_URL = HOST_FRONT_DEV1;
 
 

@@ -33,6 +33,7 @@ import { useDispatch } from 'react-redux';
 
 export default function BookingNewest( { title, subheader, list, sx, ...other } )
 {
+       // console.table( list.map( item => ( { sponsored: item.sponsored } ) ) );
 
        const theme = useTheme();
 
@@ -77,13 +78,35 @@ export default function BookingNewest( { title, subheader, list, sx, ...other } 
                                    mb: 3,
                             } }
                      />
+                     {/* 
+                     <Carousel sx={ { width: "100px" } } ref={ carousel.carouselRef } { ...carousel.carouselSettings }>
+                            { ( () =>
+                            {
+                                   console.table( list.map( item => ( { sponsored: item.sponsored } ) ) ); // Log pour débogage
+                                   return list.map( ( item ) => (
+                                          <BookingItem key={ item.id } item={ item } />
+                                   ) );
+                            } )() }
+                     </Carousel> */}
 
-                     <Carousel sx={ {
-                            width: "100px",
-                     } } ref={ carousel.carouselRef } { ...carousel.carouselSettings }>
-                            { list.map( ( item ) => (
-                                   <BookingItem key={ item.id } item={ item } />
-                            ) ) }
+                     <Carousel sx={ { width: "100px" } } ref={ carousel.carouselRef } { ...carousel.carouselSettings }>
+                            { ( () =>
+                            {
+                                   // console.table( list.map( item => ( { sponsored: item.sponsored } ) ) ); // Log pour débogage
+
+                                   // Créer un tableau avec 4 éléments au minimum
+                                   const itemsToRender = [ ...list ];
+                                   while ( itemsToRender.length < 4 )
+                                   {
+                                          itemsToRender.push( { id: `empty-${ itemsToRender.length }`, isEmpty: true } );
+                                   }
+
+                                   return itemsToRender.map( ( item ) => (
+                                          item.isEmpty
+                                                 ? <div key={ item.id } style={ { width: "100%", visibility: "hidden" } } />
+                                                 : <BookingItem key={ item.id } item={ item } />
+                                   ) );
+                            } )() }
                      </Carousel>
 
               </Box>
@@ -104,6 +127,7 @@ function BookingItem( { item } )
 
        const { avatarUrl, name, createdAt, guests, coverUrl, price, sponsored } = item;
 
+       // console.log( sponsored );
 
        const navigate = useNavigate();
        dayjs.extend( relativeTime );

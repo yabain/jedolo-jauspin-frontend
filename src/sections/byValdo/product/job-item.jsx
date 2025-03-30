@@ -23,7 +23,7 @@ import Label from 'src/components/label';
 
 // ----------------------------------------------------------------------
 
-export default function JobItem( { job, mettreALaUne, Sponsoriser, onEdit, onDelete } )
+export default function JobItem( { job, mettreALaUne, Sponsoriser, onEdit, onDelete, clickFromProfile } )
 {
        const popover = usePopover();
 
@@ -141,50 +141,66 @@ export default function JobItem( { job, mettreALaUne, Sponsoriser, onEdit, onDel
                             arrow="right-top"
                             sx={ { width: 140 } }
                      >
-                            <MenuItem
-                                   onClick={ () =>
-                                   {
+                            {
+                                   clickFromProfile === undefined ? (
+                                          <>
+                                                 <MenuItem
+                                                        onClick={ () =>
+                                                        {
+                                                               mettreALaUne();
+                                                        } }
+                                                 >
+                                                        <Iconify icon="solar:eye-bold" />
+                                                        Mettre à la une
+                                                 </MenuItem>
 
-                                          mettreALaUne();
-                                   } }
-                            >
-                                   <Iconify icon="solar:eye-bold" />
-                                   Mettre à la une
-                            </MenuItem>
+                                                 <MenuItem
+                                                        onClick={ () =>
+                                                        {
+                                                               popover.onClose();
+                                                               Sponsoriser();
+                                                        } }
+                                                 >
+                                                        <Iconify icon="solar:pen-bold" />
+                                                        Sponsoriser
+                                                 </MenuItem>
 
-                            <MenuItem
-                                   onClick={ () =>
-                                   {
-                                          popover.onClose();
-                                          Sponsoriser();
-                                   } }
-                            >
-                                   <Iconify icon="solar:pen-bold" />
-                                   Sponsoriser
-                            </MenuItem>
-                            <MenuItem
-                                   onClick={ () =>
-                                   {
-                                          popover.onClose();
-                                          onEdit();
-                                   } }
-                            >
-                                   <Iconify icon="solar:pen-bold" />
-                                   Modifier
-                            </MenuItem>
+                                                 <MenuItem
+                                                        onClick={ () =>
+                                                        {
+                                                               popover.onClose();
+                                                               onEdit();
+                                                        } }
+                                                 >
+                                                        <Iconify icon="solar:pen-bold" />
+                                                        Modifier
+                                                 </MenuItem>
 
-                            <MenuItem
-                                   onClick={ () =>
-                                   {
-                                          popover.onClose();
-                                          onDelete();
-                                   } }
-                                   sx={ { color: 'error.main' } }
-                            >
-                                   <Iconify icon="solar:trash-bin-trash-bold" />
-                                   Supprimer
-                            </MenuItem>
-
+                                                 <MenuItem
+                                                        onClick={ () =>
+                                                        {
+                                                               popover.onClose();
+                                                               onDelete();
+                                                        } }
+                                                        sx={ { color: 'error.main' } }
+                                                 >
+                                                        <Iconify icon="solar:trash-bin-trash-bold" />
+                                                        Supprimer
+                                                 </MenuItem>
+                                          </>
+                                   ) : (
+                                          <MenuItem
+                                                 onClick={ () =>
+                                                 {
+                                                        popover.onClose();
+                                                        clickFromProfile();
+                                                 } }
+                                          >
+                                                 <Iconify icon="solar:eye-bold" />
+                                                 Voir
+                                          </MenuItem>
+                                   )
+                            }
 
                      </CustomPopover>
               </>
@@ -197,4 +213,5 @@ JobItem.propTypes = {
        Sponsoriser: PropTypes.func,
        onDelete: PropTypes.func,
        onEdit: PropTypes.func,
+       clickFromProfile: PropTypes.func
 };

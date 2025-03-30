@@ -421,7 +421,7 @@ function applyFilter( { inputData, comparator, filters } )
 
        if ( role.length )
        {
-              inputData = inputData.filter( ( user ) => role.includes( user.role ) );
+              inputData = inputData.filter( ( user ) => role.includes( user?.role ) );
        }
 
        return inputData;

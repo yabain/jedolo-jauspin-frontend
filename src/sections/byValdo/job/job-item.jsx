@@ -34,7 +34,7 @@ export default function JobItem( { job, onView, onEdit, onDelete } )
               <>
                      <Card>
                             <IconButton onClick={ popover.onOpen } sx={ { position: 'absolute', top: 8, right: 8 } }>
-                                   banir
+
                                    <Iconify icon="eva:more-vertical-fill" />
                             </IconButton>
 

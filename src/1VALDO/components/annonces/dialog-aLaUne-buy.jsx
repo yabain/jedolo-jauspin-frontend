@@ -75,7 +75,7 @@ export default function DialogALaUneBuy( { showDialog, dataGet, updateDataAfterS
        // fonction use
 
        const log = ( message ) => { console.log( message ); };
-       const dataTransaction = useCallback( () => ( { id: Date.now(), transactorEmail: user.email, type: 'mise a la une', dataType: [], date: Date.now(), montant: 6000, statut: 'paid', anonnceId: dataGet?.id, anonnceName: dataGet?.name } ), [ user.email, dataGet?.name, dataGet?.id ] );
+       const dataTransaction = useCallback( () => ( { id: Date.now(), transactorEmail: user?.email, type: 'mise a la une', dataType: [], date: Date.now(), montant: 6000, statut: 'paid', anonnceId: dataGet?.id, anonnceName: dataGet?.name } ), [ user?.email, dataGet?.name, dataGet?.id ] );
 
 
 
@@ -87,7 +87,7 @@ export default function DialogALaUneBuy( { showDialog, dataGet, updateDataAfterS
        const { reset, setValue, handleSubmit, watch } = methods;
        const resetAfterSuccess = () => { reset(); setSubmiting( false ); showDialog.onFalse() }
        const afterTransactionadd = () => { startPaiement.onTrue(); showDialog.onFalse() }
-       const onSubmit = handleSubmit( ( data ) => { dispatch( request( { transactorEmail: user.email, data: dataTransaction() } ) ) } );
+       const onSubmit = handleSubmit( ( data ) => { dispatch( request( { transactorEmail: user?.email, data: dataTransaction() } ) ) } );
 
 
 

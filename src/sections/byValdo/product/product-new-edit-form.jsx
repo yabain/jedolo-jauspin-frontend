@@ -305,7 +305,7 @@ export default function ProductNewEditForm( { currentProduct2 } )
                             ...data,
                             aLaUne,
                             id: !currentProduct ? Date.now() : Number( currentProduct.id ),
-                            userEmail: !currentProduct ? user.email : currentProduct.userEmail
+                            userEmail: !currentProduct ? user?.email : currentProduct.userEmail
 
 
                      }
@@ -317,7 +317,7 @@ export default function ProductNewEditForm( { currentProduct2 } )
                             setDataToAdd( object )
                             showDialog.onTrue()
 
-                            // console.log( 'email du user', user.email, 'user email envoyer', object.userEmail );
+                            // console.log( 'email du user', user?.email, 'user email envoyer', object.userEmail );
                             // console.log( 'dtaa to add', object );
 
                      }
@@ -328,7 +328,7 @@ export default function ProductNewEditForm( { currentProduct2 } )
 
                             dispatch( updateAnnoncesRequest( object ) )
                             // console.log( 'dtaa to add', object );
-                            // console.log( 'email du user', user.email, 'user email envoyer', object.userEmail );
+                            // console.log( 'email du user', user?.email, 'user email envoyer', object.userEmail );
 
                      }
 
@@ -802,7 +802,7 @@ export default function ProductNewEditForm( { currentProduct2 } )
                      <Grid xs={ 12 } md={ 8 } sx={ { display: 'flex', alignItems: 'center' } }>
 
 
-                            {/* { user.role === "admin" && <FormControlLabel
+                            {/* { user?.role === "admin" && <FormControlLabel
                                    control={ <Switch checked={ aLaUne } onChange={ handleChange } /> }
                                    label="A la lune"
                                    sx={ { flexGrow: 1, pl: 3 } }

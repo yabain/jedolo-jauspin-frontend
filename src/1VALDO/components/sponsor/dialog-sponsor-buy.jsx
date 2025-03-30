@@ -65,7 +65,7 @@ export default function DialogSponsorBuy( { showDialog, dataGet, updateDataAfter
 
 
        const descriptionValidation = Yup.string().required( 'Description is required' );
-       const dataTransaction = useCallback( () => ( { id: Date.now(), transactorEmail: user.email, type: 'achat Sponsor', dataType: [ 'top' ], date: Date.now(), montant: 5000, statut: 'paid', anonnceId: dataGet?.id, anonnceName: dataGet?.name } ), [ user.email, dataGet?.name, dataGet?.id ] );
+       const dataTransaction = useCallback( () => ( { id: Date.now(), transactorEmail: user?.email, type: 'achat Sponsor', dataType: [ 'top' ], date: Date.now(), montant: 5000, statut: 'paid', anonnceId: dataGet?.id, anonnceName: dataGet?.name } ), [ user?.email, dataGet?.name, dataGet?.id ] );
        // const ReviewSchema = Yup.object().shape( { description: descriptionValidation } );
        const methods = useForm( { defaultValues, } );
 
@@ -87,7 +87,7 @@ export default function DialogSponsorBuy( { showDialog, dataGet, updateDataAfter
        const { reset, setValue, handleSubmit, watch } = methods;
        const resetAfterSuccess = () => { reset(); setSubmiting( false ); showDialog.onFalse() }
        const afterTransactionadd = () => { startPaiement.onTrue(); showDialog.onFalse() }
-       const onSubmit = handleSubmit( ( data ) => { dispatch( request( { transactorEmail: user.email, data: dataTransaction() } ) ) } );
+       const onSubmit = handleSubmit( ( data ) => { dispatch( request( { transactorEmail: user?.email, data: dataTransaction() } ) ) } );
 
        useAdd( undefined, afterTransactionadd )
        useGetSponsor( addData )

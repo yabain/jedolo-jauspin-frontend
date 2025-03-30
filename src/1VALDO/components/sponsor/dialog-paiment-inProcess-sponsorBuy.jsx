@@ -99,7 +99,8 @@ export default function DialogPaimentInProcessSponsorBuy( { showDialog, dataGet,
 
 
 
-       useEffect( () => { if ( showDialog.value ) { dispatch( request( { ...dataGet, sponsored: dataGet.sponsored && dataGet.sponsored === "top" ? "premium" : "top" } ) ) } }, [ showDialog, dispatch, dataGet ] );
+       useEffect( () => { if ( showDialog.value ) { dispatch( request( { ...dataGet, sponsored: dataGet.sponsored && dataGet.sponsored === "top" ? "premium" : "top" } ) ) ;console.log(dataGet,'dddddddddddddddsssssssssss');
+       } }, [ showDialog, dispatch, dataGet ] );
        useUpdate( undefined, afterAnnonceUpdateSuccess )
 
 

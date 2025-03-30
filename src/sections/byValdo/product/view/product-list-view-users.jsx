@@ -265,7 +265,7 @@ export default function ProductListViewUsers( { toShow } )
                      dispatch( setAdminData( usersAnnonceList ) )
 
 
-                     dispatch( getList( user.email ) )
+                     dispatch( getList( user?.email ) )
 
 
               }
@@ -774,7 +774,7 @@ export default function ProductListViewUsers( { toShow } )
                                    flexDirection: 'column',
                             } }
                      >
-                            { user.role === "user" && ( <CustomBreadcrumbs
+                            { user?.role === "user" && ( <CustomBreadcrumbs
                                    heading="Liste Des Annonces"
                                    links={ [
                                           {
