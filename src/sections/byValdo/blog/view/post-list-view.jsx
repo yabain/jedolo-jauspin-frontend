@@ -8,6 +8,7 @@ import { io } from 'socket.io-client';
 import { request, resetAfterRequest } from 'src/store/annonces/getUsersAnnonces/reducer';
 import { resetData, setData, addData } from 'src/store/annonces/data/users';
 import { useGet } from 'src/1VALDO/hook/annonce/useGetNbrNew';
+import { HOST_BACKEND_URL } from 'src/config-global';
 import { annonceFromStoreRef, filterByArgumentStingRef, globalFilterRef, handleFilterByTownSelectedRef, selectedTownTabRef, setSelectedTownTabRef, setSelectedUpdateData } from 'src/1data/annonces/ref';
 
 
@@ -55,7 +56,7 @@ export default function PostListView( { setAfterFilter } )
 
 
 
-       const SOCKET_SERVER_URL = "http://localhost:5000"; // L'URL de ton serveur backend
+       const SOCKET_SERVER_URL = HOST_BACKEND_URL; // L'URL de ton serveur backend
 
        const openFilters = useBoolean();
        const dispatch = useDispatch()
@@ -607,7 +608,7 @@ export default function PostListView( { setAfterFilter } )
               {
                      socket.disconnect();
               };
-       }, [ dispatch ] );
+       }, [ dispatch, SOCKET_SERVER_URL ] );
 
 
 
@@ -620,7 +621,7 @@ export default function PostListView( { setAfterFilter } )
 
        useEffect( () =>
        {
-              const socket = io( "http://localhost:5000" );
+              const socket = io( HOST_BACKEND_URL );
               socket.on( 'banned-annonce', ( bannedAnnonce ) =>
               {
 

@@ -31,6 +31,7 @@ import { Box } from '@mui/system';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
+import { HOST_BACKEND_URL } from 'src/config-global';
 import { useMediaQuery, useTheme } from '@mui/material';
 import Container from '@mui/material/Container';
 import
@@ -216,7 +217,7 @@ export default function ProductListViewUser( { toShow } )
 
 
 
-                     dispatch( getList( user?.email ) )
+                     dispatch( getList( user.email ) )
 
                      // console.log( 'fonction de chargement de data appeler', annonceList );
 
@@ -265,7 +266,7 @@ export default function ProductListViewUser( { toShow } )
 
        useEffect( () =>
        {
-              const socket = io( "http://localhost:5000" );
+              const socket = io( HOST_BACKEND_URL );
               socket.on( 'update-annonce', ( update ) =>
               {
 
@@ -299,14 +300,14 @@ export default function ProductListViewUser( { toShow } )
               // Écouter l'événement 'new-annonce' pour mettre à jour les annonces en temps réel
               socket.on( 'new-annonce', ( newAnnonce ) =>
               {
-                     if ( newAnnonce.userEmail === user?.email ) dispatch( addData( newAnnonce ) )
+                     if ( newAnnonce.userEmail === user.email ) dispatch( addData( newAnnonce ) )
                      console.log( 'nouvelle annonce detecter', newAnnonce );
 
               } );
 
               return () => { socket.disconnect(); };
 
-       }, [ dispatch, annonceFromStore, user?.email ] );
+       }, [ dispatch, annonceFromStore, user.email ] );
 
 
 

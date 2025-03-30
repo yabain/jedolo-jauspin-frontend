@@ -27,8 +27,9 @@ export default function JobItem( { job, onView, onEdit, onDelete } )
 {
        const popover = usePopover();
 
-       const { id, anonnceName, sponsorAnnonce, aLaUne, coverUrl, date, signalerEmail, comment } =
-              job;
+       const { id, anonnceName, sponsorAnnonce, aLaUne, coverUrl, date, signalerEmail, comment } = job;
+       console.log( job );
+
 
        return (
               <>

@@ -1,5 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { updateAnnonceInArray } from 'src/1functions/annonces';
 import * as service from './service';
+import { setData } from '../data/dataReducer';
 
 
 
@@ -102,3 +104,33 @@ export const getSlice = createSlice( {
 export default getSlice.reducer
 export const { resetAfterRequest } = getSlice.actions;
 export const request = createAsyncThunk( 'update/annonce', async ( data ) => service.request( data ) )
+
+
+
+
+// export const request = createAsyncThunk(
+//        'update/annonce',
+//        async ( data, thunkAPI = {} ) =>
+//        {  // thunkAPI est optionnel
+
+//               // Extraction des paramètres avec valeurs par défaut
+//               const { getState = () => ( {} ), dispatch = () => { } } = thunkAPI;
+
+//               const state = getState();
+
+//               const annonceFromStore = state.annonces?.data || []; // Fallback si annonces n'existe pas
+
+//               const response = await service.request( data );
+
+//               // Si dispatch est disponible, on met à jour l'autre reducer
+
+//               console.log( 'execccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc' );
+//               if ( dispatch && getState )
+//               {
+//                      dispatch( setData( updateAnnonceInArray( annonceFromStore, data ) ) );
+//               }
+
+//               return { data: response.data };
+
+//        }
+// );

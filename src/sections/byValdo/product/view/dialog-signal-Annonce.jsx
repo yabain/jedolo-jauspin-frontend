@@ -51,8 +51,51 @@ export default function DialogSignalAnnonce( { showDialog } )
 
 
        const { reset, handleSubmit } = methods;
+
+       const annonceToSend = {
+              annonceId: annonce.id,
+              data: {
+                     signaledUserAnnonceId: annonce.userEmail,
+                     coverUrl: annonce.coverUrl,
+                     aLaUne: annonce.aLaUne,
+                     sponsorAnnonce: annonce.sponsored,
+                     anonnceName: annonce.name
+              }
+       }
+
+       // console.log( annonceToSend );
+
        const resetAfterSuccess = () => { reset(); setSubmiting( false ); showDialog.onFalse() }
-       const onSubmit = handleSubmit( ( data ) => { setSubmiting( true ); dispatch( request( { annonceId: annonce.id, data: { ...data, signalerId: user.id, date: new Date(), signalerEmail: user?.email }, signaledUserAnnonceId: annonce.userEmail } ) ) } );
+
+       const onSubmit = handleSubmit( ( formData ) =>
+       {
+              setSubmiting( true );
+              dispatch( request( {
+                     ...annonceToSend,
+                     data: {
+                            ...annonceToSend.data,
+                            ...formData,
+                            signalerId: user.id,
+                            date: new Date(),
+                            signalerEmail: user?.email
+                     },
+                     signaledUserAnnonceId: annonce.userEmail
+              } ) )
+
+              console.log(
+                     {
+                            ...annonceToSend,
+                            data: {
+                                   ...annonceToSend.data,
+                                   ...formData,
+                                   signalerId: user.id,
+                                   date: new Date(),
+                                   signalerEmail: user?.email
+                            }
+                     }
+              );
+
+       } );
 
 
 

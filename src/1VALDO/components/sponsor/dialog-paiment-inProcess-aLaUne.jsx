@@ -26,7 +26,8 @@ export default function DialogPaimentInProcessALaUne( { showDialog, dataGet, upd
 
 
 
-       // let objectToAdd 
+       console.log( 'in proces a la une buy', dataGet );
+
        const dispatch = useDispatch();
        const location = useLocation()
        const { user } = useAuthContext();

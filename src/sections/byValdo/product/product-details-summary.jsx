@@ -97,12 +97,13 @@ export default function ProductDetailsSummary( {
               profile,
               createdAt,
               age,
+              phoneNumber,
               city,
               nbrView,
               inventoryType,
               location,
        } = product;
-       // console.log( 'product', product );
+       console.log( 'product', product );
 
 
        const existProduct = !!items?.length && items.map( ( item ) => item.id ).includes( id );
@@ -184,7 +185,7 @@ export default function ProductDetailsSummary( {
 
        const handleAddCart = useCallback( () =>
        {
-              const phoneNumber = `237${ user?.phoneNumber }`;
+              const phoneNumberToContact = `237${ phoneNumber || 696080087 }`;
               // const phoneNumber = `237${ user.phoneNumber }`;
               // console.log(phoneNumber);
 
@@ -192,10 +193,10 @@ export default function ProductDetailsSummary( {
 
 
               const message = encodeURIComponent( 'Bonjour, j\'ai vu votre annonce sur Ndolo, je suis intéressé par vos services. Pouvez-vous me donner plus de détails ?' );
-              const whatsappUrl = `https://wa.me/${ phoneNumber }?text=${ message }`;
+              const whatsappUrl = `https://wa.me/${ phoneNumberToContact }?text=${ message }`;
               window.open( whatsappUrl, '_blank' );
 
-       }, [ user?.phoneNumber ] );
+       }, [ phoneNumber ] );
 
 
 

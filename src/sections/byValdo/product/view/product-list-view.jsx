@@ -56,6 +56,7 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 
 import { setValeurRef } from 'src/1data/annonces/ref';
+import { HOST_BACKEND_URL } from 'src/config-global';
 import { dataObject } from 'src/1data/annonces/defaut';
 import ProductTableToolbar from '../product-table-toolbar';
 import ProductTableFiltersResult from '../product-table-filters-result';
@@ -301,7 +302,7 @@ export default function ProductListView( { toShow, clickFromProfile } )
 
        useEffect( () =>
        {
-              const socket = io( "http://localhost:5000" );
+              const socket = io( HOST_BACKEND_URL );
               socket.on( 'update-annonce', ( update ) =>
               {
 
@@ -556,7 +557,10 @@ export default function ProductListView( { toShow, clickFromProfile } )
                                                  showInMenu
                                                  icon={ <Iconify icon="solar:pen-bold" /> }
                                                  label="Mettre à la une"
-                                                 onClick={ () => { aLaUneBuy.onTrue(); setAnnonceClick( params.row ) } }
+                                                 onClick={ () =>
+                                                 {
+                                                        aLaUneBuy.onTrue(); setAnnonceClick( params.row );
+                                                 } }
                                           />,
                                           < GridActionsCellItem
                                                  showInMenu
@@ -605,7 +609,7 @@ export default function ProductListView( { toShow, clickFromProfile } )
        return (
               <>
 
-                     <DialogSponsorBuy showDialog={ buySponsor } startPaiement={ startPaimentSponsor } />
+                     <DialogSponsorBuy showDialog={ buySponsor } startPaiementSp={ startPaimentSponsor } />
                      <DialogPaimentInProcessSponsorBuy dataGet={ annonceToSponsor } showDialog={ startPaimentSponsor } />
 
                      <DialogALaUneBuy showDialog={ aLaUneBuy } startPaiement={ startPaimentALaUne } />
@@ -674,8 +678,17 @@ export default function ProductListView( { toShow, clickFromProfile } )
 
                                           autoHeight={ false }
 
-                                          sx={ { flexGrow: 1, } }
+                                          sx={ {
+                                                 '& .MuiDataGrid-virtualScroller': {
+                                                        overflow: 'hidden', // Cache complètement le scroll
+                                                 },
+                                                 // OU pour garder la fonctionnalité de scroll mais cacher visuellement la barre :
+                                                 '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
+                                                        display: 'none', // Cache seulement la barre de scroll
+                                                 },
 
+                                                 flexGrow: 1,
+                                          } }
 
 
 

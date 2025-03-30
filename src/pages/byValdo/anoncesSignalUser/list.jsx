@@ -64,7 +64,6 @@ const TABS = [
 export default function AnnoncesSignal()
 {
 
-       const SOCKET_SERVER_URL = "http://localhost:5000"; // L'URL de ton serveur backend
        const naviguate = useNavigate()
 
        const dispatch = useDispatch()

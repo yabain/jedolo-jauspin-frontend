@@ -61,6 +61,8 @@ export default function ProductNewEditForm( { currentProduct2 } )
 
        const annonceFromStore = useSelector( ( state ) => state.annonces.data );
        const { user } = useAuthContext()
+       console.log( user );
+
 
        const { isFulled, isPending } = useSelector( ( state ) => state.addAnnonces );
        const isFulledUpdate = useSelector( ( state ) => state.updateUserAnnonce.isFulled );
@@ -93,23 +95,70 @@ export default function ProductNewEditForm( { currentProduct2 } )
        const [ includeTaxes, setIncludeTaxes ] = useState( false );
        const [ dataToAdd, setDataToAdd ] = useState( {} );
 
+       // const NewProductSchema = Yup.object().shape( {
+       //        // name: Yup.string().required( 'Name is required' ),
+       //        phoneNumber: Yup.string().required( 'veuiller entrer le numero de teleohone pour l\'annonce telephone' ),
+       //        // images: Yup.array().min( 1, 'Images is required' ),
+       //        // tags: Yup.array().min( 2, 'Must have at least 2 tags' ),
+       //        // category: Yup.string().required( 'Category is required' ),
+       //        // price: Yup.number().moreThan( 0, 'Price should not be $0.00' ),
+       //        // description: Yup.string().required( 'Description is required' ),
+       //        // not required
+
+       // } );
+
+
        const NewProductSchema = Yup.object().shape( {
-              // name: Yup.string().required( 'Name is required' ),
-              // images: Yup.array().min( 1, 'Images is required' ),
-              // tags: Yup.array().min( 2, 'Must have at least 2 tags' ),
-              // category: Yup.string().required( 'Category is required' ),
-              // price: Yup.number().moreThan( 0, 'Price should not be $0.00' ),
-              // description: Yup.string().required( 'Description is required' ),
-              // not required
-              taxes: Yup.number(),
-              newLabel: Yup.object().shape( {
-                     enabled: Yup.boolean(),
-                     content: Yup.string(),
-              } ),
-              saleLabel: Yup.object().shape( {
-                     enabled: Yup.boolean(),
-                     content: Yup.string(),
-              } ),
+              // Section Détails
+              name: Yup.string()
+                     .required( 'Le titre est requis' )
+                     .min( 10, 'Le titre doit contenir au moins 10 caractères' )
+                     .max( 100, 'Le titre ne doit pas dépasser 100 caractères' ),
+
+              subDescription: Yup.string()
+                     .required( 'La description courte est requise' )
+                     .min( 20, 'La description doit contenir au moins 20 caractères' )
+                     .max( 300, 'La description ne doit pas dépasser 300 caractères' ),
+
+              images: Yup.array()
+                     .min( 1, 'Au moins une image est requise' )
+                     .max( 5, 'Maximum 5 images autorisées' ),
+
+              // Section Autres détails
+              phoneNumber: Yup.string()
+                     .required( 'Le numéro de téléphone est requis' )
+                     .matches( /^[0-9]+$/, 'Doit contenir uniquement des chiffres' )
+                     .min( 9, 'Le numéro doit contenir au moins 8 chiffres' )
+                     .max( 9, 'Le numéro ne doit pas dépasser 15 chiffres' ),
+
+              city: Yup.array()
+                     .min( 1, 'Veuillez sélectionner au moins une ville' )
+                     .max( 1, 'Vous ne pouvez sélectionner qu\'une seule ville' ),
+
+              localisation: Yup.string()
+                     .required( 'Le lieu est requis' )
+                     .min( 5, 'Le lieu doit contenir au moins 5 caractères' ),
+
+              categorie: Yup.array()
+                     .min( 1, 'Veuillez sélectionner au moins un service' )
+                     .max( 5, 'Maximum 5 services autorisés' ),
+
+
+              personAccept: Yup.array()
+                     .min( 1, 'Veuillez sélectionner au moins une option' )
+                     .required( 'Veuillez spécifier qui vous acceptez' ),
+
+              seDeplace: Yup.array()
+                     .min( 1, 'Veuillez sélectionner une option' )
+                     .required( 'Veuillez spécifier si vous vous déplacez' ),
+
+              // Section Tarif
+              price: Yup.number()
+                     .required( 'Le prix minimum est requis' )
+                     .min( 1000, 'Le prix minimum doit être d\'au moins 1000 FCFA' )
+                     .max( 100000, 'Le prix maximum ne peut excéder 100 000 FCFA' ),
+
+
        } );
 
        const ville = city;
@@ -151,6 +200,7 @@ export default function ProductNewEditForm( { currentProduct2 } )
                      images: currentProduct?.images || [],
                      price: currentProduct?.price || 0,
                      city: currentProduct?.city || [],
+                     phoneNumber: currentProduct?.phoneNumber || user.phoneNumber || '',
                      categorie: currentProduct?.categorie || [],
                      localisation: currentProduct?.localisation || '',
                      seDeplace: currentProduct?.seDeplace || '',
@@ -173,7 +223,7 @@ export default function ProductNewEditForm( { currentProduct2 } )
                      // newLabel: currentProduct?.newLabel || { enabled: false, content: '' },
                      // saleLabel: currentProduct?.saleLabel || { enabled: false, content: '' },
               } ),
-              [ currentProduct ]
+              [ currentProduct, user.phoneNumber ]
        );
 
        const methods = useForm( {
@@ -312,10 +362,10 @@ export default function ProductNewEditForm( { currentProduct2 } )
                      if ( !currentProduct )
                      {
 
-                            // dispatch( request( object ) )
+                            dispatch( request( object ) )
 
                             setDataToAdd( object )
-                            showDialog.onTrue()
+                            // showDialog.onTrue()
 
                             // console.log( 'email du user', user?.email, 'user email envoyer', object.userEmail );
                             // console.log( 'dtaa to add', object );
@@ -478,6 +528,9 @@ export default function ProductNewEditForm( { currentProduct2 } )
                                                         type="number"
                                                         InputLabelProps={ { shrink: true } }
                                                  /> */}
+
+
+                                                 <RHFTextField type="number" name="phoneNumber" label="Numero de Telephone" />
                                                  <RHFAutocomplete
                                                         name="city"
                                                         label="Villes"

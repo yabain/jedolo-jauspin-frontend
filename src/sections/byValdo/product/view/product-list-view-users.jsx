@@ -64,6 +64,7 @@ import { useMediaQuery, useTheme } from '@mui/material';
 
 import { LoadingButton } from '@mui/lab';
 import { dataObject } from 'src/1data/annonces/defaut';
+import { HOST_BACKEND_URL } from 'src/config-global';
 import ProductTableToolbar from '../product-table-toolbar';
 import ProductTableFiltersResult from '../product-table-filters-result';
 import
@@ -265,7 +266,7 @@ export default function ProductListViewUsers( { toShow } )
                      dispatch( setAdminData( usersAnnonceList ) )
 
 
-                     dispatch( getList( user?.email ) )
+                     dispatch( getList( user.email ) )
 
 
               }
@@ -365,7 +366,7 @@ export default function ProductListViewUsers( { toShow } )
 
        useEffect( () =>
        {
-              const socket = io( "http://localhost:5000" );
+              const socket = io( HOST_BACKEND_URL );
               socket.on( 'update-annonce', ( update ) =>
               {
 
@@ -401,7 +402,7 @@ export default function ProductListViewUsers( { toShow } )
 
        useEffect( () =>
        {
-              const socket = io( "http://localhost:5000" );
+              const socket = io( HOST_BACKEND_URL );
 
 
 

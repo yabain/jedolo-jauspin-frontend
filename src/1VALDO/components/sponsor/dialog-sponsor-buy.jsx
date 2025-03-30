@@ -24,7 +24,7 @@ import SponsorItem from './sponsor-item-list-to-buy';
 
 
 
-export default function DialogSponsorBuy( { showDialog, dataGet, updateDataAfterSucces, startPaiement } )
+export default function DialogSponsorBuy( { showDialog, dataGet, updateDataAfterSucces, startPaiementSp } )
 {
 
 
@@ -86,7 +86,7 @@ export default function DialogSponsorBuy( { showDialog, dataGet, updateDataAfter
 
        const { reset, setValue, handleSubmit, watch } = methods;
        const resetAfterSuccess = () => { reset(); setSubmiting( false ); showDialog.onFalse() }
-       const afterTransactionadd = () => { startPaiement.onTrue(); showDialog.onFalse() }
+       const afterTransactionadd = () => { startPaiementSp.onTrue(); showDialog.onFalse() }
        const onSubmit = handleSubmit( ( data ) => { dispatch( request( { transactorEmail: user?.email, data: dataTransaction() } ) ) } );
 
        useAdd( undefined, afterTransactionadd )
@@ -215,7 +215,7 @@ DialogSponsorBuy.propTypes = {
               toggle: PropTypes.func,
        } ).isRequired,
 
-       startPaiement: PropTypes.shape( {
+       startPaiementSp: PropTypes.shape( {
               value: PropTypes.bool,
               onTrue: PropTypes.func,
               onFalse: PropTypes.func,

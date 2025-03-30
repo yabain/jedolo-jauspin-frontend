@@ -32,7 +32,7 @@ export function useGet( dataGet, productGet, isActive = true )
 
 
        useEffect( () => () => handleReset(), [ handleReset ] );
-       useEffect( () => { if ( isFulled && !isPending && isActive ) handleEnque(); }, [ isFulled, isPending, isActive, handleEnque ] );
+       // useEffect( () => { if ( isFulled && !isPending && isActive ) handleEnque(); }, [ isFulled, isPending, isActive, handleEnque ] );
        useEffect( () => { if ( !isFulled && !isPending && isActive ) dispatch( request( { type: 'user', annonceId: productGet.id } ) ) }, [ productGet, isFulled, isPending, isActive, dispatch ] );
        useEffect( () => { if ( isFulled && !isPending && isActive && !isLoad ) { dataGet( data ); setIsLoad( true ) } }, [ isLoad, isFulled, isPending, isActive, dataGet, data ] );
 

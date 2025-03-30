@@ -92,7 +92,7 @@ export default function ProductDetailsView( { id } )
 
 
 
-       // console.log( productGet );
+       console.log( productGet.phoneNumber );
 
 
        useEffect( () =>

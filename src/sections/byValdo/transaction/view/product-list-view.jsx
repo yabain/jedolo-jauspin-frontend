@@ -50,6 +50,7 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 
 import { setValeurRef } from 'src/1data/annonces/ref';
+import { HOST_BACKEND_URL } from 'src/config-global';
 import { dataObject } from 'src/1data/annonces/defaut';
 import ProductTableToolbar from '../product-table-toolbar';
 import ProductTableFiltersResult from '../product-table-filters-result';
@@ -220,7 +221,7 @@ export default function ProductListView( { toShow } )
 
        useEffect( () =>
        {
-              const socket = io( "http://localhost:5000" );
+              const socket = io( HOST_BACKEND_URL );
               socket.on( 'update-annonce', ( update ) =>
               {
 

@@ -29,7 +29,7 @@ export default function DialogALaUneBuy( { showDialog, dataGet, updateDataAfterS
 
 
        // let objectToAdd 
-       // console.log( dataGet?.avatarUrl );
+       console.log( 'sssssssssssssss a la une appeler' );
 
        const dispatch = useDispatch();
        const location = useLocation()

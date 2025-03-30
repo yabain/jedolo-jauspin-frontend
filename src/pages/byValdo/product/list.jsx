@@ -9,6 +9,7 @@ import { useGetSignalAnnonces } from 'src/1VALDO/hook/annonce/signalsGets';
 import { useAuthContext } from 'src/auth/hooks';
 import Iconify from 'src/components/iconify';
 import { useSettingsContext } from 'src/components/settings';
+import { HOST_BACKEND_URL } from 'src/config-global';
 import { JobListView } from 'src/sections/byValdo/job/view';
 import { ProductListView } from 'src/sections/byValdo/product/view';
 
@@ -64,7 +65,7 @@ const TABS = [
 export default function ProductListPage()
 {
 
-       const SOCKET_SERVER_URL = "http://localhost:5000"; // L'URL de ton serveur backend
+       const SOCKET_SERVER_URL = HOST_BACKEND_URL; // L'URL de ton serveur backend
        const naviguate = useNavigate()
 
        const dispatch = useDispatch()
@@ -122,7 +123,7 @@ export default function ProductListPage()
 
               } ); return () => { socket.disconnect(); };
 
-       }, [ dispatch, user?.email ] );
+       }, [ dispatch, user?.email, SOCKET_SERVER_URL ] );
 
        return (
               <>
