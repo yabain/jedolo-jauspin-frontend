@@ -20,12 +20,18 @@ import { fCurrency } from 'src/utils/format-number';
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 import Label from 'src/components/label';
+import { useAuthContext } from 'src/auth/hooks';
+import { ConfirmDialog } from 'src/components/custom-dialog';
+import { useBoolean } from 'src/hooks/use-boolean';
+import { Button } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
 export default function JobItem( { job, onView, onEdit, onDelete } )
 {
        const popover = usePopover();
+       const { user } = useAuthContext()
+       const confirmOfBan = useBoolean();
 
        const { id, anonnceName, sponsorAnnonce, aLaUne, coverUrl, date, signalerEmail, comment } = job;
        console.log( job );
@@ -34,10 +40,10 @@ export default function JobItem( { job, onView, onEdit, onDelete } )
        return (
               <>
                      <Card>
-                            <IconButton onClick={ popover.onOpen } sx={ { position: 'absolute', top: 8, right: 8 } }>
+                            { user.role === 'admin' && ( <IconButton onClick={ popover.onOpen } sx={ { position: 'absolute', top: 8, right: 8 } }>
 
                                    <Iconify icon="eva:more-vertical-fill" />
-                            </IconButton>
+                            </IconButton> ) }
 
                             <Stack sx={ { p: 3, pb: 2 } }>
                                    <Avatar
@@ -144,8 +150,13 @@ export default function JobItem( { job, onView, onEdit, onDelete } )
                             <MenuItem
                                    onClick={ () =>
                                    {
-                                          popover.onClose();
-                                          onView();
+                                          // popover.onClose();
+                                          // onView();
+
+                                          confirmOfBan.onTrue()
+                                          console.log( 'banissement applr' );
+
+
                                    } }
                             >
                                    <Iconify icon="solar:eye-bold" />
@@ -175,6 +186,40 @@ export default function JobItem( { job, onView, onEdit, onDelete } )
                                    Delete
                             </MenuItem> */}
                      </CustomPopover>
+
+
+
+
+
+
+
+                     <ConfirmDialog
+                            open={ confirmOfBan.value }
+                            onClose={ confirmOfBan.onFalse }
+                            title="Banissement de l'annonce"
+                            content={
+                                   <>
+                                          voulez vous vraiment bannir cette annonce ?<br />
+                                          cela entreinera la suspension du compte
+                                   </>
+                            }
+                            action={
+                                   <Button
+                                          variant="contained"
+                                          color="error"
+                                          onClick={ () =>
+                                          {
+                                                 // banAnnouncement();
+
+                                                 confirmOfBan.onFalse();
+                                          } }
+                                   >
+                                          Banir
+                                   </Button>
+
+
+                            }
+                     />
               </>
        );
 }

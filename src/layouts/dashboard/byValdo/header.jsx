@@ -227,7 +227,7 @@ export default function Header( { onOpenNav } )
                                    </RoleBasedGuard>
 
 
-                                   <RoleBasedGuard hasContent roles={ [ 'admin' ] } >
+                                   {/* <RoleBasedGuard hasContent roles={ [ 'admin' ] } >
                                           <Button
 
                                                  onClick={ () => { naviguate( '/home/user/list' ) } }
@@ -261,10 +261,10 @@ export default function Header( { onOpenNav } )
                                           >
                                                  Sponsors
                                           </Button>
-                                   </RoleBasedGuard>
+                                   </RoleBasedGuard> */}
 
                                    { user?.role !== undefined ? (
-                                          <RoleBasedGuard hasContent roles={ [ 'user' ] }>
+                                          <RoleBasedGuard hasContent roles={ [ 'user', 'admin' ] }>
                                                  <Button
                                                         onClick={ () =>
                                                                naviguate( '/home/annonces/new' )
@@ -290,7 +290,7 @@ export default function Header( { onOpenNav } )
                                    ) }
 
 
-                                   <RoleBasedGuard hasContent roles={ [ 'admin', 'user' ] }  >
+                                   {/* <RoleBasedGuard hasContent roles={ [ 'admin', 'user' ] }  >
                                           <Button
 
                                                  onClick={ () => { naviguate( '/home/transactions/list' ) } }
@@ -306,7 +306,7 @@ export default function Header( { onOpenNav } )
                                           >
                                                  Transactions
                                           </Button>
-                                   </RoleBasedGuard>
+                                   </RoleBasedGuard> */}
 
                                    <RoleBasedGuard hasContent roles={ [ 'admin' ] }  >
                                           <Button

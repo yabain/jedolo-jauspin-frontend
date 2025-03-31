@@ -144,7 +144,7 @@ export default function JobItem( { job, mettreALaUne, Sponsoriser, onEdit, onDel
                             {
                                    clickFromProfile === undefined ? (
                                           <>
-                                                 <MenuItem
+                                                 {/* <MenuItem
                                                         onClick={ () =>
                                                         {
                                                                mettreALaUne();
@@ -163,7 +163,7 @@ export default function JobItem( { job, mettreALaUne, Sponsoriser, onEdit, onDel
                                                  >
                                                         <Iconify icon="solar:pen-bold" />
                                                         Sponsoriser
-                                                 </MenuItem>
+                                                 </MenuItem> */}
 
                                                  <MenuItem
                                                         onClick={ () =>

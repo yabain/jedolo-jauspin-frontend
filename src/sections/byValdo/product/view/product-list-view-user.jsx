@@ -593,18 +593,18 @@ export default function ProductListViewUser( { toShow } )
                             //        label="Voir"
                             //        onClick={ () => handleViewRow( params.row.id ) }
                             // />,
-                            <GridActionsCellItem
-                                   showInMenu
-                                   icon={ <Iconify icon="solar:pen-bold" /> }
-                                   label="Mettre à la une"
-                                   onClick={ () => { aLaUneBuy.onTrue(); setAnnonceClick( params.row ) } }
-                            />,
-                            <GridActionsCellItem
-                                   showInMenu
-                                   icon={ <Iconify icon="solar:pen-bold" /> }
-                                   label="Sponsoriser"
-                                   onClick={ () => { buySponsor.onTrue(); setAnnonceToSponsor( params.row ) } }
-                            />,
+                            // <GridActionsCellItem
+                            //        showInMenu
+                            //        icon={ <Iconify icon="solar:pen-bold" /> }
+                            //        label="Mettre à la une"
+                            //        onClick={ () => { aLaUneBuy.onTrue(); setAnnonceClick( params.row ) } }
+                            // />,
+                            // <GridActionsCellItem
+                            //        showInMenu
+                            //        icon={ <Iconify icon="solar:pen-bold" /> }
+                            //        label="Sponsoriser"
+                            //        onClick={ () => { buySponsor.onTrue(); setAnnonceToSponsor( params.row ) } }
+                            // />,
                             <GridActionsCellItem
                                    showInMenu
                                    icon={ <Iconify icon="solar:pen-bold" /> }
@@ -688,7 +688,17 @@ export default function ProductListViewUser( { toShow } )
                                    <DataGrid
                                           autoHeight={ false }
 
-                                          sx={ { flexGrow: 1, } }
+                                          sx={ {
+                                                 '& .MuiDataGrid-virtualScroller': {
+                                                        overflow: 'hidden', // Cache complètement le scroll
+                                                 },
+                                                 // OU pour garder la fonctionnalité de scroll mais cacher visuellement la barre :
+                                                 '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
+                                                        display: 'none', // Cache seulement la barre de scroll
+                                                 },
+
+                                                 flexGrow: 1,
+                                          } }
 
                                           // checkboxSelection
                                           disableRowSelectionOnClick

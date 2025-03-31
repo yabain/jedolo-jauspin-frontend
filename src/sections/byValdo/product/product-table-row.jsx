@@ -130,6 +130,8 @@ export function RenderCellProductXs( { params, mettreALaUne, Sponsoriser, onEdit
 
 export function RenderCellProduct( { params } )
 {
+       console.log( params.row.coverUrl );
+
        return (
               <Stack direction="row" alignItems="center" sx={ { py: 2, width: 1 } } >
 

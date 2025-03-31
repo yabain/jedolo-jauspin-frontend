@@ -553,22 +553,22 @@ export default function ProductListView( { toShow, clickFromProfile } )
                             if ( clickFromProfile === undefined )
                             {
                                    return [
-                                          <GridActionsCellItem
-                                                 showInMenu
-                                                 icon={ <Iconify icon="solar:pen-bold" /> }
-                                                 label="Mettre à la une"
-                                                 onClick={ () =>
-                                                 {
-                                                        aLaUneBuy.onTrue(); setAnnonceClick( params.row );
-                                                 } }
-                                          />,
-                                          < GridActionsCellItem
-                                                 showInMenu
-                                                 icon={ < Iconify icon="solar:pen-bold" /> }
-                                                 label="Sponsoriser"
-                                                 onClick={ () => { buySponsor.onTrue(); setAnnonceToSponsor( params.row ) }
-                                                 }
-                                          />,
+                                          // <GridActionsCellItem
+                                          //        showInMenu
+                                          //        icon={ <Iconify icon="solar:pen-bold" /> }
+                                          //        label="Mettre à la une"
+                                          //        onClick={ () =>
+                                          //        {
+                                          //               aLaUneBuy.onTrue(); setAnnonceClick( params.row );
+                                          //        } }
+                                          // />,
+                                          // < GridActionsCellItem
+                                          //        showInMenu
+                                          //        icon={ < Iconify icon="solar:pen-bold" /> }
+                                          //        label="Sponsoriser"
+                                          //        onClick={ () => { buySponsor.onTrue(); setAnnonceToSponsor( params.row ) }
+                                          //        }
+                                          // />,
                                           < GridActionsCellItem
                                                  showInMenu
                                                  icon={ < Iconify icon="solar:pen-bold" /> }

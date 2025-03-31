@@ -153,9 +153,9 @@ export default function AccountPopover()
                                                  { label: 'Mes Annonces', linkTo: '/home/annonces/list' },
                                                  { label: 'Annonces Signaler', linkTo: '/home/annonces/signal' },
                                                  { label: 'Publier', linkTo: '/home/annonces/new' },
-                                                 { label: 'Utilisateurs', linkTo: '/home/user/list' },
-                                                 { label: 'Sponsors', linkTo: '/home/annonces/categorie' },
-                                                 { label: 'Transactions', linkTo: '/home/transactions/list' },
+                                                 // { label: 'Utilisateurs', linkTo: '/home/user/list' },
+                                                 // { label: 'Sponsors', linkTo: '/home/annonces/categorie' },
+                                                 // { label: 'Transactions', linkTo: '/home/transactions/list' },
                                           ].map( ( option ) =>
                                           {
 
