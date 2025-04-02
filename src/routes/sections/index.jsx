@@ -31,7 +31,7 @@ export default function Router()
               //     ...authDemoRoutes,
 
               // Dashboard routes
-              // ...dashboardRoutes,
+              ...dashboardRoutes,
               //     ...dashboardRoutes2,
 
               // Main routes

@@ -10,6 +10,7 @@ import { ForbiddenIllustration } from 'src/assets/illustrations';
 
 import { varBounce, MotionContainer } from 'src/components/animate';
 import { useSelector } from 'react-redux';
+import { normalizeString } from 'src/1functions/annonces';
 import { useAuthContext } from '../hooks';
 
 // ----------------------------------------------------------------------
@@ -25,7 +26,7 @@ export default function RoleBasedGuard( { hasContent, roles, children, sx } )
        // const { user } = useMockedUser();
 
        // const currentRole = 'user';
-       const currentRole = user?.role; // admin; 
+       const currentRole = normalizeString( user?.role ); // admin; 
 
 
        if ( roles.length === 0 && currentRole === undefined ) 

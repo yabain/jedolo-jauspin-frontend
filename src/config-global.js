@@ -22,7 +22,7 @@ const HOST_FRONT_DEV4 = 'http://192.168.1.127:3030'
 const HOST_FRONT_DEV5 = 'http://192.168.58.1:5000'
 
 
-const HOST_FRONT_PROD = 'https://ndolo-backend.yaba-in.com'
+export const HOST_FRONT_PROD = 'https://ndolo-backend.yaba-in.com'
 const HOST_BACK_PROD = ''
 
 

@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { useMemo, useEffect, useReducer, useCallback } from 'react';
 
 import axios, { endpoints } from 'src/utils/axios';
-import { HOST_BACKEND_URL } from 'src/config-global';
+import { HOST_BACKEND_URL, HOST_FRONT_PROD } from 'src/config-global';
 
 import { AuthContext } from './auth-context';
 import { setSession, isValidToken } from './utils';
@@ -126,9 +126,9 @@ export function AuthProvider( { children } )
                      password,
               };
 
-              const response = await axios.post( `${ HOST_BACKEND_URL }/auth/login`, data );
+              const response = await axios.post( `${ HOST_FRONT_PROD }/auth/login`, data );
 
-              const { access_token, user } = response.data;
+              const { access_token, user } = response.data.data;
 
               console.log( 'data recu', response.data );
               setSession( access_token );
@@ -156,7 +156,7 @@ export function AuthProvider( { children } )
 
               console.log( 'data recu', response );
 
-              const { accessToken, user } = response.data;
+              const { accessToken, user } = response.data.data;
 
               // sessionStorage.setItem( STORAGE_KEY, accessToken );
 
