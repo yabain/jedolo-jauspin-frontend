@@ -24,8 +24,7 @@ import { useRouter } from 'src/routes/hooks';
 
 import { useResponsive } from 'src/hooks/use-responsive';
 
-import
-{
+import {
        _tags,
        PRODUCT_SIZE_OPTIONS,
        PRODUCT_GENDER_OPTIONS,
@@ -53,34 +52,34 @@ import { useAuthContext } from 'src/auth/hooks';
 import DialogAnnonceBuy from 'src/1VALDO/components/annonces/dialog-annonce-buy';
 import { useBoolean } from 'src/hooks/use-boolean';
 import { city } from 'src/assets/data/location.service';
+import { Autocomplete, TextField } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
-export default function ProductNewEditForm( { currentProduct2 } )
-{
+export default function ProductNewEditForm({ currentProduct2 }) {
 
-       const annonceFromStore = useSelector( ( state ) => state.annonces.data );
+       const annonceFromStore = useSelector((state) => state.annonces.data);
        const { user } = useAuthContext()
-       console.log( user );
+       // console.log( user );
 
 
-       const { isFulled, isPending } = useSelector( ( state ) => state.addAnnonces );
-       const isFulledUpdate = useSelector( ( state ) => state.updateUserAnnonce.isFulled );
-       const isPendingUpdate = useSelector( ( state ) => state.updateUserAnnonce.isPending );
+       const { data, isFulled, isPending } = useSelector((state) => state.addAnnonces);
+       const isFulledUpdate = useSelector((state) => state.updateUserAnnonce.isFulled);
+       const isPendingUpdate = useSelector((state) => state.updateUserAnnonce.isPending);
 
-       const [ selectedTag, setSelectedTag ] = useState( null );
+       const [selectedTag, setSelectedTag] = useState(null);
 
 
 
        const redirect = useNavigate();
        const dispatch = useDispatch()
        const location = useLocation();
-       const [ dataAdded, setDataAdded ] = useState( {} )
+       const [dataAdded, setDataAdded] = useState({})
 
        const showDialog = useBoolean()
        const showPaiementStatut = useBoolean()
        const currentProduct = location.state?.data;
-       const [ aLaUne, setChecked ] = useState( currentProduct?.aLaUne || false ); // État du switch
+       const [aLaUne, setChecked] = useState(currentProduct?.aLaUne || false); // État du switch
        // const currentProduct = location.state !== null ? location.state.data : undefined;
        // console.log( currentProduct );
 
@@ -88,12 +87,10 @@ export default function ProductNewEditForm( { currentProduct2 } )
 
        const router = useRouter();
 
-       const mdUp = useResponsive( 'up', 'md' );
+       const mdUp = useResponsive('up', 'md');
 
        const { enqueueSnackbar } = useSnackbar();
-
-       const [ includeTaxes, setIncludeTaxes ] = useState( false );
-       const [ dataToAdd, setDataToAdd ] = useState( {} );
+       const [dataToAdd, setDataToAdd] = useState({});
 
        // const NewProductSchema = Yup.object().shape( {
        //        // name: Yup.string().required( 'Name is required' ),
@@ -108,61 +105,59 @@ export default function ProductNewEditForm( { currentProduct2 } )
        // } );
 
 
-       const NewProductSchema = Yup.object().shape( {
+       const NewProductSchema = Yup.object().shape({
               // Section Détails
               name: Yup.string()
-                     .required( 'Le titre est requis' )
-                     .min( 10, 'Le titre doit contenir au moins 10 caractères' )
-                     .max( 100, 'Le titre ne doit pas dépasser 100 caractères' ),
+                     .required('Le titre est requis')
+                     .min(10, 'Le titre doit contenir au moins 10 caractères')
+                     .max(100, 'Le titre ne doit pas dépasser 100 caractères'),
 
               subDescription: Yup.string()
-                     .required( 'La description courte est requise' )
-                     .min( 20, 'La description doit contenir au moins 20 caractères' )
-                     .max( 300, 'La description ne doit pas dépasser 300 caractères' ),
+                     .required('La description courte est requise')
+                     .min(20, 'La description doit contenir au moins 20 caractères')
+                     .max(300, 'La description ne doit pas dépasser 300 caractères'),
 
               images: Yup.array()
-                     .min( 1, 'Au moins une image est requise' )
-                     .max( 5, 'Maximum 5 images autorisées' ),
+                     .min(1, 'Au moins une image est requise')
+                     .max(5, 'Maximum 5 images autorisées'),
 
               // Section Autres détails
-              phoneNumber: Yup.string()
-                     .required( 'Le numéro de téléphone est requis' )
-                     .matches( /^[0-9]+$/, 'Doit contenir uniquement des chiffres' )
-                     .min( 9, 'Le numéro doit contenir au moins 8 chiffres' )
-                     .max( 9, 'Le numéro ne doit pas dépasser 15 chiffres' ),
+              // phoneNumber: Yup.string()
+              //        .required( 'Le numéro de téléphone est requis' )
+              //        .matches( /^[0-9]+$/, 'Doit contenir uniquement des chiffres' )
+              //        .min( 9, 'Le numéro doit contenir au moins 8 chiffres' )
+              //        .max( 9, 'Le numéro ne doit pas dépasser 15 chiffres' ),
 
-              city: Yup.array()
-                     .min( 1, 'Veuillez sélectionner au moins une ville' )
-                     .max( 1, 'Vous ne pouvez sélectionner qu\'une seule ville' ),
+              city: Yup.string().required('Veuillez sélectionner une ville'), // Changez de array à string
 
-              localisation: Yup.string()
-                     .required( 'Le lieu est requis' )
-                     .min( 5, 'Le lieu doit contenir au moins 5 caractères' ),
+              location: Yup.string()
+                     .required('Le lieu est requis')
+                     .min(5, 'Le lieu doit contenir au moins 5 caractères'),
 
-              categorie: Yup.array()
-                     .min( 1, 'Veuillez sélectionner au moins un service' )
-                     .max( 5, 'Maximum 5 services autorisés' ),
+              category: Yup.array()
+                     .min(1, 'Veuillez sélectionner au moins un service')
+                     .max(5, 'Maximum 5 services autorisés'),
 
 
               personAccept: Yup.array()
-                     .min( 1, 'Veuillez sélectionner au moins une option' )
-                     .required( 'Veuillez spécifier qui vous acceptez' ),
+                     .min(1, 'Veuillez sélectionner au moins une option')
+                     .required('Veuillez spécifier qui vous acceptez'),
 
               seDeplace: Yup.array()
-                     .min( 1, 'Veuillez sélectionner une option' )
-                     .required( 'Veuillez spécifier si vous vous déplacez' ),
+                     .min(1, 'Veuillez sélectionner une option')
+                     .required('Veuillez spécifier si vous vous déplacez'),
 
               // Section Tarif
               price: Yup.number()
-                     .required( 'Le prix minimum est requis' )
-                     .min( 1000, 'Le prix minimum doit être d\'au moins 1000 FCFA' )
-                     .max( 100000, 'Le prix maximum ne peut excéder 100 000 FCFA' ),
+                     .required('Le prix minimum est requis')
+                     .min(1000, 'Le prix minimum doit être d\'au moins 1000 FCFA')
+                     .max(100000, 'Le prix maximum ne peut excéder 100 000 FCFA'),
 
 
-       } );
+       });
 
        const ville = city;
-       const villeNames = [ ...new Set( ville.map( ( item ) => item.name ) ) ];
+       const villeNames = [...new Set(ville.map((item) => item.name))];
        // console.log( ville );
        // console.log( villeNames );
 
@@ -192,25 +187,25 @@ export default function ProductNewEditForm( { currentProduct2 } )
        ];
 
        const defaultValues = useMemo(
-              () => ( {
+              () => ({
 
 
                      name: currentProduct?.name || '',
                      subDescription: currentProduct?.subDescription || '',
                      images: currentProduct?.images || [],
                      price: currentProduct?.price || 0,
-                     city: currentProduct?.city || [],
-                     phoneNumber: currentProduct?.phoneNumber || user.phoneNumber || '',
-                     categorie: currentProduct?.categorie || [],
-                     localisation: currentProduct?.localisation || '',
+                     city: currentProduct?.city || '',
+                     // phoneNumber: currentProduct?.phoneNumber || user.phoneNumber || '',
+                     phoneNumber: user.phoneNumber,
+                     category: currentProduct?.category || [],
+                     location: currentProduct?.location || '',
                      seDeplace: currentProduct?.seDeplace || '',
                      personAccept: currentProduct?.personAccept || '',
 
 
 
                      // code: currentProduct?.code || '',
-                     // sku: currentProduct?.sku || '',
-                     // taxes: currentProduct?.taxes || 0,
+                     // sku: currentProduct?.sku || '', 
                      // sizes: currentProduct?.sizes || [],
                      // colors: currentProduct?.colors || [],
                      // quantity: currentProduct?.quantity || 0,
@@ -222,14 +217,14 @@ export default function ProductNewEditForm( { currentProduct2 } )
                      // prixMassage: currentProduct?.prixMassage || 0,
                      // newLabel: currentProduct?.newLabel || { enabled: false, content: '' },
                      // saleLabel: currentProduct?.saleLabel || { enabled: false, content: '' },
-              } ),
-              [ currentProduct, user.phoneNumber ]
+              }),
+              [currentProduct, user.phoneNumber]
        );
 
-       const methods = useForm( {
-              resolver: yupResolver( NewProductSchema ),
+       const methods = useForm({
+              resolver: yupResolver(NewProductSchema),
               defaultValues,
-       } );
+       });
 
        const {
               reset,
@@ -241,24 +236,11 @@ export default function ProductNewEditForm( { currentProduct2 } )
 
        const values = watch();
 
-       useEffect( () =>
-       {
-              if ( currentProduct )
-              {
-                     reset( defaultValues );
+       useEffect(() => {
+              if (currentProduct) {
+                     reset(defaultValues);
               }
-       }, [ currentProduct, defaultValues, reset ] );
-
-       useEffect( () =>
-       {
-              if ( includeTaxes )
-              {
-                     setValue( 'taxes', 0 );
-              } else
-              {
-                     setValue( 'taxes', currentProduct?.taxes || 0 );
-              }
-       }, [ currentProduct?.taxes, includeTaxes, setValue ] );
+       }, [currentProduct, defaultValues, reset]);
 
 
 
@@ -268,19 +250,21 @@ export default function ProductNewEditForm( { currentProduct2 } )
 
 
 
-       useEffect( () =>
-       {
-              if ( isFulled && !isPending )
-              {
 
-                     dispatch( resetAfterRequest() )
-                     dispatch( addData( dataToAdd ) )
-                     enqueueSnackbar( 'annonce publier avec succes' );
-                     redirect( -1 );
+
+       useEffect(() => {
+              if (isFulled && !isPending) {
+
+                     dispatch(resetAfterRequest())
+                     // console.log('data a ajouter apres la mise a jour', data);
+
+                     dispatch(addData(data))
+                     enqueueSnackbar('annonce publier avec succes');
+                     redirect(-1);
 
 
               }
-       }, [ isFulled, isPending, dataToAdd, dispatch, redirect, enqueueSnackbar ] )
+       }, [isFulled, isPending, data, dispatch, redirect, enqueueSnackbar])
 
 
 
@@ -292,25 +276,23 @@ export default function ProductNewEditForm( { currentProduct2 } )
 
 
 
-       useEffect( () =>
-       {
+       useEffect(() => {
 
 
 
-              if ( !isPendingUpdate && isFulledUpdate )
-              {
+              if (!isPendingUpdate && isFulledUpdate) {
 
 
-                     dispatch( resetAfterUpdate() )
-                     redirect( -1 );
+                     dispatch(resetAfterUpdate())
+                     redirect(-1);
 
 
 
-                     enqueueSnackbar( 'Annonce mis à jour avec succes!' );
+                     enqueueSnackbar('Annonce mis à jour avec succes!');
 
               }
 
-       }, [ enqueueSnackbar, dispatch, redirect, isFulledUpdate, isPendingUpdate ] );
+       }, [enqueueSnackbar, dispatch, redirect, isFulledUpdate, isPendingUpdate]);
 
 
 
@@ -325,15 +307,13 @@ export default function ProductNewEditForm( { currentProduct2 } )
 
 
 
-       const onSubmit = handleSubmit( async ( data ) =>
-       {
-              try
-              {
+       const onSubmit = handleSubmit(async (dataGet) => {
+              try {
 
 
                      // console.log( 'datat to add', data );
-
-                     await new Promise( ( resolve ) => setTimeout( resolve, 500 ) );
+                     const { phoneNumber, ...data2 } = dataGet;
+                     // await new Promise((resolve) => setTimeout(resolve, 500));
 
                      // reset();
                      // console.log( 'user du send ', user );
@@ -342,52 +322,45 @@ export default function ProductNewEditForm( { currentProduct2 } )
 
 
 
-                            "publish": "published",
-                            "price": "2500",
-                            "profile": "standard",
-
-                            "createdAt": Date.now(),
-
-                            "coverUrl": "https://api-dev-minimal-v510.vercel.app/assets/images/cover/cover_2.jpg",
 
 
+                            "coverUrl": "http://192.168.1.212:3000/upload/uploads/1743936790933-463620380.jpg",
 
-                            ...data,
-                            aLaUne,
-                            id: !currentProduct ? Date.now() : Number( currentProduct.id ),
-                            userEmail: !currentProduct ? user?.email : currentProduct.userEmail
+
+                            ...data2,
+                            images: ['http://192.168.1.212:3000/upload/uploads/1743936790933-463620380.jpg']
 
 
                      }
-                     if ( !currentProduct )
-                     {
+                     if (!currentProduct) {
 
-                            dispatch( request( object ) )
+                            dispatch(request(object))
 
-                            setDataToAdd( object )
                             // showDialog.onTrue()
 
                             // console.log( 'email du user', user?.email, 'user email envoyer', object.userEmail );
-                            // console.log( 'dtaa to add', object );
+                            // console.log(user);
+
+                            // console.log('dtaa to add', object);
 
                      }
 
 
-                     if ( currentProduct )
-                     {
+                     if (currentProduct) {
 
-                            dispatch( updateAnnoncesRequest( object ) )
+
+                            // console.log({ ...currentProduct, ...object });
+                            dispatch(updateAnnoncesRequest({ _id: currentProduct._id, data: object }))
                             // console.log( 'dtaa to add', object );
                             // console.log( 'email du user', user?.email, 'user email envoyer', object.userEmail );
 
                      }
 
 
-              } catch ( error )
-              {
-                     console.error( error );
+              } catch (error) {
+                     console.error(error);
               }
-       } );
+       });
 
 
 
@@ -403,85 +376,76 @@ export default function ProductNewEditForm( { currentProduct2 } )
 
 
        const handleDrop = useCallback(
-              ( acceptedFiles ) =>
-              {
+              (acceptedFiles) => {
                      const files = values.images || [];
 
-                     const newFiles = acceptedFiles.map( ( file ) =>
-                            Object.assign( file, {
-                                   preview: URL.createObjectURL( file ),
-                            } )
+                     const newFiles = acceptedFiles.map((file) =>
+                            Object.assign(file, {
+                                   preview: URL.createObjectURL(file),
+                            })
                      );
 
-                     setValue( 'images', [ ...files, ...newFiles ], { shouldValidate: true } );
+                     setValue('images', [...files, ...newFiles], { shouldValidate: true });
               },
-              [ setValue, values.images ]
+              [setValue, values.images]
        );
 
        const handleRemoveFile = useCallback(
-              ( inputFile ) =>
-              {
-                     const filtered = values.images && values.images?.filter( ( file ) => file !== inputFile );
-                     setValue( 'images', filtered );
+              (inputFile) => {
+                     const filtered = values.images && values.images?.filter((file) => file !== inputFile);
+                     setValue('images', filtered);
               },
-              [ setValue, values.images ]
+              [setValue, values.images]
        );
 
-       const handleRemoveAllFiles = useCallback( () =>
-       {
-              setValue( 'images', [] );
-       }, [ setValue ] );
+       const handleRemoveAllFiles = useCallback(() => {
+              setValue('images', []);
+       }, [setValue]);
 
-       const handleChangeIncludeTaxes = useCallback( ( event ) =>
-       {
-              setIncludeTaxes( event.target.checked );
-       }, [] );
-
-       const handleChange = ( event ) =>
-       {
-              setChecked( event.target.checked ); // Mettre à jour l'état
-              console.log( "Valeur du Switch :", event.target.checked ); // Log de la valeur
+       const handleChange = (event) => {
+              setChecked(event.target.checked); // Mettre à jour l'état
+              console.log("Valeur du Switch :", event.target.checked); // Log de la valeur
        };
 
 
        const renderDetails = (
               <>
-                     { mdUp && (
-                            <Grid md={ 4 }>
-                                   <Typography variant="h6" sx={ { mb: 0.5 } }>
+                     {mdUp && (
+                            <Grid md={4}>
+                                   <Typography variant="h6" sx={{ mb: 0.5 }}>
                                           Details
                                    </Typography>
-                                   <Typography variant="body2" sx={ { color: 'text.secondary' } }>
+                                   <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                                           titre, courte description, image...
                                    </Typography>
                             </Grid>
-                     ) }
+                     )}
 
-                     <Grid xs={ 12 } md={ 8 }>
+                     <Grid xs={12} md={8}>
                             <Card>
-                                   { !mdUp && <CardHeader title="Details" /> }
+                                   {!mdUp && <CardHeader title="Details" />}
 
-                                   <Stack spacing={ 3 } sx={ { p: 3 } }>
+                                   <Stack spacing={3} sx={{ p: 3 }}>
                                           <RHFTextField name="name" label="Titre de l'annonce" />
 
-                                          <RHFTextField name="subDescription" label="Description" multiline rows={ 4 } />
+                                          <RHFTextField name="subDescription" label="Description" multiline rows={4} />
 
                                           {/* <Stack spacing={ 1.5 }>
                                                  <Typography variant="subtitle2">Content</Typography>
                                                  <RHFEditor simple name="description" />
                                           </Stack> */}
 
-                                          <Stack spacing={ 1.5 }>
+                                          <Stack spacing={1.5}>
                                                  <Typography variant="subtitle2">Images</Typography>
                                                  <RHFUpload
                                                         multiple
                                                         thumbnail
                                                         name="images"
-                                                        maxSize={ 3145728 }
-                                                        onDrop={ handleDrop }
-                                                        onRemove={ handleRemoveFile }
-                                                        onRemoveAll={ handleRemoveAllFiles }
-                                                        onUpload={ () => console.info( 'ON UPLOAD' ) }
+                                                        maxSize={3145728}
+                                                        onDrop={handleDrop}
+                                                        onRemove={handleRemoveFile}
+                                                        onRemoveAll={handleRemoveAllFiles}
+                                                        onUpload={() => console.info('ON UPLOAD')}
                                                  />
                                           </Stack>
                                    </Stack>
@@ -492,30 +456,30 @@ export default function ProductNewEditForm( { currentProduct2 } )
 
        const renderProperties = (
               <>
-                     { mdUp && (
-                            <Grid md={ 4 }>
-                                   <Typography variant="h6" sx={ { mb: 0.5 } }>
+                     {mdUp && (
+                            <Grid md={4}>
+                                   <Typography variant="h6" sx={{ mb: 0.5 }}>
                                           Autre details
                                    </Typography>
-                                   <Typography variant="body2" sx={ { color: 'text.secondary' } }>
+                                   <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                                           Details additionels
                                    </Typography>
                             </Grid>
-                     ) }
+                     )}
 
-                     <Grid xs={ 12 } md={ 8 }>
+                     <Grid xs={12} md={8}>
                             <Card>
-                                   { !mdUp && <CardHeader title="Autre details" /> }
+                                   {!mdUp && <CardHeader title="Autre details" />}
 
-                                   <Stack spacing={ 3 } sx={ { p: 3 } }>
+                                   <Stack spacing={3} sx={{ p: 3 }}>
                                           <Box
-                                                 columnGap={ 2 }
-                                                 rowGap={ 3 }
+                                                 columnGap={2}
+                                                 rowGap={3}
                                                  display="grid"
-                                                 gridTemplateColumns={ {
+                                                 gridTemplateColumns={{
                                                         xs: 'repeat(1, 1fr)',
                                                         md: 'repeat(2, 1fr)',
-                                                 } }
+                                                 }}
                                           >
                                                  {/* <RHFTextField name="code" label="Product Code" />
 
@@ -530,64 +494,56 @@ export default function ProductNewEditForm( { currentProduct2 } )
                                                  /> */}
 
 
-                                                 <RHFTextField type="number" name="phoneNumber" label="Numero de Telephone" />
+                                                 <RHFTextField type="number" disabled name="phoneNumber" label="Numero de Telephone" />
+                                                 {/* 
                                                  <RHFAutocomplete
                                                         name="city"
                                                         label="Villes"
-                                                        placeholder="+"
-                                                        multiple
+                                                        placeholder="Sélectionnez une ville"
                                                         freeSolo
-                                                        options={ villeNames }
-                                                        getOptionLabel={ ( option ) => option }
-                                                        value={ watch( "city" ) } // Utiliser React Hook Form pour stocker la valeur
-
-                                                        // value={ selectedTag ? [ selectedTag ] : [] } // Autoriser uniquement un élément
-                                                        // onChange={ ( event, newValue ) =>
-                                                        // {
-                                                        //        if ( newValue.length > 1 )
-                                                        //        {
-                                                        //               return; // Bloquer l'ajout de plus d'un élément
-                                                        //        }
-                                                        //        setSelectedTag( newValue[ 0 ] || null ); // Stocker uniquement un élément
-                                                        // } }
-                                                        onChange={ ( event, newValue ) =>
-                                                        {
-                                                               if ( newValue.length > 1 )
-                                                               {
-                                                                      return; // Bloquer l'ajout de plus d'un élément
-                                                               }
-                                                               setValue( "city", newValue ); // Mettre à jour React Hook Form
-                                                        } }
-                                                        renderOption={ ( props, option ) => (
-                                                               <li { ...props } key={ option }>
-                                                                      { option }
+                                                        options={villeNames}
+                                                        getOptionLabel={(option) => option}
+                                                        value={watch("city") || ''} // Chaîne vide par défaut
+                                                        onChange={(event, newValue) => {
+                                                               setValue("city", newValue || '', { shouldValidate: true }); // Force une chaîne
+                                                        }}
+                                                        renderOption={(props, option) => (
+                                                               <li {...props} key={option}>
+                                                                      {option}
                                                                </li>
-                                                        ) }
-                                                        renderTags={ ( selected, getTagProps ) =>
-                                                               selected.map( ( option, index ) => (
-                                                                      <Chip
-                                                                             { ...getTagProps( { index } ) }
-                                                                             key={ option }
-                                                                             label={ option }
-                                                                             size="small"
-                                                                             color="info"
-                                                                             variant="soft"
-                                                                      />
-                                                               ) )
-                                                        }
+                                                        )}
+                                                 /> */}
+                                                 <Autocomplete
+                                                        options={villeNames}
+                                                        value={values.city || null}
+                                                        onChange={(event, newValue) => {
+                                                               setValue("city", newValue, { shouldValidate: true });
+                                                        }}
+                                                        renderInput={(params) => (
+                                                               <TextField
+                                                                      {...params}
+                                                                      label="Villes"
+                                                                      error={!!methods.formState.errors.city}
+                                                                      helperText={methods.formState.errors.city?.message}
+                                                               />
+                                                        )}
+                                                        renderOption={(props, option) => (
+                                                               <li {...props} key={option}>
+                                                                      {option}
+                                                               </li>
+                                                        )}
                                                  />
-
-                                                 <RHFTextField name="localisation" label="Lieux" />
+                                                 <RHFTextField name="location" label="Lieux" />
                                                  <Stack >
                                                         <RHFAutocomplete
-                                                               name="categorie"
+                                                               name="category"
                                                                label="Services"
                                                                placeholder="+"
                                                                multiple
                                                                freeSolo
-                                                               options={ catgOptions }
-                                                               getOptionLabel={ ( option ) => option }
-                                                               value={ watch( "categorie" ) } // Utiliser React Hook Form pour stocker la valeur
+                                                               options={catgOptions}
+                                                               getOptionLabel={(option) => option}
+                                                               value={watch("category")} // Utiliser React Hook Form pour stocker la valeur
 
                                                                // value={ selectedTag ? [ selectedTag ] : [] } // Autoriser uniquement un élément
                                                                // onChange={ ( event, newValue ) =>
@@ -598,42 +554,41 @@ export default function ProductNewEditForm( { currentProduct2 } )
                                                                //        }
                                                                //        setSelectedTag( newValue[ 0 ] || null ); // Stocker uniquement un élément
                                                                // } }
-                                                               onChange={ ( event, newValue ) =>
-                                                               {
+                                                               onChange={(event, newValue) => {
                                                                       // if ( newValue.length > 1 )
                                                                       // {
                                                                       //        return; // Bloquer l'ajout de plus d'un élément
                                                                       // }
-                                                                      setValue( "categorie", newValue ); // Mettre à jour React Hook Form
-                                                               } }
-                                                               renderOption={ ( props, option ) => (
-                                                                      <li { ...props } key={ option }>
-                                                                             { option }
+                                                                      setValue("category", newValue); // Mettre à jour React Hook Form
+                                                               }}
+                                                               renderOption={(props, option) => (
+                                                                      <li {...props} key={option}>
+                                                                             {option}
                                                                       </li>
-                                                               ) }
-                                                               renderTags={ ( selected, getTagProps ) =>
-                                                                      selected.map( ( option, index ) => (
+                                                               )}
+                                                               renderTags={(selected, getTagProps) =>
+                                                                      selected.map((option, index) => (
                                                                              <Chip
-                                                                                    { ...getTagProps( { index } ) }
-                                                                                    key={ option }
-                                                                                    label={ option }
+                                                                                    {...getTagProps({ index })}
+                                                                                    key={option}
+                                                                                    label={option}
                                                                                     size="small"
                                                                                     color="info"
                                                                                     variant="soft"
                                                                              />
-                                                                      ) )
+                                                                      ))
                                                                }
                                                         />
                                                  </Stack>
 
                                                  <Stack >
                                                         <Typography variant="subtitle2">Personne accepté</Typography>
-                                                        <RHFMultiCheckbox row name="personAccept" spacing={ 2 } options={ genre } />
+                                                        <RHFMultiCheckbox row name="personAccept" spacing={2} options={genre} />
                                                  </Stack>
 
                                                  <Stack >
                                                         <Typography variant="subtitle2">Se deplace</Typography>
-                                                        <RHFMultiCheckbox row name="seDeplace" spacing={ 2 } options={ accept } />
+                                                        <RHFMultiCheckbox row name="seDeplace" spacing={2} options={accept} />
                                                  </Stack>
 
 
@@ -679,7 +634,7 @@ export default function ProductNewEditForm( { currentProduct2 } )
 
 
 
-                                          <Divider sx={ { borderStyle: 'dashed' } } />
+                                          <Divider sx={{ borderStyle: 'dashed' }} />
 
                                           {/* <Stack direction="row" alignItems="center" spacing={ 3 }>
                                                  <RHFSwitch name="saleLabel.enabled" label={ null } sx={ { m: 0 } } />
@@ -710,37 +665,37 @@ export default function ProductNewEditForm( { currentProduct2 } )
               <>
 
 
-                     { mdUp && (
-                            <Grid md={ 4 }>
-                                   <Typography variant="h6" sx={ { mb: 0.5 } }>
+                     {mdUp && (
+                            <Grid md={4}>
+                                   <Typography variant="h6" sx={{ mb: 0.5 }}>
                                           Tarif
                                    </Typography>
-                                   <Typography variant="body2" sx={ { color: 'text.secondary' } }>
+                                   <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                                           Different prix
                                    </Typography>
                             </Grid>
-                     ) }
+                     )}
 
-                     <Grid xs={ 12 } md={ 8 }>
+                     <Grid xs={12} md={8}>
                             <Card>
-                                   { !mdUp && <CardHeader title="Tarif" /> }
+                                   {!mdUp && <CardHeader title="Tarif" />}
 
-                                   <Stack direction="row" alignItems="center" flexWrap={ { xs: "wrap", md: "nowrap" } } spacing={ 3 } sx={ { p: 3 } }>
+                                   <Stack direction="row" alignItems="center" flexWrap={{ xs: "wrap", md: "nowrap" }} spacing={3} sx={{ p: 3 }}>
                                           <RHFTextField
                                                  name="price"
                                                  label="Prix minimum"
                                                  placeholder="0.00"
                                                  type="number"
-                                                 InputLabelProps={ { shrink: true } }
-                                                 InputProps={ {
+                                                 InputLabelProps={{ shrink: true }}
+                                                 InputProps={{
                                                         endAdornment: (
                                                                <InputAdornment position="start">
-                                                                      <Box component="span" sx={ { color: 'text.disabled' } }>
+                                                                      <Box component="span" sx={{ color: 'text.disabled' }}>
                                                                              fcfa
                                                                       </Box>
                                                                </InputAdornment>
                                                         ),
-                                                 } }
+                                                 }}
                                           />
 
                                           {/* <RHFTextField
@@ -761,28 +716,7 @@ export default function ProductNewEditForm( { currentProduct2 } )
                                           /> */}
 
                                           {/* <FormControlLabel
-                                                 control={ <Switch checked={ includeTaxes } onChange={ handleChangeIncludeTaxes } /> }
-                                                 label="Price includes taxes"
-                                          /> */}
-
-                                          {/* { !includeTaxes && (
-                                                 <RHFTextField
-                                                        name="taxes"
-                                                        label="Tax (%)"
-                                                        placeholder="0.00"
-                                                        type="number"
-                                                        InputLabelProps={ { shrink: true } }
-                                                        InputProps={ {
-                                                               startAdornment: (
-                                                                      <InputAdornment position="start">
-                                                                             <Box component="span" sx={ { color: 'text.disabled' } }>
-                                                                                    %
-                                                                             </Box>
-                                                                      </InputAdornment>
-                                                               ),
-                                                        } }
-                                                 />
-                                          ) } */}
+                                        
                                    </Stack>
 
                                    <Stack direction="row" alignItems="center" flexWrap={ { xs: "wrap", md: "nowrap" } } spacing={ 3 } sx={ { p: 3 } }>
@@ -820,29 +754,7 @@ export default function ProductNewEditForm( { currentProduct2 } )
                                                  } }
                                           /> */}
 
-                                          {/* <FormControlLabel
-                                                 control={ <Switch checked={ includeTaxes } onChange={ handleChangeIncludeTaxes } /> }
-                                                 label="Price includes taxes"
-                                          /> */}
 
-                                          {/* { !includeTaxes && (
-                                                 <RHFTextField
-                                                        name="taxes"
-                                                        label="Tax (%)"
-                                                        placeholder="0.00"
-                                                        type="number"
-                                                        InputLabelProps={ { shrink: true } }
-                                                        InputProps={ {
-                                                               startAdornment: (
-                                                                      <InputAdornment position="start">
-                                                                             <Box component="span" sx={ { color: 'text.disabled' } }>
-                                                                                    %
-                                                                             </Box>
-                                                                      </InputAdornment>
-                                                               ),
-                                                        } }
-                                                 />
-                                          ) } */}
                                    </Stack>
                             </Card>
                      </Grid>
@@ -851,8 +763,8 @@ export default function ProductNewEditForm( { currentProduct2 } )
 
        const renderActions = (
               <>
-                     { mdUp && <Grid md={ 4 } /> }
-                     <Grid xs={ 12 } md={ 8 } sx={ { display: 'flex', alignItems: 'center' } }>
+                     {mdUp && <Grid md={4} />}
+                     <Grid xs={12} md={8} sx={{ display: 'flex', alignItems: 'center' }}>
 
 
                             {/* { user?.role === "admin" && <FormControlLabel
@@ -861,8 +773,8 @@ export default function ProductNewEditForm( { currentProduct2 } )
                                    sx={ { flexGrow: 1, pl: 3 } }
                             /> } */}
 
-                            <LoadingButton sx={ { marginLeft: "auto" } } type="submit" variant="contained" size="large" loading={ isSubmitting }>
-                                   { !currentProduct ? 'Publier' : 'Modifier' }
+                            <LoadingButton sx={{ marginLeft: "auto" }} type="submit" variant="contained" size="large" loading={isSubmitting}>
+                                   {!currentProduct ? 'Publier' : 'Modifier'}
                             </LoadingButton>
                      </Grid>
               </>
@@ -870,16 +782,16 @@ export default function ProductNewEditForm( { currentProduct2 } )
 
        return (
               <>
-                     <DialogAnnonceBuy showDialog={ showDialog } dataGet={ dataToAdd } startPaiement={ showPaiementStatut } />
-                     <FormProvider methods={ methods } onSubmit={ onSubmit }>
-                            <Grid container spacing={ 3 }>
-                                   { renderDetails }
+                     <DialogAnnonceBuy showDialog={showDialog} dataGet={dataToAdd} startPaiement={showPaiementStatut} />
+                     <FormProvider methods={methods} onSubmit={onSubmit}>
+                            <Grid container spacing={3}>
+                                   {renderDetails}
 
-                                   { renderProperties }
+                                   {renderProperties}
 
-                                   { renderPricing }
+                                   {renderPricing}
 
-                                   { renderActions }
+                                   {renderActions}
                             </Grid>
                      </FormProvider>
               </>

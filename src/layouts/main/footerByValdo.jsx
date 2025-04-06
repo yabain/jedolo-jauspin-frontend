@@ -22,10 +22,10 @@ export default function Footer()
        const settings = useSettingsContext();
        return (
 
-              <Container maxWidth={ settings.themeStretch ? false : 'xl' } sx={ { mt: 'auto', p: '0px !important' } } >
+              <Container maxWidth={ settings.themeStretch ? false : '100%' } sx={ { mt: 'auto', p: '0px !important' } } >
 
 
-                     <Container maxWidth={ settings.themeStretch ? false : 'xl' } sx={ { bgcolor: "success.darker", mt: 12 } } >
+                     <Container maxWidth={ settings.themeStretch ? false : '100%' } sx={ { bgcolor: "success.darker", mt: 12 } } >
                             <Box sx={ { color: '#fff', pt: 5 } }>
 
 

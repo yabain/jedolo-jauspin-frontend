@@ -9,8 +9,9 @@ const HOST_DEV2 = 'http://192.168.1.122:5000'
 const HOST_DEV3 = 'http://192.168.213.1:5000'
 const HOST_DEV4 = 'http://192.168.1.127:5000'
 const HOST_DEV5 = 'http://192.168.58.1:5000'
+export const HOST_DEV7 = 'http://192.168.1.212:3000'
 
-const HOST_DEV6 = 'http://localhost:3000'
+export const HOST_DEV6 = 'http://localhost:3000'
 
 
 
@@ -26,9 +27,13 @@ export const HOST_FRONT_PROD = 'https://ndolo-backend.yaba-in.com'
 const HOST_BACK_PROD = ''
 
 
+
+
+
 export const HOST_PORT = PORT;
 export const HOST_BACKEND_URL = HOST_DEV1;
 export const HOST_FRONTEND_URL = HOST_FRONT_DEV1;
+export const tokenUser = localStorage.getItem('accessToken');
 
 
 

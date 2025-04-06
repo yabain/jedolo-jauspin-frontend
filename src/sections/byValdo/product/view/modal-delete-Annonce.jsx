@@ -15,15 +15,14 @@ import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSnackbar } from 'notistack';
 // ----------------------------------------------------------------------
 
-export default function DialogDeleteAnnonce( { showDialog, data } )
-{
+export default function DialogDeleteAnnonce({ showDialog, data }) {
 
 
        const dispatch = useDispatch()
        const { user } = useAuthContext();
        const { enqueueSnackbar } = useSnackbar();
-       const isFulledDelete = useSelector( ( state ) => state.deleteUserAnnonce.isFulled );
-       const isPendingDelete = useSelector( ( state ) => state.deleteUserAnnonce.isPending );
+       const isFulledDelete = useSelector((state) => state.deleteUserAnnonce.isFulled);
+       const isPendingDelete = useSelector((state) => state.deleteUserAnnonce.isPending);
 
 
 
@@ -35,10 +34,9 @@ export default function DialogDeleteAnnonce( { showDialog, data } )
 
 
 
-       const handleDeleteRow = useCallback( () =>
-       {
-              dispatch( deleteAnnonces( { id: data.id } ) );
-       }, [ dispatch, data ] );
+       const handleDeleteRow = useCallback(() => {
+              dispatch(deleteAnnonces({ _id: data._id }));
+       }, [dispatch, data]);
 
 
 
@@ -51,23 +49,21 @@ export default function DialogDeleteAnnonce( { showDialog, data } )
 
 
 
-       useEffect( () =>
-       {
+       useEffect(() => {
 
 
 
-              if ( !isPendingDelete && isFulledDelete && data.id )
-              {
+              if (!isPendingDelete && isFulledDelete && data._id) {
 
 
-                     dispatch( resetAfterDelete() )
+                     dispatch(resetAfterDelete())
                      // console.log( 'un seeeeeuuuuuuuuuukkkkkkk  annonce a supprimer ' );
-                     enqueueSnackbar( 'Annonces supprimées avec succès !' );
+                     enqueueSnackbar('Annonces supprimées avec succès !');
                      showDialog.onFalse();
 
               }
 
-       }, [ showDialog, enqueueSnackbar, dispatch, isFulledDelete, isPendingDelete, data ] );
+       }, [showDialog, enqueueSnackbar, dispatch, isFulledDelete, isPendingDelete, data]);
 
 
 
@@ -99,8 +95,8 @@ export default function DialogDeleteAnnonce( { showDialog, data } )
 
 
               <ConfirmDialog
-                     open={ showDialog.value }
-                     onClose={ showDialog.onFalse }
+                     open={showDialog.value}
+                     onClose={showDialog.onFalse}
                      title="Suppression de l'annonce"
                      content={
                             <>
@@ -113,15 +109,14 @@ export default function DialogDeleteAnnonce( { showDialog, data } )
                                    variant="contained"
                                    color="error"
 
-                                   loading={ isPendingDelete }
-                                   onClick={ () =>
-                                   {
+                                   loading={isPendingDelete}
+                                   onClick={() => {
 
-                                          console.log( 'valeur des etat de suppression ', isPendingDelete, isFulledDelete );
+                                          console.log('valeur des etat de suppression ', isPendingDelete, isFulledDelete);
 
                                           handleDeleteRow();
                                           // confirmOfBan.onFalse();
-                                   } }
+                                   }}
                             >
                                    supprimer
                             </LoadingButton>
@@ -133,11 +128,11 @@ export default function DialogDeleteAnnonce( { showDialog, data } )
 }
 
 DialogDeleteAnnonce.propTypes = {
-       showDialog: PropTypes.shape( {
+       showDialog: PropTypes.shape({
               value: PropTypes.bool,
               onTrue: PropTypes.func,
               onFalse: PropTypes.func,
               toggle: PropTypes.func,
-       } ).isRequired,
+       }).isRequired,
        data: PropTypes.object
 };

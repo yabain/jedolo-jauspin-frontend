@@ -95,7 +95,7 @@ app.post( "/auth/login", ( req, res ) =>
               return res.status( 404 ).json( { message: "Utilisateur non trouvé." } );
        }
 
-       const access_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG4uZG9lQGV4YW1wbGUuY29tIiwicm9sZSI6IlVTRVIiLCJzdWIiOiI2N2UxODVlMzFkN2RlYjFhNjZhYzFhMDAiLCJpYXQiOjE3NDM2MTY1MjYsImV4cCI6MTc0MzY1MjUyNn0.goS8TStxFWN02Z6K38vHH6yiagF_ompwFr1rqblNqiY"
+       const access_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30"
        const user = data.users[ email.trim() ]
        res.json( {
               user: user,

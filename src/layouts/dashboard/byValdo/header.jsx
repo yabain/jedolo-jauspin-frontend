@@ -36,15 +36,14 @@ import NotificationsPopover from '../../common/notifications-popover';
 
 // ----------------------------------------------------------------------
 
-export default function Header( { onOpenNav } )
-{
+export default function Header({ onOpenNav }) {
 
        const { user } = useAuthContext();
 
        const { logout } = useAuthContext();
        // const user = useSelector( ( state ) => state.users.selectedUser );
 
-       console.log( 'role du user from header', user );
+       // console.log( 'role du user from header', user );
 
        const theme = useTheme();
        const location = useLocation();
@@ -57,23 +56,20 @@ export default function Header( { onOpenNav } )
 
        const isNavMini = settings.themeLayout === 'mini';
 
-       const lgUp = useResponsive( 'up', 'xl' );
+       const lgUp = useResponsive('up', 'xl');
 
-       const offset = useOffSetTop( HEADER.H_DESKTOP );
+       const offset = useOffSetTop(HEADER.H_DESKTOP);
 
        const offsetTop = offset && !isNavHorizontal;
 
        const router = useRouter();
-       const handleLogout = async () =>
-       {
-              try
-              {
+       const handleLogout = async () => {
+              try {
                      await logout();
-                     router.replace( '/home' );
-              } catch ( error )
-              {
+                     router.replace('/home');
+              } catch (error) {
 
-                     console.log( error );
+                     console.log(error);
 
 
               }
@@ -98,7 +94,7 @@ export default function Header( { onOpenNav } )
                             direction="row"
                             alignItems="center"
                             justifyContent="flex-end"
-                            spacing={ { xs: 0.5, sm: 1 } }
+                            spacing={{ xs: 0.5, sm: 1 }}
                      >
                             {/* <LanguagePopover />
 
@@ -112,26 +108,26 @@ export default function Header( { onOpenNav } )
 
 
                             <Stack
-                                   flexGrow={ 1 }
+                                   flexGrow={1}
                                    direction="row"
                                    alignItems="center"
                                    justifyContent="flex-end"
-                                   spacing={ { xs: 2, sm: 1 } }
+                                   spacing={{ xs: 2, sm: 1 }}
                             >
 
-                                   <RoleBasedGuard hasContent roles={ [ 'admin', 'user' ] }  >
+                                   <RoleBasedGuard hasContent roles={['admin', 'user']}  >
                                           <Button
 
-                                                 onClick={ () => { naviguate( '/home' ) } }
-                                                 sx={ {
+                                                 onClick={() => { naviguate('/home') }}
+                                                 sx={{
 
                                                         mt: 2,
 
                                                         display: { md: 'block', sm: 'none', xs: 'none' }
                                                         // ml: 3,
 
-                                                 } }
-                                                 variant={ location.pathname === '/home' ? "contained" : "outlined" } color="primary"
+                                                 }}
+                                                 variant={location.pathname === '/home' ? "contained" : "outlined"} color="primary"
                                           // startIcon={ <Iconify icon="eva:search-fill" /> }
                                           >
                                                  Acceuil
@@ -140,18 +136,18 @@ export default function Header( { onOpenNav } )
 
 
 
-                                   <RoleBasedGuard hasContent roles={ [ 'user' ] }  >
+                                   <RoleBasedGuard hasContent roles={['user']}  >
                                           <Button
 
-                                                 onClick={ () => { naviguate( '/home/annonces/list' ) } }
-                                                 sx={ {
+                                                 onClick={() => { naviguate('/home/annonces/list') }}
+                                                 sx={{
 
                                                         mt: 2,
                                                         display: { md: 'block', sm: 'none', xs: 'none' }
                                                         // ml: 3,
 
-                                                 } }
-                                                 variant={ location.pathname === '/home/annonces/list' ? "contained" : "outlined" } color="primary"
+                                                 }}
+                                                 variant={location.pathname === '/home/annonces/list' ? "contained" : "outlined"} color="primary"
                                           // startIcon={ <Iconify icon="eva:search-fill" /> }
                                           >
                                                  Mes Annonces
@@ -160,18 +156,18 @@ export default function Header( { onOpenNav } )
 
 
 
-                                   <RoleBasedGuard hasContent roles={ [ 'user' ] }  >
+                                   <RoleBasedGuard hasContent roles={['user']}  >
                                           <Button
 
-                                                 onClick={ () => { naviguate( '/home/annonces/signal' ) } }
-                                                 sx={ {
+                                                 onClick={() => { naviguate('/home/annonces/signal') }}
+                                                 sx={{
 
                                                         mt: 2,
                                                         display: { md: 'block', sm: 'none', xs: 'none' }
                                                         // ml: 3,
 
-                                                 } }
-                                                 variant={ location.pathname === '/home/annonces/signal' ? "contained" : "outlined" } color="primary"
+                                                 }}
+                                                 variant={location.pathname === '/home/annonces/signal' ? "contained" : "outlined"} color="primary"
                                           // startIcon={ <Iconify icon="eva:search-fill" /> }
                                           >
                                                  Annonces  Signaler
@@ -181,24 +177,23 @@ export default function Header( { onOpenNav } )
 
 
 
-                                   <RoleBasedGuard hasContent roles={ [] }  >
+                                   <RoleBasedGuard hasContent roles={[]}  >
                                           <Button
 
-                                                 onClick={ () =>
-                                                 {
+                                                 onClick={() => {
 
-                                                        naviguate( '/auth/jwt/register' )
+                                                        naviguate('/auth/jwt/register')
                                                         // handleLogout()
 
-                                                 } }
-                                                 sx={ {
+                                                 }}
+                                                 sx={{
 
                                                         mt: 2,
                                                         // display: { md: 'block', sm: 'none', xs: 'none' }
                                                         // ml: 3,
 
-                                                 } }
-                                                 variant={ location.pathname === '/auth/jwt/register' ? "contained" : "outlined" } color="primary"
+                                                 }}
+                                                 variant={location.pathname === '/auth/jwt/register' ? "contained" : "outlined"} color="primary"
                                           // startIcon={ <Iconify icon="eva:search-fill" /> }
                                           >
                                                  Inscription
@@ -208,18 +203,18 @@ export default function Header( { onOpenNav } )
 
 
 
-                                   <RoleBasedGuard hasContent roles={ [] }  >
+                                   <RoleBasedGuard hasContent roles={[]}  >
                                           <Button
 
-                                                 onClick={ () => { naviguate( '/auth/jwt/login' ) } }
-                                                 sx={ {
+                                                 onClick={() => { naviguate('/auth/jwt/login') }}
+                                                 sx={{
 
                                                         mt: 2,
                                                         // display: { md: 'block', sm: 'none', xs: 'none' }
                                                         // ml: 3,
 
-                                                 } }
-                                                 variant={ location.pathname === '/auth/jwt/login' ? "contained" : "outlined" } color="primary"
+                                                 }}
+                                                 variant={location.pathname === '/auth/jwt/login' ? "contained" : "outlined"} color="primary"
                                           // startIcon={ <Iconify icon="eva:search-fill" /> }
                                           >
                                                  Connexion
@@ -263,14 +258,14 @@ export default function Header( { onOpenNav } )
                                           </Button>
                                    </RoleBasedGuard> */}
 
-                                   { user?.role !== undefined ? (
-                                          <RoleBasedGuard hasContent roles={ [ 'user', 'admin' ] }>
+                                   {user?.role !== undefined ? (
+                                          <RoleBasedGuard hasContent roles={['user', 'admin']}>
                                                  <Button
-                                                        onClick={ () =>
-                                                               naviguate( '/home/annonces/new' )
+                                                        onClick={() =>
+                                                               naviguate('/home/annonces/new')
                                                         }
-                                                        sx={ { mt: 2, display: { md: 'block', sm: 'none', xs: 'none', display: { md: 'block', sm: 'none', xs: 'none' } } } }
-                                                        variant={ location.pathname === '/home/annonces/new' ? 'contained' : 'outlined' }
+                                                        sx={{ mt: 2, display: { md: 'block', sm: 'none', xs: 'none', display: { md: 'block', sm: 'none', xs: 'none' } } }}
+                                                        variant={location.pathname === '/home/annonces/new' ? 'contained' : 'outlined'}
                                                         color="primary"
                                                  >
                                                         Publier
@@ -278,16 +273,16 @@ export default function Header( { onOpenNav } )
                                           </RoleBasedGuard>
                                    ) : (
                                           <Button
-                                                 onClick={ () =>
-                                                        naviguate( '/auth/jwt/login' )
+                                                 onClick={() =>
+                                                        naviguate('/auth/jwt/login')
                                                  }
-                                                 sx={ { mt: 2, display: { md: 'block', sm: 'none', xs: 'none' } } }
-                                                 variant={ location.pathname === '/home/annonces/new' ? 'contained' : 'outlined' }
+                                                 sx={{ mt: 2, display: { md: 'block', sm: 'none', xs: 'none' } }}
+                                                 variant={location.pathname === '/home/annonces/new' ? 'contained' : 'outlined'}
                                                  color="primary"
                                           >
                                                  Publier
                                           </Button>
-                                   ) }
+                                   )}
 
 
                                    {/* <RoleBasedGuard hasContent roles={ [ 'admin', 'user' ] }  >
@@ -308,18 +303,18 @@ export default function Header( { onOpenNav } )
                                           </Button>
                                    </RoleBasedGuard> */}
 
-                                   <RoleBasedGuard hasContent roles={ [ 'admin' ] }  >
+                                   <RoleBasedGuard hasContent roles={['admin']}  >
                                           <Button
 
-                                                 onClick={ () => { naviguate( '/home/annonces/list' ) } }
-                                                 sx={ {
+                                                 onClick={() => { naviguate('/home/annonces/list') }}
+                                                 sx={{
 
                                                         mt: 2,
                                                         display: { md: 'block', sm: 'none', xs: 'none' }
                                                         // ml: 3,
 
-                                                 } }
-                                                 variant={ location.pathname === '/home/annonces/list' ? "contained" : "outlined" } color="primary"
+                                                 }}
+                                                 variant={location.pathname === '/home/annonces/list' ? "contained" : "outlined"} color="primary"
                                           // startIcon={ <Iconify icon="eva:search-fill" /> }
                                           >
                                                  Annonces
@@ -327,7 +322,7 @@ export default function Header( { onOpenNav } )
                                    </RoleBasedGuard>
 
                             </Stack>
-                            <RoleBasedGuard hasContent roles={ [ 'admin', 'user' ] } >
+                            <RoleBasedGuard hasContent roles={['admin', 'user']} >
                                    <AccountPopover />
                             </RoleBasedGuard>
                      </Stack>
@@ -341,44 +336,44 @@ export default function Header( { onOpenNav } )
        return (
 
               <AppBar
-                     sx={ {
+                     sx={{
                             height: HEADER.H_MOBILE,
                             zIndex: theme.zIndex.appBar + 1,
-                            ...bgBlur( {
+                            ...bgBlur({
                                    color: theme.palette.background.default,
-                            } ),
-                            transition: theme.transitions.create( [ 'height' ], {
+                            }),
+                            transition: theme.transitions.create(['height'], {
                                    duration: theme.transitions.duration.shorter,
-                            } ),
-                            ...( lgUp && {
+                            }),
+                            ...(lgUp && {
                                    width: `calc(100% - 0px)`,
                                    height: HEADER.H_DESKTOP,
-                                   ...( offsetTop && {
+                                   ...(offsetTop && {
                                           height: HEADER.H_DESKTOP_OFFSET,
-                                   } ),
-                                   ...( isNavHorizontal && {
+                                   }),
+                                   ...(isNavHorizontal && {
                                           width: 1,
                                           bgcolor: 'background.default',
                                           height: HEADER.H_DESKTOP_OFFSET,
-                                          borderBottom: `dashed 1px ${ theme.palette.divider }`,
-                                   } ),
-                                   ...( isNavMini && {
+                                          borderBottom: `dashed 1px ${theme.palette.divider}`,
+                                   }),
+                                   ...(isNavMini && {
                                           width: `calc(100% - 0px)`,
-                                   } ),
-                            } ),
+                                   }),
+                            }),
                             alignItems: 'center',
 
-                     } }
+                     }}
               >
 
-                     <Box width={ 1 } maxWidth={ settings.themeStretch ? false : 'xl' } >
+                     <Box width={1} maxWidth={settings.themeStretch ? false : '100%'} >
                             <Toolbar
-                                   sx={ {
+                                   sx={{
                                           height: 1,
                                           px: { lg: 5 },
-                                   } }
+                                   }}
                             >
-                                   { renderContent }
+                                   {renderContent}
                             </Toolbar>
 
                      </Box>

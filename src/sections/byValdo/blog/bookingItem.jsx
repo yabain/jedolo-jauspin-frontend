@@ -29,8 +29,7 @@ import { useNavigate } from 'react-router';
 import { request } from 'src/store/annonces/updateAnnonce/reducer';
 import { useDispatch } from 'react-redux';
 
-export default function BookingItem( { item } )
-{
+export default function BookingItem({ item }) {
 
        const { avatarUrl, name, createdAt, guests, coverUrl, price, sponsored, rating } = item;
 
@@ -40,120 +39,119 @@ export default function BookingItem( { item } )
 
 
 
-       dayjs.extend( relativeTime );
-       dayjs.locale( 'fr' );
+       dayjs.extend(relativeTime);
+       dayjs.locale('fr');
        const dispatch = useDispatch()
 
-       const AnnonceClicked = () =>
-       {
-              navigate( 'annonces/view', { state: { annonce: item } } )
+       const AnnonceClicked = () => {
+              navigate('annonces/view', { state: { annonce: item } })
 
               const nbrView = item.nbrView !== undefined ? item.nbrView + 1 : 1
-              dispatch( request( { ...item, nbrView } ) )
+              dispatch(request({ ...item, nbrView }))
        }
 
        return (
               <Paper
-                     onClick={ () => AnnonceClicked() }
-                     sx={ {
+                     onClick={() => AnnonceClicked()}
+                     sx={{
                             cursor: "pointer",
                             // mr: 3,
                             borderRadius: 2,
                             position: 'relative',
                             // bgcolor: 'background.neutral',
                             bgcolor: "rgb(255 192 203 / 18%)",
-                     } }
+                     }}
               >
-                     <Box sx={ { p: 1, position: 'relative' } }>
-                            <Image alt={ coverUrl } src={ coverUrl } ratio="1/1" sx={ { borderRadius: 1.5 } } />
-                            { sponsored && sponsored !== '' && <Label
+                     <Box sx={{ p: 1, position: 'relative' }}>
+                            <Image alt={coverUrl} src={coverUrl} ratio="1/1" sx={{ borderRadius: 1.5 }} />
+                            {sponsored && sponsored !== '' && <Label
                                    variant="filled"
-                                   color={ sponsored === "top" ? "primary" : "info" }
-                                   sx={ {
+                                   color={sponsored === "top" ? "primary" : "info"}
+                                   sx={{
                                           left: 16,
                                           zIndex: 9,
                                           bottom: 16,
                                           position: 'absolute',
-                                   } }
+                                   }}
                             >
-                                   { sponsored }
-                            </Label> }
+                                   {sponsored}
+                            </Label>}
                      </Box>
 
                      <Stack
-                            spacing={ 2 }
-                            sx={ {
+                            spacing={2}
+                            sx={{
                                    px: 2,
                                    pb: 1,
                                    pt: 2.5,
-                            } }
+                            }}
                      >
-                            <Stack direction="row" alignItems="center" spacing={ 2 }>
-                                   <Avatar alt={ name } src={ avatarUrl } />
+                            <Stack direction="row" alignItems="center" spacing={2}>
+                                   <Avatar alt={name} src={avatarUrl} />
                                    <ListItemText
-                                          primary={ name }
-                                          primaryTypographyProps={ {
+                                          primary={name}
+                                          primaryTypographyProps={{
                                                  noWrap: true,
                                                  variant: "subtitle2",
                                                  width: '240px' // ← équivalent au style par défaut
 
-                                          } }
-                                          secondary={ fDateTime( createdAt ) }
-                                          secondaryTypographyProps={ {
+                                          }}
+                                          secondary={fDateTime(createdAt)}
+                                          secondaryTypographyProps={{
                                                  mt: 0.5,
                                                  component: 'span',
                                                  typography: 'caption',
                                                  color: 'text.disabled',
-                                          } }
+                                          }}
                                    />
                             </Stack>
 
                             <Stack
-                                   rowGap={ 1.5 }
-                                   columnGap={ 3 }
+                                   rowGap={1.5}
+                                   columnGap={3}
                                    flexWrap="wrap"
                                    direction="row"
                                    alignItems="center"
                                    justifyContent="space-between"
-                                   sx={ { color: 'text.secondary', typography: 'caption' } }
+                                   sx={{ color: 'text.secondary', typography: 'caption' }}
                             >
-                                   <Stack direction="row" alignItems="center" justifyContent="space-between" width={ 1 }>
+                                   <Stack direction="row" alignItems="center" justifyContent="space-between" width={1}>
                                           <Box alignItems="center" display="flex">
-                                                 <Iconify width={ 16 } icon="solar:calendar-date-bold" sx={ { mr: 0.5, flexShrink: 0 } } />
-                                                 { dayjs( createdAt ).fromNow() }
+                                                 <Iconify width={16} icon="solar:calendar-date-bold" sx={{ mr: 0.5, flexShrink: 0 }} />
+                                                 {dayjs(createdAt).fromNow()}
                                           </Box>
 
 
                                           <Typography variant='button' >
-                                                 { item.city[ 0 ] }
+                                                 {item.city}
                                           </Typography>
                                    </Stack>
 
                                    <Stack
 
-                                          flexGrow={ 1 }
+                                          flexGrow={1}
                                           direction="row"
                                           flexWrap="nowrap"
                                           justifyContent="space-between"
-                                          sx={ {
+                                          sx={{
                                                  typography: 'caption',
                                                  color: 'text.disabled',
-                                          } }
+                                          }}
                                    >
                                           <Stack direction="row" alignItems="center" >
-                                                 <Iconify icon="eva:message-circle-fill" width={ 16 } />
-                                                 { fShortenNumber( item.nbrComment || 0 ) }
+                                                 <Iconify icon="eva:message-circle-fill" width={16} />
+                                                 {fShortenNumber(item.nbrComment || 0)}
                                           </Stack>
 
-                                          <Stack direction="row" alignItems="center" sx={ { mr: 1, ml: 1 } }>
-                                                 <Iconify icon="solar:eye-bold" width={ 16 } />
-                                                 { fShortenNumber( item.nbrView || 0 ) }
+                                          <Stack direction="row" alignItems="center" sx={{ mr: 1, ml: 1 }}>
+                                                 <Iconify icon="solar:eye-bold" width={16} />
+                                                 {fShortenNumber(item.nbrView || 0)}
                                           </Stack>
 
                                           <Stack direction="row" alignItems="center" >
-                                                 <Iconify icon="mdi:star-rate" width={ 16 } />
-                                                 {/* <Iconify icon="solar:share-bold" width={ 16 } sx={ { mr: 0.5 } } /> */ }
-                                                 { fShortenNumber( item.rating || 0 ) } / 5
+                                                 <Iconify icon="mdi:star-rate" width={16} />
+                                                 {/* <Iconify icon="solar:share-bold" width={ 16 } sx={ { mr: 0.5 } } /> */}
+                                                 {fShortenNumber(item.rating || 0)} / 5
                                           </Stack>
                                    </Stack>
 
@@ -163,14 +161,14 @@ export default function BookingItem( { item } )
 
                      <Label
                             variant="filled"
-                            sx={ {
+                            sx={{
                                    left: 16,
                                    zIndex: 9,
                                    top: 16,
                                    position: 'absolute',
-                            } }
+                            }}
                      >
-                            { price } FCFA
+                            {price} FCFA
                      </Label>
 
 
@@ -182,14 +180,14 @@ export default function BookingItem( { item } )
 
 
 BookingItem.propTypes = {
-       item: PropTypes.shape( {
+       item: PropTypes.shape({
               avatarUrl: PropTypes.string,
               name: PropTypes.string,
-              createdAt: PropTypes.oneOfType( [
+              createdAt: PropTypes.oneOfType([
                      PropTypes.string,
                      PropTypes.number,
-                     PropTypes.instanceOf( Date ),
-              ] ),
+                     PropTypes.instanceOf(Date),
+              ]),
               guests: PropTypes.number,
               coverUrl: PropTypes.string,
               price: PropTypes.number,
@@ -199,7 +197,7 @@ BookingItem.propTypes = {
               totalViews: PropTypes.number,
               nbrComment: PropTypes.number,
               nbrView: PropTypes.number,
-              city: PropTypes.arrayOf( string ),
+              city: PropTypes.arrayOf(string),
               totalShares: PropTypes.number,
-       } ).isRequired,
+       }).isRequired,
 };

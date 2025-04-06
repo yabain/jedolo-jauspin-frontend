@@ -33,7 +33,7 @@ export default function ChatNavItem({ selected, collapse, conversation, onCloseM
   const { group, displayName, displayText, participants, lastActivity, hasOnlineInGroup } =
     useGetNavItem({
       conversation,
-      currentUserId: `${user?.id}`,
+      currentUserId: `${user?._id}`,
     });
 
   const singleParticipant = participants[0];

@@ -35,83 +35,74 @@ import ProductDetailsDescription from '../product-details-description';
 
 // ----------------------------------------------------------------------
 
-export default function ProductDetailsView( { id } )
-{
+export default function ProductDetailsView({ id }) {
 
 
 
        const location = useLocation();
        const navigate = useNavigate()
        const settings = useSettingsContext();
-       const [ publish, setPublish ] = useState( '' );
-       const [ hasConsulted, setHasConsulted ] = useState( false );
+       const [publish, setPublish] = useState('');
+       const [hasConsulted, setHasConsulted] = useState(false);
 
-       const [ totalReviews, setTotalReviews ] = useState( 0 )
-       const [ currentTab, setCurrentTab ] = useState( 'description' );
+       const [totalReviews, setTotalReviews] = useState(0)
+       const [currentTab, setCurrentTab] = useState('description');
 
-       const [ productLoading, setProductLoading ] = useState( true );
-       const [ productError, setProductError ] = useState( false );
-       const productGet = useMemo( () => location.state?.annonce || null, [ location ] );
+       const [productLoading, setProductLoading] = useState(true);
+       const [productError, setProductError] = useState(false);
+       const productGet = useMemo(() => location.state?.annonce || null, [location]);
 
-       const product = useMemo( () =>
+       const product = useMemo(() =>
        (
               {
                      ...productGet,
 
               }
        )
-              , [ productGet ] )
+              , [productGet])
 
 
-       const getChildValue = ( dataGet ) => setTotalReviews( dataGet )
+       const getChildValue = (dataGet) => setTotalReviews(dataGet)
 
-       useEffect( () =>
-       {
-              if ( product )
-              {
-                     setProductLoading( false );
-                     setProductError( false );
+       useEffect(() => {
+              if (product) {
+                     setProductLoading(false);
+                     setProductError(false);
 
 
 
-                     setHasConsulted( true );
-              } else
-              {
-                     setProductError( true );
+                     setHasConsulted(true);
+              } else {
+                     setProductError(true);
                      // console.log( 'erreurrrrrrrrrrrrrr' );
               }
 
 
-       }, [ product, hasConsulted ] );
+       }, [product, hasConsulted]);
 
 
-       useEffect( () =>
-       {
-              setHasConsulted( true );
-       }, [ location.key ] );
+       useEffect(() => {
+              setHasConsulted(true);
+       }, [location.key]);
 
 
 
-       console.log( productGet.phoneNumber );
+       console.log(productGet.phoneNumber);
 
 
-       useEffect( () =>
-       {
-              if ( product )
-              {
-                     setPublish( product?.publish );
+       useEffect(() => {
+              if (product) {
+                     setPublish(product?.publish);
               }
-       }, [ product ] );
+       }, [product]);
 
-       const handleChangePublish = useCallback( ( newValue ) =>
-       {
-              setPublish( newValue );
-       }, [] );
+       const handleChangePublish = useCallback((newValue) => {
+              setPublish(newValue);
+       }, []);
 
-       const handleChangeTab = useCallback( ( event, newValue ) =>
-       {
-              setCurrentTab( newValue );
-       }, [] );
+       const handleChangeTab = useCallback((event, newValue) => {
+              setCurrentTab(newValue);
+       }, []);
 
        const service = '<li><p>The foam sockliner feels soft and comfortable</p></li>'
        const descriptSend = `
@@ -123,7 +114,7 @@ export default function ProductDetailsView( { id } )
 <br/>
 <ol>
   <li>Tout Services</li>
-  <li>${ product.price } FCFA</li>
+  <li>${product.price} FCFA</li>
 </ol>
 
 <br/> 
@@ -133,7 +124,7 @@ export default function ProductDetailsView( { id } )
 <h6>Services Offerts</h6>
 <br/>
 <ul>
- ${ product.categorie.map( element => `<li>${ element }</li>` ).join( "" ) }
+ ${product.category.map(element => `<li>${element}</li>`).join("")}
 </ul>
 
 <br/>
@@ -143,7 +134,7 @@ export default function ProductDetailsView( { id } )
 <br/>
 <ul> 
 
-<p>${ product.subDescription }</p> 
+<p>${product.subDescription}</p> 
   
 </ul>
 
@@ -170,7 +161,7 @@ export default function ProductDetailsView( { id } )
               },
        ];
 
-       console.log( 'dddddd', product.sponsored !== '' ? 'oui' : 'non', );
+       console.log('dddddd', product.sponsored !== '' ? 'oui' : 'non',);
 
 
        const renderSkeleton = <ProductDetailsSkeleton />;
@@ -178,18 +169,18 @@ export default function ProductDetailsView( { id } )
        const renderError = (
               <EmptyContent
                      filled
-                     title={ `${ productError?.message }` }
+                     title={`${productError?.message}`}
                      action={
                             <Button
-                                   component={ RouterLink }
-                                   href={ paths.dashboard.product.root }
-                                   startIcon={ <Iconify icon="eva:arrow-ios-back-fill" width={ 16 } /> }
-                                   sx={ { mt: 3 } }
+                                   component={RouterLink}
+                                   href={paths.dashboard.product.root}
+                                   startIcon={<Iconify icon="eva:arrow-ios-back-fill" width={16} />}
+                                   sx={{ mt: 3 }}
                             >
                                    Back to List
                             </Button>
                      }
-                     sx={ { py: 10 } }
+                     sx={{ py: 10 }}
               />
        );
 
@@ -197,21 +188,21 @@ export default function ProductDetailsView( { id } )
               <>
                      <ProductDetailsToolbar
 
-                            editLink={ paths.dashboard.product.edit( `${ product?.id }` ) }
-                            liveLink={ paths.product.details( `${ product?.id }` ) }
-                            publish={ publish || '' }
-                            onChangePublish={ handleChangePublish }
-                            publishOptions={ PRODUCT_PUBLISH_OPTIONS }
-                            data={ product }
+                            editLink={paths.dashboard.product.edit(`${product?.id}`)}
+                            liveLink={paths.product.details(`${product?.id}`)}
+                            publish={publish || ''}
+                            onChangePublish={handleChangePublish}
+                            publishOptions={PRODUCT_PUBLISH_OPTIONS}
+                            data={product}
                      />
 
-                     <Grid container spacing={ { xs: 3, md: 5, lg: 8 } } >
-                            <Grid xs={ 12 } md={ 6 } lg={ 7 }>
-                                   <ProductDetailsCarousel product={ product } />
+                     <Grid container spacing={{ xs: 3, md: 5, lg: 8 }} >
+                            <Grid xs={12} md={6} lg={7}>
+                                   <ProductDetailsCarousel product={product} />
                             </Grid>
 
-                            <Grid xs={ 12 } md={ 6 } lg={ 5 }>
-                                   <ProductDetailsSummary disabledActions product={ product } />
+                            <Grid xs={12} md={6} lg={5}>
+                                   <ProductDetailsSummary disabledActions product={product} />
                             </Grid>
                      </Grid>
 
@@ -243,16 +234,16 @@ export default function ProductDetailsView( { id } )
                             ) ) }
                      </Box> */}
 
-                     <Card sx={ { mt: 10, } }>
+                     <Card sx={{ mt: 10, }}>
                             <Tabs
-                                   value={ currentTab }
-                                   onChange={ handleChangeTab }
-                                   sx={ {
+                                   value={currentTab}
+                                   onChange={handleChangeTab}
+                                   sx={{
                                           px: 3,
-                                          boxShadow: ( theme ) => `inset 0 -2px 0 0 ${ alpha( theme.palette.grey[ 500 ], 0.08 ) }`,
-                                   } }
+                                          boxShadow: (theme) => `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
+                                   }}
                             >
-                                   { [
+                                   {[
                                           {
                                                  value: 'description',
                                                  label: 'Description',
@@ -261,36 +252,36 @@ export default function ProductDetailsView( { id } )
                                                  value: 'reviews',
                                                  label: `Avis Utilisateurs `,
                                           },
-                                   ].map( ( tab ) => (
-                                          <Tab key={ tab.value } value={ tab.value } label={ tab.label } />
-                                   ) ) }
+                                   ].map((tab) => (
+                                          <Tab key={tab.value} value={tab.value} label={tab.label} />
+                                   ))}
                             </Tabs>
 
-                            { currentTab === 'description' && (
-                                   <ProductDetailsDescription description={ descriptSend } />
-                            ) }
+                            {currentTab === 'description' && (
+                                   <ProductDetailsDescription description={descriptSend} />
+                            )}
 
-                            { currentTab === 'reviews' && (
+                            {currentTab === 'reviews' && (
                                    <ProductDetailsReview
-                                          annonce={ product }
-                                          getChildValue={ getChildValue }
-                                          ratings={ product.ratings }
-                                          reviews={ product.reviews }
-                                          totalRatings={ product.totalRatings }
-                                          totalReviews={ product.totalReviews }
+                                          annonce={product}
+                                          getChildValue={getChildValue}
+                                          ratings={product.ratings}
+                                          reviews={product.reviews}
+                                          totalRatings={product.totalRatings}
+                                          totalReviews={product.totalReviews}
                                    />
-                            ) }
+                            )}
                      </Card>
               </>
        );
 
        return (
-              <Container maxWidth={ settings.themeStretch ? false : 'lg' }>
-                     { productLoading && renderSkeleton }
+              <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+                     {productLoading && renderSkeleton}
 
-                     { productError && renderError }
+                     {productError && renderError}
 
-                     { product && renderProduct }
+                     {product && renderProduct}
               </Container>
        );
 }

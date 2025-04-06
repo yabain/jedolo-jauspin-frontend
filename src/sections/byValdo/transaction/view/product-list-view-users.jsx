@@ -665,7 +665,7 @@ export default function ProductListViewUsers( { toShow } )
                                           disableRowSelectionOnClick
                                           rows={ dataFiltered }
                                           columns={ columns }
-                                          loading={ productsLoading }
+                                          loading={ dataFiltered.length === 0 }
                                           getRowHeight={ () => 'auto' }
                                           pageSizeOptions={ [ 5, 10, 25 ] }
                                           initialState={ {

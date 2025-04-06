@@ -27,8 +27,7 @@ import AppWelcome from '../app-welcome';
 
 // ----------------------------------------------------------------------
 
-export default function Home()
-{
+export default function Home() {
 
 
 
@@ -36,34 +35,32 @@ export default function Home()
        const openFilters = useBoolean();
        const { user } = useAuthContext();
        const settings = useSettingsContext();
-       const annonceFromStore = useSelector( ( state ) => state.usersAnnonces.data )
-       const [ HeadlineAnnouncement, setHeadlineAnnouncement ] = useState( [] )
+       const annonceFromStore = useSelector((state) => state.usersAnnonces.data)
+       const [HeadlineAnnouncement, setHeadlineAnnouncement] = useState([])
        const update = []
        // if ( HeadlineAnnouncement.length > 0 ) console.log( "Il y a des annonces à la une :", HeadlineAnnouncement );
 
-       const setAlaUne = ( annonceGet ) => annonceGet.filter( annonce => annonce.aLaUne );
+       const setAlaUne = (annonceGet) => annonceGet?.filter(annonce => annonce.aLaUne) || [];
 
 
 
-       const setAfterFilter = ( dataGet2 ) =>
-       {
+       const setAfterFilter = (dataGet2) => {
 
-              setHeadlineAnnouncement( setAlaUne( dataGet2 ) )
+              setHeadlineAnnouncement(setAlaUne(dataGet2))
               // console.log( setAlaUne( dataGet2 ) );
        }
 
 
 
-       useEffect( () =>
-       {
-              setHeadlineAnnouncement( trierAnnonces( setAlaUne( annonceFromStore ) ) )
+       useEffect(() => {
+              setHeadlineAnnouncement(trierAnnonces(setAlaUne(annonceFromStore)))
               // console.log( setAlaUne( annonceFromStore ) );
               // console.table( HeadlineAnnouncement.map( item => ( { sponsored: item.sponsored } ) ) );
 
 
 
 
-       }, [ annonceFromStore ] )
+       }, [annonceFromStore])
 
 
 
@@ -74,9 +71,9 @@ export default function Home()
 
        const renderFilters = (
               <TourFilters
-                     open={ openFilters.value }
-                     onOpen={ openFilters.onTrue }
-                     onClose={ openFilters.onFalse }
+                     open={openFilters.value}
+                     onOpen={openFilters.onTrue}
+                     onClose={openFilters.onFalse}
 
               />
 
@@ -86,7 +83,7 @@ export default function Home()
 
 
        return (
-              <Container maxWidth={ settings.themeStretch ? false : 'xl' }>
+              <Container maxWidth={settings.themeStretch ? false : '100%'}>
 
 
 
@@ -96,12 +93,12 @@ export default function Home()
 
 
 
-                     <Grid container spacing={ 3 }>
-                            <Grid xs={ 12 } md={ 12 }>
+                     <Grid container spacing={3}>
+                            <Grid xs={12} md={12}>
                                    <AppWelcome
-                                          title={ `Bienvenu 👋 \n ${ user?.displayName }` }
+                                          title={`Bienvenu 👋 \n ${user?.displayName || 'sur Ndolo'}`}
                                           description="If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything."
-                                          img={ <SeoIllustration /> }
+                                          img={<SeoIllustration />}
                                           action={
                                                  <Button variant="contained" color="primary">
                                                         Go Now
@@ -111,8 +108,8 @@ export default function Home()
                             </Grid>
 
 
-                            <Grid xs={ 12 } md={ 12 } pl="0px" pr="0px">
-                                   <Container maxWidth={ settings.themeStretch ? false : 'xl' } sx={ { pl: { sm: "0", xs: "0", md: "0" }, pr: { sm: "0", xs: "0", md: "0" } } }>
+                            <Grid xs={12} md={12} pl="0px" pr="0px">
+                                   <Container maxWidth={settings.themeStretch ? false : '100%'} sx={{ pl: { sm: "0", xs: "0", md: "0" }, pr: { sm: "0", xs: "0", md: "0" } }}>
 
 
 
@@ -120,21 +117,21 @@ export default function Home()
 
                                           <TownTabs
                                                  // selectedTownTab={ selectedTownTabRef.current }
-                                                 handleFilterByTownSelected={ handleFilterByTownSelectedRef.current }
+                                                 handleFilterByTownSelected={handleFilterByTownSelectedRef.current}
                                           />
 
 
-                                          <Box display="flex">    { renderFilters }
+                                          <Box display="flex">    {renderFilters}
                                           </Box>
 
 
 
-                                          <Grid container spacing={ 0 }>
+                                          <Grid container spacing={0}>
 
 
 
-                                                 <Grid xs={ 12 } md={ 12 } pl="0" pr="0">
-                                                        <BookingNewest title="Annonces à la une" subheader={ `${ HeadlineAnnouncement.length } Annonces` } list={ HeadlineAnnouncement } />
+                                                 <Grid xs={12} md={12} pl="0" pr="0">
+                                                        <BookingNewest title="Annonces à la une" subheader={`${HeadlineAnnouncement.length} Annonces`} list={HeadlineAnnouncement} />
                                                  </Grid>
 
 
@@ -149,8 +146,8 @@ export default function Home()
                             </Grid>
 
 
-                            <Grid xs={ 12 } md={ 12 } lg={ 12 }>
-                                   <PostListView setAfterFilter={ setAfterFilter } />
+                            <Grid xs={12} md={12} lg={12}>
+                                   <PostListView setAfterFilter={setAfterFilter} />
                             </Grid>
 
 

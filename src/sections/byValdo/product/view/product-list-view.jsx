@@ -27,8 +27,7 @@ import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
-import
-{
+import {
        DataGrid,
        GridToolbarExport,
        GridActionsCellItem,
@@ -60,8 +59,7 @@ import { HOST_BACKEND_URL } from 'src/config-global';
 import { dataObject } from 'src/1data/annonces/defaut';
 import ProductTableToolbar from '../product-table-toolbar';
 import ProductTableFiltersResult from '../product-table-filters-result';
-import
-{
+import {
        RenderCellStock,
        RenderCellPrice,
        RenderCellPublish,
@@ -95,12 +93,11 @@ const HIDE_COLUMNS = {
        publish: true,
 };
 
-const HIDE_COLUMNS_TOGGLABLE = [ 'category', 'actions' ];
+const HIDE_COLUMNS_TOGGLABLE = ['category', 'actions'];
 
 // ----------------------------------------------------------------------
 
-export default function ProductListView( { toShow, clickFromProfile } )
-{
+export default function ProductListView({ toShow, clickFromProfile }) {
 
 
        const { enqueueSnackbar } = useSnackbar();
@@ -120,29 +117,29 @@ export default function ProductListView( { toShow, clickFromProfile } )
 
        const settings = useSettingsContext();
 
-       const { products, productsLoading } = useGetProducts();
+       // const { products, productsLoading } = useGetProducts();
 
-       const [ dataIsSet, setDataIsSet ] = useState( false );
-       const [ tableData, setTableData ] = useState( [] );
+       const [dataIsSet, setDataIsSet] = useState(false);
+       const [tableData, setTableData] = useState([]);
 
-       const [ filters, setFilters ] = useState( defaultFilters );
+       const [filters, setFilters] = useState(defaultFilters);
 
-       const [ selectedRowIds, setSelectedRowIds ] = useState( [] );
+       const [selectedRowIds, setSelectedRowIds] = useState([]);
 
-       const [ columnVisibilityModel, setColumnVisibilityModel ] = useState( HIDE_COLUMNS );
+       const [columnVisibilityModel, setColumnVisibilityModel] = useState(HIDE_COLUMNS);
 
-       const [ annonceToDel, setAnnonceToDel ] = useState( {} );
-       const [ annonceClick, setAnnonceClick ] = useState( {} );
-       const [ annonceToSponsor, setAnnonceToSponsor ] = useState( {} );
+       const [annonceToDel, setAnnonceToDel] = useState({});
+       const [annonceClick, setAnnonceClick] = useState({});
+       const [annonceToSponsor, setAnnonceToSponsor] = useState({});
 
        const { user } = useAuthContext();
-       const annonceList = useSelector( ( state ) => state.getAnnonces.data );
-       const annonceFromStore = useSelector( ( state ) => state.annonces.data );
+       const annonceList = useSelector((state) => state.getAnnonces.data);
+       const annonceFromStore = useSelector((state) => state.annonces.data);
 
 
-       const usersAnnonceList = useSelector( ( state ) => state.getUsersAnnonces.data );
-       const { isFulled, isPending } = useSelector( ( state ) => state.getUsersAnnonces );
-       const { isGeting, isGetingSuccess } = useSelector( ( state ) => state.getAnnonces );
+       const usersAnnonceList = useSelector((state) => state.getUsersAnnonces.data);
+       const { isFulled, isPending } = useSelector((state) => state.getUsersAnnonces);
+       const { isGeting, isGetingSuccess } = useSelector((state) => state.getAnnonces);
 
 
 
@@ -154,7 +151,7 @@ export default function ProductListView( { toShow, clickFromProfile } )
 
 
        const theme = useTheme();
-       const isSmallScreen = useMediaQuery( theme.breakpoints.down( 'sm' ) ); // ✅ Détecte `xs` et `sm`
+       const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm')); // ✅ Détecte `xs` et `sm`
 
 
 
@@ -176,12 +173,11 @@ export default function ProductListView( { toShow, clickFromProfile } )
 
 
 
-       useEffect( () =>
-       {
+       useEffect(() => {
 
               setValeurRef.current = setTableData;
 
-       }, [] );
+       }, []);
 
 
 
@@ -192,15 +188,13 @@ export default function ProductListView( { toShow, clickFromProfile } )
 
 
 
-       useEffect( () => () =>
-       {
+       useEffect(() => () => {
 
-              dispatch( resetData() )
-              dispatch( resetAfterRequest() )
-              dispatch( resetAfterGetListRequete() );
+              dispatch(resetData())
+              dispatch(resetAfterRequest())
+              dispatch(resetAfterGetListRequete());
 
-       }, [ dispatch ] );
-
+       }, [dispatch]);
 
 
 
@@ -210,26 +204,24 @@ export default function ProductListView( { toShow, clickFromProfile } )
 
 
 
-       useEffect( () =>
-       {
 
-              if ( !isGeting && !isGetingSuccess )
-              {
+       useEffect(() => {
 
-                     if ( user === null || user === undefined ) 
-                     {
+              if (!isGeting && !isGetingSuccess) {
+
+                     if (user === null || user === undefined) {
 
 
                             return
                      }
 
 
-                     dispatch( getList( user.email ) )
+                     dispatch(getList(user._id))
 
 
               }
 
-       }, [ dispatch, annonceList, user, isGetingSuccess, isGeting, toShow, email ] );
+       }, [dispatch, annonceList, user, isGetingSuccess, isGeting, toShow, email]);
 
 
 
@@ -239,16 +231,13 @@ export default function ProductListView( { toShow, clickFromProfile } )
 
 
 
-       useEffect( () =>
-       {
+       useEffect(() => {
 
 
-              dispatch( setData( annonceList ) )
+              dispatch(setData(annonceList))
 
 
-       }, [ annonceList, dispatch ] );
-
-
+       }, [annonceList, dispatch]);
 
 
 
@@ -256,14 +245,14 @@ export default function ProductListView( { toShow, clickFromProfile } )
 
 
 
-       useEffect( () =>
-       {
-              setTableData( annonceFromStore );
-              console.log( annonceFromStore );
 
 
-       }, [ annonceFromStore ] );
+       useEffect(() => {
+              setTableData(annonceFromStore);
+              console.log(annonceFromStore);
 
+
+       }, [annonceFromStore]);
 
 
 
@@ -274,9 +263,9 @@ export default function ProductListView( { toShow, clickFromProfile } )
 
 
 
-       useEffect( () =>
-       {
-              setColumnVisibilityModel( {
+
+       useEffect(() => {
+              setColumnVisibilityModel({
                      name: !isSmallScreen,  // ❌ Cache "nbrView" sur xs/sm
                      name0: isSmallScreen,  // ❌ Cache "nbrView" sur xs/sm
                      nbrView: !isSmallScreen,  // ❌ Cache "nbrView" sur xs/sm
@@ -286,8 +275,8 @@ export default function ProductListView( { toShow, clickFromProfile } )
                      actions: !isSmallScreen,            // ✅ Toujours visible
                      sponsored: !isSmallScreen,
                      aLaUne: !isSmallScreen,
-              } );
-       }, [ isSmallScreen ] );
+              });
+       }, [isSmallScreen]);
 
 
 
@@ -300,66 +289,59 @@ export default function ProductListView( { toShow, clickFromProfile } )
 
 
 
-       useEffect( () =>
-       {
-              const socket = io( HOST_BACKEND_URL );
-              socket.on( 'update-annonce', ( update ) =>
-              {
+       useEffect(() => {
+              const socket = io(HOST_BACKEND_URL);
+              socket.on('update-annonce', (update) => {
 
-                     dispatch( setData( annoncesFunction.updateAnnonceInArray( annonceFromStore, update ) ) )
-                     console.log( 'nouvelle annonce detecter', update );
+                     dispatch(setData(annoncesFunction.updateAnnonceInArray(annonceFromStore, update)))
+                     console.log('nouvelle annonce detecter', update);
 
-              } );
+              });
 
 
-              socket.on( 'banned-annonce', ( update ) =>
-              {
+              socket.on('banned-annonce', (update) => {
 
-                     dispatch( setData( annoncesFunction.updateAnnonceInArray( annonceFromStore, update ) ) )
+                     dispatch(setData(annoncesFunction.updateAnnonceInArray(annonceFromStore, update)))
 
-                     console.log( 'nouvelle annonce detecter', update );
-
-
-              } );
-
-              socket.on( 'delete-annonce', ( del ) =>
-              {
-
-                     console.log( 'annonce a supprimer', del );
+                     console.log('nouvelle annonce detecter', update);
 
 
-                     dispatch( setData( annoncesFunction.deleteAnnonceInArray( annonceFromStore, del ) ) )
-              } );
+              });
+
+              socket.on('delete-annonce', (del) => {
+
+                     console.log('annonce a supprimer', del);
+
+
+                     dispatch(setData(annoncesFunction.deleteAnnonceInArray(annonceFromStore, del)))
+              });
 
 
 
               // Écouter l'événement 'new-annonce' pour mettre à jour les annonces en temps réel
-              socket.on( 'new-annonce', ( newAnnonce ) =>
-              {
-                     if ( newAnnonce.userEmail === ( email !== undefined ? email : user?.email ) ) dispatch( addData( newAnnonce ) )
-                     console.log( 'nouvelle annonce detecter', newAnnonce );
+              socket.on('new-annonce', (newAnnonce) => {
+                     if (newAnnonce.userEmail === (email !== undefined ? email : user?.email)) dispatch(addData(newAnnonce))
+                     console.log('nouvelle annonce detecter', newAnnonce);
 
-              } );
+              });
 
               return () => { socket.disconnect(); };
 
-       }, [ dispatch, annonceFromStore, user?.email, email ] );
+       }, [dispatch, annonceFromStore, user?.email, email]);
 
 
 
 
-       useEffect( () =>
-       {
+       useEffect(() => {
 
-              if ( !dataIsSet )
-              {
+              if (!dataIsSet) {
 
                      // console.log( products );
-                     setDataIsSet( true );
+                     setDataIsSet(true);
 
               }
 
-       }, [ dataIsSet, dispatch, annonceFromStore ] );
+       }, [dataIsSet, dispatch, annonceFromStore]);
 
 
 
@@ -367,62 +349,56 @@ export default function ProductListView( { toShow, clickFromProfile } )
 
 
 
-       const dataFiltered = applyFilter( {
+       const dataFiltered = applyFilter({
               inputData: tableData,
               filters,
-       } );
+       });
 
-       const canReset = !isEqual( defaultFilters, filters );
+       const canReset = !isEqual(defaultFilters, filters);
 
-       const handleFilters = useCallback( ( name, value ) =>
-       {
-              setFilters( ( prevState ) => ( {
+       const handleFilters = useCallback((name, value) => {
+              setFilters((prevState) => ({
                      ...prevState,
-                     [ name ]: value,
-              } ) );
-       }, [] );
+                     [name]: value,
+              }));
+       }, []);
 
-       const handleResetFilters = useCallback( () =>
-       {
-              setFilters( defaultFilters );
-       }, [] );
+       const handleResetFilters = useCallback(() => {
+              setFilters(defaultFilters);
+       }, []);
 
        const handleDeleteRow = useCallback(
-              ( id ) =>
-              {
-                     const deleteRow = tableData.filter( ( row ) => row.id !== id );
+              (id) => {
+                     const deleteRow = tableData.filter((row) => row.id !== id);
 
-                     enqueueSnackbar( 'Delete success!' );
+                     enqueueSnackbar('Delete success!');
 
-                     setTableData( deleteRow );
+                     setTableData(deleteRow);
               },
-              [ enqueueSnackbar, tableData ]
+              [enqueueSnackbar, tableData]
        );
 
-       const handleDeleteRows = useCallback( () =>
-       {
-              const deleteRows = tableData.filter( ( row ) => !selectedRowIds.includes( row.id ) );
+       const handleDeleteRows = useCallback(() => {
+              const deleteRows = tableData.filter((row) => !selectedRowIds.includes(row.id));
 
-              enqueueSnackbar( 'Delete success!' );
+              enqueueSnackbar('Delete success!');
 
-              setTableData( deleteRows );
-       }, [ enqueueSnackbar, selectedRowIds, tableData ] );
+              setTableData(deleteRows);
+       }, [enqueueSnackbar, selectedRowIds, tableData]);
 
        const handleEditRow = useCallback(
-              ( data ) =>
-              {
-                     navigate( paths.annonces.edit, { state: { data } } );
+              (data) => {
+                     navigate(paths.annonces.edit, { state: { data } });
 
               },
-              [ navigate ]
+              [navigate]
        );
 
        const handleViewRow = useCallback(
-              ( id ) =>
-              {
-                     router.push( paths.dashboard.product.details( id ) );
+              (id) => {
+                     router.push(paths.dashboard.product.details(id));
               },
-              [ router ]
+              [router]
        );
 
        const columns = [
@@ -438,10 +414,10 @@ export default function ProductListView( { toShow, clickFromProfile } )
                      minWidth: 260,
                      width: 260,
                      hideable: true,
-                     valueGetter: ( params ) => params.row.name, // 🔥 Utilise la même valeur que "name"
-                     renderCell: ( params ) => <RenderCellProductXs params={ params }
-                            clickFromProfile={ clickFromProfile }
-                            Sponsoriser={ () => { buySponsor.onTrue(); setAnnonceToSponsor( params.row ) } } mettreALaUne={ () => { aLaUneBuy.onTrue(); setAnnonceClick( params.row ) } } onEdit={ () => { handleEditRow( params.row ) } } onDelete={ () => { confirmOfDel.onTrue(); setAnnonceToDel( params.row ) } } />,
+                     valueGetter: (params) => params.row.name, // 🔥 Utilise la même valeur que "name"
+                     renderCell: (params) => <RenderCellProductXs params={params}
+                            clickFromProfile={clickFromProfile}
+                            Sponsoriser={() => { buySponsor.onTrue(); setAnnonceToSponsor(params.row) }} mettreALaUne={() => { aLaUneBuy.onTrue(); setAnnonceClick(params.row) }} onEdit={() => { handleEditRow(params.row) }} onDelete={() => { confirmOfDel.onTrue(); setAnnonceToDel(params.row) }} />,
               },
               {
                      field: 'name',
@@ -450,7 +426,7 @@ export default function ProductListView( { toShow, clickFromProfile } )
                      minWidth: 260,
                      width: 260,
                      hideable: true,
-                     renderCell: ( params ) => <RenderCellProduct params={ params } />,
+                     renderCell: (params) => <RenderCellProduct params={params} />,
               },
               {
                      field: 'nbrView',
@@ -464,7 +440,7 @@ export default function ProductListView( { toShow, clickFromProfile } )
 
                      type: 'singleSelect',
                      valueOptions: PRODUCT_STOCK_OPTIONS,
-                     renderCell: ( params ) => <RenderCellStock params={ params } />,
+                     renderCell: (params) => <RenderCellStock params={params} />,
               },
               {
                      field: 'nbrComment',
@@ -475,7 +451,7 @@ export default function ProductListView( { toShow, clickFromProfile } )
                      flex: 1.1,
                      hide: true, // 🔥 Masque la colonne directement selon la taille
 
-                     renderCell: ( params ) => <RenderCellNbrComment params={ params } />,
+                     renderCell: (params) => <RenderCellNbrComment params={params} />,
               },
 
               {
@@ -490,7 +466,7 @@ export default function ProductListView( { toShow, clickFromProfile } )
                      hide: isSmallScreen, // 🔥 Masque la colonne directement selon la taille
 
                      editable: true,
-                     renderCell: ( params ) => <RenderCellALaUne params={ params } />,
+                     renderCell: (params) => <RenderCellALaUne params={params} />,
               },
 
 
@@ -506,7 +482,7 @@ export default function ProductListView( { toShow, clickFromProfile } )
                      hide: isSmallScreen, // 🔥 Masque la colonne directement selon la taille
 
                      editable: true,
-                     renderCell: ( params ) => <RenderCellPrice params={ params } />,
+                     renderCell: (params) => <RenderCellPrice params={params} />,
               },
               {
                      field: 'sponsored',
@@ -520,7 +496,7 @@ export default function ProductListView( { toShow, clickFromProfile } )
                      hide: isSmallScreen, // 🔥 Masque la colonne directement selon la taille
 
                      editable: true,
-                     renderCell: ( params ) => <RenderCellSponsored params={ params } />,
+                     renderCell: (params) => <RenderCellSponsored params={params} />,
               },
               {
                      field: 'publish',
@@ -536,7 +512,7 @@ export default function ProductListView( { toShow, clickFromProfile } )
                      valueOptions: PUBLISH_OPTIONS,
                      hide: true, // 🔥 Masque la colonne directement selon la taille
 
-                     renderCell: ( params ) => <RenderCellPublish params={ params } />,
+                     renderCell: (params) => <RenderCellPublish params={params} />,
               },
               {
                      type: 'actions',
@@ -548,10 +524,8 @@ export default function ProductListView( { toShow, clickFromProfile } )
                      sortable: false,
                      filterable: false,
                      disableColumnMenu: true,
-                     getActions: ( params ) =>
-                     {
-                            if ( clickFromProfile === undefined )
-                            {
+                     getActions: (params) => {
+                            if (clickFromProfile === undefined) {
                                    return [
                                           // <GridActionsCellItem
                                           //        showInMenu
@@ -571,20 +545,19 @@ export default function ProductListView( { toShow, clickFromProfile } )
                                           // />,
                                           < GridActionsCellItem
                                                  showInMenu
-                                                 icon={ < Iconify icon="solar:pen-bold" /> }
-                                                 label="Edit"
-                                                 onClick={ () => handleEditRow( params.row ) }
+                                                 icon={< Iconify icon="solar:pen-bold" />}
+                                                 label="Modifier"
+                                                 onClick={() => handleEditRow(params.row)}
                                           />,
                                           < GridActionsCellItem
                                                  showInMenu
-                                                 icon={ < Iconify icon="solar:trash-bin-trash-bold" /> }
-                                                 label="Delete"
-                                                 onClick={ () =>
-                                                 {
+                                                 icon={< Iconify icon="solar:trash-bin-trash-bold" />}
+                                                 label="Supprimer"
+                                                 onClick={() => {
                                                         confirmOfDel.onTrue();
-                                                        setAnnonceToDel( params.row )
-                                                 } }
-                                                 sx={ { color: 'error.main' } }
+                                                        setAnnonceToDel(params.row)
+                                                 }}
+                                                 sx={{ color: 'error.main' }}
                                           />
                                    ];
                             }
@@ -592,9 +565,9 @@ export default function ProductListView( { toShow, clickFromProfile } )
                             return [
                                    <GridActionsCellItem
                                           showInMenu
-                                          icon={ <Iconify icon="solar:pen-bold" /> }
+                                          icon={<Iconify icon="solar:pen-bold" />}
                                           label="Voir"
-                                          onClick={ () => clickFromProfile( params.row ) }
+                                          onClick={() => clickFromProfile(params.row)}
                                    />
                             ];
                      }
@@ -603,62 +576,62 @@ export default function ProductListView( { toShow, clickFromProfile } )
 
        const getTogglableColumns = () =>
               columns
-                     .filter( ( column ) => !HIDE_COLUMNS_TOGGLABLE.includes( column.field ) )
-                     .map( ( column ) => column.field );
+                     .filter((column) => !HIDE_COLUMNS_TOGGLABLE.includes(column.field))
+                     .map((column) => column.field);
 
        return (
               <>
 
-                     <DialogSponsorBuy showDialog={ buySponsor } startPaiementSp={ startPaimentSponsor } />
-                     <DialogPaimentInProcessSponsorBuy dataGet={ annonceToSponsor } showDialog={ startPaimentSponsor } />
+                     <DialogSponsorBuy showDialog={buySponsor} startPaiementSp={startPaimentSponsor} />
+                     <DialogPaimentInProcessSponsorBuy dataGet={annonceToSponsor} showDialog={startPaimentSponsor} />
 
-                     <DialogALaUneBuy showDialog={ aLaUneBuy } startPaiement={ startPaimentALaUne } />
-                     <DialogPaimentInProcessALaUne dataGet={ annonceClick } showDialog={ startPaimentALaUne } />
+                     <DialogALaUneBuy showDialog={aLaUneBuy} startPaiement={startPaimentALaUne} />
+                     <DialogPaimentInProcessALaUne dataGet={annonceClick} showDialog={startPaimentALaUne} />
                      <Box
                             // maxWidth={ settings.themeStretch ? false : 'lg' }
                             // maxWidth='xl'
-                            sx={ {
+                            sx={{
                                    flexGrow: 1,
                                    display: 'flex',
                                    flexDirection: 'column',
-                            } }
+                            }}
                      >
-                            { user?.role === "user" && clickFromProfile === undefined && ( <CustomBreadcrumbs
+                            {user?.role === "user" && clickFromProfile === undefined && (<CustomBreadcrumbs
                                    heading="Liste Des Annonces"
-                                   links={ [
+                                   links={[
                                           {
                                                  name: '',
                                                  href: paths.dashboard.product.root,
                                           }
-                                   ] }
+                                   ]}
                                    action={
-                                          <>  <Button sx={ { display: { xs: 'none', md: 'flex' } } }
+                                          <>  <Button sx={{ display: { xs: 'none', md: 'flex' } }}
                                                  // component={ RouterLink }
                                                  // href={ paths.dashboard.product.new }
-                                                 onClick={ () => navigate( '/home/annonces/new' ) }
+                                                 onClick={() => navigate('/home/annonces/new')}
 
                                                  variant="contained"
-                                                 startIcon={ <Iconify icon="mingcute:add-line" /> }
+                                                 startIcon={<Iconify icon="mingcute:add-line" />}
                                           >
                                                  Nouvel annonce
                                           </Button>
 
-                                                 <IconButton sx={ { display: { md: 'none' } } } color="inherit" onClick={ () => navigate( '/home/annonces/new' ) }>
+                                                 <IconButton sx={{ display: { md: 'none' } }} color="inherit" onClick={() => navigate('/home/annonces/new')}>
                                                         <Iconify icon="mingcute:add-line" />
                                                  </IconButton>
 
                                           </>
                                    }
-                                   sx={ {
+                                   sx={{
                                           mb: {
                                                  xs: 3,
                                                  md: 5,
                                           },
-                                   } }
-                            /> ) }
+                                   }}
+                            />)}
 
                             <Card
-                                   sx={ {
+                                   sx={{
                                           // height: { xs: 800, md: 2 },
                                           // flexGrow: { md: 1 },
                                           // display: { md: 'flex' },
@@ -671,14 +644,14 @@ export default function ProductListView( { toShow, clickFromProfile } )
                                           flexGrow: { md: 1 },
                                           display: 'flex',
                                           flexDirection: 'column',
-                                   } }
+                                   }}
                             >
                                    <DataGrid
 
+                                          getRowId={(row) => row._id} // ou un autre champ unique comme row._id, row.code, etc.
+                                          autoHeight={false}
 
-                                          autoHeight={ false }
-
-                                          sx={ {
+                                          sx={{
                                                  '& .MuiDataGrid-virtualScroller': {
                                                         overflow: 'hidden', // Cache complètement le scroll
                                                  },
@@ -688,7 +661,7 @@ export default function ProductListView( { toShow, clickFromProfile } )
                                                  },
 
                                                  flexGrow: 1,
-                                          } }
+                                          }}
 
 
 
@@ -697,23 +670,22 @@ export default function ProductListView( { toShow, clickFromProfile } )
                                           disableColumnMenu
                                           // checkboxSelection
                                           disableRowSelectionOnClick
-                                          rows={ dataFiltered }
-                                          columns={ columns }
-                                          loading={ productsLoading }
-                                          getRowHeight={ () => 'auto' }
-                                          pageSizeOptions={ [ 5, 10, 25 ] }
-                                          initialState={ {
+                                          rows={dataFiltered}
+                                          columns={columns}
+                                          loading={dataFiltered.length === 0}
+                                          getRowHeight={() => 'auto'}
+                                          pageSizeOptions={[5, 10, 25]}
+                                          initialState={{
                                                  pagination: {
                                                         paginationModel: { pageSize: 10 },
                                                  },
-                                          } }
-                                          onRowSelectionModelChange={ ( newSelectionModel ) =>
-                                          {
-                                                 setSelectedRowIds( newSelectionModel );
-                                          } }
-                                          columnVisibilityModel={ columnVisibilityModel }
-                                          onColumnVisibilityModelChange={ ( newModel ) => setColumnVisibilityModel( newModel ) }
-                                          slots={ {
+                                          }}
+                                          onRowSelectionModelChange={(newSelectionModel) => {
+                                                 setSelectedRowIds(newSelectionModel);
+                                          }}
+                                          columnVisibilityModel={columnVisibilityModel}
+                                          onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
+                                          slots={{
                                                  toolbar: () => (
                                                         <>
                                                                <GridToolbarContainer>
@@ -727,22 +699,22 @@ export default function ProductListView( { toShow, clickFromProfile } )
                                                                       <GridToolbarQuickFilter />
 
                                                                       <Stack
-                                                                             spacing={ 1 }
-                                                                             flexGrow={ 1 }
+                                                                             spacing={1}
+                                                                             flexGrow={1}
                                                                              direction="row"
                                                                              alignItems="center"
                                                                              justifyContent="flex-end"
                                                                       >
-                                                                             { !!selectedRowIds.length && (
+                                                                             {!!selectedRowIds.length && (
                                                                                     <Button
                                                                                            size="small"
                                                                                            color="error"
-                                                                                           startIcon={ <Iconify icon="solar:trash-bin-trash-bold" /> }
-                                                                                           onClick={ confirmRows.onTrue }
+                                                                                           startIcon={<Iconify icon="solar:trash-bin-trash-bold" />}
+                                                                                           onClick={confirmRows.onTrue}
                                                                                     >
-                                                                                           Delete ({ selectedRowIds.length })
+                                                                                           Delete ({selectedRowIds.length})
                                                                                     </Button>
-                                                                             ) }
+                                                                             )}
 
                                                                              {/* <GridToolbarColumnsButton />
                                                                              <GridToolbarFilterButton />
@@ -750,20 +722,20 @@ export default function ProductListView( { toShow, clickFromProfile } )
                                                                       </Stack>
                                                                </GridToolbarContainer>
 
-                                                               { canReset && (
+                                                               {canReset && (
                                                                       <ProductTableFiltersResult
-                                                                             filters={ filters }
-                                                                             onFilters={ handleFilters }
-                                                                             onResetFilters={ handleResetFilters }
-                                                                             results={ dataFiltered.length }
-                                                                             sx={ { p: 2.5, pt: 0 } }
+                                                                             filters={filters}
+                                                                             onFilters={handleFilters}
+                                                                             onResetFilters={handleResetFilters}
+                                                                             results={dataFiltered.length}
+                                                                             sx={{ p: 2.5, pt: 0 }}
                                                                       />
-                                                               ) }
+                                                               )}
                                                         </>
                                                  ),
                                                  noRowsOverlay: () => <EmptyContent title="No Data" />,
                                                  noResultsOverlay: () => <EmptyContent title="No results found" />,
-                                          } }
+                                          }}
                                    // slotProps={ {
                                    //        columnsPanel: {
                                    //               getTogglableColumns,
@@ -775,26 +747,23 @@ export default function ProductListView( { toShow, clickFromProfile } )
 
 
 
-                     <DialogDeleteAnnonces showDialog={ confirmRows } data={ selectedRowIds } />
-                     <DialogDeleteAnnonce showDialog={ confirmOfDel } data={ annonceToDel } />
+                     <DialogDeleteAnnonces showDialog={confirmRows} data={selectedRowIds} />
+                     <DialogDeleteAnnonce showDialog={confirmOfDel} data={annonceToDel} />
               </>
        );
 }
 
 // ----------------------------------------------------------------------
 
-function applyFilter( { inputData, filters } )
-{
+function applyFilter({ inputData, filters }) {
        const { stock, publish } = filters;
 
-       if ( stock.length )
-       {
-              inputData = inputData.filter( ( product ) => stock.includes( product.inventoryType ) );
+       if (stock.length) {
+              inputData = inputData.filter((product) => stock.includes(product.inventoryType));
        }
 
-       if ( publish.length )
-       {
-              inputData = inputData.filter( ( product ) => publish.includes( product.publish ) );
+       if (publish.length) {
+              inputData = inputData.filter((product) => publish.includes(product.publish));
        }
 
        return inputData;

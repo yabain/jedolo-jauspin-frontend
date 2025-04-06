@@ -97,7 +97,7 @@ export default function KanbanTaskItem({ task, index, onDeleteTask, onUpdateTask
         }}
       >
         {task.assignee.map((user) => (
-          <Avatar key={user.id} alt={user.name} src={user.avatarUrl} />
+          <Avatar key={user._id} alt={user.name} src={user.avatarUrl} />
         ))}
       </AvatarGroup>
     </Stack>

@@ -71,7 +71,7 @@ export default function ProductReviewNewForm( { annonceId, addData, onClose, ...
               const data = {
                      ...dataGet,
                      "id": Date.now(),
-                     "commenterId": user.id,
+                     "commenterId": user._id,
                      "postedAt": Date.now(),
                      "isPurchased": false,
                      "avatarUrl": "https://api-dev-minimal-v510.vercel.app/assets/images/avatar/avatar_8.jpg"

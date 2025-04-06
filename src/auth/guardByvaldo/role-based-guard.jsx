@@ -26,7 +26,7 @@ export default function RoleBasedGuard( { hasContent, roles, children, sx } )
        // const { user } = useMockedUser();
 
        // const currentRole = 'user';
-       const currentRole = normalizeString( user?.role ); // admin; 
+       const currentRole = user?.role ; // admin; 
 
 
        if ( roles.length === 0 && currentRole === undefined ) 
@@ -35,9 +35,9 @@ export default function RoleBasedGuard( { hasContent, roles, children, sx } )
               // console.log( 'role get', roles );
               return <> { children } </>;
        }
+       const normalizedRoles = roles?.map(role => normalizeString(role)) ;
 
-
-       if ( typeof roles !== 'undefined' && !roles.includes( currentRole ) )
+       if ( typeof normalizedRoles !== 'undefined' && !normalizedRoles.includes( normalizeString(currentRole) ) )
        {
               return null
        }

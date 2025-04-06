@@ -43,7 +43,7 @@ export default function ChatView() {
   const { conversation, conversationError } = useGetConversation(`${selectedConversationId}`);
 
   const participants = conversation
-    ? conversation.participants.filter((participant) => participant.id !== `${user.id}`)
+    ? conversation.participants.filter((participant) => participant.id !== `${user._id}`)
     : [];
 
   useEffect(() => {

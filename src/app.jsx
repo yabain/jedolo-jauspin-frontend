@@ -29,6 +29,7 @@ import moment from 'moment';
 import 'moment/locale/fr';
 import store from './store';
 import { addAdminData } from './store/annonces/data/dataReducer';
+import { useAuthContext } from './auth/hooks';
 // import { AuthProvider } from 'src/auth/context/auth0';
 // import { AuthProvider } from 'src/auth/context/amplify';
 // import { AuthProvider } from 'src/auth/context/firebase';
@@ -37,8 +38,7 @@ import { addAdminData } from './store/annonces/data/dataReducer';
 // ----------------------------------------------------------------------
 
 
-export default function App()
-{
+export default function App() {
 
 
        const charAt = `
@@ -51,27 +51,30 @@ export default function App()
 
   `;
 
-       console.info( `%c${ charAt }`, 'color: #5BE49B' );
+       console.info(`%c${charAt}`, 'color: #5BE49B');
 
        useScrollToTop();
+       const { user } = useAuthContext()
+       console.log('user get depuis le apppp', user);
+
 
 
        return (
               <AuthProvider>
                      <LocalizationProvider>
                             <SettingsProvider
-                                   defaultSettings={ {
+                                   defaultSettings={{
                                           themeMode: 'light', // 'light' | 'dark'
                                           themeDirection: 'ltr', //  'rtl' | 'ltr'
                                           themeContrast: 'default', // 'default' | 'bold'
                                           themeLayout: 'vertical', // 'vertical' | 'horizontal' | 'mini'
                                           themeColorPresets: 'default', // 'default' | 'cyan' | 'purple' | 'blue' | 'orange' | 'red'
                                           themeStretch: false,
-                                   } }
+                                   }}
                             >
                                    <ThemeProvider>
                                           <MotionLazy>
-                                                 <Provider store={ store }>
+                                                 <Provider store={store}>
                                                         <SnackbarProvider>
                                                                <CheckoutProvider>
                                                                       <SettingsDrawer />

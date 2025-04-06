@@ -122,7 +122,7 @@ export default function UserListView()
               console.log( 'fonction supp', id );
               setTableData( ( prevTableData ) =>
                      prevTableData.map( ( user ) =>
-                            user.id === id ? { ...user, isPublic: false } : user
+                            user._id === id ? { ...user, isPublic: false } : user
                      )
               );
        }, [] );

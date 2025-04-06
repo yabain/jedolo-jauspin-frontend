@@ -1,0 +1,556 @@
+
+attribut finale pour une annonce (phoneNumber ajouter)
+ {
+      "id": 1742919001617,
+      "publish": "published || banned",
+      "price": 22222222222,
+      "profile": "standard",
+      "createdAt": 1742920836939,
+      "coverUrl": "",
+      "saleLabel": {},
+      "newLabel": {},
+      "taxes": 0,
+      "name": "doval test 7 modifier",
+      "subDescription": "jjjj",
+      "images": [
+        {
+          "path": "04 gettyimages-627505342_resized.jpg",
+          "preview": "blob:http://192.168.1.122:3030/29ab5be1-331a-4ce9-ba83-8833dfcf763e"
+        },
+        {
+          "path": "08 gettyimages-995223270_resized.jpg",
+          "preview": "blob:http://192.168.1.122:3030/504b0352-b59d-487c-88a6-1c8cc7043f4b"
+        }
+      ],
+      "city": [
+        "Bafia"
+      ],
+      "categorie": [
+        "Chatte"
+      ],
+      "localisation": "mosquée ",
+      "seDeplace": [
+        "Oui",
+        "Non"
+      ],
+      "personAccept": [
+        "Homme",
+        "Femme"
+      ],
+      phoneNumber:696080087
+      "userEmail": "tchindavaldoblair@gmail.com",
+      "nbrView": 2,
+      "nbrComment": 0,
+      "rating": "3.00",
+      "sponsored": "top"
+    },
+
+
+
+    -------- L'OBJET ENVOYE EN CAS DE SUCCES EST CELUI PASSER EN BODY DE LA REQUETTE ------
+
+
+    Ajouter une annonce
+    POST: /annonces/:email
+    reponse:
+    {
+    "success": true,
+    "annonce": {
+        "id": 1743831085071,
+        "publish": "published",
+        "profile": "standard",
+        "createdAt": 1743831085071,
+        "coverUrl": "https://api-dev-minimal-v510.vercel.app/assets/images/cover/cover_2.jpg",
+        "name": "test name annonce",
+        "subDescription": "description test test",
+        "images": [
+            {},
+            {}
+        ],
+        "price": 2000,
+        "city": [
+            "Bafang"
+        ],
+        "phoneNumber": "696080087",
+        "categorie": [
+            "Vaginal",
+            "Massage"
+        ],
+        "localisation": "charter",
+        "seDeplace": [
+            "Oui"
+        ],
+        "personAccept": [
+            "Femme"
+        ]
+        "aLaUne": false,
+        "userEmail": "tchindavaldoblair2@gmail.com"
+    }
+}
+
+
+
+
+
+
+Récupérer toutes les annonces non banir (annonce.publish === "published")
+
+GET: /annonces
+reponse:
+[
+    {
+        "id": 1743831085071,
+        "publish": "published",
+        "profile": "standard",
+        "createdAt": 1743831085071,
+        "coverUrl": "https://api-dev-minimal-v510.vercel.app/assets/images/cover/cover_2.jpg",
+        "name": "test name annonce",
+        "subDescription": "description test test",
+        "images": [
+            {},
+            {}
+        ],
+        "price": 2000,
+        "city": [
+            "Bafang"
+        ],
+        "phoneNumber": "696080087",
+        "categorie": [
+            "Vaginal",
+            "Massage"
+        ],
+        "localisation": "charter",
+        "seDeplace": [
+            "Oui"
+        ],
+        "personAccept": [
+            "Femme"
+        ]
+        "aLaUne": false,
+        "userEmail": "tchindavaldoblair2@gmail.com"
+    },
+    {
+        "id": 1743831085071,
+        "publish": "published",
+        "profile": "standard",
+        "createdAt": 1743831085071,
+        "coverUrl": "https://api-dev-minimal-v510.vercel.app/assets/images/cover/cover_2.jpg",
+        "name": "test name annonce",
+        "subDescription": "description test test",
+        "images": [
+            {},
+            {}
+        ],
+        "price": 2000,
+        "city": [
+            "Bafang"
+        ],
+        "phoneNumber": "696080087",
+        "categorie": [
+            "Vaginal",
+            "Massage"
+        ],
+        "localisation": "charter",
+        "seDeplace": [
+            "Oui"
+        ],
+        "personAccept": [
+            "Femme"
+        ]
+        "aLaUne": false,
+        "userEmail": "tchindavaldoblair2@gmail.com"
+    }
+    
+    ]
+
+
+
+
+
+
+
+
+
+
+Récupérer toutes les annonces bani et non bani
+
+GET: /annonces/all
+reponse:
+[
+    {
+        "id": 1743831085071,
+        "publish": "published",
+        "profile": "standard",
+        "createdAt": 1743831085071,
+        "coverUrl": "https://api-dev-minimal-v510.vercel.app/assets/images/cover/cover_2.jpg",
+        "name": "test name annonce",
+        "subDescription": "description test test",
+        "images": [
+            {},
+            {}
+        ],
+        "price": 2000,
+        "city": [
+            "Bafang"
+        ],
+        "phoneNumber": "696080087",
+        "categorie": [
+            "Vaginal",
+            "Massage"
+        ],
+        "localisation": "charter",
+        "seDeplace": [
+            "Oui"
+        ],
+        "personAccept": [
+            "Femme"
+        ]
+        "aLaUne": false,
+        "userEmail": "tchindavaldoblair2@gmail.com"
+    },
+    {
+        "id": 1743831085071,
+        "publish": "published",
+        "profile": "standard",
+        "createdAt": 1743831085071,
+        "coverUrl": "https://api-dev-minimal-v510.vercel.app/assets/images/cover/cover_2.jpg",
+        "name": "test name annonce",
+        "subDescription": "description test test",
+        "images": [
+            {},
+            {}
+        ],
+        "price": 2000,
+        "city": [
+            "Bafang"
+        ],
+        "phoneNumber": "696080087",
+        "categorie": [
+            "Vaginal",
+            "Massage"
+        ],
+        "localisation": "charter",
+        "seDeplace": [
+            "Oui"
+        ],
+        "personAccept": [
+            "Femme"
+        ]
+        "aLaUne": false,
+        "userEmail": "tchindavaldoblair2@gmail.com"
+    }
+    
+    ]
+
+
+
+
+
+
+
+
+
+
+
+
+Récupérer toutes les annonces a la une
+
+GET: /annonces/a-la-une
+reponse:
+[
+    {
+        "id": 1743831085071,
+        "publish": "published",
+        "profile": "standard",
+        "createdAt": 1743831085071,
+        "coverUrl": "https://api-dev-minimal-v510.vercel.app/assets/images/cover/cover_2.jpg",
+        "name": "test name annonce",
+        "subDescription": "description test test",
+        "images": [
+            {},
+            {}
+        ],
+        "price": 2000,
+        "city": [
+            "Bafang"
+        ],
+        "phoneNumber": "696080087",
+        "categorie": [
+            "Vaginal",
+            "Massage"
+        ],
+        "localisation": "charter",
+        "seDeplace": [
+            "Oui"
+        ],
+        "personAccept": [
+            "Femme"
+        ]
+        "aLaUne": true,
+        "userEmail": "tchindavaldoblair2@gmail.com"
+    },
+    {
+        "id": 1743831085071,
+        "publish": "published",
+        "profile": "standard",
+        "createdAt": 1743831085071,
+        "coverUrl": "https://api-dev-minimal-v510.vercel.app/assets/images/cover/cover_2.jpg",
+        "name": "test name annonce",
+        "subDescription": "description test test",
+        "images": [
+            {},
+            {}
+        ],
+        "price": 2000,
+        "city": [
+            "Bafang"
+        ],
+        "phoneNumber": "696080087",
+        "categorie": [
+            "Vaginal",
+            "Massage"
+        ],
+        "localisation": "charter",
+        "seDeplace": [
+            "Oui"
+        ],
+        "personAccept": [
+            "Femme"
+        ]
+        "aLaUne": true,
+        "userEmail": "tchindavaldoblair2@gmail.com"
+    }
+    
+    ]
+
+
+
+
+
+
+    Récupérer toutes les annonces d'un utilisateur
+
+    GET: /annonces/:email
+
+    reponse:
+    [
+    {
+        "id": 1742919001617,
+        "publish": "published",
+        "price": 22222222222,
+        "profile": "standard",
+        "createdAt": 1742920836939,
+        "coverUrl": "https://api-dev-minimal-v510.vercel.app/assets/images/cover/cover_2.jpg",
+        "saleLabel": {},
+        "newLabel": {},
+        "taxes": 0,
+        "name": "doval test 7 modifier",
+        "subDescription": "jjjj",
+        "images": [
+            {
+                "path": "04 gettyimages-627505342_resized.jpg",
+                "preview": "blob:http://192.168.1.122:3030/29ab5be1-331a-4ce9-ba83-8833dfcf763e"
+            },
+            {
+                "path": "08 gettyimages-995223270_resized.jpg",
+                "preview": "blob:http://192.168.1.122:3030/504b0352-b59d-487c-88a6-1c8cc7043f4b"
+            }
+        ],
+        "city": [
+            "Bafia"
+        ],
+        "categorie": [
+            "Chatte"
+        ],
+        "localisation": "mosquée ",
+        "seDeplace": [
+            "Oui",
+            "Non"
+        ],
+        "personAccept": [
+            "Homme",
+            "Femme"
+        ],
+        "aLaUne": true,
+        "userEmail": "tchindavaldoblair@gmail.com",
+        "nbrView": 6,
+        "nbrComment": 0,
+        "rating": "3.00",
+        "sponsored": "top"
+    },
+    {
+        "id": 1742937973010,
+        "publish": "published",
+        "price": 1111,
+        "profile": "standard",
+        "createdAt": 1742952377887,
+        "coverUrl": "https://api-dev-minimal-v510.vercel.app/assets/images/cover/cover_2.jpg",
+        "saleLabel": {},
+        "newLabel": {},
+        "taxes": 0,
+        "name": "test88 modifier",
+        "subDescription": "ddddd",
+        "images": [
+            {
+                "path": "08 gettyimages-539211954_resized.jpg",
+                "preview": "blob:http://192.168.1.122:3030/c217a20f-0725-4c74-a899-be34c42e8270"
+            },
+            {
+                "path": "08 gettyimages-995223270_resized.jpg",
+                "preview": "blob:http://192.168.1.122:3030/2bc855ac-0855-4564-a5a6-3b5079b71e50"
+            }
+        ],
+        "city": [
+            "Buéa"
+        ],
+        "categorie": [
+            "Pipe",
+            "Massage"
+        ],
+        "localisation": "charter",
+        "seDeplace": [
+            "Oui"
+        ],
+        "personAccept": [
+            "Homme",
+            "Femme"
+        ],
+        "aLaUne": true,
+        "userEmail": "tchindavaldoblair@gmail.com",
+        "nbrView": 2,
+        "sponsored": "top"
+    }
+   
+]
+
+
+
+modifier une annonce
+
+PATCH: /annonces/:email/:id
+email: email du proprietaire de l'annonce 
+id: id de l'anonce
+
+
+reponse
+{
+    "success": true,
+    "annonce": {
+        "id": 1742919001617,
+        "publish": "published",
+        "price": 22222222222,
+        "profile": "standard",
+        "createdAt": 1742920836939,
+        "coverUrl": "https://api-dev-minimal-v510.vercel.app/assets/images/cover/cover_2.jpg",
+        "saleLabel": {},
+        "newLabel": {},
+        "taxes": 0,
+        "name": "doval test 7 modifier",
+        "subDescription": "jjjj",
+        "images": [
+            {
+                "path": "04 gettyimages-627505342_resized.jpg",
+                "preview": "blob:http://192.168.1.122:3030/29ab5be1-331a-4ce9-ba83-8833dfcf763e"
+            },
+            {
+                "path": "08 gettyimages-995223270_resized.jpg",
+                "preview": "blob:http://192.168.1.122:3030/504b0352-b59d-487c-88a6-1c8cc7043f4b"
+            }
+        ],
+        "city": [
+            "Bafia"
+        ],
+        "categorie": [
+            "Chatte"
+        ],
+        "localisation": "mosquée ",
+        "seDeplace": [
+            "Oui",
+            "Non"
+        ],
+        "personAccept": [
+            "Homme",
+            "Femme"
+        ],
+        "aLaUne": true,
+        "userEmail": "tchindavaldoblair@gmail.com",
+        "nbrView": 6,
+        "nbrComment": 0,
+        "rating": "3.00",
+        "sponsored": "top"
+    }
+}
+
+
+
+
+bani une annonce  (met l'attribut publish d'une annonce a banned, je le faisai en local dont je faisait juste un update de l'annonce )
+
+pATCH: /annonces/banned/:email/:id
+
+reponse: 
+{
+    "success": true,
+    "annonce": {
+        "id": 1742919001617,
+        "publish": "banned",
+        "price": 22222222222,
+        "profile": "standard",
+        "createdAt": 1742920836939,
+        "coverUrl": "https://api-dev-minimal-v510.vercel.app/assets/images/cover/cover_2.jpg",
+        "saleLabel": {},
+        "newLabel": {},
+        "taxes": 0,
+        "name": "doval test 7 modifier",
+        "subDescription": "jjjj",
+        "images": [
+            {
+                "path": "04 gettyimages-627505342_resized.jpg",
+                "preview": "blob:http://192.168.1.122:3030/29ab5be1-331a-4ce9-ba83-8833dfcf763e"
+            },
+            {
+                "path": "08 gettyimages-995223270_resized.jpg",
+                "preview": "blob:http://192.168.1.122:3030/504b0352-b59d-487c-88a6-1c8cc7043f4b"
+            }
+        ],
+        "city": [
+            "Bafia"
+        ],
+        "categorie": [
+            "Chatte"
+        ],
+        "localisation": "mosquée ",
+        "seDeplace": [
+            "Oui",
+            "Non"
+        ],
+        "personAccept": [
+            "Homme",
+            "Femme"
+        ],
+        "aLaUne": true,
+        "userEmail": "tchindavaldoblair@gmail.com",
+        "nbrView": 6,
+        "nbrComment": 0,
+        "rating": "3.00",
+        "sponsored": "top"
+    }
+}
+
+
+
+supprimer une annonce
+
+DELETE: /annonces/:id
+
+reponse 
+{
+    "success": true,
+    "message": "Annonce supprimée."
+}
+
+
+
+a ajouter :   endpoint pour update le profile     
+
+NB le banissement bani tous les annonces et desactive le compte de l'utilisateur   

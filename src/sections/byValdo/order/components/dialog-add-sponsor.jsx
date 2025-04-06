@@ -67,7 +67,7 @@ export default function DialogAddSponsor( { showDialog } )
 
        const { reset, setValue, handleSubmit } = methods;
        const resetAfterSuccess = () => { reset(); setSubmiting( false ); showDialog.onFalse() }
-       const createObject = ( data ) => ( { ...data, id: Date.now(), createUserId: user.id, date: new Date() } );
+       const createObject = ( data ) => ( { ...data, id: Date.now(), createUserId: user._id, date: new Date() } );
        const onSubmit = handleSubmit( ( data ) => { setSubmiting( true ); dispatch( request( { data: createObject( data ) } ) ) } );
 
 

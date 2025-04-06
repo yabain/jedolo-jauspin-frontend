@@ -75,7 +75,7 @@ export default function DialogSignalAnnonce( { showDialog } )
                      data: {
                             ...annonceToSend.data,
                             ...formData,
-                            signalerId: user.id,
+                            signalerId: user._id,
                             date: new Date(),
                             signalerEmail: user?.email
                      },
@@ -88,7 +88,7 @@ export default function DialogSignalAnnonce( { showDialog } )
                             data: {
                                    ...annonceToSend.data,
                                    ...formData,
-                                   signalerId: user.id,
+                                   signalerId: user._id,
                                    date: new Date(),
                                    signalerEmail: user?.email
                             }

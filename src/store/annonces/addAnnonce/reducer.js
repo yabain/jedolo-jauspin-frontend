@@ -10,8 +10,7 @@ import * as service from './service';
 
 
 
-const pendingAction = ( state ) => 
-{
+const pendingAction = (state) => {
        state.isPending = true;
 }
 
@@ -23,8 +22,7 @@ const pendingAction = ( state ) =>
 
 
 
-const resetState = ( state ) => 
-{
+const resetState = (state) => {
        state.isPending = false;
        state.isFulled = false;
 }
@@ -37,12 +35,11 @@ const resetState = ( state ) =>
 
 
 
-const fulfilledAction = ( state, action ) => 
-{
+const fulfilledAction = (state, action) => {
        state.isFulled = true;
        state.isPending = false;
-       state.data = [ { ...action.payload.data.annonce } ];
-       // console.log( 'Données chargées avec succès dans Redux:', action.payload );
+       state.data = { ...action.payload.data.data };
+       // console.log('annonce ajouter avec success:', action.payload.data.data);
 }
 
 
@@ -53,11 +50,10 @@ const fulfilledAction = ( state, action ) =>
 
 
 
-const rejectedAction = ( state, action ) => 
-{
+const rejectedAction = (state, action) => {
        state.isPending = false;
        state.msg = action?.payload?.data ? action.payload.data.message : action.error.message;
-       console.log( 'Erreur detecter depuis le reducer lors de la recuperation des données:', state.msg );
+       console.log('Erreur detecter depuis le reducer lors de la recuperation des données:', state.msg);
 }
 
 
@@ -68,10 +64,10 @@ const rejectedAction = ( state, action ) =>
 
 
 
-const requestCases = ( builder ) => builder
-       .addCase( request.pending, pendingAction )
-       .addCase( request.rejected, rejectedAction )
-       .addCase( request.fulfilled, fulfilledAction );
+const requestCases = (builder) => builder
+       .addCase(request.pending, pendingAction)
+       .addCase(request.rejected, rejectedAction)
+       .addCase(request.fulfilled, fulfilledAction);
 
 
 
@@ -85,11 +81,11 @@ const requestCases = ( builder ) => builder
 
 
 
-export const getSlice = createSlice( {
+export const getSlice = createSlice({
        name: 'add', extraReducers: requestCases,
        reducers: { resetAfterRequest: resetState },
-       initialState: { data: [], isPending: false, isFulled: false, }
-} );
+       initialState: { data: {}, isPending: false, isFulled: false, }
+});
 
 
 
@@ -101,4 +97,4 @@ export const getSlice = createSlice( {
 
 export default getSlice.reducer
 export const { resetAfterRequest } = getSlice.actions;
-export const request = createAsyncThunk( 'add', async ( data ) => service.request( data ) )
+export const request = createAsyncThunk('add', async (data) => service.request(data))
