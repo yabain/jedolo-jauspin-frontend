@@ -41,7 +41,7 @@ const fulfilledAction = (state, action) => {
        state.isFulled = true;
        state.isPending = false;
        state.data = action.payload.data;
-       console.log('ville avec le plus grans nombre d\'annonce recu:', action.payload);
+       // console.log('ville avec le plus grans nombre d\'annonce recu:', action.payload);
 }
 
 

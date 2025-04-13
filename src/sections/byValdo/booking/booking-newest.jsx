@@ -26,7 +26,7 @@ import 'moment/locale/fr';
 import { fShortenNumber } from 'src/utils/format-number';
 import { tabsRef } from 'src/1data/annonces/ref';
 import { useNavigate } from 'react-router';
-import { request } from 'src/store/annonces/updateAnnonce/reducer';
+import { request } from 'src/store/annonces/updateNbrView/reducer';
 import { useDispatch } from 'react-redux';
 
 // ----------------------------------------------------------------------
@@ -83,7 +83,7 @@ export default function BookingNewest({ title, subheader, list, sx, ...other }) 
                             {
                                    console.table( list.map( item => ( { sponsored: item.sponsored } ) ) ); // Log pour débogage
                                    return list.map( ( item ) => (
-                                          <BookingItem key={ item.id } item={ item } />
+                                          <BookingItem key={ item._id } item={ item } />
                                    ) );
                             } )() }
                      </Carousel> */}
@@ -101,7 +101,7 @@ export default function BookingNewest({ title, subheader, list, sx, ...other }) 
                                    return itemsToRender.map((item) => (
                                           item.isEmpty
                                                  ? <div key={item.id} style={{ width: "100%", visibility: "hidden" }} />
-                                                 : <BookingItem key={item.id} item={item} />
+                                                 : <BookingItem key={item._id} item={item} />
                                    ));
                             })()}
                      </Carousel>
@@ -130,11 +130,23 @@ function BookingItem({ item }) {
        const dispatch = useDispatch()
        dayjs.locale('fr');
 
+       // const AnnonceClicked = () => {
+       //        navigate('annonces/view', { state: { annonce: item } })
+
+       //        const nbrView = item.nbrView !== undefined ? item.nbrView + 1 : 1
+       //        dispatch(request({ ...item, nbrView }))
+       // }
+
        const AnnonceClicked = () => {
               navigate('annonces/view', { state: { annonce: item } })
+              const dataNbrView = {
+                     "owner": item.owner._id,
+                     "actionType": "view",
+                     "annonce": item._id,
+                     "rating": 2
 
-              const nbrView = item.nbrView !== undefined ? item.nbrView + 1 : 1
-              dispatch(request({ ...item, nbrView }))
+              }
+              dispatch(request(dataNbrView))
        }
 
        return (
@@ -209,7 +221,7 @@ function BookingItem({ item }) {
 
 
                                           <Typography variant='button' >
-                                                 {item.city}
+                                                 {item.location}
                                           </Typography>
                                    </Stack>
 

@@ -13,6 +13,7 @@ import getAnnoncesReducer from './annonces/getUserAnnonces/getReducer';
 import addAnnoncesReducer from './annonces/addAnnonce/reducer';
 import deleteAnnoncesReducer from './annonces/deleteAnnonce/reducer'
 import updateUserAnnoncesReducer from './annonces/updateAnnonce/reducer'
+import updateAnnonceNbrViewReducer from './annonces/updateNbrView/reducer'
 import bannedUserAnnoncesReducer from './annonces/banAnnonce/reducer'
 
 //  users Import 
@@ -56,7 +57,7 @@ import getTransactionsReducer from './transaction/gets/reducer';
 import getTopCityReducer from './city/topCity/reducer';
 
 // Combinaison des réducteurs traditionnels et des slices
-const rootReducer = combineReducers( {
+const rootReducer = combineReducers({
 
        users: usersReducer,
        setUsers: setUsersReducer,
@@ -67,6 +68,7 @@ const rootReducer = combineReducers( {
        deleteUserAnnonce: deleteAnnoncesReducer,
        updateUserAnnonce: updateUserAnnoncesReducer,
        bannedUserAnnonce: bannedUserAnnoncesReducer,
+       updateAnnonceNbrView: updateAnnonceNbrViewReducer,
 
        // user 
        disableUsers: disableUsersReducer,
@@ -121,10 +123,10 @@ const rootReducer = combineReducers( {
 
        // city
        getTopCity: getTopCityReducer,
-} );
+});
 
 // Configuration du store avec Redux Toolkit
-const store = configureStore( { reducer: rootReducer, middleware: ( getDefaultMiddleware ) => getDefaultMiddleware( { serializableCheck: false } ).concat( thunk ) } );
+const store = configureStore({ reducer: rootReducer, middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false }).concat(thunk) });
 
 
 

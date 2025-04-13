@@ -15,8 +15,7 @@ import { useLocation } from 'react-router';
 import { request } from 'src/store/signal/add/reducer';
 import { useAddSignal } from '../service/addSignal';
 
-export default function DialogSignalAnnonce( { showDialog } )
-{
+export default function DialogSignalAnnonce({ showDialog }) {
 
 
        const dispatch = useDispatch();
@@ -27,8 +26,8 @@ export default function DialogSignalAnnonce( { showDialog } )
 
 
 
-       const [ submiting, setSubmiting ] = useState( false )
-       const [ fullWidth, setFullWidth ] = useState( true );
+       const [submiting, setSubmiting] = useState(false)
+       const [fullWidth, setFullWidth] = useState(true);
 
 
 
@@ -36,15 +35,15 @@ export default function DialogSignalAnnonce( { showDialog } )
 
 
        const defaultValues = { comment: '', };
-       const annonce = useMemo( () => location.state?.annonce || null, [ location ] );
+       const annonce = useMemo(() => location.state?.annonce || null, [location]);
 
 
 
 
 
-       const commentValidation = Yup.string().required( 'Comment is required' );
-       const ReviewSchema = Yup.object().shape( { comment: commentValidation } );
-       const methods = useForm( { resolver: yupResolver( ReviewSchema ), defaultValues, } );
+       const commentValidation = Yup.string().required('Comment is required');
+       const ReviewSchema = Yup.object().shape({ comment: commentValidation });
+       const methods = useForm({ resolver: yupResolver(ReviewSchema), defaultValues, });
 
 
 
@@ -52,57 +51,40 @@ export default function DialogSignalAnnonce( { showDialog } )
 
        const { reset, handleSubmit } = methods;
 
-       const annonceToSend = {
-              annonceId: annonce.id,
-              data: {
-                     signaledUserAnnonceId: annonce.userEmail,
-                     coverUrl: annonce.coverUrl,
-                     aLaUne: annonce.aLaUne,
-                     sponsorAnnonce: annonce.sponsored,
-                     anonnceName: annonce.name
-              }
-       }
+
 
        // console.log( annonceToSend );
 
-       const resetAfterSuccess = () => { reset(); setSubmiting( false ); showDialog.onFalse() }
+       const resetAfterSuccess = () => { reset(); setSubmiting(false); showDialog.onFalse() }
 
-       const onSubmit = handleSubmit( ( formData ) =>
-       {
-              setSubmiting( true );
-              dispatch( request( {
-                     ...annonceToSend,
-                     data: {
-                            ...annonceToSend.data,
-                            ...formData,
-                            signalerId: user._id,
-                            date: new Date(),
-                            signalerEmail: user?.email
-                     },
-                     signaledUserAnnonceId: annonce.userEmail
-              } ) )
+       const onSubmit = handleSubmit((formData) => {
+              setSubmiting(true);
+              dispatch(request({
 
-              console.log(
-                     {
-                            ...annonceToSend,
-                            data: {
-                                   ...annonceToSend.data,
-                                   ...formData,
-                                   signalerId: user._id,
-                                   date: new Date(),
-                                   signalerEmail: user?.email
-                            }
-                     }
-              );
 
-       } );
+
+
+                     "owner": annonce.owner._id,
+                     "actionType": "signaling",
+                     "annonce": annonce._id,
+                     "rating": 0,
+
+                     ...formData,
+
+              }))
+
+              // console.log(
+              //        formData,
+              // );
+
+       });
 
 
 
 
 
 
-       useAddSignal( resetAfterSuccess )
+       useAddSignal(resetAfterSuccess)
 
 
 
@@ -114,25 +96,25 @@ export default function DialogSignalAnnonce( { showDialog } )
 
 
        return (
-              <Dialog maxWidth='sm' fullWidth={ fullWidth } open={ showDialog.value } onClose={ showDialog.onFalse }>
-                     <FormProvider { ...methods }>
-                            <form onSubmit={ onSubmit }>
+              <Dialog maxWidth='sm' fullWidth={fullWidth} open={showDialog.value} onClose={showDialog.onFalse}>
+                     <FormProvider {...methods}>
+                            <form onSubmit={onSubmit}>
                                    <DialogTitle color='error'> Signaler l&apos;annonce </DialogTitle>
 
                                    <DialogContent>
-                                          <Stack direction="row" flexWrap="wrap" alignItems="center" spacing={ 1.5 }>
+                                          <Stack direction="row" flexWrap="wrap" alignItems="center" spacing={1.5}>
                                                  <Typography variant="body2">Pourquoi voulez signaler cette annonce ?</Typography>
                                           </Stack>
 
-                                          <RHFTextField name="comment" label="Commantaire *" multiline rows={ 3 } sx={ { mt: 3 } } />
+                                          <RHFTextField name="comment" label="Commantaire *" multiline rows={3} sx={{ mt: 3 }} />
                                    </DialogContent>
 
                                    <DialogActions>
-                                          <Button color="inherit" variant="outlined" onClick={ showDialog.onFalse }>
+                                          <Button color="inherit" variant="outlined" onClick={showDialog.onFalse}>
                                                  Annuler
                                           </Button>
 
-                                          <LoadingButton color='error' type="submit" variant="contained" loading={ submiting }>
+                                          <LoadingButton color='error' type="submit" variant="contained" loading={submiting}>
                                                  Signaler
                                           </LoadingButton>
                                    </DialogActions>
@@ -145,11 +127,11 @@ export default function DialogSignalAnnonce( { showDialog } )
 }
 
 DialogSignalAnnonce.propTypes = {
-       showDialog: PropTypes.shape( {
+       showDialog: PropTypes.shape({
               value: PropTypes.bool,
               onTrue: PropTypes.func,
               onFalse: PropTypes.func,
               toggle: PropTypes.func,
-       } ).isRequired,
+       }).isRequired,
        // data: PropTypes.object,
 };

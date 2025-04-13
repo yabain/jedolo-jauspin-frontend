@@ -17,6 +17,7 @@ export const getSlice = createSlice({
               data: [],
               isGeting: false,
               isGetingSuccess: false,
+              isError: false,
 
        },
        reducers: {
@@ -51,6 +52,7 @@ export const getSlice = createSlice({
                      .addCase(getList.rejected, (state, action) => {
 
                             state.isGeting = false;
+                            state.isError = true;
                             state.msg = action?.payload?.data ? action.payload.data.message : action.error.message;
                             console.log('Erreur lors du chargement des données:', state.msg);
 

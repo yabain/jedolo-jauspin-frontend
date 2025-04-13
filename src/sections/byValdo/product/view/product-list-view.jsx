@@ -284,50 +284,57 @@ export default function ProductListView({ toShow, clickFromProfile }) {
 
 
 
+       const afterDelete = (deletedAnnonce) => { dispatch(setData(annoncesFunction.deleteAnnonceInArray(annonceFromStore, deletedAnnonce))) }
 
 
 
 
 
-       useEffect(() => {
-              const socket = io(HOST_BACKEND_URL);
-              socket.on('update-annonce', (update) => {
-
-                     dispatch(setData(annoncesFunction.updateAnnonceInArray(annonceFromStore, update)))
-                     console.log('nouvelle annonce detecter', update);
-
-              });
-
-
-              socket.on('banned-annonce', (update) => {
-
-                     dispatch(setData(annoncesFunction.updateAnnonceInArray(annonceFromStore, update)))
-
-                     console.log('nouvelle annonce detecter', update);
-
-
-              });
-
-              socket.on('delete-annonce', (del) => {
-
-                     console.log('annonce a supprimer', del);
-
-
-                     dispatch(setData(annoncesFunction.deleteAnnonceInArray(annonceFromStore, del)))
-              });
 
 
 
-              // Écouter l'événement 'new-annonce' pour mettre à jour les annonces en temps réel
-              socket.on('new-annonce', (newAnnonce) => {
-                     if (newAnnonce.userEmail === (email !== undefined ? email : user?.email)) dispatch(addData(newAnnonce))
-                     console.log('nouvelle annonce detecter', newAnnonce);
 
-              });
 
-              return () => { socket.disconnect(); };
 
-       }, [dispatch, annonceFromStore, user?.email, email]);
+       // useEffect(() => {
+       //        const socket = io(HOST_BACKEND_URL);
+       //        socket.on('update-annonce', (update) => {
+
+       //               dispatch(setData(annoncesFunction.updateAnnonceInArray(annonceFromStore, update)))
+       //               console.log('nouvelle annonce detecter', update);
+
+       //        });
+
+
+       //        socket.on('banned-annonce', (update) => {
+
+       //               dispatch(setData(annoncesFunction.updateAnnonceInArray(annonceFromStore, update)))
+
+       //               console.log('nouvelle annonce detecter', update);
+
+
+       //        });
+
+       //        socket.on('delete-annonce', (del) => {
+
+       //               console.log('annonce a supprimer', del);
+
+
+       //               dispatch(setData(annoncesFunction.deleteAnnonceInArray(annonceFromStore, del)))
+       //        });
+
+
+
+       //        // Écouter l'événement 'new-annonce' pour mettre à jour les annonces en temps réel
+       //        socket.on('new-annonce', (newAnnonce) => {
+       //               if (newAnnonce.userEmail === (email !== undefined ? email : user?.email)) dispatch(addData(newAnnonce))
+       //               console.log('nouvelle annonce detecter', newAnnonce);
+
+       //        });
+
+       //        return () => { socket.disconnect(); };
+
+       // }, [dispatch, annonceFromStore, user?.email, email]);
 
 
 
@@ -582,11 +589,11 @@ export default function ProductListView({ toShow, clickFromProfile }) {
        return (
               <>
 
-                     <DialogSponsorBuy showDialog={buySponsor} startPaiementSp={startPaimentSponsor} />
+                     {/* <DialogSponsorBuy showDialog={buySponsor} startPaiementSp={startPaimentSponsor} />
                      <DialogPaimentInProcessSponsorBuy dataGet={annonceToSponsor} showDialog={startPaimentSponsor} />
 
                      <DialogALaUneBuy showDialog={aLaUneBuy} startPaiement={startPaimentALaUne} />
-                     <DialogPaimentInProcessALaUne dataGet={annonceClick} showDialog={startPaimentALaUne} />
+                     <DialogPaimentInProcessALaUne dataGet={annonceClick} showDialog={startPaimentALaUne} /> */}
                      <Box
                             // maxWidth={ settings.themeStretch ? false : 'lg' }
                             // maxWidth='xl'
@@ -672,7 +679,7 @@ export default function ProductListView({ toShow, clickFromProfile }) {
                                           disableRowSelectionOnClick
                                           rows={dataFiltered}
                                           columns={columns}
-                                          loading={dataFiltered.length === 0}
+                                          loading={isGeting}
                                           getRowHeight={() => 'auto'}
                                           pageSizeOptions={[5, 10, 25]}
                                           initialState={{
@@ -748,7 +755,7 @@ export default function ProductListView({ toShow, clickFromProfile }) {
 
 
                      <DialogDeleteAnnonces showDialog={confirmRows} data={selectedRowIds} />
-                     <DialogDeleteAnnonce showDialog={confirmOfDel} data={annonceToDel} />
+                     <DialogDeleteAnnonce showDialog={confirmOfDel} data={annonceToDel} handleAfterDelete={() => { afterDelete(annonceToDel) }} />
               </>
        );
 }

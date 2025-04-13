@@ -25,8 +25,7 @@ import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
-import
-{
+import {
        DataGrid,
        GridToolbarExport,
        GridActionsCellItem,
@@ -59,8 +58,7 @@ import { dataObject } from 'src/1data/annonces/defaut';
 import { HOST_BACKEND_URL } from 'src/config-global';
 import ProductTableToolbar from '../product-table-toolbar';
 import ProductTableFiltersResult from '../product-table-filters-result';
-import
-{
+import {
        RenderCellStock,
        RenderCellPrice,
        RenderCellPublish,
@@ -85,12 +83,11 @@ const HIDE_COLUMNS = {
        category: false,
 };
 
-const HIDE_COLUMNS_TOGGLABLE = [ 'category', 'actions' ];
+const HIDE_COLUMNS_TOGGLABLE = ['category', 'actions'];
 
 // ----------------------------------------------------------------------
 
-export default function ProductListViewUsers( { toShow } )
-{
+export default function ProductListViewUsers({ toShow }) {
 
 
        const router = useRouter();
@@ -112,13 +109,13 @@ export default function ProductListViewUsers( { toShow } )
 
 
 
-       const [ tableData, setTableData ] = useState( [] );
-       const [ dataIsSet, setDataIsSet ] = useState( false );
-       const [ annonceToBan, setAnnonceToBan ] = useState( {} );
-       const [ annonceToDel, setAnnonceToDel ] = useState( {} );
-       const [ filters, setFilters ] = useState( defaultFilters );
-       const [ selectedRowIds, setSelectedRowIds ] = useState( [] );
-       const [ columnVisibilityModel, setColumnVisibilityModel ] = useState( HIDE_COLUMNS );
+       const [tableData, setTableData] = useState([]);
+       const [dataIsSet, setDataIsSet] = useState(false);
+       const [annonceToBan, setAnnonceToBan] = useState({});
+       const [annonceToDel, setAnnonceToDel] = useState({});
+       const [filters, setFilters] = useState(defaultFilters);
+       const [selectedRowIds, setSelectedRowIds] = useState([]);
+       const [columnVisibilityModel, setColumnVisibilityModel] = useState(HIDE_COLUMNS);
 
 
 
@@ -127,19 +124,17 @@ export default function ProductListViewUsers( { toShow } )
 
        const { user } = useAuthContext();
 
-       const { isFulled, isPending } = useSelector( ( state ) => state.getUsersAnnonces );
+       const { isFulled, isPending } = useSelector((state) => state.getUsersAnnonces);
 
-       const annonceList = useSelector( ( state ) => state.getAnnonces.data );
-       const annonceFromStore = useSelector( ( state ) => state.annonces.adminData );
-       const usersAnnonceList = useSelector( ( state ) => state.getUsersAnnonces.data );
+       const annonceList = useSelector((state) => state.getAnnonces.data);
+       const annonceFromStore = useSelector((state) => state.annonces.adminData);
+       const usersAnnonceList = useSelector((state) => state.getUsersAnnonces.data);
 
-       const isFulledDelete = useSelector( ( state ) => state.deleteUserAnnonce.isFulled );
-       const isPendingDelete = useSelector( ( state ) => state.deleteUserAnnonce.isPending );
+       const isFulledDelete = useSelector((state) => state.deleteUserAnnonce.isFulled);
+       const isPendingDelete = useSelector((state) => state.deleteUserAnnonce.isPending);
 
-       const isFulledBan = useSelector( ( state ) => state.bannedUserAnnonce.isFulled );
-       const isPendingBan = useSelector( ( state ) => state.bannedUserAnnonce.isPending );
-
-
+       const isFulledBan = useSelector((state) => state.bannedUserAnnonce.isFulled);
+       const isPendingBan = useSelector((state) => state.bannedUserAnnonce.isPending);
 
 
 
@@ -147,18 +142,19 @@ export default function ProductListViewUsers( { toShow } )
 
 
 
-       function updateAnnonceInArray( annonces, updatedAnnonce )
-       {
 
-              console.log( 'updateAnnonceInArray', updatedAnnonce.id );
-              const index = annonces.findIndex( annonce => String( annonce.id ) === String( updatedAnnonce.id ) );
 
-              console.log( `Index trouvé : ${ index }` );
+       function updateAnnonceInArray(annonces, updatedAnnonce) {
 
-              if ( index === -1 ) { console.error( 'Annonce non trouvée dans le tableau' ); return annonces; }
-              const newAnnonces = [ ...annonces.slice( 0, index ), updatedAnnonce, ...annonces.slice( index + 1 ), ];
+              console.log('updateAnnonceInArray', updatedAnnonce.id);
+              const index = annonces.findIndex(annonce => String(annonce.id) === String(updatedAnnonce.id));
 
-              console.log( 'nouvelle Annonces dans le store', newAnnonces );
+              console.log(`Index trouvé : ${index}`);
+
+              if (index === -1) { console.error('Annonce non trouvée dans le tableau'); return annonces; }
+              const newAnnonces = [...annonces.slice(0, index), updatedAnnonce, ...annonces.slice(index + 1),];
+
+              console.log('nouvelle Annonces dans le store', newAnnonces);
               return newAnnonces;
        }
 
@@ -170,18 +166,17 @@ export default function ProductListViewUsers( { toShow } )
 
 
 
-       function deleteAnnonceInArray( annonces, updatedAnnonce )
-       {
+       function deleteAnnonceInArray(annonces, updatedAnnonce) {
 
-              console.log( 'updateAnnonceInArray', updatedAnnonce.id );
-              const index = annonces.findIndex( annonce => String( annonce.id ) === String( updatedAnnonce.id ) );
+              console.log('updateAnnonceInArray', updatedAnnonce.id);
+              const index = annonces.findIndex(annonce => String(annonce.id) === String(updatedAnnonce.id));
 
-              console.log( `Index trouvé : ${ index }` );
+              console.log(`Index trouvé : ${index}`);
 
-              if ( index === -1 ) { console.error( 'Annonce non trouvée dans le tableau' ); return annonces; }
-              const newAnnonces = [ ...annonces.slice( 0, index ), ...annonces.slice( index + 1 ), ];
+              if (index === -1) { console.error('Annonce non trouvée dans le tableau'); return annonces; }
+              const newAnnonces = [...annonces.slice(0, index), ...annonces.slice(index + 1),];
 
-              console.log( 'nouvelle Annonces dans le store', newAnnonces );
+              console.log('nouvelle Annonces dans le store', newAnnonces);
               return newAnnonces;
        }
 
@@ -194,15 +189,13 @@ export default function ProductListViewUsers( { toShow } )
 
 
 
-       useEffect( () => () =>
-       {
+       useEffect(() => () => {
 
-              dispatch( resetData() )
-              dispatch( resetAfterRequest() )
-              dispatch( resetAfterGetListRequete() );
+              dispatch(resetData())
+              dispatch(resetAfterRequest())
+              dispatch(resetAfterGetListRequete());
 
-       }, [ dispatch ] );
-
+       }, [dispatch]);
 
 
 
@@ -212,28 +205,27 @@ export default function ProductListViewUsers( { toShow } )
 
 
 
-       useEffect( () =>
-       {
 
-              if ( !isPending && !isFulled )
-              {
+       useEffect(() => {
 
+              if (!isPending && !isFulled) {
 
 
-                     dispatch( request( { type: 'admin' } ) )
 
-                     console.log( 'init des useeerlist set ', usersAnnonceList );
+                     dispatch(request({ type: 'admin' }))
 
-
-                     dispatch( setAdminData( usersAnnonceList ) )
+                     console.log('init des useeerlist set ', usersAnnonceList);
 
 
-                     dispatch( getList( user?.email ) )
+                     dispatch(setAdminData(usersAnnonceList))
+
+
+                     dispatch(getList(user?.email))
 
 
               }
 
-       }, [ dispatch, annonceList, user, isFulled, isPending, toShow, usersAnnonceList ] );
+       }, [dispatch, annonceList, user, isFulled, isPending, toShow, usersAnnonceList]);
 
 
 
@@ -243,20 +235,17 @@ export default function ProductListViewUsers( { toShow } )
 
 
 
-       useEffect( () =>
-       {
+       useEffect(() => {
 
 
-              console.log( 'update au changement de valeur' );
+              console.log('update au changement de valeur');
 
-              dispatch( setAdminData( usersAnnonceList ) )
-
-
+              dispatch(setAdminData(usersAnnonceList))
 
 
-       }, [ usersAnnonceList, dispatch ] );
 
 
+       }, [usersAnnonceList, dispatch]);
 
 
 
@@ -264,28 +253,27 @@ export default function ProductListViewUsers( { toShow } )
 
 
 
-       useEffect( () =>
-       {
-              setTableData( annonceFromStore );
-
-       }, [ annonceFromStore ] );
 
 
+       useEffect(() => {
+              setTableData(annonceFromStore);
+
+       }, [annonceFromStore]);
 
 
 
-       useEffect( () =>
-       {
 
-              if ( !dataIsSet )
-              {
+
+       useEffect(() => {
+
+              if (!dataIsSet) {
 
                      // console.log( products );
-                     setDataIsSet( true );
+                     setDataIsSet(true);
 
               }
 
-       }, [ dataIsSet, dispatch, annonceFromStore ] );
+       }, [dataIsSet, dispatch, annonceFromStore]);
 
 
 
@@ -296,60 +284,31 @@ export default function ProductListViewUsers( { toShow } )
 
 
 
-       useEffect( () =>
-       {
-              const socket = io( HOST_BACKEND_URL );
-              socket.on( 'update-annonce', ( update ) =>
-              {
+       // useEffect( () =>
+       // {
+       //        const socket = io( HOST_BACKEND_URL );
+       //        socket.on( 'update-annonce', ( update ) =>
+       //        {
 
-                     dispatch( setAdminData( updateAnnonceInArray( annonceFromStore, update ) ) )
-                     console.log( 'nouvelle annonce detecter', update );
+       //               dispatch( setAdminData( updateAnnonceInArray( annonceFromStore, update ) ) )
+       //               console.log( 'nouvelle annonce detecter', update );
 
-              } );
-
-
-              socket.on( 'banned-annonce', ( update ) =>
-              {
-
-                     dispatch( setAdminData( updateAnnonceInArray( annonceFromStore, update ) ) )
-
-                     console.log( 'nouvelle annonce detecter', update );
+       //        } );
 
 
-              } );
+       //        socket.on( 'banned-annonce', ( update ) =>
+       //        {
 
-              return () => { socket.disconnect(); };
+       //               dispatch( setAdminData( updateAnnonceInArray( annonceFromStore, update ) ) )
 
-       }, [ dispatch, annonceFromStore ] );
-
-
-
+       //               console.log( 'nouvelle annonce detecter', update );
 
 
+       //        } );
 
+       //        return () => { socket.disconnect(); };
 
-
-
-
-
-       useEffect( () =>
-       {
-              const socket = io( HOST_BACKEND_URL );
-
-
-
-              socket.on( 'delete-annonce', ( del ) =>
-              {
-
-                     console.log( 'annonce a supprimer', del );
-
-
-                     dispatch( setAdminData( deleteAnnonceInArray( annonceFromStore, del ) ) )
-              } );
-
-              return () => { socket.disconnect(); };
-
-       }, [ dispatch, annonceFromStore, ] );
+       // }, [ dispatch, annonceFromStore ] );
 
 
 
@@ -361,24 +320,49 @@ export default function ProductListViewUsers( { toShow } )
 
 
 
-       useEffect( () =>
-       {
+       // useEffect(() => {
+       //        const socket = io(HOST_BACKEND_URL);
 
 
 
-              if ( !isPendingBan && isFulledBan )
-              {
+       //        socket.on('delete-annonce', (del) => {
+
+       //               console.log('annonce a supprimer', del);
 
 
-                     dispatch( resetAfterBan() )
+       //               dispatch(setAdminData(deleteAnnonceInArray(annonceFromStore, del)))
+       //        });
+
+       //        return () => { socket.disconnect(); };
+
+       // }, [dispatch, annonceFromStore,]);
 
 
-                     enqueueSnackbar( 'Annonce Banni avec succes!' );
+
+
+
+
+
+
+
+
+
+       useEffect(() => {
+
+
+
+              if (!isPendingBan && isFulledBan) {
+
+
+                     dispatch(resetAfterBan())
+
+
+                     enqueueSnackbar('Annonce Banni avec succes!');
                      confirmOfBan.onFalse();
 
               }
 
-       }, [ confirmOfBan, enqueueSnackbar, dispatch, isFulledBan, isPendingBan ] );
+       }, [confirmOfBan, enqueueSnackbar, dispatch, isFulledBan, isPendingBan]);
 
 
 
@@ -390,14 +374,13 @@ export default function ProductListViewUsers( { toShow } )
 
 
        const banAnnouncement = useCallback(
-              () =>
-              {
+              () => {
 
                      const banAnnonceObject = { ...annonceToBan, publish: 'banned' }
-                     dispatch( banAnnonce( banAnnonceObject ) )
+                     dispatch(banAnnonce(banAnnonceObject))
 
               },
-              [ dispatch, annonceToBan ]
+              [dispatch, annonceToBan]
        );
 
 
@@ -409,19 +392,18 @@ export default function ProductListViewUsers( { toShow } )
 
 
        const banAnnouncements = useCallback(
-              () =>
-              {
+              () => {
 
 
 
                      annonceToBan.publish = 'banned'
-                     console.log( annonceToBan );
+                     console.log(annonceToBan);
 
-                     enqueueSnackbar( 'Annonce banni avec succes!' );
+                     enqueueSnackbar('Annonce banni avec succes!');
 
                      // setTableData( deleteRow );
               },
-              [ enqueueSnackbar, annonceToBan ]
+              [enqueueSnackbar, annonceToBan]
        );
 
 
@@ -430,25 +412,23 @@ export default function ProductListViewUsers( { toShow } )
 
 
 
-       const dataFiltered = applyFilter( {
+       const dataFiltered = applyFilter({
               inputData: tableData,
               filters,
-       } );
+       });
 
-       const canReset = !isEqual( defaultFilters, filters );
+       const canReset = !isEqual(defaultFilters, filters);
 
-       const handleFilters = useCallback( ( name, value ) =>
-       {
-              setFilters( ( prevState ) => ( {
+       const handleFilters = useCallback((name, value) => {
+              setFilters((prevState) => ({
                      ...prevState,
-                     [ name ]: value,
-              } ) );
-       }, [] );
+                     [name]: value,
+              }));
+       }, []);
 
-       const handleResetFilters = useCallback( () =>
-       {
-              setFilters( defaultFilters );
-       }, [] );
+       const handleResetFilters = useCallback(() => {
+              setFilters(defaultFilters);
+       }, []);
 
 
 
@@ -460,22 +440,21 @@ export default function ProductListViewUsers( { toShow } )
 
 
        const handleDeleteRow = useCallback(
-              ( id, annonceToDelete ) =>
-              {
+              (id, annonceToDelete) => {
 
 
                      // const deleteRow = tableData.filter( ( row ) => row.id !== id );
 
-                     console.log( 'annonce a suppppppppppp', annonceToDelete );
+                     console.log('annonce a suppppppppppp', annonceToDelete);
 
                      // enqueueSnackbar( 'fonction appeler!' );
 
 
-                     dispatch( deleteAnnonces( { id: annonceToDelete.id } ) )
+                     dispatch(deleteAnnonces({ id: annonceToDelete.id }))
 
                      // setTableData( deleteRow );
               },
-              [ dispatch ]
+              [dispatch]
        );
 
 
@@ -488,30 +467,27 @@ export default function ProductListViewUsers( { toShow } )
 
 
 
-       const handleDeleteRows = useCallback( () =>
-       {
-              const deleteRows = tableData.filter( ( row ) => !selectedRowIds.includes( row.id ) );
+       const handleDeleteRows = useCallback(() => {
+              const deleteRows = tableData.filter((row) => !selectedRowIds.includes(row.id));
 
-              enqueueSnackbar( 'Delete success!' );
+              enqueueSnackbar('Delete success!');
 
-              setTableData( deleteRows );
-       }, [ enqueueSnackbar, selectedRowIds, tableData ] );
+              setTableData(deleteRows);
+       }, [enqueueSnackbar, selectedRowIds, tableData]);
 
        const handleEditRow = useCallback(
-              ( data ) =>
-              {
-                     navigate( paths.annonces.edit, { state: { data } } );
+              (data) => {
+                     navigate(paths.annonces.edit, { state: { data } });
 
               },
-              [ navigate ]
+              [navigate]
        );
 
        const handleViewRow = useCallback(
-              ( id ) =>
-              {
-                     router.push( paths.dashboard.product.details( id ) );
+              (id) => {
+                     router.push(paths.dashboard.product.details(id));
               },
-              [ router ]
+              [router]
        );
 
        const columns = [
@@ -526,13 +502,13 @@ export default function ProductListViewUsers( { toShow } )
                      flex: 1,
                      minWidth: 360,
                      hideable: false,
-                     renderCell: ( params ) => <RenderCellProduct params={ params } />,
+                     renderCell: (params) => <RenderCellProduct params={params} />,
               },
               {
                      field: 'createdAt',
                      headerName: 'Create at',
                      width: 160,
-                     renderCell: ( params ) => <RenderCellCreatedAt params={ params } />,
+                     renderCell: (params) => <RenderCellCreatedAt params={params} />,
               },
               {
                      field: 'inventoryType',
@@ -540,14 +516,14 @@ export default function ProductListViewUsers( { toShow } )
                      width: 160,
                      type: 'singleSelect',
                      valueOptions: PRODUCT_STOCK_OPTIONS,
-                     renderCell: ( params ) => <RenderCellStock params={ params } />,
+                     renderCell: (params) => <RenderCellStock params={params} />,
               },
               {
                      field: 'price',
                      headerName: 'Price',
                      width: 140,
                      editable: true,
-                     renderCell: ( params ) => <RenderCellPrice params={ params } />,
+                     renderCell: (params) => <RenderCellPrice params={params} />,
               },
               {
                      field: 'publish',
@@ -556,7 +532,7 @@ export default function ProductListViewUsers( { toShow } )
                      type: 'singleSelect',
                      editable: true,
                      valueOptions: PUBLISH_OPTIONS,
-                     renderCell: ( params ) => <RenderCellPublish params={ params } />,
+                     renderCell: (params) => <RenderCellPublish params={params} />,
               },
               {
                      type: 'actions',
@@ -568,37 +544,36 @@ export default function ProductListViewUsers( { toShow } )
                      sortable: false,
                      filterable: false,
                      disableColumnMenu: true,
-                     getActions: ( params ) => [
+                     getActions: (params) => [
                             <GridActionsCellItem
                                    showInMenu
-                                   icon={ <Iconify icon="solar:eye-bold" /> }
+                                   icon={<Iconify icon="solar:eye-bold" />}
                                    label="View"
-                                   onClick={ () => handleViewRow( params.row.id ) }
+                                   onClick={() => handleViewRow(params.row.id)}
                             />,
                             <GridActionsCellItem
                                    showInMenu
-                                   icon={ <Iconify icon="solar:pen-bold" /> }
+                                   icon={<Iconify icon="solar:pen-bold" />}
                                    label="Edit"
-                                   onClick={ () => handleEditRow( params.row ) }
+                                   onClick={() => handleEditRow(params.row)}
                             />,
                             <GridActionsCellItem
                                    showInMenu
-                                   icon={ <Iconify icon="solar:pen-bold" /> }
+                                   icon={<Iconify icon="solar:pen-bold" />}
                                    label="Banir"
-                                   onClick={ () => { confirmOfBan.onTrue(); setAnnonceToBan( params.row ) } }
+                                   onClick={() => { confirmOfBan.onTrue(); setAnnonceToBan(params.row) }}
                             />,
                             <GridActionsCellItem
                                    showInMenu
-                                   icon={ <Iconify icon="solar:trash-bin-trash-bold" /> }
+                                   icon={<Iconify icon="solar:trash-bin-trash-bold" />}
                                    label="Delete"
-                                   onClick={ () =>
-                                   {
+                                   onClick={() => {
                                           // dispatch( deleteAnnonces( params.row ) )
-                                          confirmOfDel.onTrue(); setAnnonceToDel( params.row )
+                                          confirmOfDel.onTrue(); setAnnonceToDel(params.row)
 
                                           // handleDeleteRow( params.row.id, params.row );
-                                   } }
-                                   sx={ { color: 'error.main' } }
+                                   }}
+                                   sx={{ color: 'error.main' }}
                             />,
                      ],
               },
@@ -606,109 +581,108 @@ export default function ProductListViewUsers( { toShow } )
 
        const getTogglableColumns = () =>
               columns
-                     .filter( ( column ) => !HIDE_COLUMNS_TOGGLABLE.includes( column.field ) )
-                     .map( ( column ) => column.field );
+                     .filter((column) => !HIDE_COLUMNS_TOGGLABLE.includes(column.field))
+                     .map((column) => column.field);
 
        return (
               <>
                      <Box
                             // maxWidth={ settings.themeStretch ? false : 'lg' }
                             // maxWidth='xl'
-                            sx={ {
+                            sx={{
                                    flexGrow: 1,
                                    display: 'flex',
                                    flexDirection: 'column',
-                            } }
+                            }}
                      >
-                            { user?.role === "user" && ( <CustomBreadcrumbs
+                            {user?.role === "user" && (<CustomBreadcrumbs
                                    heading="Liste Des Annonces"
-                                   links={ [
+                                   links={[
                                           {
                                                  name: '',
                                                  href: paths.dashboard.product.root,
                                           }
-                                   ] }
+                                   ]}
                                    action={
                                           <Button
                                                  // component={ RouterLink }
                                                  // href={ paths.dashboard.product.new }
-                                                 onClick={ () => navigate( '/home/annonces/new' ) }
+                                                 onClick={() => navigate('/home/annonces/new')}
 
                                                  variant="contained"
-                                                 startIcon={ <Iconify icon="mingcute:add-line" /> }
+                                                 startIcon={<Iconify icon="mingcute:add-line" />}
                                           >
                                                  New Product
                                           </Button>
                                    }
-                                   sx={ {
+                                   sx={{
                                           mb: {
                                                  xs: 3,
                                                  md: 5,
                                           },
-                                   } }
-                            /> ) }
+                                   }}
+                            />)}
 
                             <Card
-                                   sx={ {
+                                   sx={{
 
                                           maxHeight: "max-content",
                                           minHeight: '600px',
                                           flexGrow: { md: 1 },
                                           display: 'flex',
                                           flexDirection: 'column',
-                                   } }
+                                   }}
                             >
                                    <DataGrid
-                                          autoHeight={ false }
-                                          sx={ { flexGrow: 1, } }
+                                          autoHeight={false}
+                                          sx={{ flexGrow: 1, }}
                                           checkboxSelection
                                           disableRowSelectionOnClick
-                                          rows={ dataFiltered }
-                                          columns={ columns }
-                                          loading={ dataFiltered.length === 0 }
-                                          getRowHeight={ () => 'auto' }
-                                          pageSizeOptions={ [ 5, 10, 25 ] }
-                                          initialState={ {
+                                          rows={dataFiltered}
+                                          columns={columns}
+                                          loading={dataFiltered.length === 0}
+                                          getRowHeight={() => 'auto'}
+                                          pageSizeOptions={[5, 10, 25]}
+                                          initialState={{
                                                  pagination: {
                                                         paginationModel: { pageSize: 10 },
                                                  },
-                                          } }
-                                          onRowSelectionModelChange={ ( newSelectionModel ) =>
-                                          {
-                                                 setSelectedRowIds( newSelectionModel );
-                                          } }
-                                          columnVisibilityModel={ columnVisibilityModel }
-                                          onColumnVisibilityModelChange={ ( newModel ) => setColumnVisibilityModel( newModel ) }
-                                          slots={ {
+                                          }}
+                                          onRowSelectionModelChange={(newSelectionModel) => {
+                                                 setSelectedRowIds(newSelectionModel);
+                                          }}
+                                          columnVisibilityModel={columnVisibilityModel}
+                                          onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
+                                          slots={{
                                                  toolbar: () => (
                                                         <>
                                                                <GridToolbarContainer>
                                                                       <ProductTableToolbar
-                                                                             filters={ filters }
-                                                                             onFilters={ handleFilters }
-                                                                             stockOptions={ PRODUCT_STOCK_OPTIONS }
-                                                                             publishOptions={ PUBLISH_OPTIONS }
+                                                                             filters={filters}
+                                                                             onFilters={handleFilters}
+                                                                             stockOptions={PRODUCT_STOCK_OPTIONS}
+                                                                             publishOptions={PUBLISH_OPTIONS}
                                                                       />
 
                                                                       <GridToolbarQuickFilter />
 
                                                                       <Stack
-                                                                             spacing={ 1 }
-                                                                             flexGrow={ 1 }
+                                                                             spacing={1}
+                                                                             flexGrow={1}
                                                                              direction="row"
                                                                              alignItems="center"
                                                                              justifyContent="flex-end"
                                                                       >
-                                                                             { !!selectedRowIds.length && (
+                                                                             {!!selectedRowIds.length && (
                                                                                     <Button
                                                                                            size="small"
                                                                                            color="error"
-                                                                                           startIcon={ <Iconify icon="solar:trash-bin-trash-bold" /> }
-                                                                                           onClick={ confirmRows.onTrue }
+                                                                                           startIcon={<Iconify icon="solar:trash-bin-trash-bold" />}
+                                                                                           onClick={confirmRows.onTrue}
                                                                                     >
-                                                                                           Delete ({ selectedRowIds.length })
+                                                                                           Delete ({selectedRowIds.length})
                                                                                     </Button>
-                                                                             ) }
+                                                                             )}
 
                                                                              <GridToolbarColumnsButton />
                                                                              <GridToolbarFilterButton />
@@ -716,25 +690,25 @@ export default function ProductListViewUsers( { toShow } )
                                                                       </Stack>
                                                                </GridToolbarContainer>
 
-                                                               { canReset && (
+                                                               {canReset && (
                                                                       <ProductTableFiltersResult
-                                                                             filters={ filters }
-                                                                             onFilters={ handleFilters }
-                                                                             onResetFilters={ handleResetFilters }
-                                                                             results={ dataFiltered.length }
-                                                                             sx={ { p: 2.5, pt: 0 } }
+                                                                             filters={filters}
+                                                                             onFilters={handleFilters}
+                                                                             onResetFilters={handleResetFilters}
+                                                                             results={dataFiltered.length}
+                                                                             sx={{ p: 2.5, pt: 0 }}
                                                                       />
-                                                               ) }
+                                                               )}
                                                         </>
                                                  ),
                                                  noRowsOverlay: () => <EmptyContent title="No Data" />,
                                                  noResultsOverlay: () => <EmptyContent title="No results found" />,
-                                          } }
-                                          slotProps={ {
+                                          }}
+                                          slotProps={{
                                                  columnsPanel: {
                                                         getTogglableColumns,
                                                  },
-                                          } }
+                                          }}
                                    />
                             </Card>
                      </Box >
@@ -743,8 +717,8 @@ export default function ProductListViewUsers( { toShow } )
 
 
                      <ConfirmDialog
-                            open={ confirmOfBan.value }
-                            onClose={ confirmOfBan.onFalse }
+                            open={confirmOfBan.value}
+                            onClose={confirmOfBan.onFalse}
                             title="Banissement de l'annonce"
                             content={
                                    <>
@@ -755,10 +729,9 @@ export default function ProductListViewUsers( { toShow } )
                                    <Button
                                           variant="contained"
                                           color="error"
-                                          onClick={ () =>
-                                          {
+                                          onClick={() => {
                                                  banAnnouncement();
-                                          } }
+                                          }}
                                    >
                                           Banir
                                    </Button>
@@ -770,8 +743,8 @@ export default function ProductListViewUsers( { toShow } )
 
 
 
-                     <DialogDeleteAnnonces showDialog={ confirmRows } data={ selectedRowIds } />
-                     <DialogDeleteAnnonce showDialog={ confirmOfDel } data={ annonceToDel } />
+                     <DialogDeleteAnnonces showDialog={confirmRows} data={selectedRowIds} />
+                     <DialogDeleteAnnonce showDialog={confirmOfDel} data={annonceToDel} />
 
               </>
        );
@@ -779,18 +752,15 @@ export default function ProductListViewUsers( { toShow } )
 
 // ----------------------------------------------------------------------
 
-function applyFilter( { inputData, filters } )
-{
+function applyFilter({ inputData, filters }) {
        const { stock, publish } = filters;
 
-       if ( stock.length )
-       {
-              inputData = inputData.filter( ( product ) => stock.includes( product.inventoryType ) );
+       if (stock.length) {
+              inputData = inputData.filter((product) => stock.includes(product.inventoryType));
        }
 
-       if ( publish.length )
-       {
-              inputData = inputData.filter( ( product ) => publish.includes( product.publish ) );
+       if (publish.length) {
+              inputData = inputData.filter((product) => publish.includes(product.publish));
        }
 
        return inputData;

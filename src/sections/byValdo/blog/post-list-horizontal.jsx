@@ -9,80 +9,76 @@ import { PostItemSkeleton } from './post-skeleton';
 import PostItemHorizontal from './post-item-horizontal';
 import BookingItem from './bookingItem';
 
-export default function PostListHorizontal( { posts, loading } )
-{
-       const [ page, setPage ] = useState( 1 );
-       const [ hasPageChanged, setHasPageChanged ] = useState( false ); // Ajouter un état pour suivre les changements de page
+export default function PostListHorizontal({ posts, loading }) {
+       const [page, setPage] = useState(1);
+       const [hasPageChanged, setHasPageChanged] = useState(false); // Ajouter un état pour suivre les changements de page
        const postsPerPage = 24;
 
        // console.log( 'recu', posts );
 
 
        // Calcul du nombre total de pages
-       const totalPages = Math.ceil( posts.length / postsPerPage );
+       const totalPages = Math.ceil(posts.length / postsPerPage);
 
        // Déterminer les posts à afficher pour la page actuelle
        const indexOfLastPost = page * postsPerPage;
        const indexOfFirstPost = indexOfLastPost - postsPerPage;
-       const currentPosts = posts.slice( indexOfFirstPost, indexOfLastPost );
+       const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
 
-       const handleChangePage = ( event, value ) =>
-       {
-              setPage( value );
-              setHasPageChanged( true ); // Indique qu'une page a été changée
+       const handleChangePage = (event, value) => {
+              setPage(value);
+              setHasPageChanged(true); // Indique qu'une page a été changée
        };
 
        // Réinitialiser le défilement à chaque changement de page si l'utilisateur a cliqué
-       useEffect( () =>
-       {
-              if ( hasPageChanged )
-              {
+       useEffect(() => {
+              if (hasPageChanged) {
                      // tabsRef.current.scrollIntoView( { behavior: 'smooth', block: 'start' } );
-                     window.scrollTo( {
+                     window.scrollTo({
                             top: tabsRef.current.offsetTop - HEADER.H_DESKTOP,
                             behavior: "smooth"
-                     } );
-                     setHasPageChanged( false ); // Réinitialise l'état après avoir effectué le défilement
+                     });
+                     setHasPageChanged(false); // Réinitialise l'état après avoir effectué le défilement
               }
-       }, [ page, hasPageChanged ] ); // Déclenchement uniquement après un changement de page par l'utilisateur
+       }, [page, hasPageChanged]); // Déclenchement uniquement après un changement de page par l'utilisateur
 
        return (
               <>
                      <Box
-                            ref={ postRef }
-                            gap={ 3 }
+                            ref={postRef}
+                            gap={3}
                             display="grid"
-                            gridTemplateColumns={ {
+                            gridTemplateColumns={{
                                    xs: 'repeat(1, 1fr)',
                                    sm: 'repeat(2, 1fr)',
                                    md: 'repeat(3, 1fr)',
                                    lg: 'repeat(4, 1fr)',
                                    xl: 'repeat(5, 1fr)',
-                            } }
+                            }}
                      >
-                            { loading
-                                   ? [ ...Array( postsPerPage ) ].map( ( _, index ) => (
-                                          <PostItemSkeleton key={ index } variant="horizontal" />
-                                   ) )
-                                   : currentPosts.map( ( post ) => (
+                            {loading
+                                   ? [...Array(postsPerPage)].map((_, index) => (
+                                          <PostItemSkeleton key={index} variant="horizontal" />
+                                   ))
+                                   : currentPosts.map((post) => (
                                           // <PostItemHorizontal key={ post.id } post={ post } />
-                                          <BookingItem key={ post.id } item={ post } />
-                                   ) ) }
+                                          <BookingItem key={post._id} item={post} />
+                                   ))}
                      </Box>
 
-                     { totalPages > 1 && (
+                     {totalPages > 1 && (
                             <Pagination
-                                   count={ totalPages }
-                                   page={ page }
-                                   onChange={ handleChangePage }
-                                   sx={ {
+                                   count={totalPages}
+                                   page={page}
+                                   onChange={handleChangePage}
+                                   sx={{
                                           mt: 8,
-                                          [ `& .${ paginationClasses.ul }` ]: {
+                                          [`& .${paginationClasses.ul}`]: {
                                                  justifyContent: 'center',
                                           },
-                                   } }
+                                   }}
                             />
-                     ) }
+                     )}
               </>
        );
 }

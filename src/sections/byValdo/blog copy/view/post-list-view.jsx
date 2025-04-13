@@ -49,8 +49,7 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function PostListView()
-{
+export default function PostListView() {
 
 
 
@@ -61,22 +60,22 @@ export default function PostListView()
 
        const settings = useSettingsContext();
 
-       const [ sortBy, setSortBy ] = useState( 'latest' );
+       const [sortBy, setSortBy] = useState('latest');
 
-       const [ filters, setFilters ] = useState( defaultFilters );
-       const [ selectedTab, setSelectedTab ] = useState( 'VIP' );
-       const [ selectedTownTab, setSelectedTownTab ] = useState( 'Yaounde' );
+       const [filters, setFilters] = useState(defaultFilters);
+       const [selectedTab, setSelectedTab] = useState('VIP');
+       const [selectedTownTab, setSelectedTownTab] = useState('Yaounde');
 
-       const [ searchQuery, setSearchQuery ] = useState( '' );
+       const [searchQuery, setSearchQuery] = useState('');
 
-       const debouncedQuery = useDebounce( searchQuery );
+       const debouncedQuery = useDebounce(searchQuery);
 
        const { postsLoading } = useGetPosts();
 
 
-       const annonceFromStore = useSelector( ( state ) => state.usersAnnonces.data )
-       const usersAnnonces = useSelector( state => state.getUsersAnnonces.data )
-       const { isPending, isFulled } = useSelector( state => state.getUsersAnnonces )
+       const annonceFromStore = useSelector((state) => state.usersAnnonces.data)
+       const usersAnnonces = useSelector(state => state.getUsersAnnonces.data)
+       const { isPending, isFulled } = useSelector(state => state.getUsersAnnonces)
 
        // const posts = useMemo( () =>
        // (
@@ -763,7 +762,7 @@ export default function PostListView()
 
 
 
-       const [ filteredPosts, setFilteredPosts ] = useState( [] );
+       const [filteredPosts, setFilteredPosts] = useState([]);
 
 
        const newPost2 =
@@ -995,14 +994,13 @@ export default function PostListView()
        // Add dependencies if needed
 
 
-       const addPost = ( newPost ) =>
-       {
+       const addPost = (newPost) => {
               const newPostWithId = { ...newPost, id: Date.now() }; // Génère un id basé sur le timestamp actuel
-              const updatedPosts = [ ...filteredPosts, newPostWithId ];
+              const updatedPosts = [...filteredPosts, newPostWithId];
 
-              console.log( 'fonctio appeler', updatedPosts );
+              console.log('fonctio appeler', updatedPosts);
 
-              setFilteredPosts( updatedPosts );
+              setFilteredPosts(updatedPosts);
        };
 
 
@@ -1018,12 +1016,11 @@ export default function PostListView()
 
 
 
-       useEffect( () =>
-       {
+       useEffect(() => {
 
               annonceFromStoreRef.current = annonceFromStore;
 
-       }, [ annonceFromStore ] );
+       }, [annonceFromStore]);
 
 
 
@@ -1031,70 +1028,62 @@ export default function PostListView()
 
 
 
-       const { searchResults, searchLoading } = useSearchPosts( debouncedQuery );
+       const { searchResults, searchLoading } = useSearchPosts(debouncedQuery);
 
-       const dataFiltered = applyFilter( {
+       const dataFiltered = applyFilter({
               inputData: filteredPosts,
               filters,
               sortBy,
-       } );
+       });
 
-       const handleSortBy = useCallback( ( newValue ) =>
-       {
-              setSortBy( newValue );
-       }, [] );
-
+       const handleSortBy = useCallback((newValue) => {
+              setSortBy(newValue);
+       }, []);
 
 
-       const handleSearch = useCallback( ( inputValue ) =>
-       {
-              setSearchQuery( inputValue );
-       }, [] );
+
+       const handleSearch = useCallback((inputValue) => {
+              setSearchQuery(inputValue);
+       }, []);
 
 
 
        const filterByArguments = useCallback(
-              ( dataToFilter, type, value ) =>
-              {
+              (dataToFilter, type, value) => {
 
                      // console.log( dataToFilter[ 0 ].city, type, value );
                      // console.log( type, 'value', value );
 
-                     if ( value[ 0 ] === 'all' || value[ 0 ] === 'Tout' )
-                     {
+                     if (value[0] === 'all' || value[0] === 'Tout') {
                             // Si "all" est spécifié ou si le tableau est vide, afficher tous les posts
 
-                            setFilteredPosts( annonceFromStore );
+                            setFilteredPosts(annonceFromStore);
                             return annonceFromStore
 
                      }
                      const dataFilter = []
-                     if ( value[ 0 ] !== 'all' && value[ 0 ] !== 'Tout' )
-                     {
+                     if (value[0] !== 'all' && value[0] !== 'Tout') {
                             // Filtrer les posts si la propriété correspond à l'une des valeurs du tableau
                             // const result = filteredPosts.filter( ( item ) => Array.isArray( value ) && value.includes( item[ type ] ) );
 
-                            dataToFilter.forEach( element =>
-                            {
+                            dataToFilter.forEach(element => {
 
                                    value.forEach(
-                                          ( optionValue ) =>
-                                          {
+                                          (optionValue) => {
 
                                                  const normalizeOption = optionValue.trim().toLowerCase();
                                                  // console.log( 'dans le tbaleau:', element.city, 'recu:', normalizeOption );
                                                  // console.log( element[ type ].includes( normalizeOption ) );
 
-                                                 if ( element[ type ] !== undefined && element[ type ].includes( normalizeOption ) )
-                                                 {
+                                                 if (element[type] !== undefined && element[type].includes(normalizeOption)) {
                                                         // console.log( 'touver', element );
 
 
-                                                        dataFilter.push( element )
+                                                        dataFilter.push(element)
                                                  }
                                           }
                                    )
-                            } );
+                            });
                             // setFilteredPosts( result );
                             // console.log( 'Valeur filtrée', dataFilter );
                             return dataFilter;
@@ -1104,7 +1093,7 @@ export default function PostListView()
                      // console.log( 'Valeur des posts', type, value );
                      return dataFilter;
               },
-              [ annonceFromStore ] // Dépend uniquement de `posts`
+              [annonceFromStore] // Dépend uniquement de `posts`
        );
 
 
@@ -1114,12 +1103,11 @@ export default function PostListView()
 
 
 
-       useEffect( () =>
-       {
+       useEffect(() => {
 
               filterByArgumentStingRef.current = filterByArguments;
 
-       }, [ annonceFromStore, filterByArguments ] );
+       }, [annonceFromStore, filterByArguments]);
 
 
 
@@ -1129,60 +1117,55 @@ export default function PostListView()
 
 
 
-       const handleFilters = useCallback( ( name, value ) =>
-       {
+       const handleFilters = useCallback((name, value) => {
               // setFilters( ( prevState ) => ( {
               //        ...prevState,
               //        [ name ]: value,
               // } ) );
 
-              filterByArguments( value );
+              filterByArguments(value);
 
-       }, [ filterByArguments ] );
+       }, [filterByArguments]);
 
        const handleFilterProfil = useCallback(
-              ( event, newValue ) =>
-              {
+              (event, newValue) => {
 
                      // console.log( newValue );
                      // console.log( selectedTownTab );
-                     const dataFilteredByTown = filterByArguments( annonceFromStore, 'city', [ selectedTownTab ] )
-                     setFilteredPosts( filterByArguments( dataFilteredByTown, 'profile', [ newValue ] ) )
-                     setSelectedTab( newValue )
+                     const dataFilteredByTown = filterByArguments(annonceFromStore, 'city', [selectedTownTab])
+                     setFilteredPosts(filterByArguments(dataFilteredByTown, 'profile', [newValue]))
+                     setSelectedTab(newValue)
 
                      // handleFilters( 'categorie', newValue );
               },
 
-              [ filterByArguments, selectedTownTab, annonceFromStore ]
+              [filterByArguments, selectedTownTab, annonceFromStore]
        );
 
 
        const handleFilterByTownSelected = useCallback(
-              ( event, newValue ) =>
-              {
-                     console.log( 'fonction appelée' );
+              (event, newValue) => {
+                     console.log('fonction appelée');
 
-                     const dataFilteredByProfil = filterByArguments( annonceFromStore, 'profile', [ selectedTownTab ] );
-                     setFilteredPosts( filterByArguments( annonceFromStore, 'city', [ newValue ] ) );
+                     const dataFilteredByProfil = filterByArguments(annonceFromStore, 'profile', [selectedTownTab]);
+                     setFilteredPosts(filterByArguments(annonceFromStore, 'city', [newValue]));
 
                      return newValue; // ✅ retour de la valeur sélectionnée
               },
-              [ filterByArguments, annonceFromStore, selectedTownTab ]
+              [filterByArguments, annonceFromStore, selectedTownTab]
        );
-       console.log( annonceFromStore.city );
+       console.log(annonceFromStore.city);
 
-       useEffect( () =>
-       {
+       useEffect(() => {
               handleFilterByTownSelectedRef.current = handleFilterByTownSelected;
-       }, [ handleFilterByTownSelected ] );
+       }, [handleFilterByTownSelected]);
 
 
-       useEffect( () =>
-       {
+       useEffect(() => {
               selectedTownTabRef.current = selectedTownTab;
               setSelectedTownTabRef.current = setSelectedTownTab; // Stocke le setter
 
-       }, [ selectedTownTab, setSelectedTownTab ] );
+       }, [selectedTownTab, setSelectedTownTab]);
 
 
 
@@ -1191,13 +1174,12 @@ export default function PostListView()
 
 
        const setfilt = useCallback(
-              ( newValue ) =>
-              {
+              (newValue) => {
 
-                     console.log( newValue );
-                     setFilters( {
+                     console.log(newValue);
+                     setFilters({
                             publish: newValue,
-                     } )
+                     })
               },
 
               []
@@ -1217,25 +1199,23 @@ export default function PostListView()
 
        const filterByPriceRange = useCallback(
 
-              ( minPrice, maxPrice ) =>
-              {
-                     setFilteredPosts( () =>
-                            filteredPosts.filter( ( post ) =>
-                            {
+              (minPrice, maxPrice) => {
+                     setFilteredPosts(() =>
+                            filteredPosts.filter((post) => {
                                    const { price } = post;
 
                                    // Filtrer par prix minimum ou maximum
-                                   if ( minPrice && !maxPrice ) return price >= minPrice;
-                                   if ( maxPrice && !minPrice ) return price <= maxPrice;
+                                   if (minPrice && !maxPrice) return price >= minPrice;
+                                   if (maxPrice && !minPrice) return price <= maxPrice;
 
                                    // Filtrer par plage de prix si les deux sont spécifiés
-                                   if ( minPrice && maxPrice ) return price >= minPrice && price <= maxPrice;
+                                   if (minPrice && maxPrice) return price >= minPrice && price <= maxPrice;
 
                                    // Aucun filtre
                                    return true;
-                            } )
+                            })
                      );
-              }, [ filteredPosts ]
+              }, [filteredPosts]
        );
 
 
@@ -1250,16 +1230,15 @@ export default function PostListView()
 
 
 
-       const filterByPriceRange2 = useCallback( ( dataToFilter, minPrice, maxPrice ) => dataToFilter.filter( ( post ) =>
-       {
+       const filterByPriceRange2 = useCallback((dataToFilter, minPrice, maxPrice) => dataToFilter.filter((post) => {
 
               const { price } = post;
-              if ( minPrice && !maxPrice ) return price >= minPrice;
-              if ( maxPrice && !minPrice ) return price <= maxPrice;
-              if ( minPrice && maxPrice ) return price >= minPrice && price <= maxPrice;
+              if (minPrice && !maxPrice) return price >= minPrice;
+              if (maxPrice && !minPrice) return price <= maxPrice;
+              if (minPrice && maxPrice) return price >= minPrice && price <= maxPrice;
               return true;
 
-       } ), []
+       }), []
 
        );
 
@@ -1277,24 +1256,21 @@ export default function PostListView()
 
 
        const sortPostsByOrder = useCallback(
-              ( order ) =>
-              {
-                     setFilteredPosts( ( prevPosts ) =>
-                     {
-                            const validOrders = [ "croissant", "decroissant" ];
+              (order) => {
+                     setFilteredPosts((prevPosts) => {
+                            const validOrders = ["croissant", "decroissant"];
 
                             // Si l'ordre est null ou non valide, retourne les posts non triés
-                            if ( !order || !validOrders.includes( order ) )
-                            {
-                                   console.error( "Ordre non valide. Utiliser 'croissant' ou 'decroissant'" );
-                                   return [ ...prevPosts ]; // Retourne une copie non triée
+                            if (!order || !validOrders.includes(order)) {
+                                   console.error("Ordre non valide. Utiliser 'croissant' ou 'decroissant'");
+                                   return [...prevPosts]; // Retourne une copie non triée
                             }
 
                             // Trie les posts selon l'ordre spécifié
-                            return [ ...prevPosts ].sort( ( a, b ) =>
+                            return [...prevPosts].sort((a, b) =>
                                    order === "croissant" ? a.price - b.price : b.price - a.price
                             );
-                     } );
+                     });
               }, []
        );
 
@@ -1311,17 +1287,15 @@ export default function PostListView()
 
 
 
-       const sortPostsByOrder2 = useCallback( ( tabToOrder, order ) =>
-       {
+       const sortPostsByOrder2 = useCallback((tabToOrder, order) => {
 
-              console.log( 'ordre recu', tabToOrder );
+              console.log('ordre recu', tabToOrder);
 
-              if ( !order || ![ "croissant", "decroissant" ].includes( order ) )
-              { console.error( "Ordre non valide.utiliser croissant, decroissant" ); return tabToOrder; }
-              return [ ...tabToOrder ].sort( ( a, b ) => order === "croissant" ? a.price - b.price : b.price - a.price );
+              if (!order || !["croissant", "decroissant"].includes(order)) { console.error("Ordre non valide.utiliser croissant, decroissant"); return tabToOrder; }
+              return [...tabToOrder].sort((a, b) => order === "croissant" ? a.price - b.price : b.price - a.price);
 
 
-       }, [] );
+       }, []);
 
 
 
@@ -1331,8 +1305,7 @@ export default function PostListView()
 
 
 
-       const globalFilter = useCallback( ( data ) =>
-       {
+       const globalFilter = useCallback((data) => {
 
               const { categoriesTab, citiesTab, minPrice, maxPrice, order } = data;
 
@@ -1349,19 +1322,18 @@ export default function PostListView()
 
 
 
-              if ( categoriesTab?.length > 0 && citiesTab?.length < 1 ) { mergedFilters = filterByArguments( annonceFromStore, 'categorie', categoriesTab ); }
-              if ( categoriesTab?.length < 1 && citiesTab?.length > 0 ) { mergedFilters = filterByArguments( annonceFromStore, 'city', citiesTab ); }
-              if ( !categoriesTab?.length && !citiesTab?.length ) { mergedFilters = annonceFromStore; }
+              if (categoriesTab?.length > 0 && citiesTab?.length < 1) { mergedFilters = filterByArguments(annonceFromStore, 'categorie', categoriesTab); }
+              if (categoriesTab?.length < 1 && citiesTab?.length > 0) { mergedFilters = filterByArguments(annonceFromStore, 'city', citiesTab); }
+              if (!categoriesTab?.length && !citiesTab?.length) { mergedFilters = annonceFromStore; }
 
 
 
 
 
 
-              if ( categoriesTab?.length > 0 && citiesTab?.length > 0 )
-              {
-                     filteredCatg = filterByArguments( annonceFromStore, 'categorie', categoriesTab );
-                     filteredCity = filterByArguments( filteredCatg, 'city', citiesTab );
+              if (categoriesTab?.length > 0 && citiesTab?.length > 0) {
+                     filteredCatg = filterByArguments(annonceFromStore, 'categorie', categoriesTab);
+                     filteredCity = filterByArguments(filteredCatg, 'city', citiesTab);
                      mergedFilters = filteredCity
               }
 
@@ -1369,34 +1341,31 @@ export default function PostListView()
 
 
 
-              finallyFilteredPrice = filterByPriceRange2( mergedFilters, minPrice, maxPrice )
-              const sortedPosts = sortPostsByOrder2( finallyFilteredPrice, order )
-              setFilteredPosts( sortedPosts )
+              finallyFilteredPrice = filterByPriceRange2(mergedFilters, minPrice, maxPrice)
+              const sortedPosts = sortPostsByOrder2(finallyFilteredPrice, order)
+              setFilteredPosts(sortedPosts)
 
 
 
 
 
 
-       }, [ sortPostsByOrder2, filterByArguments, filterByPriceRange2, annonceFromStore ] );
+       }, [sortPostsByOrder2, filterByArguments, filterByPriceRange2, annonceFromStore]);
 
 
-       useEffect( () => { globalFilterRef.current = globalFilter }, [ filteredPosts, globalFilter ] )
-
-
-
+       useEffect(() => { globalFilterRef.current = globalFilter }, [filteredPosts, globalFilter])
 
 
 
-       useEffect( () => () =>
-       {
-
-              dispatch( resetData() )
-              dispatch( resetAfterRequest() )
-
-       }, [ dispatch ] );
 
 
+
+       useEffect(() => () => {
+
+              dispatch(resetData())
+              dispatch(resetAfterRequest())
+
+       }, [dispatch]);
 
 
 
@@ -1405,22 +1374,22 @@ export default function PostListView()
 
 
 
-       useEffect( () =>
-       {
 
-              if ( !isPending && !isFulled )
-              {
 
-                     dispatch( request( { type: 'user' } ) )
+       useEffect(() => {
 
-                     dispatch( setData( usersAnnonces ) )
+              if (!isPending && !isFulled) {
+
+                     dispatch(request({ type: 'user' }))
+
+                     dispatch(setData(usersAnnonces))
                      // console.log( 'fonction ccccccccccccccccccccccccccccccccccccccc ' );
 
 
 
               }
 
-       }, [ dispatch, isFulled, isPending, usersAnnonces ] );
+       }, [dispatch, isFulled, isPending, usersAnnonces]);
 
 
 
@@ -1430,18 +1399,17 @@ export default function PostListView()
 
 
 
-       useEffect( () =>
-       {
+       useEffect(() => {
 
 
 
-              dispatch( setData( usersAnnonces ) )
+              dispatch(setData(usersAnnonces))
               // console.log( usersAnnonces );
 
 
 
 
-       }, [ dispatch, usersAnnonces ] );
+       }, [dispatch, usersAnnonces]);
 
 
 
@@ -1451,11 +1419,10 @@ export default function PostListView()
 
 
 
-       useEffect( () =>
-       {
-              setFilteredPosts( annonceFromStore );
+       useEffect(() => {
+              setFilteredPosts(annonceFromStore);
 
-       }, [ annonceFromStore ] );
+       }, [annonceFromStore]);
 
 
 
@@ -1473,26 +1440,24 @@ export default function PostListView()
 
 
        // Établir la connexion WebSocket
-       useEffect( () =>
-       {
-              const socket = io( SOCKET_SERVER_URL );
+       // useEffect( () =>
+       // {
+       //        const socket = io( SOCKET_SERVER_URL );
 
-              // Écouter l'événement 'new-annonce' pour mettre à jour les annonces en temps réel
-              socket.on( 'new-annonce', ( newAnnonce ) =>
-              {
-                     dispatch( addData( newAnnonce ) )
-                     console.log( 'nouvelle annonce detecter', newAnnonce );
+       //        // Écouter l'événement 'new-annonce' pour mettre à jour les annonces en temps réel
+       //        socket.on( 'new-annonce', ( newAnnonce ) =>
+       //        {
+       //               dispatch( addData( newAnnonce ) )
+       //               console.log( 'nouvelle annonce detecter', newAnnonce );
 
-              } );
+       //        } );
 
-              // Nettoyer la connexion au déchargement du composant
-              return () =>
-              {
-                     socket.disconnect();
-              };
-       }, [ dispatch, SOCKET_SERVER_URL ] );
-
-
+       //        // Nettoyer la connexion au déchargement du composant
+       //        return () =>
+       //        {
+       //               socket.disconnect();
+       //        };
+       // }, [ dispatch, SOCKET_SERVER_URL ] );
 
 
 
@@ -1501,42 +1466,44 @@ export default function PostListView()
 
 
 
-       useEffect( () =>
-       {
-              const socket = io( HOST_BACKEND_URL );
-              socket.on( 'banned-annonce', ( bannedAnnonce ) =>
-              {
-
-                     dispatch( setData( deleteObjectFromTabObjetc( annonceFromStore, bannedAnnonce ) ) )
-                     console.log( 'nouvelle annonce bannie detecter', bannedAnnonce );
-
-              } );
 
 
-              socket.on( 'update-annonce', ( updateAnnonce ) =>
-              {
+       // useEffect( () =>
+       // {
+       //        const socket = io( HOST_BACKEND_URL );
+       //        socket.on( 'banned-annonce', ( bannedAnnonce ) =>
+       //        {
 
-                     dispatch( setData( updateObjectFromTabObjetc( annonceFromStore, updateAnnonce ) ) )
-                     console.log( 'nouvelle annonce bannie detecter', updateAnnonce );
+       //               dispatch( setData( deleteObjectFromTabObjetc( annonceFromStore, bannedAnnonce ) ) )
+       //               console.log( 'nouvelle annonce bannie detecter', bannedAnnonce );
 
-              } );
-
-
+       //        } );
 
 
+       //        socket.on( 'update-annonce', ( updateAnnonce ) =>
+       //        {
+
+       //               dispatch( setData( updateObjectFromTabObjetc( annonceFromStore, updateAnnonce ) ) )
+       //               console.log( 'nouvelle annonce bannie detecter', updateAnnonce );
+
+       //        } );
 
 
-              socket.on( 'delete-annonce', ( del ) =>
-              {
 
-                     console.log( 'nouvelle annonce supprimer detecter', del );
 
-                     dispatch( setData( deleteAnnonceInArray( annonceFromStore, del ) ) )
-              } );
 
-              return () => { socket.disconnect(); };
 
-       }, [ dispatch, annonceFromStore ] );
+       //        socket.on( 'delete-annonce', ( del ) =>
+       //        {
+
+       //               console.log( 'nouvelle annonce supprimer detecter', del );
+
+       //               dispatch( setData( deleteAnnonceInArray( annonceFromStore, del ) ) )
+       //        } );
+
+       //        return () => { socket.disconnect(); };
+
+       // }, [ dispatch, annonceFromStore ] );
 
 
 
@@ -1549,12 +1516,12 @@ export default function PostListView()
 
        const renderFilters = (
               <TourFilters
-                     open={ openFilters.value }
-                     onOpen={ openFilters.onTrue }
-                     onClose={ openFilters.onFalse }
-                     onPriceFilters={ filterByPriceRange }
-                     onArgumentFilters={ filterByArguments }
-                     onOrderPriceFilters={ sortPostsByOrder }
+                     open={openFilters.value}
+                     onOpen={openFilters.onTrue}
+                     onClose={openFilters.onFalse}
+                     onPriceFilters={filterByPriceRange}
+                     onArgumentFilters={filterByArguments}
+                     onOrderPriceFilters={sortPostsByOrder}
 
               />
 
@@ -1565,7 +1532,7 @@ export default function PostListView()
 
 
        return (
-              <Container maxWidth={ settings.themeStretch ? false : 'xl' }>
+              <Container maxWidth={settings.themeStretch ? false : 'xl'}>
                      {/* <CustomBreadcrumbs
                             heading="List"
                             links={ [
@@ -1620,27 +1587,27 @@ export default function PostListView()
 
                      <Stack
 
-                            spacing={ 1 }
+                            spacing={1}
                             justifyContent="space-between"
-                            alignItems={ { xs: 'flex-start', sm: 'flex-start' } }
+                            alignItems={{ xs: 'flex-start', sm: 'flex-start' }}
                             direction="row"
-                            sx={ {
+                            sx={{
                                    mb: { xs: 3, md: 5 },
-                            } }
+                            }}
                      >
                             <CardHeader
                                    title='Dernière annonces'
                                    subheader='200 nouvelle annonces'
                                    // action={ <CarouselArrows onNext={ carousel.onNext  onPrev={ carousel.onPrev } /> }
-                                   sx={ {
+                                   sx={{
                                           p: 0,
                                           mb: 3,
                                           width: "max-content",
                                           whiteSpace: "nowrap"
-                                   } }
+                                   }}
                             />
                             <Box flexDirection="column" alignItems="center" display="flex"
-                                   sx={ { width: { xs: 1, md: "max-content" } } }>
+                                   sx={{ width: { xs: 1, md: "max-content" } }}>
 
                                    {/* <Tabs
 
@@ -1717,7 +1684,7 @@ export default function PostListView()
                                    /> */}
                             </Box>
 
-                            { renderFilters }
+                            {renderFilters}
 
                      </Stack>
 
@@ -1736,36 +1703,31 @@ export default function PostListView()
                      <Button sx={ { ml: 1 } } variant='soft' onClick={ () => filterByArguments( 'categorie', [ 'categorie3', 'categorie1' ] ) }>
                             categorie1 et 3
                      </Button> */}
-                     {/* <PostList posts={ dataFiltered } loading={ postsLoading } /> */ }
-                     <PostListHorizontal posts={ filteredPosts } loading={ postsLoading } />
+                     {/* <PostList posts={ dataFiltered } loading={ postsLoading } /> */}
+                     <PostListHorizontal posts={filteredPosts} loading={postsLoading} />
               </Container >
        );
 }
 
 // ----------------------------------------------------------------------
 
-const applyFilter = ( { inputData, filters, sortBy } ) =>
-{
+const applyFilter = ({ inputData, filters, sortBy }) => {
        const { publish } = filters;
 
-       if ( sortBy === 'latest' )
-       {
-              inputData = orderBy( inputData, [ 'createdAt' ], [ 'desc' ] );
+       if (sortBy === 'latest') {
+              inputData = orderBy(inputData, ['createdAt'], ['desc']);
        }
 
-       if ( sortBy === 'oldest' )
-       {
-              inputData = orderBy( inputData, [ 'createdAt' ], [ 'asc' ] );
+       if (sortBy === 'oldest') {
+              inputData = orderBy(inputData, ['createdAt'], ['asc']);
        }
 
-       if ( sortBy === 'popular' )
-       {
-              inputData = orderBy( inputData, [ 'totalViews' ], [ 'desc' ] );
+       if (sortBy === 'popular') {
+              inputData = orderBy(inputData, ['totalViews'], ['desc']);
        }
 
-       if ( publish !== 'all' )
-       {
-              inputData = inputData.filter( ( post ) => post.publish === publish );
+       if (publish !== 'all') {
+              inputData = inputData.filter((post) => post.publish === publish);
        }
 
        return inputData;

@@ -39,7 +39,7 @@ const fulfilledAction = (state, action) => {
        state.isFulled = true;
        state.isPending = false;
        state.data = action.payload.data.count;
-       console.log('nombre d\'annonce recement publier:', action.payload);
+       // console.log('nombre d\'annonce recement publier:', action.payload);
 }
 
 

@@ -15,7 +15,7 @@ import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSnackbar } from 'notistack';
 // ----------------------------------------------------------------------
 
-export default function DialogDeleteAnnonce({ showDialog, data }) {
+export default function DialogDeleteAnnonce({ showDialog, data, handleAfterDelete }) {
 
 
        const dispatch = useDispatch()
@@ -63,7 +63,39 @@ export default function DialogDeleteAnnonce({ showDialog, data }) {
 
               }
 
-       }, [showDialog, enqueueSnackbar, dispatch, isFulledDelete, isPendingDelete, data]);
+
+       }, [showDialog, enqueueSnackbar, dispatch, isFulledDelete, isPendingDelete, data, handleAfterDelete]);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       useEffect(() => {
+
+
+
+
+
+              if (!isPendingDelete && isFulledDelete && data._id && handleAfterDelete !== undefined) {
+
+
+                     console.log('suppression d store appler');
+                     handleAfterDelete()
+
+
+              }
+
+       }, [showDialog, enqueueSnackbar, dispatch, isFulledDelete, isPendingDelete, data, handleAfterDelete]);
 
 
 
@@ -134,5 +166,7 @@ DialogDeleteAnnonce.propTypes = {
               onFalse: PropTypes.func,
               toggle: PropTypes.func,
        }).isRequired,
-       data: PropTypes.object
+       data: PropTypes.object,
+       handleAfterDelete: PropTypes.func
+
 };

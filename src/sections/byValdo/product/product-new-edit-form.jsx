@@ -53,6 +53,8 @@ import DialogAnnonceBuy from 'src/1VALDO/components/annonces/dialog-annonce-buy'
 import { useBoolean } from 'src/hooks/use-boolean';
 import { city } from 'src/assets/data/location.service';
 import { Autocomplete, TextField } from '@mui/material';
+import { useUpdate } from 'src/1VALDO/hook/annonce/useUpdate';
+import { uploadImage } from 'src/store/annonces/uploadImage/reducer';
 
 // ----------------------------------------------------------------------
 
@@ -74,7 +76,8 @@ export default function ProductNewEditForm({ currentProduct2 }) {
        const redirect = useNavigate();
        const dispatch = useDispatch()
        const location = useLocation();
-       const [dataAdded, setDataAdded] = useState({})
+       const [imageTab, setImageTab] = useState([])
+       const [allfileToUpload, setAllfileToUpload] = useState([])
 
        const showDialog = useBoolean()
        const showPaiementStatut = useBoolean()
@@ -121,13 +124,6 @@ export default function ProductNewEditForm({ currentProduct2 }) {
                      .min(1, 'Au moins une image est requise')
                      .max(5, 'Maximum 5 images autorisées'),
 
-              // Section Autres détails
-              // phoneNumber: Yup.string()
-              //        .required( 'Le numéro de téléphone est requis' )
-              //        .matches( /^[0-9]+$/, 'Doit contenir uniquement des chiffres' )
-              //        .min( 9, 'Le numéro doit contenir au moins 8 chiffres' )
-              //        .max( 9, 'Le numéro ne doit pas dépasser 15 chiffres' ),
-
               city: Yup.string().required('Veuillez sélectionner une ville'), // Changez de array à string
 
               location: Yup.string()
@@ -147,7 +143,6 @@ export default function ProductNewEditForm({ currentProduct2 }) {
                      .min(1, 'Veuillez sélectionner une option')
                      .required('Veuillez spécifier si vous vous déplacez'),
 
-              // Section Tarif
               price: Yup.number()
                      .required('Le prix minimum est requis')
                      .min(1000, 'Le prix minimum doit être d\'au moins 1000 FCFA')
@@ -201,6 +196,8 @@ export default function ProductNewEditForm({ currentProduct2 }) {
                      location: currentProduct?.location || '',
                      seDeplace: currentProduct?.seDeplace || '',
                      personAccept: currentProduct?.personAccept || '',
+                     coverUrl: currentProduct?.coverUrl || '',
+
 
 
 
@@ -218,7 +215,7 @@ export default function ProductNewEditForm({ currentProduct2 }) {
                      // newLabel: currentProduct?.newLabel || { enabled: false, content: '' },
                      // saleLabel: currentProduct?.saleLabel || { enabled: false, content: '' },
               }),
-              [currentProduct, user.phoneNumber]
+              [currentProduct, user?.phoneNumber]
        );
 
        const methods = useForm({
@@ -288,13 +285,13 @@ export default function ProductNewEditForm({ currentProduct2 }) {
 
 
 
-                     enqueueSnackbar('Annonce mis à jour avec succes!');
+                     // enqueueSnackbar('Annonce mis à jour avec succes!');
 
               }
 
-       }, [enqueueSnackbar, dispatch, redirect, isFulledUpdate, isPendingUpdate]);
+       }, [dispatch, redirect, isFulledUpdate, isPendingUpdate]);
 
-
+       useUpdate()
 
 
 
@@ -318,30 +315,18 @@ export default function ProductNewEditForm({ currentProduct2 }) {
                      // reset();
                      // console.log( 'user du send ', user );
 
-                     const object = {
+                     const object = { ...data2, images: imageTab, }
 
-
-
-
-
-                            "coverUrl": "http://192.168.1.212:3000/upload/uploads/1743936790933-463620380.jpg",
-
-
-                            ...data2,
-                            images: ['http://192.168.1.212:3000/upload/uploads/1743936790933-463620380.jpg']
-
-
-                     }
                      if (!currentProduct) {
 
-                            dispatch(request(object))
-
+                            // dispatch(request(object))
+                            setDataToAdd(object)
                             // showDialog.onTrue()
 
                             // console.log( 'email du user', user?.email, 'user email envoyer', object.userEmail );
                             // console.log(user);
 
-                            // console.log('dtaa to add', object);
+                            console.log('dtaa to add', object);
 
                      }
 
@@ -375,20 +360,122 @@ export default function ProductNewEditForm({ currentProduct2 }) {
 
 
 
-       const handleDrop = useCallback(
-              (acceptedFiles) => {
-                     const files = values.images || [];
+       // const handleDrop = useCallback(
+       //        (acceptedFiles) => {
+       //               const files = values.images || [];
 
-                     const newFiles = acceptedFiles.map((file) =>
-                            Object.assign(file, {
-                                   preview: URL.createObjectURL(file),
-                            })
-                     );
+       //               const newFiles = acceptedFiles.map((file) =>
+       //                      Object.assign(file, {
+       //                             preview: URL.createObjectURL(file),
+       //                      })
+       //               );
 
-                     setValue('images', [...files, ...newFiles], { shouldValidate: true });
+       //               setValue('images', [...files, ...newFiles], { shouldValidate: true });
+       //        },
+       //        [setValue, values.images]
+       // );
+       const uploadAllImages = useCallback(
+              async (imagesArray, dispatchGet) => {
+                     try {
+                            const uploadedUrls = []; // Tableau pour stocker les URLs
+                            let coverUrl = null; // Variable pour stocker l'URL cover
+
+                            // Utilisation de map + Promise.all
+                            const uploadPromises = imagesArray.map(async (imageObj) => {
+                                   const result = await dispatchGet(uploadImage(imageObj.file)).unwrap();
+                                   const imageUrl = result.data; // URL de l'image uploadée
+
+                                   // Ajoute l'URL au tableau
+                                   uploadedUrls.push(imageUrl);
+
+                                   // Si c'est l'image de couverture, on stocke l'URL
+                                   if (imageObj.iscover) {
+                                          coverUrl = imageUrl;
+                                   }
+
+                                   return imageUrl;
+                            });
+
+                            // Attend que tous les uploads soient terminés
+                            const allUrls = await Promise.all(uploadPromises);
+
+                            console.log('Toutes les images ont été uploadées', allUrls);
+
+                            // Retourne à la fois le tableau complet et l'URL cover
+                            return {
+                                   allUrls,
+                                   coverUrl
+                            };
+
+                     } catch (error) {
+                            console.error("Erreur lors de l'upload:", error);
+                            throw error;
+                     }
               },
-              [setValue, values.images]
+              [] // Aucune dépendance
        );
+
+
+
+
+
+
+
+
+
+
+
+       const handleDrop = useCallback(async (acceptedFiles) => {
+
+              const files = values.images || [];
+
+
+
+
+
+              const updatedFiles = files.map(file => ({
+                     file,
+                     iscover: false
+              }));
+
+              const newFiles = acceptedFiles.map((file) =>
+                     Object.assign(file, {
+                            preview: URL.createObjectURL(file),
+                     })
+              );
+
+              const allFiles = [...updatedFiles, { file: newFiles[0], iscover: true }];
+              setAllfileToUpload(allFiles)
+
+              console.log('filchier a uploader', allFiles);
+              setValue('images', [...files, ...newFiles], { shouldValidate: true });
+
+
+
+
+
+
+       },
+              [setValue, values.images] // img retiré car c'est une variable locale
+       );
+
+
+
+       const uploadAllImageCharged = async () => {
+
+              try {
+                     const { allUrls, coverUrl } = await uploadAllImages(allfileToUpload, dispatch);
+
+                     setImageTab(allUrls);
+                     if (coverUrl) {
+                            setValue('coverUrl', coverUrl); // Stocke l'URL cover
+                     }
+
+              } catch (error) {
+                     // Gestion des erreurs
+              }
+
+       }
 
        const handleRemoveFile = useCallback(
               (inputFile) => {
@@ -410,7 +497,7 @@ export default function ProductNewEditForm({ currentProduct2 }) {
 
        const renderDetails = (
               <>
-                     {mdUp && (
+                     {/* {mdUp && (
                             <Grid md={4}>
                                    <Typography variant="h6" sx={{ mb: 0.5 }}>
                                           Details
@@ -419,11 +506,11 @@ export default function ProductNewEditForm({ currentProduct2 }) {
                                           titre, courte description, image...
                                    </Typography>
                             </Grid>
-                     )}
+                     )} */}
 
-                     <Grid xs={12} md={8}>
+                     <Grid xs={12} md={12}>
                             <Card>
-                                   {!mdUp && <CardHeader title="Details" />}
+                                   {/* {!mdUp && <CardHeader title="Details" />} */}
 
                                    <Stack spacing={3} sx={{ p: 3 }}>
                                           <RHFTextField name="name" label="Titre de l'annonce" />
@@ -445,7 +532,7 @@ export default function ProductNewEditForm({ currentProduct2 }) {
                                                         onDrop={handleDrop}
                                                         onRemove={handleRemoveFile}
                                                         onRemoveAll={handleRemoveAllFiles}
-                                                        onUpload={() => console.info('ON UPLOAD')}
+                                                        onUpload={() => uploadAllImageCharged()}
                                                  />
                                           </Stack>
                                    </Stack>
@@ -456,7 +543,7 @@ export default function ProductNewEditForm({ currentProduct2 }) {
 
        const renderProperties = (
               <>
-                     {mdUp && (
+                     {/* {mdUp && (
                             <Grid md={4}>
                                    <Typography variant="h6" sx={{ mb: 0.5 }}>
                                           Autre details
@@ -465,11 +552,11 @@ export default function ProductNewEditForm({ currentProduct2 }) {
                                           Details additionels
                                    </Typography>
                             </Grid>
-                     )}
+                     )} */}
 
-                     <Grid xs={12} md={8}>
+                     <Grid xs={12} md={12}>
                             <Card>
-                                   {!mdUp && <CardHeader title="Autre details" />}
+                                   {/* {!mdUp && <CardHeader title="Autre details" />} */}
 
                                    <Stack spacing={3} sx={{ p: 3 }}>
                                           <Box
@@ -665,7 +752,7 @@ export default function ProductNewEditForm({ currentProduct2 }) {
               <>
 
 
-                     {mdUp && (
+                     {/* {mdUp && (
                             <Grid md={4}>
                                    <Typography variant="h6" sx={{ mb: 0.5 }}>
                                           Tarif
@@ -674,11 +761,11 @@ export default function ProductNewEditForm({ currentProduct2 }) {
                                           Different prix
                                    </Typography>
                             </Grid>
-                     )}
+                     )} */}
 
-                     <Grid xs={12} md={8}>
+                     <Grid xs={12} md={12}>
                             <Card>
-                                   {!mdUp && <CardHeader title="Tarif" />}
+                                   {/* {!mdUp && <CardHeader title="Tarif" />} */}
 
                                    <Stack direction="row" alignItems="center" flexWrap={{ xs: "wrap", md: "nowrap" }} spacing={3} sx={{ p: 3 }}>
                                           <RHFTextField
@@ -782,7 +869,7 @@ export default function ProductNewEditForm({ currentProduct2 }) {
 
        return (
               <>
-                     <DialogAnnonceBuy showDialog={showDialog} dataGet={dataToAdd} startPaiement={showPaiementStatut} />
+                     <DialogAnnonceBuy showDialog={showDialog} dataGet={dataToAdd} />
                      <FormProvider methods={methods} onSubmit={onSubmit}>
                             <Grid container spacing={3}>
                                    {renderDetails}

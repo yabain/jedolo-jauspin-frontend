@@ -2,3 +2,12 @@ revoi la reponse de recent count et sont operationalite
 revoir le retour du get de la liste des annonces d'un utilisateur
 revoir le retour du add annonces
 
+pas etre connecte pour ajouter la view 
+
+
+
+
+liste des comeantaire 
+note apres le commentaire
+internal error lors du post annonce avec le token
+footer

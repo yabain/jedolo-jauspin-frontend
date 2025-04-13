@@ -26,8 +26,8 @@ import 'moment/locale/fr';
 import { fShortenNumber } from 'src/utils/format-number';
 import { tabsRef } from 'src/1data/annonces/ref';
 import { useNavigate } from 'react-router';
-import { request } from 'src/store/annonces/updateAnnonce/reducer';
 import { useDispatch } from 'react-redux';
+import { request } from 'src/store/annonces/updateNbrView/reducer';
 
 export default function BookingItem({ item }) {
 
@@ -45,9 +45,14 @@ export default function BookingItem({ item }) {
 
        const AnnonceClicked = () => {
               navigate('annonces/view', { state: { annonce: item } })
+              const dataNbrView = {
+                     "owner": item.owner._id,
+                     "actionType": "view",
+                     "annonce": item._id,
+                     "rating": 2
 
-              const nbrView = item.nbrView !== undefined ? item.nbrView + 1 : 1
-              dispatch(request({ ...item, nbrView }))
+              }
+              dispatch(request(dataNbrView))
        }
 
        return (
@@ -123,7 +128,7 @@ export default function BookingItem({ item }) {
 
 
                                           <Typography variant='button' >
-                                                 {item.city}
+                                                 {item.location}
                                           </Typography>
                                    </Stack>
 
@@ -180,24 +185,6 @@ export default function BookingItem({ item }) {
 
 
 BookingItem.propTypes = {
-       item: PropTypes.shape({
-              avatarUrl: PropTypes.string,
-              name: PropTypes.string,
-              createdAt: PropTypes.oneOfType([
-                     PropTypes.string,
-                     PropTypes.number,
-                     PropTypes.instanceOf(Date),
-              ]),
-              guests: PropTypes.number,
-              coverUrl: PropTypes.string,
-              price: PropTypes.number,
-              sponsored: PropTypes.string,
-              totalComments: PropTypes.number,
-              rating: PropTypes.string,
-              totalViews: PropTypes.number,
-              nbrComment: PropTypes.number,
-              nbrView: PropTypes.number,
-              city: PropTypes.arrayOf(string),
-              totalShares: PropTypes.number,
-       }).isRequired,
+       item: PropTypes.object
+              .isRequired,
 };

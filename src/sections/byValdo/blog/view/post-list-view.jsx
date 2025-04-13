@@ -169,6 +169,7 @@ export default function PostListView({ setAfterFilter }) {
                             // Filtrer les posts si la propriété correspond à l'une des valeurs du tableau
                             // const result = filteredPosts.filter( ( item ) => Array.isArray( value ) && value.includes( item[ type ] ) );
 
+
                             dataToFilter.forEach(element => {
 
                                    value.forEach(
@@ -178,12 +179,23 @@ export default function PostListView({ setAfterFilter }) {
                                                  // console.log( 'dans le tbaleau:', element.city, 'recu:', normalizeOption );
                                                  // console.log( element[ type ].includes( normalizeOption ) );
 
-                                                 if (element[type] !== undefined && element[type].map(item => normalizeString(item)).includes(normalizeOption)) {
+                                                 console.log('element to filter', element);
+                                                 if (element[type] !== undefined && Array.isArray(element[type]) && element[type].map(item => normalizeString(item)).includes(normalizeOption)) {
                                                         // console.log( 'touver', element );
 
 
                                                         dataFilter.push(element)
                                                  }
+
+
+
+                                                 if (element[type] !== undefined && !Array.isArray(element[type]) && normalizeString(element[type]).includes(normalizeOption)) {
+                                                        // console.log( 'touver', element );
+
+
+                                                        dataFilter.push(element)
+                                                 }
+
                                           }
                                    )
                             });
@@ -426,7 +438,7 @@ export default function PostListView({ setAfterFilter }) {
 
 
 
-              if (categoriesTab?.length > 0 && citiesTab?.length < 1) { mergedFilters = filterByArguments(annonceFromStore, 'categorie', categoriesTab); }
+              if (categoriesTab?.length > 0 && citiesTab?.length < 1) { mergedFilters = filterByArguments(annonceFromStore, 'category', categoriesTab); }
               if (categoriesTab?.length < 1 && citiesTab?.length > 0) { mergedFilters = filterByArguments(annonceFromStore, 'city', citiesTab); }
               if (!categoriesTab?.length && !citiesTab?.length) { mergedFilters = annonceFromStore; }
 
@@ -436,7 +448,7 @@ export default function PostListView({ setAfterFilter }) {
 
 
               if (categoriesTab?.length > 0 && citiesTab?.length > 0) {
-                     filteredCatg = filterByArguments(annonceFromStore, 'categorie', categoriesTab);
+                     filteredCatg = filterByArguments(annonceFromStore, 'category', categoriesTab);
                      filteredCity = filterByArguments(filteredCatg, 'city', citiesTab);
                      mergedFilters = filteredCity
               }
@@ -583,23 +595,21 @@ export default function PostListView({ setAfterFilter }) {
 
 
        // Établir la connexion WebSocket
-       useEffect(() => {
-              const socket = io(SOCKET_SERVER_URL);
+       // useEffect(() => {
+       //        const socket = io(SOCKET_SERVER_URL);
 
-              // Écouter l'événement 'new-annonce' pour mettre à jour les annonces en temps réel
-              socket.on('new-annonce', (newAnnonce) => {
-                     dispatch(addData(newAnnonce))
-                     console.log('nouvelle annonce detecter', newAnnonce);
+       //        // Écouter l'événement 'new-annonce' pour mettre à jour les annonces en temps réel
+       //        socket.on('new-annonce', (newAnnonce) => {
+       //               dispatch(addData(newAnnonce))
+       //               console.log('nouvelle annonce detecter', newAnnonce);
 
-              });
+       //        });
 
-              // Nettoyer la connexion au déchargement du composant
-              return () => {
-                     socket.disconnect();
-              };
-       }, [dispatch, SOCKET_SERVER_URL]);
-
-
+       //        // Nettoyer la connexion au déchargement du composant
+       //        return () => {
+       //               socket.disconnect();
+       //        };
+       // }, [dispatch, SOCKET_SERVER_URL]);
 
 
 
@@ -608,38 +618,40 @@ export default function PostListView({ setAfterFilter }) {
 
 
 
-       useEffect(() => {
-              const socket = io(HOST_BACKEND_URL);
-              socket.on('banned-annonce', (bannedAnnonce) => {
-
-                     dispatch(setData(deleteObjectFromTabObjetc(annonceFromStore, bannedAnnonce)))
-                     console.log('nouvelle annonce bannie detecter', bannedAnnonce);
-
-              });
 
 
-              socket.on('update-annonce', (updateAnnonce) => {
+       // useEffect(() => {
+       //        const socket = io(HOST_BACKEND_URL);
+       //        socket.on('banned-annonce', (bannedAnnonce) => {
 
-                     dispatch(setData(updateObjectFromTabObjetc(annonceFromStore, updateAnnonce)))
-                     console.log('nouvelle annonce bannie detecter', updateAnnonce);
+       //               dispatch(setData(deleteObjectFromTabObjetc(annonceFromStore, bannedAnnonce)))
+       //               console.log('nouvelle annonce bannie detecter', bannedAnnonce);
 
-              });
-
-
-
-
+       //        });
 
 
-              socket.on('delete-annonce', (del) => {
+       //        socket.on('update-annonce', (updateAnnonce) => {
 
-                     console.log('nouvelle annonce supprimer detecter', del);
+       //               dispatch(setData(updateObjectFromTabObjetc(annonceFromStore, updateAnnonce)))
+       //               console.log('nouvelle annonce bannie detecter', updateAnnonce);
 
-                     dispatch(setData(deleteAnnonceInArray(annonceFromStore, del)))
-              });
+       //        });
 
-              return () => { socket.disconnect(); };
 
-       }, [dispatch, annonceFromStore]);
+
+
+
+
+       //        socket.on('delete-annonce', (del) => {
+
+       //               console.log('nouvelle annonce supprimer detecter', del);
+
+       //               dispatch(setData(deleteAnnonceInArray(annonceFromStore, del)))
+       //        });
+
+       //        return () => { socket.disconnect(); };
+
+       // }, [dispatch, annonceFromStore]);
 
 
 

@@ -11,96 +11,89 @@ import JobItem from './job-item';
 
 // ----------------------------------------------------------------------
 
-export default function JobList( { jobs } )
-{
+export default function JobList({ jobs }) {
        const router = useRouter();
-       const [ page, setPage ] = useState( 1 );
-       const [ hasPageChanged, setHasPageChanged ] = useState( false );
+       const [page, setPage] = useState(1);
+       const [hasPageChanged, setHasPageChanged] = useState(false);
        const jobsPerPage = 12;
 
        // Calcul du nombre total de pages
-       const totalPages = Math.ceil( jobs.length / jobsPerPage );
+       const totalPages = Math.ceil(jobs.length / jobsPerPage);
 
        // Déterminer les jobs à afficher pour la page actuelle
        const indexOfLastJob = page * jobsPerPage;
        const indexOfFirstJob = indexOfLastJob - jobsPerPage;
-       const currentJobs = jobs.slice( indexOfFirstJob, indexOfLastJob );
+       const currentJobs = jobs.slice(indexOfFirstJob, indexOfLastJob);
 
-       const handleChangePage = ( event, value ) =>
-       {
-              setPage( value );
-              setHasPageChanged( true );
+       const handleChangePage = (event, value) => {
+              setPage(value);
+              setHasPageChanged(true);
        };
 
        // Réinitialiser le défilement à chaque changement de page si l'utilisateur a cliqué
-       useEffect( () =>
-       {
-              if ( hasPageChanged )
-              {
-                     window.scrollTo( {
+       useEffect(() => {
+              if (hasPageChanged) {
+                     window.scrollTo({
                             top: 0,
                             behavior: 'smooth',
-                     } );
-                     setHasPageChanged( false );
+                     });
+                     setHasPageChanged(false);
               }
-       }, [ page, hasPageChanged ] );
+       }, [page, hasPageChanged]);
 
        const handleView = useCallback(
-              ( id ) =>
-              {
-                     router.push( paths.dashboard.job.details( id ) );
+              (id) => {
+                     router.push(paths.dashboard.job.details(id));
               },
-              [ router ]
+              [router]
        );
 
        const handleEdit = useCallback(
-              ( id ) =>
-              {
-                     router.push( paths.dashboard.job.edit( id ) );
+              (id) => {
+                     router.push(paths.dashboard.job.edit(id));
               },
-              [ router ]
+              [router]
        );
 
-       const handleDelete = useCallback( ( id ) =>
-       {
-              console.info( 'DELETE', id );
-       }, [] );
+       const handleDelete = useCallback((id) => {
+              console.info('DELETE', id);
+       }, []);
 
        return (
               <>
                      <Box
-                            gap={ 3 }
+                            gap={3}
                             display="grid"
-                            gridTemplateColumns={ {
+                            gridTemplateColumns={{
                                    xs: 'repeat(1, 1fr)',
                                    sm: 'repeat(3, 1fr)',
                                    md: 'repeat(4, 1fr)',
-                            } }
+                            }}
                      >
-                            { currentJobs.map( ( job ) => (
+                            {currentJobs.map((job) => (
                                    <JobItem
-                                          key={ job.id }
-                                          job={ job }
-                                          onView={ () => handleView( job.id ) }
-                                          onEdit={ () => handleEdit( job.id ) }
-                                          onDelete={ () => handleDelete( job.id ) }
+                                          key={job._id}
+                                          job={job}
+                                          onView={() => handleView(job._id)}
+                                          onEdit={() => handleEdit(job._id)}
+                                          onDelete={() => handleDelete(job._id)}
                                    />
-                            ) ) }
+                            ))}
                      </Box>
 
-                     { totalPages > 1 && (
+                     {totalPages > 1 && (
                             <Pagination
-                                   count={ totalPages }
-                                   page={ page }
-                                   onChange={ handleChangePage }
-                                   sx={ {
+                                   count={totalPages}
+                                   page={page}
+                                   onChange={handleChangePage}
+                                   sx={{
                                           mt: 8,
-                                          [ `& .${ paginationClasses.ul }` ]: {
+                                          [`& .${paginationClasses.ul}`]: {
                                                  justifyContent: 'center',
                                           },
-                                   } }
+                                   }}
                             />
-                     ) }
+                     )}
               </>
        );
 }

@@ -26,16 +26,15 @@ import ProductReviewNewForm from './product-review-new-form';
 
 // ----------------------------------------------------------------------
 
-export default function ProductDetailsReview( { annonce, totalRatings, totalReviews, getChildValue } )
-{
+export default function ProductDetailsReview({ annonce, totalRatings, totalReviews, getChildValue }) {
        const review = useBoolean();
        const location = useLocation();
        const { user } = useAuthContext()
-       const [ reviews, setReviews ] = useState( [] )
+       const [reviews, setReviews] = useState([])
        const dispatch = useDispatch()
-       const { data, isPending, isFulled } = useSelector( state => state.getUsersAnnoncesComments )
-       const productGet = useMemo( () => location.state?.annonce || null, [ location ] );
-       const [ ratings, setRating ] = useState( [
+       const { data, isPending, isFulled } = useSelector(state => state.getUsersAnnoncesComments)
+       const productGet = useMemo(() => location.state?.annonce || null, [location]);
+       const [ratings, setRating] = useState([
               {
                      "name": "1 etoile",
                      "starCount": 0,
@@ -61,44 +60,37 @@ export default function ProductDetailsReview( { annonce, totalRatings, totalRevi
                      "starCount": 0,
 
               }
-       ] )
-       const calculateRatingCounts = ( commentsArray ) =>
-       {
-              const counts = [ 0, 0, 0, 0, 0 ]; // index 0 → 1 étoile, index 4 → 5 étoiles
+       ])
+       const calculateRatingCounts = (commentsArray) => {
+              const counts = [0, 0, 0, 0, 0]; // index 0 → 1 étoile, index 4 → 5 étoiles
 
-              commentsArray.forEach( ( item ) =>
-              {
-                     if ( item.rating >= 1 && item.rating <= 5 )
-                     {
-                            counts[ item.rating - 1 ] += 1;
+              commentsArray.forEach((item) => {
+                     if (item.rating >= 1 && item.rating <= 5) {
+                            counts[item.rating - 1] += 1;
                      }
-              } );
+              });
 
               return [
-                     { name: "1 etoile", starCount: counts[ 0 ] },
-                     { name: "2 etoile", starCount: counts[ 1 ] },
-                     { name: "3 etoile", starCount: counts[ 2 ] },
-                     { name: "4 etoile", starCount: counts[ 3 ] },
-                     { name: "5 etoile", starCount: counts[ 4 ] },
+                     { name: "1 etoile", starCount: counts[0] },
+                     { name: "2 etoile", starCount: counts[1] },
+                     { name: "3 etoile", starCount: counts[2] },
+                     { name: "4 etoile", starCount: counts[3] },
+                     { name: "5 etoile", starCount: counts[4] },
               ];
        };
 
-       const updateRatingsWithNewComment = ( newComment ) =>
-       {
-              if ( newComment.rating >= 1 && newComment.rating <= 5 )
-              {
-                     setRating( ( prevRatings ) =>
-                            prevRatings.map( ( ratingObj, index ) =>
-                            {
-                                   if ( index === newComment.rating - 1 )
-                                   {
+       const updateRatingsWithNewComment = (newComment) => {
+              if (newComment.rating >= 1 && newComment.rating <= 5) {
+                     setRating((prevRatings) =>
+                            prevRatings.map((ratingObj, index) => {
+                                   if (index === newComment.rating - 1) {
                                           return {
                                                  ...ratingObj,
                                                  starCount: ratingObj.starCount + 1,
                                           };
                                    }
                                    return ratingObj;
-                            } )
+                            })
                      );
               }
        };
@@ -106,37 +98,33 @@ export default function ProductDetailsReview( { annonce, totalRatings, totalRevi
 
 
        useEffect(
-              () =>
-              {
-                     getChildValue( data.comments?.length )
-                     console.log( data.comments );
+              () => {
+                     getChildValue(data.comments?.length)
+                     console.log(data.comments);
 
-              }, [ data, getChildValue ]
+              }, [data, getChildValue]
        )
 
-       const calculerMoyenneEtoiles = ( data2 ) =>
-       {
+       const calculerMoyenneEtoiles = (data2) => {
               let totalVotes = 0;
               let totalPoints = 0;
 
               // console.log( 'comment get', data2 );
 
-              data2.forEach( ( item, index ) =>
-              {
+              data2.forEach((item, index) => {
                      const etoile = index + 1; // 1 à 5 étoiles
                      totalVotes += item.starCount;
                      totalPoints += etoile * item.starCount;
-              } );
-              if ( totalVotes === 0 )
-              {
-                     console.log( 'Aucun vote, la moyenne est 0' );
+              });
+              if (totalVotes === 0) {
+                     console.log('Aucun vote, la moyenne est 0');
                      return 0; // Retourne 0 si aucun vote n'a été enregistré
               }
 
 
               const moyenne = totalPoints / totalVotes;
-              console.log( 'pts mm', moyenne.toFixed( 2 ) );
-              return moyenne.toFixed( 2 ); // arrondi à 2 décimales
+              console.log('pts mm', moyenne.toFixed(2));
+              return moyenne.toFixed(2); // arrondi à 2 décimales
        }
 
 
@@ -149,42 +137,39 @@ export default function ProductDetailsReview( { annonce, totalRatings, totalRevi
 
 
 
-       useEffect( () => () => dispatch( resetAfterRequest() ), [ dispatch ] );
+       useEffect(() => () => dispatch(resetAfterRequest()), [dispatch]);
 
 
 
 
 
-       useEffect( () =>
-       {
+       useEffect(() => {
 
-              if ( !isPending && !isFulled )
-              {
+              if (!isPending && !isFulled) {
 
-                     dispatch( request( { type: 'user', annonceId: productGet.id } ) )
+                     dispatch(request({ type: 'user', annonceId: productGet._id }))
 
               }
 
-       }, [ dispatch, isFulled, isPending, productGet.id, data.length ] );
+       }, [dispatch, isFulled, isPending, productGet._id, data.length]);
 
 
 
 
 
 
-       useEffect( () =>
-       {
+       useEffect(() => {
 
-              if ( !isPending && isFulled )
-              {
+              if (!isPending && isFulled) {
 
-                     setReviews( data.comments )
-                     setRating( calculateRatingCounts( data.comments ) )
-                     // console.log( data )
+                     console.log('datra obssssssssssssssssssssstenu apres la requette ', data)
+
+                     setReviews(data.comments)
+                     setRating(calculateRatingCounts(data.comments))
 
               }
 
-       }, [ isFulled, isPending, data ] );
+       }, [isFulled, isPending, data]);
 
 
 
@@ -194,28 +179,26 @@ export default function ProductDetailsReview( { annonce, totalRatings, totalRevi
 
 
 
-       const addNewReviewToLocalReview = useCallback( ( newItem ) =>
-       {
+       const addNewReviewToLocalReview = useCallback((newItem) => {
 
-              setReviews( ( prevItems ) => [ ...prevItems, newItem ] );
-              updateRatingsWithNewComment( newItem )
+              setReviews((prevItems) => [...prevItems, newItem]);
+              updateRatingsWithNewComment(newItem)
 
-       }, [] )
+       }, [])
 
 
-       useEffect( () =>
-       {
+       useEffect(() => {
               handleAddNewReviewToLocalReviewdRef.current = addNewReviewToLocalReview
 
-       }, [ addNewReviewToLocalReview ] )
+       }, [addNewReviewToLocalReview])
 
        const renderSummary = (
-              <Stack spacing={ 1 } alignItems="center" justifyContent="center">
+              <Stack spacing={1} alignItems="center" justifyContent="center">
                      <Typography variant="subtitle2">Note</Typography>
 
-                     <Typography variant="h2">{ calculerMoyenneEtoiles( ratings ) || 0 }/5</Typography>
+                     <Typography variant="h2">{calculerMoyenneEtoiles(ratings) || 0}/5</Typography>
 
-                     <Rating readOnly value={ calculerMoyenneEtoiles( ratings ) } precision={ 0.1 } />
+                     <Rating readOnly value={calculerMoyenneEtoiles(ratings)} precision={0.1} />
 
                      {/* <Typography variant="caption" sx={ { color: 'text.secondary' } }>
                             ({ fShortenNumber( totalReviews ) } reviews)
@@ -225,28 +208,26 @@ export default function ProductDetailsReview( { annonce, totalRatings, totalRevi
 
        const renderProgress = (
               <Stack
-                     spacing={ 1.5 }
-                     sx={ {
+                     spacing={1.5}
+                     sx={{
                             py: 5,
                             px: { xs: 3, md: 5 },
-                            borderLeft: ( theme ) => ( {
-                                   md: `dashed 1px ${ theme.palette.divider }`,
-                            } ),
-                            borderRight: ( theme ) => ( {
-                                   md: `dashed 1px ${ theme.palette.divider }`,
-                            } ),
-                     } }
+                            borderLeft: (theme) => ({
+                                   md: `dashed 1px ${theme.palette.divider}`,
+                            }),
+                            borderRight: (theme) => ({
+                                   md: `dashed 1px ${theme.palette.divider}`,
+                            }),
+                     }}
               >
 
-                     { ratings
-                            .slice( 0 )
+                     {ratings
+                            .slice(0)
                             .reverse()
-                            .map( ( rating ) =>
-                            {
+                            .map((rating) => {
 
                                    let totalToUse = rating.starCount
-                                   if ( rating.starCount < 90 )
-                                   {
+                                   if (rating.starCount < 90) {
                                           // Calculer la valeur à ajouter en fonction de rating.starCount
                                           const valueToAdd = 90 - rating.starCount;
                                           totalToUse = rating.starCount + valueToAdd;
@@ -254,35 +235,35 @@ export default function ProductDetailsReview( { annonce, totalRatings, totalRevi
 
                                    }
                                    return (
-                                          <Stack key={ rating.name } direction="row" alignItems="center">
-                                                 <Typography variant="subtitle2" component="span" sx={ { width: 50 } }>
-                                                        { rating.name }
+                                          <Stack key={rating.name} direction="row" alignItems="center">
+                                                 <Typography variant="subtitle2" component="span" sx={{ width: 50 }}>
+                                                        {rating.name}
                                                  </Typography>
 
                                                  <LinearProgress
                                                         color="inherit"
                                                         variant="determinate"
-                                                        value={ ( totalToUse / 500 ) * 10 }
+                                                        value={(totalToUse / 500) * 10}
                                                         // value={ 12 }
-                                                        sx={ {
+                                                        sx={{
                                                                mx: 2,
                                                                flexGrow: 1,
-                                                        } }
+                                                        }}
                                                  />
 
                                                  <Typography
                                                         variant="body2"
                                                         component="span"
-                                                        sx={ {
+                                                        sx={{
                                                                minWidth: 48,
                                                                color: 'text.secondary',
-                                                        } }
+                                                        }}
                                                  >
-                                                        { fShortenNumber( rating.starCount ) || 0 }
+                                                        {fShortenNumber(rating.starCount) || 0}
                                                  </Typography>
                                           </Stack>
                                    )
-                            } ) }
+                            })}
               </Stack>
        );
 
@@ -292,8 +273,8 @@ export default function ProductDetailsReview( { annonce, totalRatings, totalRevi
                             size="large"
                             variant="soft"
                             color="inherit"
-                            onClick={ review.onTrue }
-                            startIcon={ <Iconify icon="solar:pen-bold" /> }
+                            onClick={review.onTrue}
+                            startIcon={<Iconify icon="solar:pen-bold" />}
                      >
                             Ecrire un avis
                      </Button>
@@ -303,28 +284,28 @@ export default function ProductDetailsReview( { annonce, totalRatings, totalRevi
 
        return (
               <>
-                     <Box ref={ reviewRef }
+                     <Box ref={reviewRef}
                             display="grid"
-                            gridTemplateColumns={ {
+                            gridTemplateColumns={{
                                    xs: 'repeat(1, 1fr)',
                                    md: 'repeat(3, 1fr)',
-                            } }
-                            sx={ {
+                            }}
+                            sx={{
                                    py: { xs: 5, md: 0 },
-                            } }
+                            }}
                      >
-                            { renderSummary }
+                            {renderSummary}
 
-                            { renderProgress }
+                            {renderProgress}
 
-                            { renderReviewButton }
+                            {renderReviewButton}
                      </Box>
 
-                     <Divider sx={ { borderStyle: 'dashed' } } />
+                     <Divider sx={{ borderStyle: 'dashed' }} />
 
-                     <ProductReviewList reviews={ reviews } />
+                     <ProductReviewList reviews={reviews} />
 
-                     <ProductReviewNewForm rating={ ratings } annonce={ annonce } addData={ addNewReviewToLocalReview } open={ review.value } onClose={ review.onFalse } />
+                     <ProductReviewNewForm rating={ratings} annonce={annonce} addData={addNewReviewToLocalReview} open={review.value} onClose={review.onFalse} />
               </>
        );
 }

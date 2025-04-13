@@ -27,137 +27,135 @@ import { Button } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
-export default function JobItem( { job, onView, onEdit, onDelete } )
-{
+export default function JobItem({ job, onView, onEdit, onDelete }) {
        const popover = usePopover();
        const { user } = useAuthContext()
        const confirmOfBan = useBoolean();
 
-       const { id, anonnceName, sponsorAnnonce, aLaUne, coverUrl, date, signalerEmail, comment } = job;
-       console.log( job );
+       const { id, anonnceName, sponsorAnnonce, aLaUne, coverUrl, date, owner, comment } = job;
+       console.log(job);
 
 
        return (
               <>
                      <Card>
-                            { user.role === 'admin' && ( <IconButton onClick={ popover.onOpen } sx={ { position: 'absolute', top: 8, right: 8 } }>
+                            {user.role === 'admin' && (<IconButton onClick={popover.onOpen} sx={{ position: 'absolute', top: 8, right: 8 }}>
 
                                    <Iconify icon="eva:more-vertical-fill" />
-                            </IconButton> ) }
+                            </IconButton>)}
 
-                            <Stack sx={ { p: 3, pb: 2 } }>
+                            <Stack sx={{ p: 3, pb: 2 }}>
                                    <Avatar
-                                          alt={ coverUrl }
-                                          src={ coverUrl }
+                                          alt={coverUrl}
+                                          src={coverUrl}
                                           variant="rounded"
-                                          sx={ { width: 132, height: 132, mb: 2 } }
+                                          sx={{ width: 132, height: 132, mb: 2 }}
                                    />
 
                                    <ListItemText
-                                          sx={ { mb: 1 } }
+                                          sx={{ mb: 1 }}
                                           primary={
-                                                 <Link component={ RouterLink } href={ paths.dashboard.job.details( id ) } color="inherit">
-                                                        { anonnceName }
+                                                 <Link component={RouterLink} href={paths.dashboard.job.details(id)} color="inherit">
+                                                        {anonnceName}
                                                  </Link>
                                           }
-                                          secondary={ `signale le : ${ fDate( date ) }` }
-                                          primaryTypographyProps={ {
+                                          secondary={`signale le : ${fDate(date)}`}
+                                          primaryTypographyProps={{
                                                  typography: 'subtitle1',
-                                          } }
-                                          secondaryTypographyProps={ {
+                                          }}
+                                          secondaryTypographyProps={{
                                                  mt: 1,
                                                  component: 'span',
                                                  typography: 'caption',
                                                  color: 'text.disabled',
-                                          } }
+                                          }}
                                    />
 
                                    <Stack
 
                                           direction="column"
                                           justifyContent="center"
-                                          sx={ { color: sponsorAnnonce ? 'primary.main' : 'error.main', typography: 'caption' } }
+                                          sx={{ color: sponsorAnnonce ? 'primary.main' : 'error.main', typography: 'caption' }}
                                    >
 
                                           <Box display="flex" alignItems="center">
-                                                 <Box mr={ 1 }><Label color={ aLaUne ? "info" : "error" } >A la Une : { aLaUne ? 'OUI' : 'NON' }</Label></Box>
+                                                 <Box mr={1}><Label color={aLaUne ? "info" : "error"} >A la Une : {aLaUne ? 'OUI' : 'NON'}</Label></Box>
                                                  <Box display="flex" alignItems="center">
-                                                        <Iconify width={ 16 } icon="solar:users-group-rounded-bold" />
+                                                        <Iconify width={16} icon="solar:users-group-rounded-bold" />
 
-                                                        { sponsorAnnonce && `Sponsoriser` }
-                                                        { !sponsorAnnonce && `Non sponsoriser` }
+                                                        {sponsorAnnonce && `Sponsoriser`}
+                                                        {!sponsorAnnonce && `Non sponsoriser`}
                                                  </Box>
 
 
 
                                           </Box>
 
-                                          <Box mt={ 2 }  ><Typography variant='caption' color="text.disabled" >Raison du signalement</Typography></Box>
+                                          <Box mt={2}  ><Typography variant='caption' color="text.disabled" >Raison du signalement</Typography></Box>
 
                                           <Typography
                                                  variant="body2"
-                                                 sx={ {
+                                                 sx={{
                                                         color: 'black',
                                                         display: '-webkit-box',
                                                         WebkitLineClamp: 2,
                                                         WebkitBoxOrient: 'vertical',
                                                         overflow: 'hidden',
                                                         textOverflow: 'ellipsis'
-                                                 } }
+                                                 }}
                                           >
-                                                 { comment }
+                                                 {comment}
                                           </Typography>
 
 
                                    </Stack>
                             </Stack>
 
-                            <Divider sx={ { borderStyle: 'dashed' } } />
+                            <Divider sx={{ borderStyle: 'dashed' }} />
 
-                            <Box rowGap={ 1.5 } display="grid" gridTemplateColumns="repeat(2, 1fr)" sx={ { p: 3 } }>
-                                   { [
+                            <Box rowGap={1.5} display="grid" gridTemplateColumns="repeat(2, 1fr)" sx={{ p: 3 }}>
+                                   {[
 
                                           {
-                                                 label: signalerEmail,
-                                                 icon: <Iconify width={ 16 } icon="solar:user-rounded-bold" sx={ { flexShrink: 0 } } />,
+                                                 label: owner.email,
+                                                 icon: <Iconify width={16} icon="solar:user-rounded-bold" sx={{ flexShrink: 0 }} />,
                                           },
-                                   ].map( ( item, index ) => (
+                                   ].map((item, index) => (
                                           <Stack
-                                                 key={ index }
-                                                 spacing={ 0.5 }
-                                                 flexShrink={ 0 }
+                                                 key={index}
+                                                 spacing={0.5}
+                                                 flexShrink={0}
                                                  direction="column"
-                                                 sx={ { color: 'text.disabled', minWidth: 0 } }
+                                                 sx={{ color: 'text.disabled', minWidth: 0 }}
                                           >
                                                  signaler par :
                                                  <Box display="flex" alignItems="center" color="info.main">
-                                                        { item.icon }
+                                                        {item.icon}
                                                         <Typography variant="caption" >
-                                                               { item.label }
+                                                               {item.label}
                                                         </Typography>
                                                  </Box>
                                           </Stack>
-                                   ) ) }
+                                   ))}
                             </Box>
                      </Card>
 
                      <CustomPopover
-                            open={ popover.open }
-                            onClose={ popover.onClose }
+                            open={popover.open}
+                            onClose={popover.onClose}
                             arrow="right-top"
-                            sx={ { width: 140 } }
+                            sx={{ width: 140 }}
                      >
                             <MenuItem
-                                   onClick={ () =>
-                                   {
+                                   onClick={() => {
                                           // popover.onClose();
                                           // onView();
 
                                           confirmOfBan.onTrue()
-                                          console.log( 'banissement applr' );
+                                          console.log('banissement applr');
 
 
-                                   } }
+                                   }}
                             >
                                    <Iconify icon="solar:eye-bold" />
                                    Banir
@@ -194,8 +192,8 @@ export default function JobItem( { job, onView, onEdit, onDelete } )
 
 
                      <ConfirmDialog
-                            open={ confirmOfBan.value }
-                            onClose={ confirmOfBan.onFalse }
+                            open={confirmOfBan.value}
+                            onClose={confirmOfBan.onFalse}
                             title="Banissement de l'annonce"
                             content={
                                    <>
@@ -207,12 +205,11 @@ export default function JobItem( { job, onView, onEdit, onDelete } )
                                    <Button
                                           variant="contained"
                                           color="error"
-                                          onClick={ () =>
-                                          {
+                                          onClick={() => {
                                                  // banAnnouncement();
 
                                                  confirmOfBan.onFalse();
-                                          } }
+                                          }}
                                    >
                                           Banir
                                    </Button>

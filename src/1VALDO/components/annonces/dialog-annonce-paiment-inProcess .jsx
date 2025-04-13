@@ -24,8 +24,7 @@ import { CreationAnnonceTransaction } from 'src/1VALDO/hook/annonce/creationAnno
 
 
 
-export default function DialogAnnoncePaimentInProcess( { showDialog, dataGet, updateDataAfterSucces } )
-{
+export default function DialogAnnoncePaimentInProcess({ showDialog, dataGet, updateDataAfterSucces }) {
 
 
 
@@ -33,22 +32,22 @@ export default function DialogAnnoncePaimentInProcess( { showDialog, dataGet, up
        const dispatch = useDispatch();
        const location = useLocation()
        const { user } = useAuthContext();
-       const [ message, setMessage ] = useState( '' );
-       const [ messageStyle, setMessageStyle ] = useState( { color: 'black' } );
+       const [message, setMessage] = useState('');
+       const [messageStyle, setMessageStyle] = useState({ color: 'black' });
 
 
 
 
 
 
-       const [ payant, setChecked ] = useState( false );
-       const [ sponsGet, setSponsGet ] = useState( [] );
-       const [ dataPass, setDataPass ] = useState( [] );
-       const [ submiting, setSubmiting ] = useState( false )
-       const [ fullWidth, setFullWidth ] = useState( true );
-       const [ tableData, setTableData ] = useState( [] );
-       const addData = ( tempDataGet ) => { console.log( 'kkkkkkkkk', tempDataGet ); setTableData( tempDataGet ); setSponsGet( tempDataGet.map( ( item ) => item.titre ) ); }
-       const annonce = useMemo( () => location.state?.annonce || null, [ location ] );
+       const [payant, setChecked] = useState(false);
+       const [sponsGet, setSponsGet] = useState([]);
+       const [dataPass, setDataPass] = useState([]);
+       const [submiting, setSubmiting] = useState(false)
+       const [fullWidth, setFullWidth] = useState(true);
+       const [tableData, setTableData] = useState([]);
+       const addData = (tempDataGet) => { console.log('kkkkkkkkk', tempDataGet); setTableData(tempDataGet); setSponsGet(tempDataGet.map((item) => item.titre)); }
+       const annonce = useMemo(() => location.state?.annonce || null, [location]);
 
 
 
@@ -57,7 +56,7 @@ export default function DialogAnnoncePaimentInProcess( { showDialog, dataGet, up
 
 
 
-       const dataTransaction = useCallback( () => ( { id: Date.now(), transactorEmail: user?.email, type: 'creation annonce', dataType: [], date: Date.now(), montant: 2600, statut: 'paid', anonnceId: dataGet.id, anonnceName: dataGet.name } ), [ user?.email, dataGet.name, dataGet.id ] );
+       const dataTransaction = useCallback(() => ({ id: Date.now(), transactorEmail: user?.email, type: 'creation annonce', dataType: [], date: Date.now(), montant: 2600, statut: 'paid', anonnceId: dataGet.id, anonnceName: dataGet.name }), [user?.email, dataGet.name, dataGet.id]);
 
 
 
@@ -65,7 +64,7 @@ export default function DialogAnnoncePaimentInProcess( { showDialog, dataGet, up
 
        // fonction use
 
-       const log = ( messageGet ) => { console.log( messageGet ); };
+       const log = (messageGet) => { console.log(messageGet); };
 
 
 
@@ -75,47 +74,9 @@ export default function DialogAnnoncePaimentInProcess( { showDialog, dataGet, up
 
 
 
-       CreationAnnonceTransaction()
 
 
 
-       useEffect( () =>
-       {
-              // Si le dialogue est ouvert, commencez les timeouts
-              if ( showDialog.value )
-              {
-                     const messageTimeout = setTimeout( () =>
-                     {
-                            setMessage( 'Paiement effectué avec succès' );
-                            setMessageStyle( { color: 'green' } ); // Styliser en vert
-                            // console.log( 'mis à jour' );
-                            dispatch( request( dataGet ) )
-                            dispatch( buyAnnonceCreationRequest( { transactorEmail: user?.email, data: dataTransaction() } ) )
-                     }, 5000 );
-
-                     const closeTimeout = setTimeout( () =>
-                     {
-                            showDialog.onFalse();
-                            clearTimeout( messageTimeout );
-                            setMessage( '' );
-                     }, 8000 );
-
-                     // Cleanup lors du démontage ou de la fermeture du dialogue
-                     return () =>
-                     {
-                            clearTimeout( messageTimeout );
-                            clearTimeout( closeTimeout );
-                            setMessage( '' );
-                            // console.log( 'Nettoyage effectué' );
-                     };
-              }
-
-              // Retour explicite dans le cas où la condition if échoue
-              return undefined;
-       }, [ showDialog, dispatch, dataGet, user?.email, dataTransaction ] ); // Ce useEffect dépend de la valeur de showDialog
-
-
-       // console.log( 'mesaaaaaage', message );
 
 
 
@@ -124,29 +85,29 @@ export default function DialogAnnoncePaimentInProcess( { showDialog, dataGet, up
 
 
        return (
-              <Dialog maxWidth='xs' fullWidth={ fullWidth } open={ showDialog.value } onClose={ showDialog.onFalse }>
+              <Dialog maxWidth='xs' fullWidth={fullWidth} open={showDialog.value} onClose={showDialog.onFalse}>
 
                      <DialogTitle justifyContent="center" display="flex" > <Label variant="soft" color='primary' > Transaction initier </Label></DialogTitle>
 
                      <DialogContent>
-                            <Stack direction="column" flexWrap="wrap" alignItems="center" mb={ 3 } spacing={ 1.5 }>
-                                   {/* <Typography variant="h6"><Label variant="soft" color='primary'></Label></Typography> */ }
-                                   { message === '' && ( <Typography variant="h6">Veuiller composer le #150*50# et entre Votre code secret pour Terminer la transaction</Typography> ) }
+                            <Stack direction="column" flexWrap="wrap" alignItems="center" mb={3} spacing={1.5}>
+                                   {/* <Typography variant="h6"><Label variant="soft" color='primary'></Label></Typography> */}
+                                   {message === '' && (<Typography variant="h6">Veuiller composer le #150*50# et entre Votre code secret pour Terminer la transaction</Typography>)}
 
-                                   { message !== '' && ( <Typography variant="h6" style={ messageStyle }>  { message }</Typography> ) }
+                                   {message !== '' && (<Typography variant="h6" style={messageStyle}>  {message}</Typography>)}
                             </Stack>
 
 
 
                      </DialogContent>
 
-                     { message === '' && <DialogActions>
-                            <Button color="error" variant="contained" onClick={ () => showDialog.onFalse() }>
+                     {message === '' && <DialogActions>
+                            <Button color="error" variant="contained" onClick={() => showDialog.onFalse()}>
                                    Annuler
                             </Button>
 
 
-                     </DialogActions> }
+                     </DialogActions>}
 
               </Dialog >
 
@@ -155,12 +116,12 @@ export default function DialogAnnoncePaimentInProcess( { showDialog, dataGet, up
 }
 
 DialogAnnoncePaimentInProcess.propTypes = {
-       showDialog: PropTypes.shape( {
+       showDialog: PropTypes.shape({
               value: PropTypes.bool,
               onTrue: PropTypes.func,
               onFalse: PropTypes.func,
               toggle: PropTypes.func,
-       } ).isRequired,
+       }).isRequired,
        dataGet: PropTypes.object,
        updateDataAfterSucces: PropTypes.func
 };

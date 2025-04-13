@@ -1,5 +1,5 @@
 import { enqueueSnackbar } from "notistack";
-import { HOST_PORT, HOST_BACKEND_URL, tokenUser, HOST_FRONTEND_URL, HOST_FRONT_PROD } from "src/config-global"; import axiosInstance from "src/utils/axios";
+import { HOST_PORT, HOST_BACKEND_URL, tokenUser, HOST_FRONT_PROD } from "src/config-global"; import axiosInstance from "src/utils/axios";
 
 
 
@@ -16,12 +16,10 @@ import { HOST_PORT, HOST_BACKEND_URL, tokenUser, HOST_FRONTEND_URL, HOST_FRONT_P
 
 export async function request(data) {
 
-       // console.log( `Envoi d'une requête pour ajouter ${ data }` );
+       // console.log( 'Envoi de la requête pour modifer ', data );
        try {
 
               // const response = await axiosInstance.get( `${ endpoints.user.get }/${ userID }` );
-              // console.log( 'requette pour ajouter appeler' );
-
               const response = await axiosInstance.post(`${HOST_FRONT_PROD}/useraction`, data, { headers: { Authorization: `Bearer ${tokenUser}` } });
               // console.log( 'Réponse de la requête :', response.data );
               return response;

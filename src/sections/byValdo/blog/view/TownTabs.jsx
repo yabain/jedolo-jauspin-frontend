@@ -9,14 +9,14 @@ import { HEADER } from 'src/layouts/config-layout';
 
 export default function TownTabs({ handleFilterByTownSelected }) {
        const [cityTabs, setCityTabs] = useState([])
-       const [currentTab, setCurrentTab] = useState(cityTabs[0]?.ville);
+       const [currentTab, setCurrentTab] = useState(cityTabs[0]?.city);
        const handleGet = (dataGet) => { setCityTabs(dataGet) };
 
 
 
 
        useGet(handleGet)
-       useEffect(() => { setCurrentTab(cityTabs[0]?.ville) }, [cityTabs])
+       useEffect(() => { setCurrentTab(cityTabs[0]?.city) }, [cityTabs])
 
 
 
@@ -52,7 +52,9 @@ export default function TownTabs({ handleFilterByTownSelected }) {
               <Tabs
                      value={currentTab}
                      onChange={(event, newValue) => {
-                            const selected = search([newValue]);
+
+
+                            search([newValue]);
                             setCurrentTab(newValue); // ✅ c’est ici qu’on met la valeur retournée
                      }}
                      // scrollButtons // Activer les boutons de défilement

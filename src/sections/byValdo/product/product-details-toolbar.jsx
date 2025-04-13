@@ -16,7 +16,7 @@ import { useNavigate } from 'react-router';
 
 // ----------------------------------------------------------------------
 
-export default function ProductDetailsToolbar( {
+export default function ProductDetailsToolbar({
        publish,
        backLink,
        editLink,
@@ -26,33 +26,32 @@ export default function ProductDetailsToolbar( {
        data,
        sx,
        ...other
-} )
-{
+}) {
        const popover = usePopover();
        const navigate = useNavigate()
 
-       console.log( data, 'toooooooooooooooo' );
+       // console.log( data, 'toooooooooooooooo' );
 
        return (
               <>
                      <Stack
-                            spacing={ 1.5 }
+                            spacing={1.5}
                             direction="row"
-                            sx={ {
+                            sx={{
                                    mb: { xs: 3, md: 5 },
                                    ...sx,
-                            } }
-                            { ...other }
+                            }}
+                            {...other}
                      >
                             <Button
                                    // component={ RouterLink }
-                                   onClick={ () => { navigate( - 1 ) } }
-                                   startIcon={ <Iconify icon="eva:arrow-ios-back-fill" width={ 16 } /> }
+                                   onClick={() => { navigate(- 1) }}
+                                   startIcon={<Iconify icon="eva:arrow-ios-back-fill" width={16} />}
                             >
                                    Retour
                             </Button>
 
-                            <Box sx={ { flexGrow: 1 } } />
+                            <Box sx={{ flexGrow: 1 }} />
 
                             {/* { publish === 'published' && (
                                    <Tooltip title="Go Live">
@@ -71,20 +70,19 @@ export default function ProductDetailsToolbar( {
                             <LoadingButton
                                    color="inherit"
                                    variant="contained"
-                                   loading={ !publish }
+                                   loading={!publish}
                                    loadingIndicator="Loading…"
                                    onClick={
-                                          () =>
-                                          {
+                                          () => {
                                                  navigate(
                                                         '/home/user/profile',
                                                         {
                                                                state: { email: data.userEmail, data }  // En supposant que `user?.email` est disponible
-                                                        } )
+                                                        })
                                           }
 
                                    }
-                                   sx={ { textTransform: 'capitalize' } }
+                                   sx={{ textTransform: 'capitalize' }}
                             >
                                    Profil de l&apos;annonceur
 
@@ -92,26 +90,25 @@ export default function ProductDetailsToolbar( {
                      </Stack >
 
                      <CustomPopover
-                            open={ popover.open }
-                            onClose={ popover.onClose }
+                            open={popover.open}
+                            onClose={popover.onClose}
                             arrow="top-right"
-                            sx={ { width: 140 } }
+                            sx={{ width: 140 }}
                      >
-                            { publishOptions.map( ( option ) => (
+                            {publishOptions.map((option) => (
                                    <MenuItem
-                                          key={ option.value }
-                                          selected={ option.value === publish }
-                                          onClick={ () =>
-                                          {
+                                          key={option.value}
+                                          selected={option.value === publish}
+                                          onClick={() => {
                                                  popover.onClose();
-                                                 onChangePublish( option.value );
-                                          } }
+                                                 onChangePublish(option.value);
+                                          }}
                                    >
-                                          { option.value === 'published' && <Iconify icon="eva:cloud-upload-fill" /> }
-                                          { option.value === 'draft' && <Iconify icon="solar:file-text-bold" /> }
-                                          { option.label }
+                                          {option.value === 'published' && <Iconify icon="eva:cloud-upload-fill" />}
+                                          {option.value === 'draft' && <Iconify icon="solar:file-text-bold" />}
+                                          {option.label}
                                    </MenuItem>
-                            ) ) }
+                            ))}
                      </CustomPopover>
               </>
        );

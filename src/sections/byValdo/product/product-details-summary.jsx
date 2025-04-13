@@ -199,7 +199,7 @@ export default function ProductDetailsSummary({
 
        const setratingGet = (data) => {
 
-              console.log('eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee', data);
+              // console.log('eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee', data);
 
               setRating(calculateRatingCounts(data.comments || [], setRating))
 
@@ -333,7 +333,7 @@ export default function ProductDetailsSummary({
 
                      >
                             <Typography variant="body2" sx={{ color: 'text.secondary', flexGrow: 1 }}>
-                                   {city[0]}
+                                   {city}
                             </Typography>
                      </Box>
               </Stack>

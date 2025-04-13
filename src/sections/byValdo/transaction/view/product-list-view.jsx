@@ -21,15 +21,14 @@ import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
-import
-{
-       DataGrid,
-       GridToolbarExport,
-       GridActionsCellItem,
-       GridToolbarContainer,
-       GridToolbarQuickFilter,
-       GridToolbarFilterButton,
-       GridToolbarColumnsButton,
+import {
+DataGrid,
+GridToolbarExport,
+GridActionsCellItem,
+GridToolbarContainer,
+GridToolbarQuickFilter,
+GridToolbarFilterButton,
+GridToolbarColumnsButton,
 } from '@mui/x-data-grid';
 
 import { paths } from 'src/routes/paths';
@@ -54,13 +53,12 @@ import { HOST_BACKEND_URL } from 'src/config-global';
 import { dataObject } from 'src/1data/annonces/defaut';
 import ProductTableToolbar from '../product-table-toolbar';
 import ProductTableFiltersResult from '../product-table-filters-result';
-import
-{
-       RenderCellStock,
-       RenderCellPrice,
-       RenderCellPublish,
-       RenderCellProduct,
-       RenderCellCreatedAt,
+import {
+RenderCellStock,
+RenderCellPrice,
+RenderCellPublish,
+RenderCellProduct,
+RenderCellCreatedAt,
 } from '../product-table-row';
 import DialogDeleteAnnonces from './modal-delete-Annonces';
 import DialogDeleteAnnonce from './modal-delete-Annonce';
@@ -80,12 +78,11 @@ const HIDE_COLUMNS = {
        category: false,
 };
 
-const HIDE_COLUMNS_TOGGLABLE = [ 'category', 'actions' ];
+const HIDE_COLUMNS_TOGGLABLE = ['category', 'actions'];
 
 // ----------------------------------------------------------------------
 
-export default function ProductListView( { toShow } )
-{
+export default function ProductListView({ toShow }) {
 
 
        const { enqueueSnackbar } = useSnackbar();
@@ -103,32 +100,31 @@ export default function ProductListView( { toShow } )
 
        const { products, productsLoading } = useGetProducts();
 
-       const [ dataIsSet, setDataIsSet ] = useState( false );
-       const [ tableData, setTableData ] = useState( [] );
+       const [dataIsSet, setDataIsSet] = useState(false);
+       const [tableData, setTableData] = useState([]);
 
-       const [ filters, setFilters ] = useState( defaultFilters );
+       const [filters, setFilters] = useState(defaultFilters);
 
-       const [ selectedRowIds, setSelectedRowIds ] = useState( [] );
+       const [selectedRowIds, setSelectedRowIds] = useState([]);
 
-       const [ columnVisibilityModel, setColumnVisibilityModel ] = useState( HIDE_COLUMNS );
+       const [columnVisibilityModel, setColumnVisibilityModel] = useState(HIDE_COLUMNS);
 
-       const [ annonceToDel, setAnnonceToDel ] = useState( {} );
+       const [annonceToDel, setAnnonceToDel] = useState({});
 
        const { user } = useAuthContext();
-       const annonceList = useSelector( ( state ) => state.getAnnonces.data );
-       const annonceFromStore = useSelector( ( state ) => state.annonces.data );
+       const annonceList = useSelector((state) => state.getAnnonces.data);
+       const annonceFromStore = useSelector((state) => state.annonces.data);
 
 
-       const usersAnnonceList = useSelector( ( state ) => state.getUsersAnnonces.data );
-       const { isFulled, isPending } = useSelector( ( state ) => state.getUsersAnnonces );
-       const { isGeting, isGetingSuccess } = useSelector( ( state ) => state.getAnnonces );
+       const usersAnnonceList = useSelector((state) => state.getUsersAnnonces.data);
+       const { isFulled, isPending } = useSelector((state) => state.getUsersAnnonces);
+       const { isGeting, isGetingSuccess } = useSelector((state) => state.getAnnonces);
 
-       useEffect( () =>
-       {
+       useEffect(() => {
 
               setValeurRef.current = setTableData;
 
-       }, [] );
+       }, []);
 
 
 
@@ -139,15 +135,13 @@ export default function ProductListView( { toShow } )
 
 
 
-       useEffect( () => () =>
-       {
+       useEffect(() => () => {
 
-              dispatch( resetData() )
-              dispatch( resetAfterRequest() )
-              dispatch( resetAfterGetListRequete() );
+              dispatch(resetData())
+              dispatch(resetAfterRequest())
+              dispatch(resetAfterGetListRequete());
 
-       }, [ dispatch ] );
-
+       }, [dispatch]);
 
 
 
@@ -157,26 +151,24 @@ export default function ProductListView( { toShow } )
 
 
 
-       useEffect( () =>
-       {
 
-              if ( !isGeting && !isGetingSuccess )
-              {
+       useEffect(() => {
 
-                     if ( user === null || user === undefined ) 
-                     {
+              if (!isGeting && !isGetingSuccess) {
+
+                     if (user === null || user === undefined) {
 
 
                             return
                      }
 
 
-                     dispatch( getList( user?.email ) )
+                     dispatch(getList(user?.email))
 
 
               }
 
-       }, [ dispatch, annonceList, user, isGetingSuccess, isGeting, toShow ] );
+       }, [dispatch, annonceList, user, isGetingSuccess, isGeting, toShow]);
 
 
 
@@ -186,16 +178,13 @@ export default function ProductListView( { toShow } )
 
 
 
-       useEffect( () =>
-       {
+       useEffect(() => {
 
 
-              dispatch( setData( annonceList ) )
+              dispatch(setData(annonceList))
 
 
-       }, [ annonceList, dispatch ] );
-
-
+       }, [annonceList, dispatch]);
 
 
 
@@ -203,12 +192,12 @@ export default function ProductListView( { toShow } )
 
 
 
-       useEffect( () =>
-       {
-              setTableData( annonceFromStore );
 
-       }, [ annonceFromStore ] );
 
+       useEffect(() => {
+              setTableData(annonceFromStore);
+
+       }, [annonceFromStore]);
 
 
 
@@ -219,66 +208,65 @@ export default function ProductListView( { toShow } )
 
 
 
-       useEffect( () =>
-       {
-              const socket = io( HOST_BACKEND_URL );
-              socket.on( 'update-annonce', ( update ) =>
-              {
 
-                     dispatch( setData( annoncesFunction.updateAnnonceInArray( annonceFromStore, update ) ) )
-                     console.log( 'nouvelle annonce detecter', update );
+       // useEffect( () =>
+       // {
+       //        const socket = io( HOST_BACKEND_URL );
+       //        socket.on( 'update-annonce', ( update ) =>
+       //        {
 
-              } );
+       //               dispatch( setData( annoncesFunction.updateAnnonceInArray( annonceFromStore, update ) ) )
+       //               console.log( 'nouvelle annonce detecter', update );
 
-
-              socket.on( 'banned-annonce', ( update ) =>
-              {
-
-                     dispatch( setData( annoncesFunction.updateAnnonceInArray( annonceFromStore, update ) ) )
-
-                     console.log( 'nouvelle annonce detecter', update );
+       //        } );
 
 
-              } );
+       //        socket.on( 'banned-annonce', ( update ) =>
+       //        {
 
-              socket.on( 'delete-annonce', ( del ) =>
-              {
+       //               dispatch( setData( annoncesFunction.updateAnnonceInArray( annonceFromStore, update ) ) )
 
-                     console.log( 'annonce a supprimer', del );
-
-
-                     dispatch( setData( annoncesFunction.deleteAnnonceInArray( annonceFromStore, del ) ) )
-              } );
+       //               console.log( 'nouvelle annonce detecter', update );
 
 
+       //        } );
 
-              // Écouter l'événement 'new-annonce' pour mettre à jour les annonces en temps réel
-              socket.on( 'new-annonce', ( newAnnonce ) =>
-              {
-                     if ( newAnnonce.userEmail === user?.email ) dispatch( addData( newAnnonce ) )
-                     console.log( 'nouvelle annonce detecter', newAnnonce );
+       //        socket.on( 'delete-annonce', ( del ) =>
+       //        {
 
-              } );
+       //               console.log( 'annonce a supprimer', del );
 
-              return () => { socket.disconnect(); };
 
-       }, [ dispatch, annonceFromStore, user?.email ] );
+       //               dispatch( setData( annoncesFunction.deleteAnnonceInArray( annonceFromStore, del ) ) )
+       //        } );
 
 
 
+       //        // Écouter l'événement 'new-annonce' pour mettre à jour les annonces en temps réel
+       //        socket.on( 'new-annonce', ( newAnnonce ) =>
+       //        {
+       //               if ( newAnnonce.userEmail === user?.email ) dispatch( addData( newAnnonce ) )
+       //               console.log( 'nouvelle annonce detecter', newAnnonce );
 
-       useEffect( () =>
-       {
+       //        } );
 
-              if ( !dataIsSet )
-              {
+       //        return () => { socket.disconnect(); };
+
+       // }, [ dispatch, annonceFromStore, user?.email ] );
+
+
+
+
+       useEffect(() => {
+
+              if (!dataIsSet) {
 
                      // console.log( products );
-                     setDataIsSet( true );
+                     setDataIsSet(true);
 
               }
 
-       }, [ dataIsSet, dispatch, annonceFromStore ] );
+       }, [dataIsSet, dispatch, annonceFromStore]);
 
 
 
@@ -286,62 +274,56 @@ export default function ProductListView( { toShow } )
 
 
 
-       const dataFiltered = applyFilter( {
+       const dataFiltered = applyFilter({
               inputData: tableData,
               filters,
-       } );
+       });
 
-       const canReset = !isEqual( defaultFilters, filters );
+       const canReset = !isEqual(defaultFilters, filters);
 
-       const handleFilters = useCallback( ( name, value ) =>
-       {
-              setFilters( ( prevState ) => ( {
+       const handleFilters = useCallback((name, value) => {
+              setFilters((prevState) => ({
                      ...prevState,
-                     [ name ]: value,
-              } ) );
-       }, [] );
+                     [name]: value,
+              }));
+       }, []);
 
-       const handleResetFilters = useCallback( () =>
-       {
-              setFilters( defaultFilters );
-       }, [] );
+       const handleResetFilters = useCallback(() => {
+              setFilters(defaultFilters);
+       }, []);
 
        const handleDeleteRow = useCallback(
-              ( id ) =>
-              {
-                     const deleteRow = tableData.filter( ( row ) => row.id !== id );
+              (id) => {
+                     const deleteRow = tableData.filter((row) => row.id !== id);
 
-                     enqueueSnackbar( 'Delete success!' );
+                     enqueueSnackbar('Delete success!');
 
-                     setTableData( deleteRow );
+                     setTableData(deleteRow);
               },
-              [ enqueueSnackbar, tableData ]
+              [enqueueSnackbar, tableData]
        );
 
-       const handleDeleteRows = useCallback( () =>
-       {
-              const deleteRows = tableData.filter( ( row ) => !selectedRowIds.includes( row.id ) );
+       const handleDeleteRows = useCallback(() => {
+              const deleteRows = tableData.filter((row) => !selectedRowIds.includes(row.id));
 
-              enqueueSnackbar( 'Delete success!' );
+              enqueueSnackbar('Delete success!');
 
-              setTableData( deleteRows );
-       }, [ enqueueSnackbar, selectedRowIds, tableData ] );
+              setTableData(deleteRows);
+       }, [enqueueSnackbar, selectedRowIds, tableData]);
 
        const handleEditRow = useCallback(
-              ( data ) =>
-              {
-                     navigate( paths.annonces.edit, { state: { data } } );
+              (data) => {
+                     navigate(paths.annonces.edit, { state: { data } });
 
               },
-              [ navigate ]
+              [navigate]
        );
 
        const handleViewRow = useCallback(
-              ( id ) =>
-              {
-                     router.push( paths.dashboard.product.details( id ) );
+              (id) => {
+                     router.push(paths.dashboard.product.details(id));
               },
-              [ router ]
+              [router]
        );
 
        const columns = [
@@ -356,13 +338,13 @@ export default function ProductListView( { toShow } )
                      flex: 1,
                      minWidth: 360,
                      hideable: false,
-                     renderCell: ( params ) => <RenderCellProduct params={ params } />,
+                     renderCell: (params) => <RenderCellProduct params={params} />,
               },
               {
                      field: 'createdAt',
                      headerName: 'Create at',
                      width: 160,
-                     renderCell: ( params ) => <RenderCellCreatedAt params={ params } />,
+                     renderCell: (params) => <RenderCellCreatedAt params={params} />,
               },
               {
                      field: 'inventoryType',
@@ -370,14 +352,14 @@ export default function ProductListView( { toShow } )
                      width: 160,
                      type: 'singleSelect',
                      valueOptions: PRODUCT_STOCK_OPTIONS,
-                     renderCell: ( params ) => <RenderCellStock params={ params } />,
+                     renderCell: (params) => <RenderCellStock params={params} />,
               },
               {
                      field: 'price',
                      headerName: 'Price',
                      width: 140,
                      editable: true,
-                     renderCell: ( params ) => <RenderCellPrice params={ params } />,
+                     renderCell: (params) => <RenderCellPrice params={params} />,
               },
               {
                      field: 'publish',
@@ -386,7 +368,7 @@ export default function ProductListView( { toShow } )
                      type: 'singleSelect',
                      editable: true,
                      valueOptions: PUBLISH_OPTIONS,
-                     renderCell: ( params ) => <RenderCellPublish params={ params } />,
+                     renderCell: (params) => <RenderCellPublish params={params} />,
               },
               {
                      type: 'actions',
@@ -398,28 +380,27 @@ export default function ProductListView( { toShow } )
                      sortable: false,
                      filterable: false,
                      disableColumnMenu: true,
-                     getActions: ( params ) => [
+                     getActions: (params) => [
                             <GridActionsCellItem
                                    showInMenu
-                                   icon={ <Iconify icon="solar:eye-bold" /> }
+                                   icon={<Iconify icon="solar:eye-bold" />}
                                    label="View"
-                                   onClick={ () => handleViewRow( params.row.id ) }
+                                   onClick={() => handleViewRow(params.row.id)}
                             />,
                             <GridActionsCellItem
                                    showInMenu
-                                   icon={ <Iconify icon="solar:pen-bold" /> }
+                                   icon={<Iconify icon="solar:pen-bold" />}
                                    label="Edit"
-                                   onClick={ () => handleEditRow( params.row ) }
+                                   onClick={() => handleEditRow(params.row)}
                             />,
                             <GridActionsCellItem
                                    showInMenu
-                                   icon={ <Iconify icon="solar:trash-bin-trash-bold" /> }
+                                   icon={<Iconify icon="solar:trash-bin-trash-bold" />}
                                    label="Delete"
-                                   onClick={ () =>
-                                   {
-                                          confirmOfDel.onTrue(); setAnnonceToDel( params.row )
-                                   } }
-                                   sx={ { color: 'error.main' } }
+                                   onClick={() => {
+                                          confirmOfDel.onTrue(); setAnnonceToDel(params.row)
+                                   }}
+                                   sx={{ color: 'error.main' }}
                             />,
                      ],
               },
@@ -427,105 +408,104 @@ export default function ProductListView( { toShow } )
 
        const getTogglableColumns = () =>
               columns
-                     .filter( ( column ) => !HIDE_COLUMNS_TOGGLABLE.includes( column.field ) )
-                     .map( ( column ) => column.field );
+                     .filter((column) => !HIDE_COLUMNS_TOGGLABLE.includes(column.field))
+                     .map((column) => column.field);
 
        return (
               <>
                      <Box
                             // maxWidth={ settings.themeStretch ? false : 'lg' }
                             // maxWidth='xl'
-                            sx={ {
+                            sx={{
                                    flexGrow: 1,
                                    display: 'flex',
                                    flexDirection: 'column',
-                            } }
+                            }}
                      >
-                            { user?.role === "user" && ( <CustomBreadcrumbs
+                            {user?.role === "user" && (<CustomBreadcrumbs
                                    heading="Liste Des Annonces"
-                                   links={ [
+                                   links={[
                                           {
                                                  name: '',
                                                  href: paths.dashboard.product.root,
                                           }
-                                   ] }
+                                   ]}
                                    action={
                                           <Button
                                                  // component={ RouterLink }
                                                  // href={ paths.dashboard.product.new }
-                                                 onClick={ () => navigate( '/home/annonces/new' ) }
+                                                 onClick={() => navigate('/home/annonces/new')}
 
                                                  variant="contained"
-                                                 startIcon={ <Iconify icon="mingcute:add-line" /> }
+                                                 startIcon={<Iconify icon="mingcute:add-line" />}
                                           >
                                                  New Product
                                           </Button>
                                    }
-                                   sx={ {
+                                   sx={{
                                           mb: {
                                                  xs: 3,
                                                  md: 5,
                                           },
-                                   } }
-                            /> ) }
+                                   }}
+                            />)}
 
                             <Card
-                                   sx={ {
+                                   sx={{
                                           height: { xs: 800, md: 2 },
                                           flexGrow: { md: 1 },
                                           display: { md: 'flex' },
                                           flexDirection: { md: 'column' },
-                                   } }
+                                   }}
                             >
                                    <DataGrid
                                           checkboxSelection
                                           disableRowSelectionOnClick
-                                          rows={ dataFiltered }
-                                          columns={ columns }
-                                          loading={ dataFiltered.length === 0 }
-                                          getRowHeight={ () => 'auto' }
-                                          pageSizeOptions={ [ 5, 10, 25 ] }
-                                          initialState={ {
+                                          rows={dataFiltered}
+                                          columns={columns}
+                                          loading={dataFiltered.length === 0}
+                                          getRowHeight={() => 'auto'}
+                                          pageSizeOptions={[5, 10, 25]}
+                                          initialState={{
                                                  pagination: {
                                                         paginationModel: { pageSize: 10 },
                                                  },
-                                          } }
-                                          onRowSelectionModelChange={ ( newSelectionModel ) =>
-                                          {
-                                                 setSelectedRowIds( newSelectionModel );
-                                          } }
-                                          columnVisibilityModel={ columnVisibilityModel }
-                                          onColumnVisibilityModelChange={ ( newModel ) => setColumnVisibilityModel( newModel ) }
-                                          slots={ {
+                                          }}
+                                          onRowSelectionModelChange={(newSelectionModel) => {
+                                                 setSelectedRowIds(newSelectionModel);
+                                          }}
+                                          columnVisibilityModel={columnVisibilityModel}
+                                          onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
+                                          slots={{
                                                  toolbar: () => (
                                                         <>
                                                                <GridToolbarContainer>
                                                                       <ProductTableToolbar
-                                                                             filters={ filters }
-                                                                             onFilters={ handleFilters }
-                                                                             stockOptions={ PRODUCT_STOCK_OPTIONS }
-                                                                             publishOptions={ PUBLISH_OPTIONS }
+                                                                             filters={filters}
+                                                                             onFilters={handleFilters}
+                                                                             stockOptions={PRODUCT_STOCK_OPTIONS}
+                                                                             publishOptions={PUBLISH_OPTIONS}
                                                                       />
 
                                                                       <GridToolbarQuickFilter />
 
                                                                       <Stack
-                                                                             spacing={ 1 }
-                                                                             flexGrow={ 1 }
+                                                                             spacing={1}
+                                                                             flexGrow={1}
                                                                              direction="row"
                                                                              alignItems="center"
                                                                              justifyContent="flex-end"
                                                                       >
-                                                                             { !!selectedRowIds.length && (
+                                                                             {!!selectedRowIds.length && (
                                                                                     <Button
                                                                                            size="small"
                                                                                            color="error"
-                                                                                           startIcon={ <Iconify icon="solar:trash-bin-trash-bold" /> }
-                                                                                           onClick={ confirmRows.onTrue }
+                                                                                           startIcon={<Iconify icon="solar:trash-bin-trash-bold" />}
+                                                                                           onClick={confirmRows.onTrue}
                                                                                     >
-                                                                                           Delete ({ selectedRowIds.length })
+                                                                                           Delete ({selectedRowIds.length})
                                                                                     </Button>
-                                                                             ) }
+                                                                             )}
 
                                                                              <GridToolbarColumnsButton />
                                                                              <GridToolbarFilterButton />
@@ -533,51 +513,48 @@ export default function ProductListView( { toShow } )
                                                                       </Stack>
                                                                </GridToolbarContainer>
 
-                                                               { canReset && (
+                                                               {canReset && (
                                                                       <ProductTableFiltersResult
-                                                                             filters={ filters }
-                                                                             onFilters={ handleFilters }
-                                                                             onResetFilters={ handleResetFilters }
-                                                                             results={ dataFiltered.length }
-                                                                             sx={ { p: 2.5, pt: 0 } }
+                                                                             filters={filters}
+                                                                             onFilters={handleFilters}
+                                                                             onResetFilters={handleResetFilters}
+                                                                             results={dataFiltered.length}
+                                                                             sx={{ p: 2.5, pt: 0 }}
                                                                       />
-                                                               ) }
+                                                               )}
                                                         </>
                                                  ),
                                                  noRowsOverlay: () => <EmptyContent title="No Data" />,
                                                  noResultsOverlay: () => <EmptyContent title="No results found" />,
-                                          } }
-                                          slotProps={ {
+                                          }}
+                                          slotProps={{
                                                  columnsPanel: {
                                                         getTogglableColumns,
                                                  },
-                                          } }
+                                          }}
                                    />
                             </Card>
                      </Box>
 
 
 
-                     <DialogDeleteAnnonces showDialog={ confirmRows } data={ selectedRowIds } />
-                     <DialogDeleteAnnonce showDialog={ confirmOfDel } data={ annonceToDel } />
+                     <DialogDeleteAnnonces showDialog={confirmRows} data={selectedRowIds} />
+                     <DialogDeleteAnnonce showDialog={confirmOfDel} data={annonceToDel} />
               </>
        );
 }
 
 // ----------------------------------------------------------------------
 
-function applyFilter( { inputData, filters } )
-{
+function applyFilter({ inputData, filters }) {
        const { stock, publish } = filters;
 
-       if ( stock.length )
-       {
-              inputData = inputData.filter( ( product ) => stock.includes( product.inventoryType ) );
+       if (stock.length) {
+              inputData = inputData.filter((product) => stock.includes(product.inventoryType));
        }
 
-       if ( publish.length )
-       {
-              inputData = inputData.filter( ( product ) => publish.includes( product.publish ) );
+       if (publish.length) {
+              inputData = inputData.filter((product) => publish.includes(product.publish));
        }
 
        return inputData;
