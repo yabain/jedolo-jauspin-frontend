@@ -4,7 +4,7 @@ import thunk from 'redux-thunk';
 import { combineReducers } from 'redux';
 import { configureStore } from '@reduxjs/toolkit';
 
-import usersReducer from './users/usersReducer';
+import updateUserProfilReducer from './users/updateprofile/reducer';
 import setUsersReducer from './users/setUsersReducer';
 
 // annonces user Import
@@ -15,6 +15,7 @@ import deleteAnnoncesReducer from './annonces/deleteAnnonce/reducer'
 import updateUserAnnoncesReducer from './annonces/updateAnnonce/reducer'
 import updateAnnonceNbrViewReducer from './annonces/updateNbrView/reducer'
 import bannedUserAnnoncesReducer from './annonces/banAnnonce/reducer'
+import uploadAnnonceImageReducer from './annonces/uploadImage/reducer'
 
 //  users Import 
 import disableUsersReducer from './users/disable/reducer';
@@ -59,7 +60,7 @@ import getTopCityReducer from './city/topCity/reducer';
 // Combinaison des réducteurs traditionnels et des slices
 const rootReducer = combineReducers({
 
-       users: usersReducer,
+       updateUserProfil: updateUserProfilReducer,
        setUsers: setUsersReducer,
 
        annonces: annoncesReducer,
@@ -69,6 +70,7 @@ const rootReducer = combineReducers({
        updateUserAnnonce: updateUserAnnoncesReducer,
        bannedUserAnnonce: bannedUserAnnoncesReducer,
        updateAnnonceNbrView: updateAnnonceNbrViewReducer,
+       uploadAnnonceImage: uploadAnnonceImageReducer,
 
        // user 
        disableUsers: disableUsersReducer,

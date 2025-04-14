@@ -17,6 +17,7 @@ import { useLocation } from 'react-router';
 import { handleAddNewReviewToLocalReviewdRef, reviewRef } from 'src/1data/annonces/ref';
 import { useBoolean } from 'src/hooks/use-boolean';
 
+import { useAddComment } from 'src/1VALDO/hook/comment/use-add-comment';
 import { fShortenNumber } from 'src/utils/format-number';
 
 import Iconify from 'src/components/iconify';
@@ -31,6 +32,9 @@ export default function ProductDetailsReview({ annonce, totalRatings, totalRevie
        const location = useLocation();
        const { user } = useAuthContext()
        const [reviews, setReviews] = useState([])
+       // console.log(annonce);
+
+       const [ratingGet, setRatingGet] = useState(annonce.rating)
        const dispatch = useDispatch()
        const { data, isPending, isFulled } = useSelector(state => state.getUsersAnnoncesComments)
        const productGet = useMemo(() => location.state?.annonce || null, [location]);
@@ -192,13 +196,18 @@ export default function ProductDetailsReview({ annonce, totalRatings, totalRevie
 
        }, [addNewReviewToLocalReview])
 
+
+       const handlesucces = () => console.log(data);
+
+       useAddComment(() => handlesucces)
+
        const renderSummary = (
               <Stack spacing={1} alignItems="center" justifyContent="center">
                      <Typography variant="subtitle2">Note</Typography>
 
-                     <Typography variant="h2">{calculerMoyenneEtoiles(ratings) || 0}/5</Typography>
+                     <Typography variant="h2">{ratingGet || 0}/5</Typography>
 
-                     <Rating readOnly value={calculerMoyenneEtoiles(ratings)} precision={0.1} />
+                     <Rating readOnly value={ratingGet} precision={0.1} />
 
                      {/* <Typography variant="caption" sx={ { color: 'text.secondary' } }>
                             ({ fShortenNumber( totalReviews ) } reviews)

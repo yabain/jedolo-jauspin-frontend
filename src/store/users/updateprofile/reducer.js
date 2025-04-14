@@ -22,9 +22,10 @@ const pendingAction = (state) => {
 
 
 
-const resetGetState = (state) => {
+const resetState = (state) => {
        state.isPending = false;
        state.isFulled = false;
+       console.log('resetAfterRequest');
 }
 
 
@@ -38,8 +39,8 @@ const resetGetState = (state) => {
 const fulfilledAction = (state, action) => {
        state.isFulled = true;
        state.isPending = false;
-       console.log('liste des annonce publier recu:', action.payload);
-       state.data = [...action.payload.data];
+       state.data = { ...action.payload.data.data };
+       console.log('profil mis a jour:', action.payload);
 }
 
 
@@ -52,7 +53,8 @@ const fulfilledAction = (state, action) => {
 
 const rejectedAction = (state, action) => {
        state.isPending = false;
-       state.msg = action?.payload?.data ? action.payload.message : action.error.message;
+       state.isError = true
+       state.msg = action?.payload?.data ? action.payload.data.message : action.error.message;
        console.log('Erreur detecter depuis le reducer lors de la recuperation des données:', state.msg);
 }
 
@@ -81,10 +83,10 @@ const requestCases = (builder) => builder
 
 
 
-export const getSlice = createSlice({
-       name: 'getusersAnnonces', extraReducers: requestCases,
-       reducers: { resetAfterRequest: resetGetState },
-       initialState: { data: null, isPending: false, isFulled: false, }
+export const addSlice = createSlice({
+       name: 'updateProfil', extraReducers: requestCases,
+       reducers: { resetAfterRequest: resetState },
+       initialState: { data: {}, isPending: false, isFulled: false, isError: false }
 });
 
 
@@ -95,6 +97,6 @@ export const getSlice = createSlice({
 
 
 
-export default getSlice.reducer
-export const { resetAfterRequest } = getSlice.actions;
-export const request = createAsyncThunk('getusersAnnonces', async (data) => service.request(data))
+export default addSlice.reducer
+export const { resetAfterRequest } = addSlice.actions;
+export const request = createAsyncThunk('updateProfil', async (data) => service.request(data))

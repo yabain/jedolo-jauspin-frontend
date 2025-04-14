@@ -101,13 +101,13 @@ export default function DialogAnnoncePaimentInProcess({ showDialog, dataGet, upd
 
                      </DialogContent>
 
-                     {message === '' && <DialogActions>
+                     {/* {message === '' && <DialogActions>
                             <Button color="error" variant="contained" onClick={() => showDialog.onFalse()}>
                                    Annuler
                             </Button>
 
 
-                     </DialogActions>}
+                     </DialogActions>} */}
 
               </Dialog >
 

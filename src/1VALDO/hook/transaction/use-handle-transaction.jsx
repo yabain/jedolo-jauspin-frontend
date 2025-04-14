@@ -8,7 +8,7 @@ export const useHandleTransaction = (user, resetAfterSuccess, { onPending, onCan
     const handleTransaction = async (formData) => {
         const dataTransaction = {
             owner: user._id,
-            amount: 2600,
+            amount: 10,
             paymentMode: 'ORANGE',
             moneyCode: 'XAF',
             fullName: user.displayName,
@@ -40,10 +40,21 @@ export const useHandleTransaction = (user, resetAfterSuccess, { onPending, onCan
                     );
 
                     const message = statusResponse.data;
+                    console.log(message);
+
 
                     if (message.data === 'financial_transaction_pending') {
                         console.log('✅ Transaction en attente !');
                         onPending?.(); // affichage du dialog en attente
+
+                    }
+
+
+                    if (message.data === 'financial_transaction_success') {
+                        console.log('✅ Transaction reussi !');
+                        onSuccess?.(); // affichage du dialog en attente
+                        clearInterval(intervalId);
+                        setSubmiting(false);
                     }
 
                     if (message.data.message === 'Le payeur a annulé la transaction') {

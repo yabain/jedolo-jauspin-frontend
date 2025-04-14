@@ -3,8 +3,11 @@ import PropTypes from 'prop-types';
 import { useDropzone } from 'react-dropzone';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
+import { useSelector } from 'react-redux';
 import Button from '@mui/material/Button';
 import { alpha } from '@mui/material/styles';
+import { LoadingButton } from '@mui/lab';
+
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Iconify from '../iconify';
@@ -13,7 +16,8 @@ import RejectionFiles from './errors-rejection-files';
 import Image from '../image'; // Assurez-vous que ce composant existe
 import UploadIllustration from '../../assets/illustrations/upload-illustration';
 
-export default function Upload( {
+
+export default function Upload({
        disabled,
        multiple = false,
        error,
@@ -27,40 +31,36 @@ export default function Upload( {
        onRemoveAll,
        sx,
        ...other
-} )
-{
-       const { getRootProps, getInputProps, isDragActive, isDragReject, fileRejections } = useDropzone( {
+}) {
+       const { getRootProps, getInputProps, isDragActive, isDragReject, fileRejections } = useDropzone({
               multiple,
               disabled,
               ...other,
-       } );
+       });
 
        const hasFile = !!file && !multiple;
        const hasFiles = !!files && multiple && !!files.length;
        const hasError = isDragReject || !!error;
 
-       const [ mainFile, setMainFile ] = React.useState( null );
+       const { isUploading } = useSelector((state) => state.uploadAnnonceImage);
 
-       useEffect( () =>
-       {
-              if ( files && files.length > 0 )
-              {
-                     setMainFile( files[ files.length - 1 ] ); // La dernière photo devient la photo principale
+       const [mainFile, setMainFile] = React.useState(null);
+
+       useEffect(() => {
+              if (files && files.length > 0) {
+                     setMainFile(files[files.length - 1]); // La dernière photo devient la photo principale
               }
-       }, [ files ] );
+       }, [files]);
 
-       const handleThumbnailClick = ( clickedFile ) =>
-       {
-              console.log( 'clickedFile', clickedFile );
-              setMainFile( clickedFile );
+       const handleThumbnailClick = (clickedFile) => {
+              console.log('clickedFile', clickedFile);
+              setMainFile(clickedFile);
        };
 
-       const renderMainImage = () =>
-       {
-              if ( !mainFile )
-              {
+       const renderMainImage = () => {
+              if (!mainFile) {
                      return (
-                            <Box sx={ { width: '100%', height: '200px', bgcolor: '#f0f0f0', textAlign: 'center', lineHeight: '200px' } }>
+                            <Box sx={{ width: '100%', height: '200px', bgcolor: '#f0f0f0', textAlign: 'center', lineHeight: '200px' }}>
                                    Aucune photo principale
                             </Box>
                      );
@@ -70,10 +70,10 @@ export default function Upload( {
 
               return (
                      <Image
-                            alt={ mainFile.name || 'Principale' }
-                            src={ typeof mainFile === 'string' ? mainFile : mainFile.preview }
+                            alt={mainFile.name || 'Principale'}
+                            src={typeof mainFile === 'string' ? mainFile : mainFile.preview}
                             ratio="1/1"
-                            sx={ { borderRadius: 1.5 } }
+                            sx={{ borderRadius: 1.5 }}
                      />
               );
        };
@@ -84,46 +84,58 @@ export default function Upload( {
 
        const renderMultiPreview = hasFiles && (
               <>
-                     <Box sx={ { my: 3 } }>
-                            <MultiFilePreview setCover={ handleThumbnailClick } files={ files } thumbnail={ thumbnail } onRemove={ onRemove } />
+                     <Box sx={{ my: 3 }}>
+                            <MultiFilePreview setCover={handleThumbnailClick} files={files} thumbnail={thumbnail} onRemove={onRemove} />
                      </Box>
 
-                     <Stack direction="row" justifyContent="flex-end" spacing={ 1.5 }>
-                            { onRemoveAll && (
-                                   <Button color="inherit" variant="outlined" size="small" onClick={ onRemoveAll }>
+                     <Stack direction="row" justifyContent="flex-end" spacing={1.5}>
+                            {onRemoveAll && (
+                                   <Button color="inherit" variant="outlined" size="small" onClick={onRemoveAll}>
                                           Supprimer tout
                                    </Button>
-                            ) }
+                            )}
 
-                            { onUpload && (
+                            {/* {onUpload && (
                                    <Button
                                           size="small"
                                           variant="contained"
-                                          onClick={ onUpload }
-                                          startIcon={ <Iconify icon="eva:cloud-upload-fill" /> }
+                                          onClick={onUpload}
+                                          startIcon={<Iconify icon="eva:cloud-upload-fill" />}
                                    >
                                           Telecharger
                                    </Button>
-                            ) }
+                            )} */}
+
+                            {onUpload && (
+                                   <LoadingButton
+                                          size="small"
+                                          variant="contained"
+                                          loading={isUploading}
+                                          onClick={onUpload}
+                                          startIcon={<Iconify icon="eva:cloud-upload-fill" />}
+                                   >
+                                          Telecharger
+                                   </LoadingButton>
+                            )}
                      </Stack>
               </>
        );
 
 
        const renderPlaceholder = () => (
-              <Stack spacing={ 3 } alignItems="center" justifyContent="center" flexWrap="wrap">
-                     <UploadIllustration sx={ { width: 1, maxWidth: 200 } } />
-                     <Stack spacing={ 1 } sx={ { textAlign: 'center' } }>
+              <Stack spacing={3} alignItems="center" justifyContent="center" flexWrap="wrap">
+                     <UploadIllustration sx={{ width: 1, maxWidth: 200 }} />
+                     <Stack spacing={1} sx={{ textAlign: 'center' }}>
                             <Typography variant="h6">Drop or Select file</Typography>
-                            <Typography variant="body2" sx={ { color: 'text.secondary' } }>
+                            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                                    Drop files here or click
                                    <Box
                                           component="span"
-                                          sx={ {
+                                          sx={{
                                                  mx: 0.5,
                                                  color: 'primary.main',
                                                  textDecoration: 'underline',
-                                          } }
+                                          }}
                                    >
                                           browse
                                    </Box>
@@ -134,49 +146,49 @@ export default function Upload( {
        );
 
        return (
-              <Box sx={ { width: 1, position: 'relative', ...sx } }>
+              <Box sx={{ width: 1, position: 'relative', ...sx }}>
                      <Box
-                            { ...getRootProps() }
-                            sx={ {
+                            {...getRootProps()}
+                            sx={{
                                    p: 5,
                                    outline: 'none',
                                    borderRadius: 1,
                                    cursor: 'pointer',
                                    overflow: 'hidden',
                                    position: 'relative',
-                                   bgcolor: ( theme ) => alpha( theme.palette.grey[ 500 ], 0.08 ),
-                                   border: ( theme ) => `1px dashed ${ alpha( theme.palette.grey[ 500 ], 0.2 ) }`,
-                                   transition: ( theme ) => theme.transitions.create( [ 'opacity', 'padding' ] ),
+                                   bgcolor: (theme) => alpha(theme.palette.grey[500], 0.08),
+                                   border: (theme) => `1px dashed ${alpha(theme.palette.grey[500], 0.2)}`,
+                                   transition: (theme) => theme.transitions.create(['opacity', 'padding']),
                                    '&:hover': {
                                           opacity: 0.72,
                                    },
-                                   ...( isDragActive && {
+                                   ...(isDragActive && {
                                           opacity: 0.72,
-                                   } ),
-                                   ...( disabled && {
+                                   }),
+                                   ...(disabled && {
                                           opacity: 0.48,
                                           pointerEvents: 'none',
-                                   } ),
-                                   ...( hasError && {
+                                   }),
+                                   ...(hasError && {
                                           color: 'error.main',
                                           borderColor: 'error.main',
-                                          bgcolor: ( theme ) => alpha( theme.palette.error.main, 0.08 ),
-                                   } ),
-                                   ...( hasFile && {
+                                          bgcolor: (theme) => alpha(theme.palette.error.main, 0.08),
+                                   }),
+                                   ...(hasFile && {
                                           padding: '24% 0',
-                                   } ),
-                            } }
+                                   }),
+                            }}
                      >
-                            <input { ...getInputProps() } />
+                            <input {...getInputProps()} />
 
-                            { hasFiles ? renderMainImage() : renderPlaceholder() }
+                            {hasFiles ? renderMainImage() : renderPlaceholder()}
                      </Box>
 
-                     { helperText && helperText }
+                     {helperText && helperText}
 
-                     <RejectionFiles fileRejections={ fileRejections } />
+                     <RejectionFiles fileRejections={fileRejections} />
 
-                     { renderMultiPreview }
+                     {renderMultiPreview}
               </Box>
        );
 }
@@ -184,7 +196,7 @@ export default function Upload( {
 Upload.propTypes = {
        disabled: PropTypes.bool,
        error: PropTypes.bool,
-       file: PropTypes.oneOfType( [ PropTypes.string, PropTypes.object ] ),
+       file: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
        files: PropTypes.array,
        helperText: PropTypes.node,
        multiple: PropTypes.bool,

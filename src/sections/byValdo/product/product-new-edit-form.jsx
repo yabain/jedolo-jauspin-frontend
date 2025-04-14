@@ -310,18 +310,27 @@ export default function ProductNewEditForm({ currentProduct2 }) {
 
                      // console.log( 'datat to add', data );
                      const { phoneNumber, ...data2 } = dataGet;
+                     if (!data2.coverUrl && !currentProduct?.coverUrl) {
+                            enqueueSnackbar('veuillez cliker sur le bouton telecharger pour uploader les imges', { variant: 'error' });
+                            return; // Arrête la soumission si pas de coverUrl
+                     }
+
+
                      // await new Promise((resolve) => setTimeout(resolve, 500));
 
                      // reset();
                      // console.log( 'user du send ', user );
 
                      const object = { ...data2, images: imageTab, }
+                     // const object = { ...data2, images: imageTab, transactionToken: 'MP250414ED828F5E0ED87B7D5BC7' }
+
+
 
                      if (!currentProduct) {
 
                             // dispatch(request(object))
                             setDataToAdd(object)
-                            // showDialog.onTrue()
+                            showDialog.onTrue()
 
                             // console.log( 'email du user', user?.email, 'user email envoyer', object.userEmail );
                             // console.log(user);
@@ -398,6 +407,7 @@ export default function ProductNewEditForm({ currentProduct2 }) {
 
                             // Attend que tous les uploads soient terminés
                             const allUrls = await Promise.all(uploadPromises);
+                            enqueueSnackbar('tous les images on ete uploader avec success');
 
                             console.log('Toutes les images ont été uploadées', allUrls);
 
@@ -412,7 +422,7 @@ export default function ProductNewEditForm({ currentProduct2 }) {
                             throw error;
                      }
               },
-              [] // Aucune dépendance
+              [enqueueSnackbar] // Aucune dépendance
        );
 
 

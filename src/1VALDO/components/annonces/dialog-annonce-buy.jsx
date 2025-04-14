@@ -44,6 +44,9 @@ export default function DialogAnnonceBuy({ showDialog, dataGet, updateDataAfterS
        const handleSuccesTransaction = (token) => {
               const newAnnonce = { ...dataGet, transactionToken: token }
               dispatch(request(newAnnonce))
+              startPaiement.onFalse()
+              showDialog.onFalse()
+              enqueueSnackbar('la transaction a ete effectuer avec success')
        }
 
 

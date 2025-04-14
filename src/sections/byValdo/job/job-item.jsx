@@ -32,7 +32,7 @@ export default function JobItem({ job, onView, onEdit, onDelete }) {
        const { user } = useAuthContext()
        const confirmOfBan = useBoolean();
 
-       const { id, anonnceName, sponsorAnnonce, aLaUne, coverUrl, date, owner, comment } = job;
+       const { id, anonnceName, annonce, coverUrl, createdAt, owner, comment } = job;
        console.log(job);
 
 
@@ -59,7 +59,7 @@ export default function JobItem({ job, onView, onEdit, onDelete }) {
                                                         {anonnceName}
                                                  </Link>
                                           }
-                                          secondary={`signale le : ${fDate(date)}`}
+                                          secondary={`signale le : ${fDate(createdAt)}`}
                                           primaryTypographyProps={{
                                                  typography: 'subtitle1',
                                           }}
@@ -75,16 +75,16 @@ export default function JobItem({ job, onView, onEdit, onDelete }) {
 
                                           direction="column"
                                           justifyContent="center"
-                                          sx={{ color: sponsorAnnonce ? 'primary.main' : 'error.main', typography: 'caption' }}
+                                          sx={{ color: annonce?.sponsored ? 'primary.main' : 'error.main', typography: 'caption' }}
                                    >
 
                                           <Box display="flex" alignItems="center">
-                                                 <Box mr={1}><Label color={aLaUne ? "info" : "error"} >A la Une : {aLaUne ? 'OUI' : 'NON'}</Label></Box>
+                                                 <Box mr={1}><Label color={annonce?.aLaUne ? "info" : "error"} >A la Une : {annonce?.aLaUne ? 'OUI' : 'NON'}</Label></Box>
                                                  <Box display="flex" alignItems="center">
                                                         <Iconify width={16} icon="solar:users-group-rounded-bold" />
 
-                                                        {sponsorAnnonce && `Sponsoriser`}
-                                                        {!sponsorAnnonce && `Non sponsoriser`}
+                                                        {annonce?.sponsored && `Sponsoriser`}
+                                                        {!annonce?.sponsored && `Non sponsoriser`}
                                                  </Box>
 
 

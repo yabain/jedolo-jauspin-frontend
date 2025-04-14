@@ -41,7 +41,7 @@ import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { useGetProducts } from 'src/api/product';
+// import { useGetProducts } from 'src/api/product';
 import { PRODUCT_STOCK_OPTIONS } from 'src/_mock';
 
 import Iconify from 'src/components/iconify';
@@ -95,7 +95,7 @@ export default function ProductListViewUsers({ toShow }) {
        const navigate = useNavigate()
        const settings = useSettingsContext();
        const { enqueueSnackbar } = useSnackbar();
-       const { products, productsLoading } = useGetProducts();
+       // const { products, productsLoading } = useGetProducts();
 
 
 
@@ -220,7 +220,7 @@ export default function ProductListViewUsers({ toShow }) {
                      dispatch(setAdminData(usersAnnonceList))
 
 
-                     dispatch(getList(user?.email))
+                     // dispatch(getList(user?._id))
 
 
               }

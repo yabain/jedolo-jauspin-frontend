@@ -28,7 +28,7 @@ const OPTIONS = [
               linkTo: '/home/user/profile',
        },
        {
-              label: 'Settings',
+              label: 'Compte',
               linkTo: '/home/user/setting',
        },
 ];
@@ -204,7 +204,7 @@ export default function AccountPopover() {
                                    onClick={handleLogout}
                                    sx={{ m: 1, fontWeight: 'fontWeightBold', color: 'error.main' }}
                             >
-                                   Logout
+                                   Deconnexion
                             </MenuItem>
                      </CustomPopover >
               </>

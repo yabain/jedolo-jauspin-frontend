@@ -29,7 +29,7 @@ const TABS = [
        {
               value: 'profile',
               label: 'Profile',
-              icon: <Iconify icon="solar:user-id-bold" width={ 24 } />,
+              icon: <Iconify icon="solar:user-id-bold" width={24} />,
        },
        // {
        //        value: 'followers',
@@ -50,63 +50,68 @@ const TABS = [
 
 // ----------------------------------------------------------------------
 
-export default function UserProfileView()
-{
+export default function UserProfileView() {
        const settings = useSettingsContext();
 
        const { user } = useAuthContext();
 
-       const [ searchFriends, setSearchFriends ] = useState( '' );
+       const [searchFriends, setSearchFriends] = useState('');
 
-       const [ currentTab, setCurrentTab ] = useState( 'profile' );
+       const [currentTab, setCurrentTab] = useState('profile');
 
-       const handleChangeTab = useCallback( ( event, newValue ) =>
-       {
-              setCurrentTab( newValue );
-       }, [] );
+       const handleChangeTab = useCallback((event, newValue) => {
+              setCurrentTab(newValue);
+       }, []);
 
-       const handleSearchFriends = useCallback( ( event ) =>
-       {
-              setSearchFriends( event.target.value );
-       }, [] );
+       const handleSearchFriends = useCallback((event) => {
+              setSearchFriends(event.target.value);
+       }, []);
 
        const location = useLocation();
        const { data } = location.state || {};
 
-       console.log( data, 'dataaaaaaaaaaaaaaaaa' );
+       console.log(data, 'dataaaaaaaaaaaaaaaaa');
+
+       let photoURL;
+
+       if (data !== undefined) {
+              photoURL = data?.owner.photoURL !== '' ? data.owner.photoURL : undefined;
+       } else {
+              photoURL = user?.photoURL;
+       }
 
        const dataget = {
 
-              name: data !== undefined ? data.userEmail || 0 : user.displayName,
-              photoURL: data !== undefined ? '' || 0 : user.photoURL,
-              role: data !== undefined ? 'utilisateur' || 0 : user?.role,
+              name: data !== undefined ? data?.owner.displayName || 0 : user?.displayName,
+              photoURL,
+              role: data !== undefined ? data?.owner.role || 0 : user?.role,
        }
 
        return (
-              <Container maxWidth={ settings.themeStretch ? false : 'xl' }>
+              <Container maxWidth={settings.themeStretch ? false : 'xl'}>
                      <CustomBreadcrumbs
                             heading="Profile"
-                            links={ [
+                            links={[
                                    { name: '', href: paths.dashboard.root },
-                                   //    { name: 'User', href: paths.dashboard.user.root },
+                                   //    { name: 'User', href: paths.dashboard.user?.root },
                                    //    { name: user?.displayName },
-                            ] }
-                            sx={ {
+                            ]}
+                            sx={{
                                    mb: { xs: 3, md: 5 },
-                            } }
+                            }}
                      />
 
                      <Card
-                            sx={ {
+                            sx={{
                                    mb: 3,
                                    height: 290,
-                            } }
+                            }}
                      >
                             <ProfileCover
-                                   role={ dataget.role }
-                                   name={ dataget?.name }
-                                   avatarUrl={ dataget?.photoURL }
-                                   coverUrl={ _userAbout.coverUrl }
+                                   role={dataget.role}
+                                   name={dataget?.name}
+                                   avatarUrl={dataget?.photoURL}
+                                   coverUrl={_userAbout.coverUrl}
                             />
 
                             {/* <Tabs
@@ -133,10 +138,10 @@ export default function UserProfileView()
                             </Tabs> */}
                      </Card>
 
-                     <ProfileHome posts={ _userFeeds } />
+                     <ProfileHome posts={_userFeeds} />
 
 
-                     {/* { currentTab === 'profile' && <ProfileHome info={ _userAbout } posts={ _userFeeds } /> } */ }
+                     {/* { currentTab === 'profile' && <ProfileHome info={ _userAbout } posts={ _userFeeds } /> } */}
 
                      {/* { currentTab === 'followers' && <ProfileFollowers followers={ _userFollowers } /> }
 

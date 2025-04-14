@@ -250,7 +250,7 @@ export default function ProductListViewUsers({ toShow }) {
 
 
 
-                     // dispatch(request({ type: 'admin' }))
+                     dispatch(request({ type: 'admin' }))
 
                      console.log('init des useeerlist set ', usersAnnonceList);
 
