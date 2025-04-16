@@ -8,7 +8,7 @@ export const useHandleTransaction = (user, resetAfterSuccess, { onPending, onCan
     const handleTransaction = async (formData) => {
         const dataTransaction = {
             owner: user._id,
-            amount: 10,
+            amount: 2600,
             paymentMode: 'ORANGE',
             moneyCode: 'XAF',
             fullName: user.displayName,
