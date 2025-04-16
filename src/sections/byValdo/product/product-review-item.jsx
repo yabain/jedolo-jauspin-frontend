@@ -19,87 +19,87 @@ import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 
-export default function ProductReviewItem( { review } )
-{
+export default function ProductReviewItem({ review }) {
 
 
-       dayjs.extend( relativeTime );
-       dayjs.locale( 'fr' );
+       dayjs.extend(relativeTime);
+       dayjs.locale('fr');
 
-       const { name, rating, comment, postedAt, avatarUrl, attachments, isPurchased } = review;
+       const { rating, comment, createdAt, owner, attachments, isPurchased } = review;
+       // console.log('commentaire get', review);
 
        const renderInfo = (
               <Stack
-                     spacing={ 2 }
+                     spacing={2}
                      alignItems="center"
-                     direction={ {
+                     direction={{
                             xs: 'row',
                             md: 'column',
-                     } }
-                     sx={ {
+                     }}
+                     sx={{
                             width: { md: 240 },
                             textAlign: { md: 'center' },
-                     } }
+                     }}
               >
                      <Avatar
-                            src={ avatarUrl }
-                            sx={ {
+                            src={owner.photoURL}
+                            sx={{
                                    width: { xs: 48, md: 64 },
                                    height: { xs: 48, md: 64 },
-                            } }
+                            }}
                      />
 
                      <ListItemText
-                            primary={ name }
-                            // secondary={ fDate( postedAt ) }
-                            primaryTypographyProps={ {
+                            primary={owner.lastName}
+                            // secondary={ fDate( createdAt ) }
+                            primaryTypographyProps={{
                                    noWrap: true,
                                    typography: 'subtitle2',
                                    mb: 0.5,
-                            } }
-                            secondaryTypographyProps={ {
+                            }}
+                            secondaryTypographyProps={{
                                    noWrap: true,
                                    typography: 'caption',
                                    component: 'span',
-                            } }
+                            }}
                      />
               </Stack>
        );
 
        const renderContent = (
-              <Stack spacing={ 1 } flexGrow={ 1 }>
-                     <Rating size="small" value={ rating } precision={ 0.1 } readOnly />
+              <Stack spacing={1} flexGrow={1}>
+                     <Rating size="small" value={rating} precision={0.1} readOnly />
 
-                     { isPurchased && (
+                     {isPurchased && (
                             <Stack
                                    direction="row"
                                    alignItems="center"
-                                   sx={ {
+                                   sx={{
                                           color: 'success.main',
                                           typography: 'caption',
-                                   } }
+                                   }}
                             >
-                                   <Iconify icon="ic:round-verified" width={ 16 } sx={ { mr: 0.5 } } />
+                                   <Iconify icon="ic:round-verified" width={16} sx={{ mr: 0.5 }} />
                                    Verified purchase
                             </Stack>
-                     ) }
+                     )}
 
-                     <Typography variant="body2">{ comment }</Typography>
+                     <Typography variant="body2">{comment}</Typography>
 
 
                      <ListItemText
                             // primary={ name }
-                            secondary={ dayjs( postedAt ).fromNow() }
-                            primaryTypographyProps={ {
+                            secondary={dayjs(createdAt).fromNow()}
+                            primaryTypographyProps={{
                                    noWrap: true,
                                    typography: 'subtitle2',
                                    mb: 0.5,
-                            } }
-                            secondaryTypographyProps={ {
+                            }}
+                            secondaryTypographyProps={{
                                    noWrap: true,
                                    typography: 'caption',
                                    component: 'span',
-                            } }
+                            }}
                      />
 
 
@@ -108,16 +108,16 @@ export default function ProductReviewItem( { review } )
 
        return (
               <Stack
-                     spacing={ 2 }
-                     direction={ {
+                     spacing={2}
+                     direction={{
                             xs: 'column',
                             md: 'row',
-                     } }
-                     sx={ { mt: 5, px: { xs: 2.5, md: 0 } } }
+                     }}
+                     sx={{ mt: 5, px: { xs: 2.5, md: 0 } }}
               >
-                     { renderInfo }
+                     {renderInfo}
 
-                     { renderContent }
+                     {renderContent}
               </Stack>
        );
 }

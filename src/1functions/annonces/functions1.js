@@ -98,9 +98,12 @@ export function updateObjectFromTabObjetc(annonces, updatedAnnonce) {
 export function deleteAnnonceInArray(annonces, updatedAnnonce) {
 
 
+       console.log('recu', annonces.length);
        const index = annonces.findIndex(annonce => String(annonce._id) === String(updatedAnnonce._id));
        if (index === -1) { console.error('Annonce non trouvée dans le tableau'); return annonces; }
        const newAnnonces = [...annonces.slice(0, index), ...annonces.slice(index + 1),];
+       console.log('final renvoye', newAnnonces.length);
+
        return newAnnonces;
 
 }
@@ -266,6 +269,6 @@ export function calculerMoyenneEtoiles(data2) {
 
 
        const moyenne = totalPoints / totalVotes;
-       console.log('pts mm', moyenne.toFixed(2));
+       // console.log('pts mm', moyenne.toFixed(2));
        return moyenne.toFixed(2); // arrondi à 2 décimales
 }

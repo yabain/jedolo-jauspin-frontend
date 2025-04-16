@@ -2,6 +2,8 @@
 import { Box } from '@mui/system';
 import PropTypes from 'prop-types';
 import orderBy from 'lodash/orderBy';
+import { Skeleton } from '@mui/material';
+import { useSelector } from 'react-redux';
 import isEqual from 'lodash/isEqual';
 import { useState, useCallback, useEffect } from 'react';
 
@@ -17,8 +19,7 @@ import { RouterLink } from 'src/routes/components';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { countries } from 'src/assets/data';
-import
-{
+import {
        _jobs,
        _roles,
        JOB_SORT_OPTIONS,
@@ -50,90 +51,90 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function JobListView( { dataGet } )
-{
+export default function JobListView({ dataGet }) {
 
 
-       console.log( dataGet );
+       console.log(dataGet);
        const settings = useSettingsContext();
 
        const openFilters = useBoolean();
        const { user } = useAuthContext();
        const navigate = useNavigate()
 
-       const [ sortBy, setSortBy ] = useState( 'latest' );
-       const [ data, setData ] = useState( dataGet );
-       const [ selectedJob, setSelectedJob ] = useState( null );
-       const [ search, setSearch ] = useState( {
+       const [sortBy, setSortBy] = useState('latest');
+       const [data, setData] = useState(dataGet);
+       const [selectedJob, setSelectedJob] = useState(null);
+       const [search, setSearch] = useState({
               query: '',
               results: [],
-       } );
+       });
 
-       const [ filters, setFilters ] = useState( defaultFilters );
+       const [filters, setFilters] = useState(defaultFilters);
+       const { isFulled, isPending } = useSelector((state) => state.getUserAnnonceSignals);
+       const isPendingSignals = useSelector((state) => state.getUsersAnnonceSignals.isPending);
 
-       const dataFiltered = applyFilter( {
+       useEffect(() => {
+              console.log('valeur des pending', isPending);
+
+       }, [isPending])
+
+       const dataFiltered = applyFilter({
               inputData: data,
               filters,
               sortBy,
               query: search.query, // <== ajout ici
 
-       } );
+       });
 
-       const canReset = !isEqual( defaultFilters, filters );
+       const canReset = !isEqual(defaultFilters, filters);
 
        const notFound = !dataFiltered.length && canReset;
 
-       const handleFilters = useCallback( ( name, value ) =>
-       {
-              setFilters( ( prevState ) => ( {
+       const handleFilters = useCallback((name, value) => {
+              setFilters((prevState) => ({
                      ...prevState,
-                     [ name ]: value,
-              } ) );
-       }, [] );
+                     [name]: value,
+              }));
+       }, []);
 
-       const handleResetFilters = useCallback( () =>
-       {
-              setFilters( defaultFilters );
-       }, [] );
+       const handleResetFilters = useCallback(() => {
+              setFilters(defaultFilters);
+       }, []);
 
-       const handleSortBy = useCallback( ( newValue ) =>
-       {
-              setSortBy( newValue );
-       }, [] );
+       const handleSortBy = useCallback((newValue) => {
+              setSortBy(newValue);
+       }, []);
 
 
 
 
        const handleSearch = useCallback(
-              ( inputValue ) =>
-              {
-                     setSearch( ( prevState ) => ( {
+              (inputValue) => {
+                     setSearch((prevState) => ({
                             ...prevState,
                             query: inputValue,
-                     } ) );
+                     }));
 
-                     if ( inputValue )
-                     {
+                     if (inputValue) {
                             const results = data.filter(
-                                   ( job ) =>
+                                   (job) =>
                                           job.anonnceName &&
-                                          job.anonnceName.toLowerCase().includes( inputValue.toLowerCase() )
+                                          job.anonnceName.toLowerCase().includes(inputValue.toLowerCase())
                             );
 
-                            setSearch( ( prevState ) => ( {
+                            setSearch((prevState) => ({
                                    ...prevState,
                                    results,
-                            } ) );
-                     } else
-                     {
-                            setSearch( ( prevState ) => ( {
+                            }));
+                     } else {
+                            setSearch((prevState) => ({
                                    ...prevState,
                                    results: [],
-                            } ) );
-                            setSelectedJob( null ); // Réinitialiser la sélection si la recherche est vide
+                            }));
+                            setSelectedJob(null); // Réinitialiser la sélection si la recherche est vide
                      }
               },
-              [ data ]
+              [data]
        );
 
        // const handleSearch = useCallback( ( inputValue ) =>
@@ -148,22 +149,22 @@ export default function JobListView( { dataGet } )
 
 
 
-       useEffect( () => { setData( dataGet ) }, [ dataGet ] )
+       useEffect(() => { setData(dataGet) }, [dataGet])
 
 
        const renderFilters = (
               <Stack
-                     spacing={ 3 }
+                     spacing={3}
                      justifyContent="space-between"
-                     alignItems={ { xs: 'flex-end', sm: 'center' } }
-                     direction={ { xs: 'column', sm: 'row' } }
+                     alignItems={{ xs: 'flex-end', sm: 'center' }}
+                     direction={{ xs: 'column', sm: 'row' }}
               >
                      <JobSearch
-                            query={ search.query }
-                            results={ search.results }
-                            onSearch={ handleSearch }
-                            selectedJob={ selectedJob }
-                            onSelectJob={ setSelectedJob }
+                            query={search.query}
+                            results={search.results}
+                            onSearch={handleSearch}
+                            selectedJob={selectedJob}
+                            onSelectJob={setSelectedJob}
 
                      // hrefItem={ ( id ) => paths.dashboard.job.details( id ) }
                      />
@@ -194,60 +195,61 @@ export default function JobListView( { dataGet } )
 
        const renderResults = (
               <JobFiltersResult
-                     filters={ filters }
-                     onResetFilters={ handleResetFilters }
+                     filters={filters}
+                     onResetFilters={handleResetFilters}
                      //
-                     canReset={ canReset }
-                     onFilters={ handleFilters }
+                     canReset={canReset}
+                     onFilters={handleFilters}
                      //
-                     results={ dataFiltered.length }
+                     results={dataFiltered.length}
               />
        );
 
        return (
               <Box >
                      {
-                            user?.role === "user" && ( <CustomBreadcrumbs
+                            user?.role === "user" && (<CustomBreadcrumbs
                                    heading="Annonces Signaler"
-                                   links={ [
+                                   links={[
                                           {
                                                  name: '',
                                                  href: paths.dashboard.product.root,
                                           }
-                                   ] }
+                                   ]}
                                    action={
                                           <Button
                                                  // component={ RouterLink }
                                                  // href={ paths.dashboard.product.new }
-                                                 onClick={ () => navigate( '/home/annonces/new' ) }
+                                                 onClick={() => navigate('/home/annonces/new')}
 
                                                  variant="contained"
-                                                 startIcon={ <Iconify icon="mingcute:add-line" /> }
+                                                 startIcon={<Iconify icon="mingcute:add-line" />}
                                           >
                                                  Nouvel annonce
                                           </Button>
                                    }
-                                   sx={ {
+                                   sx={{
                                           mb: {
                                                  xs: 3,
                                                  md: 5,
                                           },
-                                   } }
-                            /> ) }
+                                   }}
+                            />)}
                      <Stack
-                            spacing={ 2.5 }
-                            sx={ {
+                            spacing={2.5}
+                            sx={{
                                    mb: { xs: 1, md: 1 },
-                            } }
+                            }}
                      >
-                            { renderFilters }
+                            {renderFilters}
 
-                            { canReset && renderResults }
-                            { dataFiltered.length === 0 && <EmptyContent filled title="Aucune annonce signaler" sx={ { py: 10 } } /> }
+                            {canReset && renderResults}
+                            {isFulled && dataFiltered.length === 0 && <EmptyContent filled title="Aucune annonce signaler" sx={{ py: 10 }} />}
+                            {isPending || isPendingSignals && <Skeleton sx={{ height: '600px', py: 10 }} />}
                      </Stack>
 
 
-                     <JobList jobs={ dataFiltered } />
+                     <JobList jobs={dataFiltered} />
               </Box>
        );
 }
@@ -306,63 +308,53 @@ export default function JobListView( { dataGet } )
 // };
 
 
-const applyFilter = ( { inputData, filters, sortBy, query } ) =>
-{
+const applyFilter = ({ inputData, filters, sortBy, query }) => {
        const { employmentTypes, experience, roles, locations, benefits } = filters;
 
        // 🔍 Filtrage par texte (recherche)
-       if ( query )
-       {
-              inputData = inputData.filter( ( job ) =>
-                     job.anonnceName?.toLowerCase().includes( query.toLowerCase() )
+       if (query) {
+              inputData = inputData.filter((job) =>
+                     job.anonnceName?.toLowerCase().includes(query.toLowerCase())
               );
        }
 
        // Tri
-       if ( sortBy === 'latest' )
-       {
-              inputData = orderBy( inputData, [ 'createdAt' ], [ 'desc' ] );
+       if (sortBy === 'latest') {
+              inputData = orderBy(inputData, ['createdAt'], ['desc']);
        }
 
-       if ( sortBy === 'oldest' )
-       {
-              inputData = orderBy( inputData, [ 'createdAt' ], [ 'asc' ] );
+       if (sortBy === 'oldest') {
+              inputData = orderBy(inputData, ['createdAt'], ['asc']);
        }
 
-       if ( sortBy === 'popular' )
-       {
-              inputData = orderBy( inputData, [ 'totalViews' ], [ 'desc' ] );
+       if (sortBy === 'popular') {
+              inputData = orderBy(inputData, ['totalViews'], ['desc']);
        }
 
        // Filtres
-       if ( employmentTypes.length )
-       {
-              inputData = inputData.filter( ( job ) =>
-                     job.employmentTypes.some( ( item ) => employmentTypes.includes( item ) )
+       if (employmentTypes.length) {
+              inputData = inputData.filter((job) =>
+                     job.employmentTypes.some((item) => employmentTypes.includes(item))
               );
        }
 
-       if ( experience !== 'all' )
-       {
-              inputData = inputData.filter( ( job ) => job.experience === experience );
+       if (experience !== 'all') {
+              inputData = inputData.filter((job) => job.experience === experience);
        }
 
-       if ( roles.length )
-       {
-              inputData = inputData.filter( ( job ) => roles.includes( job.role ) );
+       if (roles.length) {
+              inputData = inputData.filter((job) => roles.includes(job.role));
        }
 
-       if ( locations.length )
-       {
-              inputData = inputData.filter( ( job ) =>
-                     job.locations.some( ( item ) => locations.includes( item ) )
+       if (locations.length) {
+              inputData = inputData.filter((job) =>
+                     job.locations.some((item) => locations.includes(item))
               );
        }
 
-       if ( benefits.length )
-       {
-              inputData = inputData.filter( ( job ) =>
-                     job.benefits.some( ( item ) => benefits.includes( item ) )
+       if (benefits.length) {
+              inputData = inputData.filter((job) =>
+                     job.benefits.some((item) => benefits.includes(item))
               );
        }
 
@@ -373,6 +365,6 @@ const applyFilter = ( { inputData, filters, sortBy, query } ) =>
 
 JobListView.propTypes = {
 
-       dataGet: PropTypes.arrayOf( PropTypes.object )
+       dataGet: PropTypes.array
 
 };

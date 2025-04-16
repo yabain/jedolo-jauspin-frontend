@@ -16,22 +16,20 @@ import JobItem from './job-item';
 
 // ----------------------------------------------------------------------
 
-export function RenderCellPrice( { params } )
-{
+export function RenderCellPrice({ params }) {
        return <>  <Label variant="soft" color='success' >
-              { params.row.rating || 0 }  /5
+              {params.row.rating || 0}  /5
        </Label></>;
 }
 
 
 
 
-export function RenderCellSponsored( { params } )
-{
+export function RenderCellSponsored({ params }) {
 
        return (
-              <Label variant="soft" color={ params.row.sponsored && params.row.sponsored !== "" ? "info" : "error" }>
-                     { params.row.sponsored && params.row.sponsored !== "" ? params.row.sponsored : "Non sponsorisé" }
+              <Label variant="soft" color={params.row.sponsored && params.row.sponsored !== "" ? "info" : "error"}>
+                     {params.row.sponsored && params.row.sponsored !== "" ? params.row.sponsored : "Non sponsorisé"}
               </Label>
        );
 }
@@ -39,107 +37,100 @@ export function RenderCellSponsored( { params } )
 
 
 
-export function RenderCellALaUne( { params } )
-{
-       return <>  <Label variant="soft" color={ ( params.row.aLaUne ? 'success' : 'error' ) } >
-              { params.row.aLaUne ? 'oui' : 'non' }
+export function RenderCellALaUne({ params }) {
+       return <>  <Label variant="soft" color={(params.row.aLaUne ? 'success' : 'error')} >
+              {params.row.aLaUne ? 'oui' : 'non'}
        </Label></>;
 }
 
 RenderCellPrice.propTypes = {
-       params: PropTypes.shape( {
+       params: PropTypes.shape({
               row: PropTypes.object,
-       } ),
+       }),
 };
 
-export function RenderCellPublish( { params } )
-{
+export function RenderCellPublish({ params }) {
        let statut
-       if ( params.row.publish === 'published' ) statut = 'Publié'
-       if ( params.row.publish !== 'published' ) statut = 'banit'
+       if (params.row.publish === 'published') statut = 'Publié'
+       if (params.row.publish !== 'published') statut = 'banit'
        return (
-              <Label variant="soft" color={ ( params.row.publish === 'published' && 'info' ) || 'error' }>
-                     { statut }
+              <Label variant="soft" color={(params.row.publish === 'published' && 'info') || 'error'}>
+                     {statut}
               </Label>
        );
 }
 
 RenderCellPublish.propTypes = {
-       params: PropTypes.shape( {
+       params: PropTypes.shape({
               row: PropTypes.object,
-       } ),
+       }),
 };
 
-export function RenderCellCreatedAt( { params } )
-{
+export function RenderCellCreatedAt({ params }) {
        return (
               <ListItemText
-                     primary={ fDate( params.row.createdAt ) }
-                     secondary={ fTime( params.row.createdAt ) }
-                     primaryTypographyProps={ { typography: 'body2', noWrap: true } }
-                     secondaryTypographyProps={ {
+                     primary={fDate(params.row.createdAt)}
+                     secondary={fTime(params.row.createdAt)}
+                     primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+                     secondaryTypographyProps={{
                             mt: 0.5,
                             component: 'span',
                             typography: 'caption',
-                     } }
+                     }}
               />
        );
 }
 
-export function RenderCellNbrComment( { params } )
-{
+export function RenderCellNbrComment({ params }) {
        return (
               <Label variant="soft" color='success' >
-                     { params.row.nbrComment || 0 } commentaires
+                     {params.row.nbrComment || 0} commentaires
               </Label>
        );
 }
 
 RenderCellCreatedAt.propTypes = {
-       params: PropTypes.shape( {
+       params: PropTypes.shape({
               row: PropTypes.object,
-       } ),
+       }),
 };
 
-export function RenderCellStock( { params } )
-{
+export function RenderCellStock({ params }) {
        return (
               <Label variant="soft" color='success' >
-                     { params.row.nbrView || 0 } vues
+                     {params.row.nbrView || 0} vues
               </Label>
        );
 }
 
 RenderCellStock.propTypes = {
-       params: PropTypes.shape( {
+       params: PropTypes.shape({
               row: PropTypes.object,
-       } ),
+       }),
 };
 
-export function RenderCellProductXs( { params, mettreALaUne, Sponsoriser, onEdit, onDelete, clickFromProfile } )
-{
+export function RenderCellProductXs({ params, mettreALaUne, Sponsoriser, onEdit, onDelete, clickFromProfile }) {
        return (
-              <Stack sx={ { py: 2, width: 1 } }>
+              <Stack sx={{ py: 2, width: 1 }}>
 
-                     <JobItem clickFromProfile={ clickFromProfile } job={ params.row } Sponsoriser={ Sponsoriser } mettreALaUne={ mettreALaUne } onEdit={ onEdit } onDelete={ onDelete } />
+                     <JobItem clickFromProfile={clickFromProfile} job={params.row} Sponsoriser={Sponsoriser} mettreALaUne={mettreALaUne} onEdit={onEdit} onDelete={onDelete} />
 
 
               </Stack>
        );
 }
 
-export function RenderCellProduct( { params } )
-{
-       console.log( params.row.coverUrl );
+export function RenderCellProduct({ params }) {
+       // console.log( params.row.coverUrl );
 
        return (
-              <Stack direction="row" alignItems="center" sx={ { py: 2, width: 1 } } >
+              <Stack direction="row" alignItems="center" sx={{ py: 2, width: 1 }} >
 
                      <Avatar
-                            alt={ params.row.name }
-                            src={ params.row.coverUrl }
+                            alt={params.row.name}
+                            src={params.row.coverUrl}
                             variant="rounded"
-                            sx={ { width: 64, height: 64, mr: 2 } }
+                            sx={{ width: 64, height: 64, mr: 2 }}
                      />
 
                      <ListItemText
@@ -149,19 +140,19 @@ export function RenderCellProduct( { params } )
                                           noWrap
                                           color="inherit"
                                           variant="subtitle2"
-                                          onClick={ params.row.onViewRow }
-                                          sx={ { cursor: 'pointer' } }
+                                          onClick={params.row.onViewRow}
+                                          sx={{ cursor: 'pointer' }}
                                    >
-                                          { params.row.name }
+                                          {params.row.name}
                                    </Link>
                             }
                             secondary={
                                    // <Box component="div" sx={ { typography: 'body2', color: 'text.disabled' } }>
                                    //        { params.row.category }
                                    // </Box>
-                                   RenderCellCreatedAt( { params } )
+                                   RenderCellCreatedAt({ params })
                             }
-                            sx={ { display: 'flex', flexDirection: 'column' } }
+                            sx={{ display: 'flex', flexDirection: 'column' }}
                      />
               </Stack>
 
@@ -170,31 +161,31 @@ export function RenderCellProduct( { params } )
 }
 
 RenderCellALaUne.propTypes = {
-       params: PropTypes.shape( {
+       params: PropTypes.shape({
               row: PropTypes.object,
-       } ),
+       }),
 };
 RenderCellSponsored.propTypes = {
-       params: PropTypes.shape( {
+       params: PropTypes.shape({
               row: PropTypes.object,
-       } ),
+       }),
 };
 
 RenderCellNbrComment.propTypes = {
-       params: PropTypes.shape( {
+       params: PropTypes.shape({
               row: PropTypes.object,
-       } ),
+       }),
 };
 RenderCellProduct.propTypes = {
-       params: PropTypes.shape( {
+       params: PropTypes.shape({
               row: PropTypes.object,
-       } ),
+       }),
 };
 
 RenderCellProductXs.propTypes = {
-       params: PropTypes.shape( {
+       params: PropTypes.shape({
               row: PropTypes.object,
-       } ),
+       }),
 
        mettreALaUne: PropTypes.func,
        Sponsoriser: PropTypes.func,

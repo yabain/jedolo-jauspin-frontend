@@ -48,7 +48,7 @@ import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { useGetProducts } from 'src/api/product';
+// import { useGetProducts } from 'src/api/product';
 import { PRODUCT_STOCK_OPTIONS } from 'src/_mock';
 
 import Iconify from 'src/components/iconify';
@@ -124,6 +124,7 @@ export default function ProductListViewUsers({ toShow }) {
        const buySponsor = useBoolean();
        const startPaimentSponsor = useBoolean();
        const startPaimentALaUne = useBoolean();
+       const load = true
        const aLaUneBuy = useBoolean();
        const [annonceClick, setAnnonceClick] = useState({});
        const [annonceToSponsor, setAnnonceToSponsor] = useState({});
@@ -295,6 +296,8 @@ export default function ProductListViewUsers({ toShow }) {
 
        useEffect(() => {
               setTableData(annonceFromStore || []);
+              console.log('changement local deteter et mis ajourrrrrrrrrrrrrrr');
+
 
        }, [annonceFromStore]);
 
@@ -343,7 +346,9 @@ export default function ProductListViewUsers({ toShow }) {
        }, [dataIsSet, dispatch, annonceFromStore]);
 
 
-       const afterDelete = (deletedAnnonce) => { dispatch(setData(annoncesFunction.deleteAnnonceInArray(annonceFromStore, deletedAnnonce))) }
+       const afterDelete = (deletedAnnonce) => {
+              dispatch(setAdminData(annoncesFunction.deleteAnnonceInArray(annonceFromStore, deletedAnnonce)));;
+       }
 
 
 
@@ -872,14 +877,17 @@ export default function ProductListViewUsers({ toShow }) {
                                                                )}
                                                         </>
                                                  ),
+
                                                  noRowsOverlay: () => <EmptyContent title="No Data" />,
                                                  noResultsOverlay: () => <EmptyContent title="No results found" />,
+
                                           }}
                                           slotProps={{
                                                  columnsPanel: {
                                                         getTogglableColumns,
                                                  },
                                           }}
+
                                    />
                             </Card>
                      </Box >

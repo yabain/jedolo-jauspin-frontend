@@ -25,6 +25,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
 import { useUpdate } from 'src/1VALDO/hook/annonce/useUpdate';
 import { calculerMoyenneEtoiles, updateRatingsWithNewComment, updateRatingsWithNewCommentWhithoutState } from 'src/1functions/annonces';
+import { useAddComment } from 'src/1VALDO/hook/comment/use-add-comment';
 
 // ----------------------------------------------------------------------
 
@@ -94,29 +95,37 @@ export default function ProductReviewNewForm({ rating, annonce, annonceId, addDa
 
        });
 
+       console.log(typeof (addData), 'function get');
+
        const onCancel = useCallback(() => {
               onClose();
               reset();
        }, [onClose, reset]);
 
 
+       const addLocalcomment = (dataGet) => {
+              if (addData) addData(dataGet.data)
+              console.log('local data add after requete ', dataGet.data);
+
+       }
 
 
+       useAddComment(addLocalcomment)
 
        useEffect(() => {
               if (isFulled && !isPending) {
                      dispatch(resetAfterRequest())
-                     if (addData) addData(dataAdded)
+                     // if (addData) addData(dataAdded)
                      reset();
                      onClose();
                      enqueueSnackbar("Votre avis a étét ajouté avec success !")
                      const note = calculerMoyenneEtoiles(ratingToAdd)
 
-                     console.log(locaComment, 'valeur init de nbrcomment');
+                     // console.log(locaComment, 'valeur init de nbrcomment');
                      const nbrComment = locaComment !== undefined ? locaComment + 1 : 0
                      setLocalComment(nbrComment)
 
-                     console.log(note, nbrComment);
+                     // console.log(note, nbrComment);
 
                      // dispatch(updateAnnonce({ ...annonce, nbrComment, rating: note }))
               }

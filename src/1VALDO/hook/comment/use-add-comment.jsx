@@ -34,7 +34,8 @@ export function useAddComment(handleAddSuccess) {
        // useEffect( () => { if ( isFulled && !isPending && isActive ) handleEnque(); }, [ isFulled, isPending, isActive, handleEnque ] );
        useEffect(() => {
               if (isFulled && !isPending) {
-                     handleAddSuccess(data); console.log('commentaire ajouter depuiiiiiiiiiiii');
+                     handleAddSuccess(data);
+                     // console.log('commentaire ajouter depuiiiiiiiiiiii', data);
                      setIsLoad(true)
               }
        }, [isFulled, isPending, handleAddSuccess, data]);

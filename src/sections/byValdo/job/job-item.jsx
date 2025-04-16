@@ -24,6 +24,11 @@ import { useAuthContext } from 'src/auth/hooks';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useBoolean } from 'src/hooks/use-boolean';
 import { Button } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import { request, resetAfterRequest } from 'src/store/annonces/banAnnonce/reducer';
+import { useEffect } from 'react';
+import { useSnackbar } from 'notistack';
+import { LoadingButton } from '@mui/lab';
 
 // ----------------------------------------------------------------------
 
@@ -32,22 +37,53 @@ export default function JobItem({ job, onView, onEdit, onDelete }) {
        const { user } = useAuthContext()
        const confirmOfBan = useBoolean();
 
-       const { id, anonnceName, annonce, coverUrl, createdAt, owner, comment } = job;
+       const { id, annonce, createdAt, owner, comment } = job;
        console.log(job);
+       const dispatch = useDispatch()
 
+
+       const { enqueueSnackbar } = useSnackbar();
+
+       const banAnnouncement = () => {
+              dispatch(request({ ...annonce }))
+              console.log(annonce);
+
+       }
+
+
+       const isFulledBan = useSelector((state) => state.bannedUserAnnonce.isFulled);
+       const isPendingBan = useSelector((state) => state.bannedUserAnnonce.isPending);
+
+       useEffect(() => {
+
+
+
+              if (!isPendingBan && isFulledBan) {
+                     confirmOfBan.onFalse();
+
+
+                     dispatch(resetAfterRequest())
+
+
+                     enqueueSnackbar('Annonce Banni avec succes!');
+                     confirmOfBan.onFalse();
+
+              }
+
+       }, [confirmOfBan, enqueueSnackbar, dispatch, isFulledBan, isPendingBan]);
 
        return (
               <>
                      <Card>
-                            {user.role === 'admin' && (<IconButton onClick={popover.onOpen} sx={{ position: 'absolute', top: 8, right: 8 }}>
+                            {user?.role === 'admin' && (<IconButton onClick={popover.onOpen} sx={{ position: 'absolute', top: 8, right: 8 }}>
 
                                    <Iconify icon="eva:more-vertical-fill" />
                             </IconButton>)}
 
                             <Stack sx={{ p: 3, pb: 2 }}>
                                    <Avatar
-                                          alt={coverUrl}
-                                          src={coverUrl}
+                                          alt={annonce?.coverUrl}
+                                          src={annonce?.coverUrl}
                                           variant="rounded"
                                           sx={{ width: 132, height: 132, mb: 2 }}
                                    />
@@ -56,7 +92,7 @@ export default function JobItem({ job, onView, onEdit, onDelete }) {
                                           sx={{ mb: 1 }}
                                           primary={
                                                  <Link component={RouterLink} href={paths.dashboard.job.details(id)} color="inherit">
-                                                        {anonnceName}
+                                                        {annonce?.name}
                                                  </Link>
                                           }
                                           secondary={`signale le : ${fDate(createdAt)}`}
@@ -191,6 +227,7 @@ export default function JobItem({ job, onView, onEdit, onDelete }) {
 
 
 
+
                      <ConfirmDialog
                             open={confirmOfBan.value}
                             onClose={confirmOfBan.onFalse}
@@ -202,17 +239,17 @@ export default function JobItem({ job, onView, onEdit, onDelete }) {
                                    </>
                             }
                             action={
-                                   <Button
+                                   <LoadingButton
                                           variant="contained"
                                           color="error"
                                           onClick={() => {
-                                                 // banAnnouncement();
-
-                                                 confirmOfBan.onFalse();
+                                                 banAnnouncement();
                                           }}
+                                          loading={isPendingBan}
                                    >
                                           Banir
-                                   </Button>
+                                   </LoadingButton>
+
 
 
                             }

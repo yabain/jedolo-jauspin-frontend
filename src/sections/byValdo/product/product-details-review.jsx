@@ -197,9 +197,9 @@ export default function ProductDetailsReview({ annonce, totalRatings, totalRevie
        }, [addNewReviewToLocalReview])
 
 
-       const handlesucces = () => console.log(data);
+       const handlesucces = (dataGet) => { console.log(dataGet.data.finalRating); setRatingGet(dataGet.data.finalRating) }
 
-       useAddComment(() => handlesucces)
+       useAddComment(handlesucces)
 
        const renderSummary = (
               <Stack spacing={1} alignItems="center" justifyContent="center">

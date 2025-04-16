@@ -12,7 +12,7 @@ import { resetAfterRequest } from "src/store/annonces/updateAnnonce/reducer";
 
 export function useUpdate(reset, afterRequestSuccess, msgAfterReqSuccess = false, dataUpdate = undefined) {
 
-       console.log('useeppppppppppppppdaaaaaaateeeeeeeee');
+       // console.log('useeppppppppppppppdaaaaaaateeeeeeeee');
 
        const dispatch = useDispatch();
        const { enqueueSnackbar } = useSnackbar();

@@ -12,11 +12,10 @@ const initialSetState = { data: [], adminData: [], };
 
 
 
-const resetDataAction = ( state ) =>
-{
+const resetDataAction = (state) => {
 
        state.data = [];
-       console.log( 'data reset' );
+       console.log('data reset');
 }
 
 
@@ -27,11 +26,10 @@ const resetDataAction = ( state ) =>
 
 
 
-const setDataAction = ( state, action ) =>
-{
+const setDataAction = (state, action) => {
        const dataTemp = action.payload;
        state.data = dataTemp;
-       // console.log( 'data set succesffuly from store', state.data );
+       // console.log('data set succesffuly from store', action.payload);
 }
 
 
@@ -42,11 +40,10 @@ const setDataAction = ( state, action ) =>
 
 
 
-const setAdminDataAction = ( state, action ) =>
-{
+const setAdminDataAction = (state, action) => {
        const dataTemp = action.payload;
        state.adminData = dataTemp;
-       // console.log( 'adminData set succesffuly from store', state.data );
+       // console.log('adminData set succesffuly from store', action.payload);
 }
 
 
@@ -57,11 +54,10 @@ const setAdminDataAction = ( state, action ) =>
 
 
 
-const addDataAction = ( state, action ) =>
-{
+const addDataAction = (state, action) => {
        const dataTemp = action.payload;
-       state.data = [ ...state.data, dataTemp ];
-       console.log( 'data add succesffuly from store' );
+       state.data = [...state.data, dataTemp];
+       console.log('data add succesffuly from store');
 }
 
 
@@ -71,11 +67,10 @@ const addDataAction = ( state, action ) =>
 
 
 
-const addAdminDataAction = ( state, action ) =>
-{
+const addAdminDataAction = (state, action) => {
        const dataTemp = action.payload;
-       state.adminData = [ dataTemp, ...state.adminData ];
-       console.log( 'adminData add succesffuly from store' );
+       state.adminData = [dataTemp, ...state.adminData];
+       console.log('adminData add succesffuly from store');
 }
 
 
@@ -87,11 +82,11 @@ const addAdminDataAction = ( state, action ) =>
 
 
 
-const datasSlice = createSlice( {
+const datasSlice = createSlice({
        name: 'data',
        initialState: initialSetState,
        reducers: { addData: addDataAction, addAdminData: addAdminDataAction, setData: setDataAction, resetData: resetDataAction, setAdminData: setAdminDataAction },
-} );
+});
 
 
 

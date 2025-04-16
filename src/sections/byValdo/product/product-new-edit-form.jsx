@@ -321,14 +321,14 @@ export default function ProductNewEditForm({ currentProduct2 }) {
                      // reset();
                      // console.log( 'user du send ', user );
 
-                     const object = { ...data2, images: imageTab, }
-                     // const object = { ...data2, images: imageTab, transactionToken: 'MP250414ED828F5E0ED87B7D5BC7' }
+                     // const object = { ...data2, images: imageTab, }
+                     const object = { ...data2, images: imageTab, transactionToken: 'MP250416BC2ED35E5396B9B6DB2A' }
 
 
 
                      if (!currentProduct) {
 
-                            // dispatch(request(object))
+                            dispatch(request(object))
                             setDataToAdd(object)
                             showDialog.onTrue()
 

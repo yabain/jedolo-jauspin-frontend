@@ -607,7 +607,7 @@ export default function ProductDetailsSummary({
 
                             {renderShare}
 
-                            <ProductReviewNewForm rating={ratings} annonce={product} open={review.value} onClose={review.onFalse} />
+                            <ProductReviewNewForm rating={ratings} addData={() => handleAddNewReviewToLocalReviewdRef.current} annonce={product} open={review.value} onClose={review.onFalse} />
 
                      </Stack>
 

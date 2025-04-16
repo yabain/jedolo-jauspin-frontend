@@ -33,7 +33,12 @@ export function useGetSignalAnnonces(dataGet, isActive = true) {
        useEffect(() => () => handleReset(), [handleReset]);
        useEffect(() => { if (isFulled && !isPending && isActive) handleEnque(); }, [isFulled, isPending, isActive, handleEnque]);
        useEffect(() => { if (!isFulled && !isPending && !isError && isActive) dispatch(request({ userId: user?._id })); }, [isError, isFulled, isPending, isActive, user?._id, dispatch]);
-       useEffect(() => { if (isFulled && !isPending && isActive && !isLoad) { dataGet(data.signalAnnonce); setIsLoad(true) } }, [isLoad, isFulled, isPending, isActive, dataGet, data]);
+       useEffect(() => {
+              if (isFulled && !isPending && isActive && !isLoad) {
+                     dataGet(data); console.log('get from usehook', data);
+                     setIsLoad(true)
+              }
+       }, [isLoad, isFulled, isPending, isActive, dataGet, data]);
 
 
 

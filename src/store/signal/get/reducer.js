@@ -40,8 +40,8 @@ const resetGetState = (state) => {
 const fulfilledAction = (state, action) => {
        state.isFulled = true;
        state.isPending = false;
-       state.data = action.payload;
-       console.log('fonction appeler:', action.payload);
+       state.data = action.payload.data;
+       console.log('fonction appeler:', action.payload.data);
 }
 
 

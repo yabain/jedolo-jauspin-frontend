@@ -52,7 +52,7 @@ export const useHandleTransaction = (user, resetAfterSuccess, { onPending, onCan
 
                     if (message.data === 'financial_transaction_success') {
                         console.log('✅ Transaction reussi !');
-                        onSuccess?.(); // affichage du dialog en attente
+                        onSuccess?.(transactionToken); // affichage du dialog en attente
                         clearInterval(intervalId);
                         setSubmiting(false);
                     }

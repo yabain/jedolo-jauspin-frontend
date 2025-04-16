@@ -21,39 +21,39 @@ import { addAdminData } from 'src/store/annonces/data/dataReducer';
 const TABS = [
        {
               value: 'one',
-              icon: <Iconify icon="solar:phone-bold" width={ 24 } />,
+              icon: <Iconify icon="solar:phone-bold" width={24} />,
               label: 'Mes Annonces',
        },
        {
               value: 'two',
-              icon: <Iconify icon="solar:heart-bold" width={ 24 } />,
+              icon: <Iconify icon="solar:heart-bold" width={24} />,
               label: 'Annonces Utilisateurs',
        },
        {
               value: 'three',
-              icon: <Iconify icon="eva:headphones-fill" width={ 24 } />,
+              icon: <Iconify icon="eva:headphones-fill" width={24} />,
               label: 'Annonce Signalées',
               disabled: true,
        },
        {
               value: 'four',
-              icon: <Iconify icon="eva:headphones-fill" width={ 24 } />,
+              icon: <Iconify icon="eva:headphones-fill" width={24} />,
               label: 'Item Four',
        },
        {
               value: 'five',
-              icon: <Iconify icon="eva:headphones-fill" width={ 24 } />,
+              icon: <Iconify icon="eva:headphones-fill" width={24} />,
               label: 'Item Five',
               disabled: true,
        },
        {
               value: 'six',
-              icon: <Iconify icon="eva:headphones-fill" width={ 24 } />,
+              icon: <Iconify icon="eva:headphones-fill" width={24} />,
               label: 'Item Six',
        },
        {
               value: 'seven',
-              icon: <Iconify icon="eva:headphones-fill" width={ 24 } />,
+              icon: <Iconify icon="eva:headphones-fill" width={24} />,
               label: 'Item Seven',
        },
 ];
@@ -61,38 +61,36 @@ const TABS = [
 
 
 
-export default function AnnoncesSignal()
-{
+export default function AnnoncesSignal() {
 
        const naviguate = useNavigate()
 
        const dispatch = useDispatch()
-       const [ currentTab, setCurrentTab ] = useState( 'one' );
-       const [ signalAnnonces, setSignalAnnonces ] = useState( [] )
+       const [currentTab, setCurrentTab] = useState('one');
+       const [signalAnnonces, setSignalAnnonces] = useState([])
 
 
        const settings = useSettingsContext();
-       const [ scrollableTab, setScrollableTab ] = useState( 'one' );
+       const [scrollableTab, setScrollableTab] = useState('one');
 
 
        const { user } = useAuthContext();
 
-       const handleChangeTab = useCallback( ( event, newValue ) =>
-       {
-              setCurrentTab( newValue );
-       }, [] );
+       const handleChangeTab = useCallback((event, newValue) => {
+              setCurrentTab(newValue);
+       }, []);
 
 
 
 
 
-       const updateSignalAnnonces = ( dataGet ) => { setSignalAnnonces( dataGet ); console.log( dataGet ); }
+       const updateSignalAnnonces = (dataGet) => { setSignalAnnonces(dataGet || []); console.log(dataGet); }
 
 
 
 
 
-       useGetSignalAnnonces( updateSignalAnnonces )
+       useGetSignalAnnonces(updateSignalAnnonces)
 
 
 
@@ -129,17 +127,17 @@ export default function AnnoncesSignal()
                             <title> Annonces</title>
                      </Helmet>
 
-                     <Container maxWidth='xl' sx={ {
+                     <Container maxWidth='xl' sx={{
                             flexGrow: 1,
                             display: 'flex',
                             flexDirection: 'column',
-                     } }>
+                     }}>
 
 
 
 
 
-                            <  JobListView dataGet={ signalAnnonces } />
+                            <  JobListView dataGet={signalAnnonces} />
 
 
                      </Container>

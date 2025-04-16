@@ -42,7 +42,7 @@ export function useUpdateProfil() {
 
 
        // useEffect( () => { if ( isError && reset ) reset() }, [ isError, reset ] );
-       useEffect(() => { if (isError) handleError() }, [isError, handleError]);
+       // useEffect(() => { if (isError) handleError() }, [isError, handleError]);
        // useEffect(() => { if (isError) resetAfterSuccess() }, [isError, resetAfterSuccess]);
 
 

@@ -45,6 +45,8 @@ export default function AccountGeneral() {
 
        const [imageTab, setImageTab] = useState([])
        const [allfileToUpload, setAllfileToUpload] = useState([])
+       const [isUploadingImage, setIsUploadingImage] = useState(false);
+
 
        // console.log(user);
 
@@ -189,7 +191,11 @@ export default function AccountGeneral() {
        const onSubmit = handleSubmit(async (data) => {
               try {
 
-                     const dataToSend = { ...data, displayName: ` ${data.firstName} ${data.lastName}` }
+                     if (imageTab.length === 0 && allfileToUpload.length !== 0) {
+                            enqueueSnackbar('veuillez cliker sur le bouton upload pour uploader votre photo', { variant: 'error' });
+                            return; // Arrête la soumission si pas de coverUrl
+                     }
+                     const dataToSend = { ...data, displayName: ` ${data.firstName} ${data.lastName}`, photoURL: imageTab[0] }
                      await new Promise((resolve) => setTimeout(resolve, 500));
                      dispatch(request(dataToSend))
                      // enqueueSnackbar( 'Update success!' );
@@ -280,7 +286,7 @@ export default function AccountGeneral() {
 
 
        const uploadAllImageCharged = async () => {
-
+              setIsUploadingImage(true)
               try {
                      const { allUrls } = await uploadAllImages(allfileToUpload, dispatch);
 
@@ -289,6 +295,9 @@ export default function AccountGeneral() {
 
               } catch (error) {
                      // Gestion des erreurs
+              } finally {
+                     setIsUploadingImage(false); // réactive le bouton
+                     enqueueSnackbar('photo uploader avec succes')
               }
 
        }
@@ -325,11 +334,20 @@ export default function AccountGeneral() {
                                                  }
                                           />
 
+                                          <LoadingButton
+                                                 variant="soft"
+                                                 color="success"
+                                                 sx={{ mt: 3 }}
+                                                 onClick={() => uploadAllImageCharged()}
+                                                 loading={isUploadingImage} // indique s'il est en chargement
+                                          >
+                                                 Uploader
+                                          </LoadingButton>
 
 
-                                          <Button onClick={() => uploadAllImageCharged()} variant="soft" color="success" sx={{ mt: 3 }}>
+                                          {/* <Button onClick={() => uploadAllImageCharged()} variant="soft" color="success" sx={{ mt: 3 }}>
                                                  enregistrer
-                                          </Button>
+                                          </Button> */}
                                    </Card>
                             </Grid>
 
