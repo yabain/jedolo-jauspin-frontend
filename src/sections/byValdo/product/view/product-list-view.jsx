@@ -4,7 +4,7 @@ import * as annoncesFunction from 'src/1functions/annonces'
 
 import { useDispatch, useSelector } from 'react-redux';
 import { useAuthContext } from 'src/auth/hooks';
-import { useLocation, useNavigate } from 'react-router';
+import { useLocation, useNavigate, useParams } from 'react-router';
 import { IconButton, useMediaQuery, useTheme } from '@mui/material';
 
 
@@ -139,7 +139,7 @@ export default function ProductListView({ toShow, clickFromProfile }) {
 
        const usersAnnonceList = useSelector((state) => state.getUsersAnnonces.data);
        const { isFulled, isPending } = useSelector((state) => state.getUsersAnnonces);
-       const { isGeting, isGetingSuccess } = useSelector((state) => state.getAnnonces);
+       const { isGeting, isGetingSuccess, isError } = useSelector((state) => state.getAnnonces);
 
 
 
@@ -163,6 +163,12 @@ export default function ProductListView({ toShow, clickFromProfile }) {
 
        const location = useLocation();
        const { email } = location.state || {};
+       const idGet = useParams().id;
+       console.log(idGet, isError);
+
+
+
+
 
 
 
@@ -207,7 +213,7 @@ export default function ProductListView({ toShow, clickFromProfile }) {
 
        useEffect(() => {
 
-              if (!isGeting && !isGetingSuccess) {
+              if (!isGeting && !isGetingSuccess && !isError) {
 
                      if (user === null || user === undefined) {
 
@@ -215,13 +221,18 @@ export default function ProductListView({ toShow, clickFromProfile }) {
                             return
                      }
 
+                     if (idGet) {
+                            dispatch(getList(idGet))
+                            console.log(idGet, 'annonce appeler avec id utilisateur passer en arg');
+                            return
+                     }
 
                      dispatch(getList(user._id))
 
 
               }
 
-       }, [dispatch, annonceList, user, isGetingSuccess, isGeting, toShow, email]);
+       }, [dispatch, annonceList, user, isGetingSuccess, isGeting, toShow, idGet, isError]);
 
 
 

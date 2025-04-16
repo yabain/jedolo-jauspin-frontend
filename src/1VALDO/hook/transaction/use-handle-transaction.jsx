@@ -1,14 +1,15 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import axios from 'axios';
 import { HOST_FRONT_PROD, tokenUser } from 'src/config-global';
 
 export const useHandleTransaction = (user, resetAfterSuccess, { onPending, onCancelled, onError, onSuccess, onstart }) => {
     const [submiting, setSubmiting] = useState(false);
+    const transactionCompleted = useRef(false);
 
     const handleTransaction = async (formData) => {
         const dataTransaction = {
             owner: user._id,
-            amount: 2600,
+            amount: 10,
             paymentMode: 'ORANGE',
             moneyCode: 'XAF',
             fullName: user.displayName,
@@ -51,17 +52,26 @@ export const useHandleTransaction = (user, resetAfterSuccess, { onPending, onCan
 
 
                     if (message.data === 'financial_transaction_success') {
-                        console.log('✅ Transaction reussi !');
-                        onSuccess?.(transactionToken); // affichage du dialog en attente
-                        clearInterval(intervalId);
-                        setSubmiting(false);
+                        console.log('✅ token de la transaction !', transactionToken);
+
+                        if (!transactionCompleted.current) {
+                            transactionCompleted.current = true; // blocage des appels suivants
+
+                            onSuccess?.(transactionToken);
+
+                            clearInterval(intervalId);
+                            setSubmiting(false);
+                        }
                     }
 
+
                     if (message.data.message === 'Le payeur a annulé la transaction') {
+
                         clearInterval(intervalId);
                         console.error('❌ Transaction annulée');
                         setSubmiting(false);
-                        onCancelled?.(); // affichage du dialog annulé
+                        onCancelled?.();
+
                     }
 
 

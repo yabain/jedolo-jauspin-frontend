@@ -75,9 +75,9 @@ export default function ProductDetailsToolbar({
                                    onClick={
                                           () => {
                                                  navigate(
-                                                        '/home/user/profile',
+                                                        `/home/user/profile/${data.owner._id}`,
                                                         {
-                                                               state: { email: data.userEmail, data }  // En supposant que `user?.email` est disponible
+                                                               state: { data }  // En supposant que `user?.email` est disponible
                                                         })
                                           }
 

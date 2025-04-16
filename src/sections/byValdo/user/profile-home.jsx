@@ -26,9 +26,8 @@ import { ProductListView } from '../product/view';
 
 // ----------------------------------------------------------------------
 
-export default function ProfileHome( { posts } )
-{
-       const fileRef = useRef( null );
+export default function ProfileHome({ posts }) {
+       const fileRef = useRef(null);
 
 
 
@@ -37,10 +36,8 @@ export default function ProfileHome( { posts } )
        const { user } = useAuthContext()
 
 
-       const handleAttach = () =>
-       {
-              if ( fileRef.current )
-              {
+       const handleAttach = () => {
+              if (fileRef.current) {
                      fileRef.current.click();
               }
        };
@@ -74,17 +71,17 @@ export default function ProfileHome( { posts } )
        const location = useLocation();
        const { data } = location.state || {};
 
-       // console.log( data, 'dataaaaaaaaaaaaaaaaa' );
+       console.log(data, 'dataaaaaaaaaaaaaaaaa');
 
        const dataget = {
 
-              age: data !== undefined ? data.age || 0 : user.age,
-              prix: data !== undefined ? data.price || 0 : user.price || 0,
-              email: data !== undefined ? data.userEmail || '' : user?.email,
-              city: data !== undefined ? data.city || '' : user.city,
-              localisation: data !== undefined ? data.location || '' : user.location,
-              about: data !== undefined ? 'je suis une femme cliente' : user.about,
-              coutry: data !== undefined ? 'Cameroun' : user.coutry,
+              age: data !== undefined ? data.owner.age || 0 : user.age,
+              prix: data !== undefined ? data.owner.price || 0 : user.price || 0,
+              email: data !== undefined ? data.owner.email || '' : user?.email,
+              city: data !== undefined ? data.owner.city || '' : user.city,
+              localisation: data !== undefined ? data.owner.location || '' : user.location,
+              about: data !== undefined ? data.owner.about : user.about,
+              country: data !== undefined ? data.owner.country : user.coutry,
        }
 
 
@@ -92,34 +89,33 @@ export default function ProfileHome( { posts } )
 
        const navigate = useNavigate();
        const dispatch = useDispatch()
-       const AnnonceClicked = ( item ) =>
-       {
-              navigate( '/home/annonces/view', { state: { annonce: item } } )
+       const AnnonceClicked = (item) => {
+              navigate('/home/annonces/view', { state: { annonce: item } })
 
               const nbrView = item.nbrView !== undefined ? item.nbrView + 1 : 1
-              dispatch( request( { ...item, nbrView } ) )
+              dispatch(request({ ...item, nbrView }))
        }
 
 
        const renderFollows = (
-              <Card sx={ { py: 3, textAlign: 'center', typography: 'h4' } }>
+              <Card sx={{ py: 3, textAlign: 'center', typography: 'h4' }}>
                      <Stack
                             direction="row"
-                            divider={ <Divider orientation="vertical" flexItem sx={ { borderStyle: 'dashed' } } /> }
+                            divider={<Divider orientation="vertical" flexItem sx={{ borderStyle: 'dashed' }} />}
                      >
-                            { dataget.age !== 0 && ( <Stack width={ 1 }>
-                                   { dataget.age }
-                                   <Box component="span" sx={ { color: 'text.secondary', typography: 'body2' } }>
+                            {dataget.age !== 0 && (<Stack width={1}>
+                                   {dataget.age}
+                                   <Box component="span" sx={{ color: 'text.secondary', typography: 'body2' }}>
                                           Age
                                    </Box>
-                            </Stack> ) }
+                            </Stack>)}
 
-                            { dataget.prix !== 0 && ( <Stack width={ 1 }>
-                                   { fNumber( dataget.prix ) }
-                                   <Box component="span" sx={ { color: 'text.secondary', typography: 'body2' } }>
+                            {/* {dataget.prix !== 0 && (<Stack width={1}>
+                                   {fNumber(dataget.prix)}
+                                   <Box component="span" sx={{ color: 'text.secondary', typography: 'body2' }}>
                                           Prix minimum
                                    </Box>
-                            </Stack> ) }
+                            </Stack>)} */}
                      </Stack>
               </Card>
        );
@@ -128,41 +124,41 @@ export default function ProfileHome( { posts } )
               <Card>
                      <CardHeader title="A propos" />
 
-                     <Stack spacing={ 2 } sx={ { p: 3 } }>
-                            <Box sx={ { typography: 'body2' } }>{ dataget.about }</Box>
+                     <Stack spacing={2} sx={{ p: 3 }}>
+                            <Box sx={{ typography: 'body2' }}>{dataget.about}</Box>
 
 
-                            <Stack direction="row" sx={ { typography: 'body2' } }>
-                                   <Iconify icon="fluent:mail-24-filled" width={ 24 } sx={ { mr: 2 } } />
-                                   { dataget.email }
+                            <Stack direction="row" sx={{ typography: 'body2' }}>
+                                   <Iconify icon="fluent:mail-24-filled" width={24} sx={{ mr: 2 }} />
+                                   {dataget.email}
                             </Stack>
 
-                            <Stack direction="row" spacing={ 2 }>
-                                   <Iconify icon="mingcute:location-fill" width={ 24 } />
+                            <Stack direction="row" spacing={2}>
+                                   <Iconify icon="mingcute:location-fill" width={24} />
 
-                                   <Box sx={ { typography: 'body2' } }>
+                                   <Box sx={{ typography: 'body2' }}>
 
-                                          Pays { dataget.coutry }
+                                          Pays {dataget.country}
 
                                    </Box>
                             </Stack>
 
 
-                            <Stack direction="row" spacing={ 2 }>
-                                   <Iconify icon="mingcute:location-fill" width={ 24 } />
+                            <Stack direction="row" spacing={2}>
+                                   <Iconify icon="mingcute:location-fill" width={24} />
 
-                                   <Box sx={ { typography: 'body2' } }>
-                                          Ville  { dataget.city }
+                                   <Box sx={{ typography: 'body2' }}>
+                                          Ville  {dataget.city}
 
                                    </Box>
                             </Stack>
 
-                            <Stack direction="row" spacing={ 2 }>
-                                   <Iconify icon="mingcute:location-fill" width={ 24 } />
+                            <Stack direction="row" spacing={2}>
+                                   <Iconify icon="mingcute:location-fill" width={24} />
 
-                                   <Box sx={ { typography: 'body2' } }>
+                                   <Box sx={{ typography: 'body2' }}>
 
-                                          Lieux  { dataget.localisation }
+                                          Lieux  {dataget.localisation}
                                    </Box>
                             </Stack>
                      </Stack>
@@ -170,29 +166,29 @@ export default function ProfileHome( { posts } )
        );
 
        const renderPostInput = (
-              <Card sx={ { p: 3 } }>
+              <Card sx={{ p: 3 }}>
                      <InputBase
                             multiline
                             fullWidth
-                            rows={ 4 }
+                            rows={4}
                             placeholder="Share what you are thinking here..."
-                            sx={ {
+                            sx={{
                                    p: 2,
                                    mb: 3,
                                    borderRadius: 1,
-                                   border: ( theme ) => `solid 1px ${ alpha( theme.palette.grey[ 500 ], 0.2 ) }`,
-                            } }
+                                   border: (theme) => `solid 1px ${alpha(theme.palette.grey[500], 0.2)}`,
+                            }}
                      />
 
                      <Stack direction="row" alignItems="center" justifyContent="space-between">
-                            <Stack direction="row" spacing={ 1 } alignItems="center" sx={ { color: 'text.secondary' } }>
-                                   <Fab size="small" color="inherit" variant="softExtended" onClick={ handleAttach }>
-                                          <Iconify icon="solar:gallery-wide-bold" width={ 24 } sx={ { color: 'success.main' } } />
+                            <Stack direction="row" spacing={1} alignItems="center" sx={{ color: 'text.secondary' }}>
+                                   <Fab size="small" color="inherit" variant="softExtended" onClick={handleAttach}>
+                                          <Iconify icon="solar:gallery-wide-bold" width={24} sx={{ color: 'success.main' }} />
                                           Image/Video
                                    </Fab>
 
                                    <Fab size="small" color="inherit" variant="softExtended">
-                                          <Iconify icon="solar:videocamera-record-bold" width={ 24 } sx={ { color: 'error.main' } } />
+                                          <Iconify icon="solar:videocamera-record-bold" width={24} sx={{ color: 'error.main' }} />
                                           Streaming
                                    </Fab>
                             </Stack>
@@ -200,7 +196,7 @@ export default function ProfileHome( { posts } )
                             <Button variant="contained">Post</Button>
                      </Stack>
 
-                     <input ref={ fileRef } type="file" style={ { display: 'none' } } />
+                     <input ref={fileRef} type="file" style={{ display: 'none' }} />
               </Card>
        );
 
@@ -208,49 +204,49 @@ export default function ProfileHome( { posts } )
               <Card>
                      <CardHeader title="Social" />
 
-                     <Stack spacing={ 2 } sx={ { p: 3 } }>
-                            { _socials.map( ( link ) => (
+                     <Stack spacing={2} sx={{ p: 3 }}>
+                            {_socials.map((link) => (
                                    <Stack
-                                          key={ link.name }
-                                          spacing={ 2 }
+                                          key={link.name}
+                                          spacing={2}
                                           direction="row"
-                                          sx={ { wordBreak: 'break-all', typography: 'body2' } }
+                                          sx={{ wordBreak: 'break-all', typography: 'body2' }}
                                    >
                                           <Iconify
-                                                 icon={ link.icon }
-                                                 width={ 24 }
-                                                 sx={ {
+                                                 icon={link.icon}
+                                                 width={24}
+                                                 sx={{
                                                         flexShrink: 0,
                                                         color: link.color,
-                                                 } }
+                                                 }}
                                           />
                                           <Link color="inherit">
-                                                 { link.value === 'facebook' && link.path }
-                                                 { link.value === 'instagram' && link.path }
-                                                 { link.value === 'twitter' && link.path }
+                                                 {link.value === 'facebook' && link.path}
+                                                 {link.value === 'instagram' && link.path}
+                                                 {link.value === 'twitter' && link.path}
                                           </Link>
                                    </Stack>
-                            ) ) }
+                            ))}
                      </Stack>
               </Card>
        );
 
        return (
-              <Grid container spacing={ 3 }>
-                     <Grid xs={ 12 } md={ 4 }>
-                            <Stack spacing={ 3 }>
-                                   { renderFollows }
+              <Grid container spacing={3}>
+                     <Grid xs={12} md={4}>
+                            <Stack spacing={3}>
+                                   {renderFollows}
 
-                                   { renderAbout }
+                                   {renderAbout}
 
-                                   { renderSocials }
+                                   {/* { renderSocials } */}
                             </Stack>
                      </Grid>
 
-                     <Grid xs={ 12 } md={ 8 }>
-                            <Stack spacing={ 3 }>
+                     <Grid xs={12} md={8}>
+                            <Stack spacing={3}>
 
-                                   <ProductListView clickFromProfile={ AnnonceClicked } />
+                                   <ProductListView clickFromProfile={AnnonceClicked} />
                             </Stack>
                      </Grid>
               </Grid>

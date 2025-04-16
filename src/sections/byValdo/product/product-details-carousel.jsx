@@ -15,55 +15,55 @@ import Carousel, { useCarousel, CarouselArrowIndex } from 'src/components/carous
 
 const THUMB_SIZE = 64;
 
-const StyledThumbnailsContainer = styled( 'div' )( ( { length, theme } ) => ( {
+const StyledThumbnailsContainer = styled('div')(({ length, theme }) => ({
        position: 'relative',
-       margin: theme.spacing( 0, 'auto' ),
+       margin: theme.spacing(0, 'auto'),
        '& .slick-slide': {
               lineHeight: 0,
        },
 
-       ...( length === 1 && {
+       ...(length === 1 && {
               maxWidth: THUMB_SIZE * 1 + 16,
-       } ),
+       }),
 
-       ...( length === 2 && {
+       ...(length === 2 && {
               maxWidth: THUMB_SIZE * 2 + 32,
-       } ),
+       }),
 
-       ...( ( length === 3 || length === 4 ) && {
+       ...((length === 3 || length === 4) && {
               maxWidth: THUMB_SIZE * 3 + 48,
-       } ),
+       }),
 
-       ...( length >= 5 && {
+       ...(length >= 5 && {
               maxWidth: THUMB_SIZE * 6,
-       } ),
+       }),
 
-       ...( length > 3 && {
+       ...(length > 3 && {
               '&:before, &:after': {
-                     ...bgGradient( {
+                     ...bgGradient({
                             direction: 'to left',
-                            startColor: `${ alpha( theme.palette.background.default, 0 ) } 0%`,
-                            endColor: `${ theme.palette.background.default } 100%`,
-                     } ),
+                            startColor: `${alpha(theme.palette.background.default, 0)} 0%`,
+                            endColor: `${theme.palette.background.default} 100%`,
+                     }),
                      top: 0,
                      zIndex: 9,
                      content: "''",
                      height: '100%',
                      position: 'absolute',
-                     width: ( THUMB_SIZE * 2 ) / 3,
+                     width: (THUMB_SIZE * 2) / 3,
               },
               '&:after': {
                      right: 0,
                      transform: 'scaleX(-1)',
               },
-       } ),
-} ) );
+       }),
+}));
 
 // ----------------------------------------------------------------------
 
-export default function ProductDetailsCarousel( { product } )
-{
+export default function ProductDetailsCarousel({ product }) {
        const theme = useTheme();
+       console.log(product, 'for imageddddddddd');
 
        // const slides = product?.images.map( ( img ) => ( {
        //        src: img,
@@ -75,18 +75,18 @@ export default function ProductDetailsCarousel( { product } )
               'https://i.pinimg.com/736x/e1/7f/07/e17f072a6c834839d0270bfeaeea4929.jpg'
 
        ]
-       const slides = [ { src: imageTab[ 0 ] }, { src: imageTab[ 2 ] }, { src: imageTab[ 1 ] } ];
+       const slides = product.images?.map((img) => ({ src: img })) || [];
 
 
-       const lightbox = useLightBox( slides );
+       const lightbox = useLightBox(slides);
 
-       const carouselLarge = useCarousel( {
+       const carouselLarge = useCarousel({
               rtl: false,
               draggable: false,
               adaptiveHeight: true,
-       } );
+       });
 
-       const carouselThumb = useCarousel( {
+       const carouselThumb = useCarousel({
               rtl: false,
               centerMode: true,
               swipeToSlide: true,
@@ -94,108 +94,105 @@ export default function ProductDetailsCarousel( { product } )
               variableWidth: true,
               centerPadding: '0px',
               slidesToShow: slides?.length > 3 ? 3 : slides?.length,
-       } );
+       });
 
-       useEffect( () =>
-       {
+       useEffect(() => {
               carouselLarge.onSetNav();
               carouselThumb.onSetNav();
-       }, [ carouselLarge, carouselThumb ] );
+       }, [carouselLarge, carouselThumb]);
 
-       useEffect( () =>
-       {
-              if ( lightbox.open )
-              {
-                     carouselLarge.onTogo( lightbox.selected );
+       useEffect(() => {
+              if (lightbox.open) {
+                     carouselLarge.onTogo(lightbox.selected);
               }
-       }, [ carouselLarge, lightbox.open, lightbox.selected ] );
+       }, [carouselLarge, lightbox.open, lightbox.selected]);
 
        const renderLargeImg = (
               <Box
-                     sx={ {
+                     sx={{
                             width: { xs: 'auto', md: 'auto', lg: 600 }, // 300px sur mobile, 500px sur grand écran
                             height: 'auto',
                             mb: 3,
                             borderRadius: 2,
                             overflow: 'hidden',
                             position: 'relative',
-                     } }
+                     }}
               >
                      <Carousel
-                            { ...carouselLarge.carouselSettings }
-                            asNavFor={ carouselThumb.nav }
-                            ref={ carouselLarge.carouselRef }
+                            {...carouselLarge.carouselSettings}
+                            asNavFor={carouselThumb.nav}
+                            ref={carouselLarge.carouselRef}
                      >
-                            { slides?.map( ( slide ) => (
+                            {slides?.map((slide) => (
                                    <Image
-                                          key={ slide.src }
-                                          alt={ slide.src }
-                                          src={ slide.src }
+                                          key={slide.src}
+                                          alt={slide.src}
+                                          src={slide.src}
                                           ratio="1/1"
-                                          onClick={ () => lightbox.onOpen( slide.src ) }
-                                          sx={ { cursor: 'zoom-in' } }
+                                          onClick={() => lightbox.onOpen(slide.src)}
+                                          sx={{ cursor: 'zoom-in' }}
                                    />
-                            ) ) }
+                            ))}
                      </Carousel>
 
                      <CarouselArrowIndex
-                            index={ carouselLarge.currentIndex }
-                            total={ slides?.length }
-                            onNext={ carouselThumb.onNext }
-                            onPrev={ carouselThumb.onPrev }
+                            index={carouselLarge.currentIndex}
+                            total={slides?.length}
+                            onNext={carouselThumb.onNext}
+                            onPrev={carouselThumb.onPrev}
                      />
               </Box>
        );
 
        const renderThumbnails = (
-              <StyledThumbnailsContainer length={ slides?.length }>
+              <StyledThumbnailsContainer length={slides?.length}>
                      <Carousel
-                            { ...carouselThumb.carouselSettings }
-                            asNavFor={ carouselLarge.nav }
-                            ref={ carouselThumb.carouselRef }
+                            {...carouselThumb.carouselSettings}
+                            asNavFor={carouselLarge.nav}
+                            ref={carouselThumb.carouselRef}
                      >
-                            { slides?.map( ( item, index ) => (
-                                   <Box key={ item.src } sx={ { px: 0.5 } }>
+                            {slides?.map((item, index) => (
+                                   <Box key={item.src} sx={{ px: 0.5 }}>
                                           <Avatar
-                                                 key={ item.src }
-                                                 alt={ item.src }
-                                                 src={ item.src }
+                                                 key={item.src}
+                                                 alt={item.src}
+                                                 src={item.src}
                                                  variant="rounded"
-                                                 sx={ {
+                                                 sx={{
                                                         width: THUMB_SIZE,
                                                         height: THUMB_SIZE,
                                                         opacity: 0.48,
                                                         cursor: 'pointer',
-                                                        ...( carouselLarge.currentIndex === index && {
+                                                        ...(carouselLarge.currentIndex === index && {
                                                                opacity: 1,
-                                                               border: `solid 2.5px ${ theme.palette.primary.main }`,
-                                                        } ),
-                                                 } }
+                                                               border: `solid 2.5px ${theme.palette.primary.main}`,
+                                                        }),
+                                                 }}
                                           />
                                    </Box>
-                            ) ) }
+                            ))}
                      </Carousel>
               </StyledThumbnailsContainer>
        );
 
        return (
               <Box
-                     sx={ {
+                     sx={{
                             '& .slick-slide': {
                                    float: theme.direction === 'rtl' ? 'right' : 'left',
                             },
-                     } }
+                     }}
               >
-                     { renderLargeImg }
+                     {renderLargeImg}
 
-                     { renderThumbnails }
+                     {renderThumbnails}
 
                      <Lightbox
-                            index={ lightbox.selected }
-                            slides={ slides }
-                            open={ lightbox.open }
-                            close={ lightbox.onClose }
-                            onGetCurrentIndex={ ( index ) => lightbox.setSelected( index ) }
+                            index={lightbox.selected}
+                            slides={slides}
+                            open={lightbox.open}
+                            close={lightbox.onClose}
+                            onGetCurrentIndex={(index) => lightbox.setSelected(index)}
                      />
               </Box>
        );

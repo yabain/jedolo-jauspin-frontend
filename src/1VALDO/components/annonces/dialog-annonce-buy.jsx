@@ -42,7 +42,10 @@ export default function DialogAnnonceBuy({ showDialog, dataGet, updateDataAfterS
 
 
        const handleSuccesTransaction = (token) => {
+              console.log('appeler apres la reuisssite de la transaction', token);
+
               const newAnnonce = { ...dataGet, transactionToken: token }
+              console.log('data envoyer', newAnnonce);
               dispatch(request(newAnnonce))
               startPaiement.onFalse()
               showDialog.onFalse()
@@ -80,7 +83,7 @@ export default function DialogAnnonceBuy({ showDialog, dataGet, updateDataAfterS
        const { user } = useAuthContext();
        const { handleTransaction, submiting, setSubmiting } = useHandleTransaction(user, resetAfterSuccess,
               {
-                     onSuccess: () => handleSuccesTransaction(),
+                     onSuccess: (tokenGet) => handleSuccesTransaction(tokenGet),
                      onPending: () => handlePending(),
                      onCancelled: () => handleCancel(),
                      onstart: () => handleStart(),
