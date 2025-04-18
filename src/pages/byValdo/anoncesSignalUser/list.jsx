@@ -124,7 +124,7 @@ export default function AnnoncesSignal() {
        return (
               <>
                      <Helmet>
-                            <title> Annonces</title>
+                            <title> Ndolo: Annonces signaler</title>
                      </Helmet>
 
                      <Container maxWidth='xl' sx={{

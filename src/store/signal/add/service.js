@@ -22,7 +22,7 @@ export async function request(data) {
               // const response = await axiosInstance.get( `${ endpoints.user.get }/${ userID }` );
               console.log('requette pour ajouter appeler');
 
-              const response = await axiosInstance.post(`${HOST_FRONT_PROD}/useraction`, data, { headers: { Authorization: `Bearer ${tokenUser}` } });
+              const response = await axiosInstance.post(`${HOST_FRONT_PROD}/useraction`, data, { headers: { Authorization: `Bearer ${tokenUser()}` } });
               console.log('Réponse de la requête :', response.data);
               return response;
 

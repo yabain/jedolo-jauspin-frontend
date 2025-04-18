@@ -6,8 +6,7 @@ import { TourEditView } from 'src/sections/byTemplate/tour/view';
 
 // ----------------------------------------------------------------------
 
-export default function TourEditPage()
-{
+export default function TourEditPage() {
        const params = useParams();
 
        const { id } = params;
@@ -15,10 +14,10 @@ export default function TourEditPage()
        return (
               <>
                      <Helmet>
-                            <title> Dashboard: Tour Edit</title>
+                            <title> Ndolo: Tour Edit</title>
                      </Helmet>
 
-                     <TourEditView id={ `${ id }` } />
+                     <TourEditView id={`${id}`} />
               </>
        );
 }

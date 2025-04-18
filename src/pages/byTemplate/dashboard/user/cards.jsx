@@ -4,12 +4,11 @@ import { UserCardsView } from 'src/sections/byTemplate/user/view';
 
 // ----------------------------------------------------------------------
 
-export default function UserCardsPage()
-{
+export default function UserCardsPage() {
        return (
               <>
                      <Helmet>
-                            <title> Dashboard: User Cards</title>
+                            <title> Ndolo: User Cards</title>
                      </Helmet>
 
                      <UserCardsView />

@@ -15,7 +15,7 @@ export async function request(data) {
               if (data.type === 'admin') {
 
 
-                     response = await axiosInstance.get(`${HOST_FRONT_PROD}/annonce/all`, { headers: { Authorization: `Bearer ${tokenUser}` } });
+                     response = await axiosInstance.get(`${HOST_FRONT_PROD}/annonce/all`, { headers: { Authorization: `Bearer ${tokenUser()}` } });
                      return response.data;
 
               }

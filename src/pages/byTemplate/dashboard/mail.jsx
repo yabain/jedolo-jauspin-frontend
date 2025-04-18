@@ -4,12 +4,11 @@ import { MailView } from 'src/sections/byTemplate/mail/view';
 
 // ----------------------------------------------------------------------
 
-export default function MailPage()
-{
+export default function MailPage() {
        return (
               <>
                      <Helmet>
-                            <title> Dashboard: Mail</title>
+                            <title> Ndolo: Mail</title>
                      </Helmet>
 
                      <MailView />

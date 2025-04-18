@@ -2,29 +2,29 @@ import PropTypes from 'prop-types';
 
 import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
+import Header from '../dashboard/byValdo/header';
 
-import Header from '../common/header-simple';
+// import Header from '../common/header-simple';
 
 // ----------------------------------------------------------------------
 
-export default function CompactLayout( { children } )
-{
+export default function CompactLayout({ children }) {
        return (
               <>
                      <Header />
 
                      <Container component="main">
                             <Stack
-                                   sx={ {
+                                   sx={{
                                           py: 12,
                                           m: 'auto',
                                           maxWidth: 400,
                                           minHeight: '100vh',
                                           textAlign: 'center',
                                           justifyContent: 'center',
-                                   } }
+                                   }}
                             >
-                                   { children }
+                                   {children}
                             </Stack>
                      </Container>
               </>

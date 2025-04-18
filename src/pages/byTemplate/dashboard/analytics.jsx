@@ -4,12 +4,11 @@ import { OverviewAnalyticsView } from 'src/sections/byTemplate/overview/analytic
 
 // ----------------------------------------------------------------------
 
-export default function OverviewAnalyticsPage()
-{
+export default function OverviewAnalyticsPage() {
        return (
               <>
                      <Helmet>
-                            <title> Dashboard: Analytics</title>
+                            <title> Ndolo: Analytics</title>
                      </Helmet>
 
                      <OverviewAnalyticsView />

@@ -10,10 +10,10 @@ import axiosInstance from 'src/utils/axios';
 
 
 
-export async function request(userData) {
-       console.log("Envoi d'une requête pour mettre a jour le profil utilisateur:", userData);
+export async function request(userId) {
+       console.log("Envoi d'une requête pour recupperer le le profil utilisateur:", userId);
        try {
-              const response = await axiosInstance.put(`${HOST_FRONT_PROD}/user/profile/update`, userData, { headers: { Authorization: `Bearer ${tokenUser()}` } });
+              const response = await axiosInstance.get(`${HOST_FRONT_PROD}/user/profile/${userId}`, { headers: { Authorization: `Bearer ${tokenUser()}` } });
               console.log('Réponse de la requête :', response.data);
               return response;
        } catch (error) {

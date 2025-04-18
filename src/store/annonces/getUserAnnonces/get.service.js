@@ -5,7 +5,7 @@ export async function getList(id) {
        // console.log( `Envoi d'une requête pour récupérer l'utilisateur avec ID ${ id }` );
        try {
               // const response = await axiosInstance.get( `${ endpoints.user.get }/${ userID }` );
-              const response = await axiosInstance.get(`${HOST_FRONT_PROD}/annonce/user/${id}`, { headers: { Authorization: `Bearer ${tokenUser}` } });
+              const response = await axiosInstance.get(`${HOST_FRONT_PROD}/annonce/user/${id}`, { headers: { Authorization: `Bearer ${tokenUser()}` } });
               // console.log( 'Réponse de la requête :', response.data );
               return response;
        } catch (error) {

@@ -4,12 +4,11 @@ import { InvoiceListView } from 'src/sections/byTemplate/invoice/view';
 
 // ----------------------------------------------------------------------
 
-export default function InvoiceListPage()
-{
+export default function InvoiceListPage() {
        return (
               <>
                      <Helmet>
-                            <title> Dashboard: Invoice List</title>
+                            <title> Ndolo: Invoice List</title>
                      </Helmet>
 
                      <InvoiceListView />

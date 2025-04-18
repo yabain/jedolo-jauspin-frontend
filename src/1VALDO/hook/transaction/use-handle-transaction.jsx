@@ -25,7 +25,7 @@ export const useHandleTransaction = (user, resetAfterSuccess, { onPending, onCan
                 `${HOST_FRONT_PROD}/transaction-payment`,
                 dataTransaction,
                 {
-                    headers: { Authorization: `Bearer ${tokenUser}` },
+                    headers: { Authorization: `Bearer ${tokenUser()}` },
                 }
             );
 
@@ -36,7 +36,7 @@ export const useHandleTransaction = (user, resetAfterSuccess, { onPending, onCan
                     const statusResponse = await axios.get(
                         `${HOST_FRONT_PROD}/transaction-payment/status/${transactionToken}`,
                         {
-                            headers: { Authorization: `Bearer ${tokenUser}` },
+                            headers: { Authorization: `Bearer ${tokenUser()}` },
                         }
                     );
 

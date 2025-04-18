@@ -34,7 +34,7 @@ const HOST_BACK_PROD = ''
 export const HOST_PORT = PORT;
 export const HOST_BACKEND_URL = HOST_DEV1;
 export const HOST_FRONTEND_URL = HOST_FRONT_DEV1;
-export const tokenUser = localStorage.getItem('accessToken');
+export const tokenUser = () => localStorage.getItem('accessToken');
 
 
 
@@ -87,4 +87,4 @@ export const SUPABASE_API = {
 export const MAPBOX_API = import.meta.env.VITE_MAPBOX_API;
 
 // ROOT PATH AFTER LOGIN SUCCESSFUL
-export const PATH_AFTER_LOGIN = paths.dashboard.root; // as '/dashboard'
+export const PATH_AFTER_LOGIN = paths.dashboard.root;  

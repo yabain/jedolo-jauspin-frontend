@@ -4,12 +4,11 @@ import { ProductCreateView } from 'src/sections/byValdo/product/view';
 
 // ----------------------------------------------------------------------
 
-export default function ProductCreatePage()
-{
+export default function ProductCreatePage() {
        return (
               <>
                      <Helmet>
-                            <title> Dashboard: Create a new product</title>
+                            <title> Ndolo: Nouvelle annonce</title>
                      </Helmet>
 
                      <ProductCreateView />

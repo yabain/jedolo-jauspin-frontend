@@ -4,12 +4,11 @@ import { OrderListView } from 'src/sections/byTemplate/order/view';
 
 // ----------------------------------------------------------------------
 
-export default function OrderListPage()
-{
+export default function OrderListPage() {
        return (
               <>
                      <Helmet>
-                            <title> Dashboard: Order List</title>
+                            <title> Ndolo: Order List</title>
                      </Helmet>
 
                      <OrderListView />

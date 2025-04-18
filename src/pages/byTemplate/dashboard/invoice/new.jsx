@@ -4,12 +4,11 @@ import { InvoiceCreateView } from 'src/sections/byTemplate/invoice/view';
 
 // ----------------------------------------------------------------------
 
-export default function InvoiceCreatePage()
-{
+export default function InvoiceCreatePage() {
        return (
               <>
                      <Helmet>
-                            <title> Dashboard: Create a new invoice</title>
+                            <title> Ndolo: Create a new invoice</title>
                      </Helmet>
 
                      <InvoiceCreateView />

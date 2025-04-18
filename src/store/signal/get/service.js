@@ -8,7 +8,7 @@ export async function request(data) {
 
 
 
-              const response = await axiosInstance.get(`${HOST_FRONT_PROD}/useraction/user/${data.userId}/signaling`, { headers: { Authorization: `Bearer ${tokenUser}` } });
+              const response = await axiosInstance.get(`${HOST_FRONT_PROD}/useraction/user/${data.userId}/signaling`, { headers: { Authorization: `Bearer ${tokenUser()}` } });
 
 
 

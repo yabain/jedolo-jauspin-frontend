@@ -4,12 +4,11 @@ import { UserCreateView } from 'src/sections/byValdo/user/view';
 
 // ----------------------------------------------------------------------
 
-export default function UserCreatePage()
-{
+export default function UserCreatePage() {
        return (
               <>
                      <Helmet>
-                            <title> Dashboard: Create a new user</title>
+                            <title> Ndolo: Create a new user</title>
                      </Helmet>
 
                      <UserCreateView />

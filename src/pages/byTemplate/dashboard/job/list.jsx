@@ -4,12 +4,11 @@ import { JobListView } from 'src/sections/byTemplate/job/view';
 
 // ----------------------------------------------------------------------
 
-export default function JobListPage()
-{
+export default function JobListPage() {
        return (
               <>
                      <Helmet>
-                            <title> Dashboard: Job List</title>
+                            <title> Ndolo: Job List</title>
                      </Helmet>
 
                      <JobListView />

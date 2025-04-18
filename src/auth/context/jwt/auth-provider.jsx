@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { useMemo, useEffect, useReducer, useCallback } from 'react';
 
 import axios, { endpoints } from 'src/utils/axios';
-import { HOST_BACKEND_URL, HOST_FRONT_PROD, HOST_DEV6 } from 'src/config-global';
+import { HOST_BACKEND_URL, HOST_FRONT_PROD, HOST_DEV6, tokenUser } from 'src/config-global';
 
 import { AuthContext } from './auth-context';
 import { setSession, isValidToken } from './utils';
@@ -165,6 +165,10 @@ export function AuthProvider({ children }) {
 
        // LOGOUT
        const logout = useCallback(async () => {
+
+              const response = await axios.get(`${HOST_FRONT_PROD}/auth/logout`, { headers: { Authorization: `Bearer:${tokenUser()}` } });
+              console.log('deconnexion reussi', response.data);
+
               setSession(null);
               dispatch({
                      type: 'LOGOUT',

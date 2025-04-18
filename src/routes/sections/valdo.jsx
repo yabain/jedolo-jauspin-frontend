@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
+import CompactLayout from 'src/layouts/compact';
 
 import { AuthGuard, GuestGuard } from 'src/auth/guardByvaldo';
 import DashboardLayout from 'src/layouts/dashboard/byValdo';
@@ -9,6 +10,17 @@ import AuthClassicLayout from 'src/layouts/auth/classic';
 import { JwtLoginPage } from './auth';
 
 
+
+
+
+
+
+
+const Page500 = lazy(() => import('src/pages/byTemplate/500'));
+const Page403 = lazy(() => import('src/pages/byTemplate/403'));
+const Page404 = lazy(() => import('src/pages/byTemplate/404'));
+const ComingSoonPage = lazy(() => import('src/pages/byTemplate/coming-soon'));
+const MaintenancePage = lazy(() => import('src/pages/byTemplate/maintenance'));
 
 // CATEGORY
 const OrderListPage = lazy(() => import('src/pages/byValdo/order/list'));
@@ -87,7 +99,7 @@ export const route = [
                                           path: 'user',
                                           children: [
                                                  { index: true, element: <UserProfilePage /> },
-                                                 { path: 'profile/:id', element: <UserProfilePage /> }, // route dynamique
+                                                 // { path: 'profile/:id', element: <UserProfilePage /> }, // route dynamique
                                                  { path: 'profile', element: <UserProfilePage /> },
                                                  { path: 'cards', element: <UserCardsPage /> },
                                                  { path: 'list', element: <UserListPage /> },
@@ -105,8 +117,31 @@ export const route = [
                                    { path: 'view', element: <ProductDetailsPage /> },
                             ],
                      },
+                     {
+                            path: 'user',
+                            children: [
+                                   { path: 'profile/:id', element: <UserProfilePage /> },
+                            ],
+                     },
               ],
-       }
+       },
+
+       {
+              element: (
+                     <CompactLayout>
+                            <Suspense fallback={<SplashScreen />}>
+                                   <Outlet />
+                            </Suspense>
+                     </CompactLayout>
+              ),
+              children: [
+                     { path: 'coming-soon', element: <ComingSoonPage /> },
+                     { path: 'maintenance', element: <MaintenancePage /> },
+                     { path: '500', element: <Page500 /> },
+                     { path: '404', element: <Page404 /> },
+                     { path: '403', element: <Page403 /> },
+              ],
+       },
 
 
 

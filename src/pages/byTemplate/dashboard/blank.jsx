@@ -8,7 +8,7 @@ export default function BlankPage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: Blank</title>
+        <title> Ndolo: Blank</title>
       </Helmet>
 
       <BlankView />

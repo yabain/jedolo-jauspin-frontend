@@ -4,12 +4,11 @@ import { UserProfileView } from 'src/sections/byTemplate/user/view';
 
 // ----------------------------------------------------------------------
 
-export default function UserProfilePage()
-{
+export default function UserProfilePage() {
        return (
               <>
                      <Helmet>
-                            <title> Dashboard: User Profile</title>
+                            <title> Ndolo: User Profile</title>
                      </Helmet>
 
                      <UserProfileView />

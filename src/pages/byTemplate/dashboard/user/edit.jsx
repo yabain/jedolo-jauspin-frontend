@@ -6,8 +6,7 @@ import { UserEditView } from 'src/sections/byTemplate/user/view';
 
 // ----------------------------------------------------------------------
 
-export default function UserEditPage()
-{
+export default function UserEditPage() {
        const params = useParams();
 
        const { id } = params;
@@ -15,10 +14,10 @@ export default function UserEditPage()
        return (
               <>
                      <Helmet>
-                            <title> Dashboard: User Edit</title>
+                            <title> Ndolo: User Edit</title>
                      </Helmet>
 
-                     <UserEditView id={ `${ id }` } />
+                     <UserEditView id={`${id}`} />
               </>
        );
 }

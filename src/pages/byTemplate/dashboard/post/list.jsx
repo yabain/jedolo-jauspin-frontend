@@ -4,12 +4,11 @@ import { PostListView } from 'src/sections/byTemplate/blog/view';
 
 // ----------------------------------------------------------------------
 
-export default function PostListPage()
-{
+export default function PostListPage() {
        return (
               <>
                      <Helmet>
-                            <title> Dashboard: Post List</title>
+                            <title> Ndolo: Post List</title>
                      </Helmet>
 
                      <PostListView />

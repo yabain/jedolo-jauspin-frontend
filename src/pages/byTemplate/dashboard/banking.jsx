@@ -4,12 +4,11 @@ import { OverviewBankingView } from 'src/sections/byTemplate/overview/banking/vi
 
 // ----------------------------------------------------------------------
 
-export default function OverviewBankingPage()
-{
+export default function OverviewBankingPage() {
        return (
               <>
                      <Helmet>
-                            <title> Dashboard: Banking</title>
+                            <title> Ndolo: Banking</title>
                      </Helmet>
 
                      <OverviewBankingView />

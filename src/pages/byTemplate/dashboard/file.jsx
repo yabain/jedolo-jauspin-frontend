@@ -4,12 +4,11 @@ import { OverviewFileView } from 'src/sections/byTemplate/overview/file/view';
 
 // ----------------------------------------------------------------------
 
-export default function OverviewFilePage()
-{
+export default function OverviewFilePage() {
        return (
               <>
                      <Helmet>
-                            <title> Dashboard: File</title>
+                            <title> Ndolo: File</title>
                      </Helmet>
 
                      <OverviewFileView />

@@ -1,13 +1,14 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 
 import Tab from '@mui/material/Tab';
 import Card from '@mui/material/Card';
 import Container from '@mui/material/Container';
 import Tabs, { tabsClasses } from '@mui/material/Tabs';
-import { useLocation } from 'react-router';
+import { useLocation, useParams } from 'react-router';
 import { useAuthContext } from 'src/auth/hooks';
 
 import { paths } from 'src/routes/paths';
+import { useGetProfil } from 'src/1VALDO/hook/user/use-get-profile/use-get-profile';
 
 import { useMockedUser } from 'src/hooks/use-mocked-user';
 
@@ -68,24 +69,46 @@ export default function UserProfileView() {
        }, []);
 
        const location = useLocation();
-       const { data } = location.state || {};
+       // const { data } = location.state || {};
+       // const [data, setData] = useState(undefined)
+       const [dataGet, setDataGet] = useState({})
 
-       console.log(data, 'dataaaaaaaaaaaaaaaaa');
+       // console.log(data, 'dataaaaaaaaaaaaaaaaa');
 
-       let photoURL;
 
-       if (data !== undefined) {
-              photoURL = data?.owner.photoURL !== '' ? data.owner.photoURL : undefined;
-       } else {
-              photoURL = user?.photoURL;
+
+
+       const handleGetSuccess = useCallback(((data) => {
+              // console.log('data recu pour une mise a jour local', data);
+
+              let photoURL;
+
+              if (data !== undefined) {
+                     photoURL = data?.photoURL !== '' ? data.photoURL : undefined;
+              } else {
+                     photoURL = user?.photoURL;
+              }
+              setDataGet({
+                     name: data !== undefined ? data?.displayName || 0 : user?.displayName,
+                     photoURL,
+                     role: data !== undefined ? data?.role || 0 : user?.role,
+
+
+                     age: data !== undefined ? data.age || 0 : user.age,
+                     prix: data !== undefined ? data.price || 0 : user.price || 0,
+                     email: data !== undefined ? data.email || '' : user?.email,
+                     city: data !== undefined ? data.city || '' : user.city,
+                     localisation: data !== undefined ? data.location || '' : user.location,
+                     about: data !== undefined ? data.about : user.about,
+                     country: data !== undefined ? data.country : user.coutry,
+
+              })
        }
+       ), [user])
 
-       const dataget = {
-
-              name: data !== undefined ? data?.owner.displayName || 0 : user?.displayName,
-              photoURL,
-              role: data !== undefined ? data?.owner.role || 0 : user?.role,
-       }
+       const show = false
+       const userId = useParams().id;
+       const { isFulled, isError } = useGetProfil(userId, handleGetSuccess)
 
        return (
               <Container maxWidth={settings.themeStretch ? false : 'xl'}>
@@ -101,16 +124,16 @@ export default function UserProfileView() {
                             }}
                      />
 
-                     <Card
+                     {isFulled && <Card
                             sx={{
                                    mb: 3,
                                    height: 290,
                             }}
                      >
                             <ProfileCover
-                                   role={dataget.role}
-                                   name={dataget?.name}
-                                   avatarUrl={dataget?.photoURL}
+                                   role={dataGet.role}
+                                   name={dataGet?.name}
+                                   avatarUrl={dataGet?.photoURL}
                                    coverUrl={_userAbout.coverUrl}
                             />
 
@@ -136,9 +159,9 @@ export default function UserProfileView() {
                                           <Tab key={ tab.value } value={ tab.value } icon={ tab.icon } label={ tab.label } />
                                    ) ) }
                             </Tabs> */}
-                     </Card>
-
-                     <ProfileHome posts={_userFeeds} />
+                     </Card>}
+                     {/* !isPending && !isError && */}
+                     <ProfileHome isFulled={isFulled} dataGet={dataGet} />
 
 
                      {/* { currentTab === 'profile' && <ProfileHome info={ _userAbout } posts={ _userFeeds } /> } */}

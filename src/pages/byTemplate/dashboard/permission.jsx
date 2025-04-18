@@ -8,7 +8,7 @@ export default function PermissionDeniedPage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: Permission Denied</title>
+        <title> Ndolo: Permission Denied</title>
       </Helmet>
 
       <PermissionDeniedView />

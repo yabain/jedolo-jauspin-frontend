@@ -4,12 +4,11 @@ import { OverviewEcommerceView } from 'src/sections/byTemplate/overview/e-commer
 
 // ----------------------------------------------------------------------
 
-export default function OverviewEcommercePage()
-{
+export default function OverviewEcommercePage() {
        return (
               <>
                      <Helmet>
-                            <title> Dashboard: E-Commerce</title>
+                            <title> Ndolo: E-Commerce</title>
                      </Helmet>
 
                      <OverviewEcommerceView />

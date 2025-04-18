@@ -8,7 +8,7 @@ export default function CalendarPage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: Calendar</title>
+        <title> Ndolo: Calendar</title>
       </Helmet>
 
       <CalendarView />

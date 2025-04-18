@@ -4,12 +4,11 @@ import { ProductListView } from 'src/sections/byTemplate/product/view';
 
 // ----------------------------------------------------------------------
 
-export default function ProductListPage()
-{
+export default function ProductListPage() {
        return (
               <>
                      <Helmet>
-                            <title> Dashboard: Product List</title>
+                            <title> Ndolo: Product List</title>
                      </Helmet>
 
                      <ProductListView />

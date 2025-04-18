@@ -17,9 +17,8 @@ import { route } from './valdo';
 
 // ----------------------------------------------------------------------
 
-export default function Router()
-{
-       return useRoutes( [
+export default function Router() {
+       return useRoutes([
               // SET INDEX PAGE WITH SKIP HOME PAGE
               {
                      path: '/',
@@ -35,7 +34,7 @@ export default function Router()
               //     ...dashboardRoutes2,
 
               // Main routes
-              ...mainRoutes,
+              // ...mainRoutes,
 
               // Components routes
               ...componentsRoutes,
@@ -45,5 +44,5 @@ export default function Router()
 
               // No match 404
               { path: '*', element: <Navigate to="/404" replace /> },
-       ] );
+       ]);
 }

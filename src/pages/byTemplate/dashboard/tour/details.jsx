@@ -6,8 +6,7 @@ import { TourDetailsView } from 'src/sections/byTemplate/tour/view';
 
 // ----------------------------------------------------------------------
 
-export default function TourDetailsPage()
-{
+export default function TourDetailsPage() {
        const params = useParams();
 
        const { id } = params;
@@ -15,10 +14,10 @@ export default function TourDetailsPage()
        return (
               <>
                      <Helmet>
-                            <title> Dashboard: Analytics</title>
+                            <title> Ndolo: Analytics</title>
                      </Helmet>
 
-                     <TourDetailsView id={ `${ id }` } />
+                     <TourDetailsView id={`${id}`} />
               </>
        );
 }

@@ -4,12 +4,11 @@ import { UserProfileView } from 'src/sections/byValdo/user/view';
 
 // ----------------------------------------------------------------------
 
-export default function UserProfilePage()
-{
+export default function UserProfilePage() {
        return (
               <>
                      <Helmet>
-                            <title> Dashboard: User Profile</title>
+                            <title> Profile utilisateur</title>
                      </Helmet>
 
                      <UserProfileView />

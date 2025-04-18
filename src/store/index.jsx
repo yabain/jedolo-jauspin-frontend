@@ -19,6 +19,7 @@ import uploadAnnonceImageReducer from './annonces/uploadImage/reducer'
 
 //  users Import 
 import disableUsersReducer from './users/disable/reducer';
+import getProfilReducer from './users/getProfil/reducer';
 
 
 // annonces users Import 
@@ -74,6 +75,7 @@ const rootReducer = combineReducers({
 
        // user 
        disableUsers: disableUsersReducer,
+       getProfil: getProfilReducer,
 
 
 

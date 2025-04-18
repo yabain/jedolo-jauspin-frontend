@@ -103,7 +103,7 @@ export async function uploadImage(imageObject) {
         const response = await axiosInstance.post(`${HOST_FRONT_PROD}/upload`, formData,
             {
 
-                headers: { Authorization: `Bearer ${tokenUser}` }
+                headers: { Authorization: `Bearer ${tokenUser()}` }
                 // headers: { 'Content-Type': 'multipart/form-data', },
                 // onUploadProgress: (progressEvent) => {
 

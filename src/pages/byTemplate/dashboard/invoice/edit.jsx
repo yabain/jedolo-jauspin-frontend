@@ -6,8 +6,7 @@ import { InvoiceEditView } from 'src/sections/byTemplate/invoice/view';
 
 // ----------------------------------------------------------------------
 
-export default function InvoiceEditPage()
-{
+export default function InvoiceEditPage() {
        const params = useParams();
 
        const { id } = params;
@@ -15,10 +14,10 @@ export default function InvoiceEditPage()
        return (
               <>
                      <Helmet>
-                            <title> Dashboard: Invoice Edit</title>
+                            <title> Ndolo: Invoice Edit</title>
                      </Helmet>
 
-                     <InvoiceEditView id={ `${ id }` } />
+                     <InvoiceEditView id={`${id}`} />
               </>
        );
 }

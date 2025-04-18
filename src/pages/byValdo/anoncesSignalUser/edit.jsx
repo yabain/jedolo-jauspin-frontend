@@ -6,8 +6,7 @@ import { ProductEditView } from 'src/sections/byValdo/product/view';
 
 // ----------------------------------------------------------------------
 
-export default function ProductEditPage()
-{
+export default function ProductEditPage() {
        const params = useParams();
 
        const { id } = params;
@@ -15,10 +14,10 @@ export default function ProductEditPage()
        return (
               <>
                      <Helmet>
-                            <title> Dashboard: Product Edit</title>
+                            <title> Ndolo: Product Edit</title>
                      </Helmet>
 
-                     <ProductEditView id={ `${ id }` } />
+                     <ProductEditView id={`${id}`} />
               </>
        );
 }

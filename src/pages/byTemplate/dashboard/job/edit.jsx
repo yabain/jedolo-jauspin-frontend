@@ -6,8 +6,7 @@ import { JobEditView } from 'src/sections/byTemplate/job/view';
 
 // ----------------------------------------------------------------------
 
-export default function JobEditPage()
-{
+export default function JobEditPage() {
        const params = useParams();
 
        const { id } = params;
@@ -15,10 +14,10 @@ export default function JobEditPage()
        return (
               <>
                      <Helmet>
-                            <title> Dashboard: Dashboard: Job Edit</title>
+                            <title> Ndolo: Ndolo: Job Edit</title>
                      </Helmet>
 
-                     <JobEditView id={ `${ id }` } />
+                     <JobEditView id={`${id}`} />
               </>
        );
 }

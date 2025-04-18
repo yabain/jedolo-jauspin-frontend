@@ -6,8 +6,7 @@ import { PostDetailsView } from 'src/sections/byTemplate/blog/view';
 
 // ----------------------------------------------------------------------
 
-export default function PostDetailsPage()
-{
+export default function PostDetailsPage() {
        const params = useParams();
 
        const { title } = params;
@@ -15,10 +14,10 @@ export default function PostDetailsPage()
        return (
               <>
                      <Helmet>
-                            <title> Dashboard: Post Details</title>
+                            <title> Ndolo: Post Details</title>
                      </Helmet>
 
-                     <PostDetailsView title={ `${ title }` } />
+                     <PostDetailsView title={`${title}`} />
               </>
        );
 }

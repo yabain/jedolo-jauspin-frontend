@@ -17,19 +17,21 @@ import { alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 import Grid from '@mui/material/Unstable_Grid2';
 import CardHeader from '@mui/material/CardHeader';
+import { Skeleton } from '@mui/material';
+
 
 import { fNumber } from 'src/utils/format-number';
 
 import { request } from 'src/store/annonces/updateAnnonce/reducer';
 import { ProductListView } from '../product/view';
 
-
 // ----------------------------------------------------------------------
 
-export default function ProfileHome({ posts }) {
+export default function ProfileHome({ isFulled, dataGet }) {
        const fileRef = useRef(null);
 
 
+       console.log('data get', dataGet);
 
 
 
@@ -73,16 +75,16 @@ export default function ProfileHome({ posts }) {
 
        console.log(data, 'dataaaaaaaaaaaaaaaaa');
 
-       const dataget = {
+       // const dataGet = {
 
-              age: data !== undefined ? data.owner.age || 0 : user.age,
-              prix: data !== undefined ? data.owner.price || 0 : user.price || 0,
-              email: data !== undefined ? data.owner.email || '' : user?.email,
-              city: data !== undefined ? data.owner.city || '' : user.city,
-              localisation: data !== undefined ? data.owner.location || '' : user.location,
-              about: data !== undefined ? data.owner.about : user.about,
-              country: data !== undefined ? data.owner.country : user.coutry,
-       }
+       //        age: data !== undefined ? data.owner.age || 0 : user.age,
+       //        prix: data !== undefined ? data.owner.price || 0 : user.price || 0,
+       //        email: data !== undefined ? data.owner.email || '' : user?.email,
+       //        city: data !== undefined ? data.owner.city || '' : user.city,
+       //        localisation: data !== undefined ? data.owner.location || '' : user.location,
+       //        about: data !== undefined ? data.owner.about : user.about,
+       //        country: data !== undefined ? data.owner.country : user.coutry,
+       // }
 
 
 
@@ -103,15 +105,15 @@ export default function ProfileHome({ posts }) {
                             direction="row"
                             divider={<Divider orientation="vertical" flexItem sx={{ borderStyle: 'dashed' }} />}
                      >
-                            {dataget.age !== 0 && (<Stack width={1}>
-                                   {dataget.age}
+                            {dataGet.age !== 0 && (<Stack width={1}>
+                                   {dataGet.age}
                                    <Box component="span" sx={{ color: 'text.secondary', typography: 'body2' }}>
                                           Age
                                    </Box>
                             </Stack>)}
 
-                            {/* {dataget.prix !== 0 && (<Stack width={1}>
-                                   {fNumber(dataget.prix)}
+                            {/* {dataGet.prix !== 0 && (<Stack width={1}>
+                                   {fNumber(dataGet.prix)}
                                    <Box component="span" sx={{ color: 'text.secondary', typography: 'body2' }}>
                                           Prix minimum
                                    </Box>
@@ -125,12 +127,12 @@ export default function ProfileHome({ posts }) {
                      <CardHeader title="A propos" />
 
                      <Stack spacing={2} sx={{ p: 3 }}>
-                            <Box sx={{ typography: 'body2' }}>{dataget.about}</Box>
+                            <Box sx={{ typography: 'body2' }}>{dataGet.about}</Box>
 
 
                             <Stack direction="row" sx={{ typography: 'body2' }}>
                                    <Iconify icon="fluent:mail-24-filled" width={24} sx={{ mr: 2 }} />
-                                   {dataget.email}
+                                   {dataGet.email}
                             </Stack>
 
                             <Stack direction="row" spacing={2}>
@@ -138,7 +140,7 @@ export default function ProfileHome({ posts }) {
 
                                    <Box sx={{ typography: 'body2' }}>
 
-                                          Pays {dataget.country}
+                                          Pays {dataGet.country}
 
                                    </Box>
                             </Stack>
@@ -148,7 +150,7 @@ export default function ProfileHome({ posts }) {
                                    <Iconify icon="mingcute:location-fill" width={24} />
 
                                    <Box sx={{ typography: 'body2' }}>
-                                          Ville  {dataget.city}
+                                          Ville  {dataGet.city}
 
                                    </Box>
                             </Stack>
@@ -158,7 +160,7 @@ export default function ProfileHome({ posts }) {
 
                                    <Box sx={{ typography: 'body2' }}>
 
-                                          Lieux  {dataget.localisation}
+                                          Lieux  {dataGet.localisation}
                                    </Box>
                             </Stack>
                      </Stack>
@@ -233,7 +235,8 @@ export default function ProfileHome({ posts }) {
 
        return (
               <Grid container spacing={3}>
-                     <Grid xs={12} md={4}>
+
+                     {isFulled && <> <Grid xs={12} md={4}>
                             <Stack spacing={3}>
                                    {renderFollows}
 
@@ -243,16 +246,22 @@ export default function ProfileHome({ posts }) {
                             </Stack>
                      </Grid>
 
-                     <Grid xs={12} md={8}>
-                            <Stack spacing={3}>
+                            <Grid xs={12} md={8}>
+                                   <Stack spacing={3}>
 
-                                   <ProductListView clickFromProfile={AnnonceClicked} />
-                            </Stack>
-                     </Grid>
+                                          <ProductListView clickFromProfile={AnnonceClicked} />
+                                   </Stack>
+                            </Grid>
+                     </>}
+
+
+                     {!isFulled && <Grid md={12}> <Skeleton height='600px' />  </Grid>}
+
               </Grid>
        );
 }
 
 ProfileHome.propTypes = {
-       posts: PropTypes.array,
+       isFulled: PropTypes.bool,
+       dataGet: PropTypes.object
 };

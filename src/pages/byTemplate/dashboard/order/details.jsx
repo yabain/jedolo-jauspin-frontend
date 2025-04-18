@@ -6,8 +6,7 @@ import { OrderDetailsView } from 'src/sections/byTemplate/order/view';
 
 // ----------------------------------------------------------------------
 
-export default function OrderDetailsPage()
-{
+export default function OrderDetailsPage() {
        const params = useParams();
 
        const { id } = params;
@@ -15,10 +14,10 @@ export default function OrderDetailsPage()
        return (
               <>
                      <Helmet>
-                            <title> Dashboard: Order Details</title>
+                            <title> Ndolo: Order Details</title>
                      </Helmet>
 
-                     <OrderDetailsView id={ `${ id }` } />
+                     <OrderDetailsView id={`${id}`} />
               </>
        );
 }

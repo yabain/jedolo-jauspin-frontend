@@ -218,6 +218,8 @@ export default function ProductListView({ toShow, clickFromProfile }) {
                      if (user === null || user === undefined) {
 
 
+                            console.log('fonction abort');
+
                             return
                      }
 

@@ -4,12 +4,11 @@ import { KanbanView } from 'src/sections/byTemplate/kanban/view';
 
 // ----------------------------------------------------------------------
 
-export default function KanbanPage()
-{
+export default function KanbanPage() {
        return (
               <>
                      <Helmet>
-                            <title> Dashboard: Kanban</title>
+                            <title> Ndolo: Kanban</title>
                      </Helmet>
 
                      <KanbanView />

@@ -20,7 +20,7 @@ export async function request(data) {
        try {
 
               // const response = await axiosInstance.get( `${ endpoints.user.get }/${ userID }` );
-              const response = await axiosInstance.post(`${HOST_FRONT_PROD}/annonce`, { ...data }, { headers: { Authorization: `Bearer ${tokenUser}` } });
+              const response = await axiosInstance.post(`${HOST_FRONT_PROD}/annonce`, { ...data }, { headers: { Authorization: `Bearer ${tokenUser()}` } });
               // console.log( 'Réponse de la requête :', response.data );
               return response;
 

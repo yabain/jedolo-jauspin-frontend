@@ -4,12 +4,11 @@ import { TourListView } from 'src/sections/byTemplate/tour/view';
 
 // ----------------------------------------------------------------------
 
-export default function TourListPage()
-{
+export default function TourListPage() {
        return (
               <>
                      <Helmet>
-                            <title> Dashboard: Tour List</title>
+                            <title> Ndolo: Tour List</title>
                      </Helmet>
 
                      <TourListView />

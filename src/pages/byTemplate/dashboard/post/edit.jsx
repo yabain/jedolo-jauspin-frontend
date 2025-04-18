@@ -6,8 +6,7 @@ import { PostEditView } from 'src/sections/byTemplate/blog/view';
 
 // ----------------------------------------------------------------------
 
-export default function PostEditPage()
-{
+export default function PostEditPage() {
        const params = useParams();
 
        const { title } = params;
@@ -15,10 +14,10 @@ export default function PostEditPage()
        return (
               <>
                      <Helmet>
-                            <title> Dashboard: Post Edit</title>
+                            <title> Ndolo: Post Edit</title>
                      </Helmet>
 
-                     <PostEditView title={ `${ title }` } />
+                     <PostEditView title={`${title}`} />
               </>
        );
 }

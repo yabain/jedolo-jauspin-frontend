@@ -6,8 +6,7 @@ import { InvoiceDetailsView } from 'src/sections/byTemplate/invoice/view';
 
 // ----------------------------------------------------------------------
 
-export default function InvoiceDetailsPage()
-{
+export default function InvoiceDetailsPage() {
        const params = useParams();
 
        const { id } = params;
@@ -15,10 +14,10 @@ export default function InvoiceDetailsPage()
        return (
               <>
                      <Helmet>
-                            <title> Dashboard: Invoice Details</title>
+                            <title> Ndolo: Invoice Details</title>
                      </Helmet>
 
-                     <InvoiceDetailsView id={ `${ id }` } />
+                     <InvoiceDetailsView id={`${id}`} />
               </>
        );
 }

@@ -4,12 +4,11 @@ import { AccountView } from 'src/sections/byValdo/account/view';
 
 // ----------------------------------------------------------------------
 
-export default function AccountPage()
-{
+export default function AccountPage() {
        return (
               <>
                      <Helmet>
-                            <title> Dashboard: Account Settings</title>
+                            <title> Compte</title>
                      </Helmet>
 
                      <AccountView />

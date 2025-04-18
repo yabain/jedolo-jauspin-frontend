@@ -127,7 +127,7 @@ export default function ProductListPage() {
        return (
               <>
                      <Helmet>
-                            <title> Annonces</title>
+                            <title> Ndolo: Liste des Annonces</title>
                      </Helmet>
 
                      {user !== null && user?.role === "admin" && (<Container maxWidth='xl' sx={{

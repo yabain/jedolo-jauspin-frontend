@@ -4,12 +4,11 @@ import { UserListView } from 'src/sections/byTemplate/user/view';
 
 // ----------------------------------------------------------------------
 
-export default function UserListPage()
-{
+export default function UserListPage() {
        return (
               <>
                      <Helmet>
-                            <title> Dashboard: User List</title>
+                            <title> Ndolo: User List</title>
                      </Helmet>
 
                      <UserListView />
