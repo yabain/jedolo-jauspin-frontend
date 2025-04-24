@@ -19,8 +19,8 @@ const HOST_FRONT_DEV3 = 'http://192.168.213.1:3030';
 const HOST_FRONT_DEV4 = 'http://192.168.1.127:3030';
 const HOST_FRONT_DEV5 = 'http://192.168.58.1:5000';
 
-// export const HOST_FRONT_PROD = 'https://ndolo-backend.yaba-in.com'
-export const HOST_FRONT_PROD = 'http://192.168.1.212:3000';
+export const HOST_FRONT_PROD = 'https://ndolo-backend.yaba-in.com';
+// export const HOST_FRONT_PROD = 'http://192.168.1.212:3000';
 const HOST_BACK_PROD = '';
 
 export const HOST_PORT = PORT;
