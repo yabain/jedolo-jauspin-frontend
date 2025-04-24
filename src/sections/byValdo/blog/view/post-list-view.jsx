@@ -29,6 +29,7 @@ import { useDebounce } from 'src/hooks/use-debounce';
 import { POST_SORT_OPTIONS } from 'src/_mock';
 import { useGetPosts, useSearchPosts } from 'src/api/blog';
 
+import { sortByRecentDate } from 'src/1functions/annonces/sortByRecentDate';
 import Label from 'src/components/label';
 import { Box } from '@mui/system';
 import Iconify from 'src/components/iconify';
@@ -78,7 +79,7 @@ export default function PostListView({ setAfterFilter }) {
 
        const annonceFromStore = useSelector((state) => state.usersAnnonces.data)
        const usersAnnonces = useSelector(state => state.getUsersAnnonces.data)
-       const { isPending, isFulled } = useSelector(state => state.getUsersAnnonces)
+       const { isPending, isFulled, isError } = useSelector(state => state.getUsersAnnonces)
 
 
 
@@ -459,10 +460,10 @@ export default function PostListView({ setAfterFilter }) {
 
               finallyFilteredPrice = filterByPriceRange2(mergedFilters, minPrice, maxPrice)
               const sortedPosts = sortPostsByOrder2(finallyFilteredPrice, order)
-              setAfterFilter(trierAnnonces(sortedPosts))
+              setAfterFilter(sortByRecentDate(trierAnnonces(sortedPosts)))
               // console.log(sortedPosts);
 
-              setFilteredPosts(trierAnnonces(sortedPosts))
+              setFilteredPosts(sortByRecentDate(trierAnnonces(sortedPosts)))
 
 
 
@@ -497,7 +498,7 @@ export default function PostListView({ setAfterFilter }) {
 
        useEffect(() => {
 
-              if (!isPending && !isFulled) {
+              if (!isPending && !isFulled && !isError) {
 
                      dispatch(request({ type: 'user' }))
 
@@ -508,7 +509,7 @@ export default function PostListView({ setAfterFilter }) {
 
               }
 
-       }, [dispatch, isFulled, isPending, usersAnnonces]);
+       }, [dispatch, isFulled, isPending, usersAnnonces, isError]);
 
 
 
@@ -568,7 +569,7 @@ export default function PostListView({ setAfterFilter }) {
               }
               if (annonceFromStore.length !== 0) {
 
-                     setFilteredPosts(trierAnnonces(annonceFromStore));
+                     setFilteredPosts(sortByRecentDate(trierAnnonces(annonceFromStore)));
 
               } else {
                      setFilteredPosts(annonceFromStore)

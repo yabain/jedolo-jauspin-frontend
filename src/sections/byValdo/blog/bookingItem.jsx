@@ -31,8 +31,9 @@ import { request } from 'src/store/annonces/updateNbrView/reducer';
 
 export default function BookingItem({ item }) {
 
-       const { avatarUrl, name, createdAt, guests, coverUrl, price, sponsored, rating } = item;
+       const { avatarUrl, name, subDescription, createdAt, guests, coverUrl, price, sponsored, rating } = item;
 
+       const descriptTest = `${subDescription}`
        // console.log( sponsored );
 
        const navigate = useNavigate();
@@ -91,7 +92,7 @@ export default function BookingItem({ item }) {
                                    pt: 2.5,
                             }}
                      >
-                            <Stack direction="row" alignItems="center" spacing={2}>
+                            <Stack direction="row" alignItems="center" spacing={2}  >
                                    <Avatar alt={name} src={avatarUrl} />
                                    <ListItemText
                                           primary={name}
@@ -101,12 +102,31 @@ export default function BookingItem({ item }) {
                                                  width: '240px' // ← équivalent au style par défaut
 
                                           }}
-                                          secondary={fDateTime(createdAt)}
+                                          secondary={descriptTest}
                                           secondaryTypographyProps={{
                                                  mt: 0.5,
-                                                 component: 'span',
-                                                 typography: 'caption',
+
+                                                 // component: 'span',
+                                                 // typography: 'subtitle2',
+                                                 // color: 'text.disabled',
+
+
+
+                                                 component: 'div', // Important pour supporter le multi-ligne
+                                                 variant: 'subtitle2',
                                                  color: 'text.disabled',
+                                                 // noWrap: true,
+                                                 // typography: 'subtitle2',
+                                                 // mb: 0.5,
+
+
+                                                 sx: {
+                                                        width: '250px',
+                                                        display: '-webkit-box',
+                                                        WebkitBoxOrient: 'vertical',
+                                                        WebkitLineClamp: 2,
+                                                        overflow: 'hidden',
+                                                 },
                                           }}
                                    />
                             </Stack>

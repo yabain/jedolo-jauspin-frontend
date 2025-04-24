@@ -130,17 +130,19 @@ export default function ProductDetailsView({ id }) {
 <br/>
 <br/>
 
-<h6>Description</h6>
-<br/>
-<ul> 
 
-<p>${product.subDescription}</p> 
-  
-</ul>
 
 <br/>
 <br/>
  `
+
+       //               < h6 > Description</h6>
+       // <br/>
+       // <ul> 
+
+       // <p>${product.subDescription}</p> 
+
+       // </ul>
 
 
        const SUMMARY = [

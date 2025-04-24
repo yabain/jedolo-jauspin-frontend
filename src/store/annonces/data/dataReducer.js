@@ -56,7 +56,7 @@ const setAdminDataAction = (state, action) => {
 
 const addDataAction = (state, action) => {
        const dataTemp = action.payload;
-       state.data = [...state.data, dataTemp];
+       state.data = [dataTemp, ...state.data];
        console.log('data add succesffuly from store');
 }
 

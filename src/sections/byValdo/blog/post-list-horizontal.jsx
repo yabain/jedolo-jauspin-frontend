@@ -12,7 +12,7 @@ import BookingItem from './bookingItem';
 export default function PostListHorizontal({ posts, loading }) {
        const [page, setPage] = useState(1);
        const [hasPageChanged, setHasPageChanged] = useState(false); // Ajouter un état pour suivre les changements de page
-       const postsPerPage = 24;
+       const postsPerPage = 25;
 
        // console.log( 'recu', posts );
 

@@ -31,7 +31,7 @@ export function useGet(handleGet, isActive = true, showEmque = false) {
 
 
        useEffect(() => () => handleReset(), [handleReset]);
-       useEffect(() => { if (!isFulled && !isPending && isActive) dispatch(request()); }, [isFulled, isPending, isActive, dispatch]);
+       useEffect(() => { if (!isFulled && !isPending && !isError && isActive) dispatch(request()); }, [isError, isFulled, isPending, isActive, dispatch]);
        useEffect(() => { if (isFulled && !isPending && isActive && showEmque) handleEnque(); }, [showEmque, isFulled, isPending, isActive, handleEnque]);
        useEffect(() => { if (isFulled && !isPending && isActive && !isLoad) { handleGet(data); setIsLoad(true) } }, [isLoad, isFulled, isPending, isActive, handleGet, data]);
 

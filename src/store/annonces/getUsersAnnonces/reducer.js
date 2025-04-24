@@ -52,6 +52,7 @@ const fulfilledAction = (state, action) => {
 
 const rejectedAction = (state, action) => {
        state.isPending = false;
+       state.isError = true
        state.msg = action?.payload?.data ? action.payload.message : action.error.message;
        console.log('Erreur detecter depuis le reducer lors de la recuperation des données:', state.msg);
 }
@@ -84,7 +85,7 @@ const requestCases = (builder) => builder
 export const getSlice = createSlice({
        name: 'getusersAnnonces', extraReducers: requestCases,
        reducers: { resetAfterRequest: resetGetState },
-       initialState: { data: null, isPending: false, isFulled: false, }
+       initialState: { data: null, isPending: false, isFulled: false, isError: false }
 });
 
 

@@ -102,7 +102,7 @@ export default function ProductDetailsSummary({
               inventoryType,
               location,
        } = product;
-       // console.log('product', product);
+       console.log('product', product);
 
 
        const existProduct = !!items?.length && items.map((item) => item.id).includes(id);
@@ -465,6 +465,7 @@ export default function ProductDetailsSummary({
               <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                      {/* { subDescription } */}
                      Je suis Une Femme  Clients accepte {findMatchingWord(product.personAccept || ['femme'], ["Homme", 'femme'])}  {(isArray(product.personAccept) && product.personAccept.length < 2 && 'uniquement')}.{seDeplaceText}
+                     {product.subDescription}
               </Typography>
        );
 

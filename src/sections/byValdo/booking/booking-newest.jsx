@@ -121,7 +121,7 @@ BookingNewest.propTypes = {
 
 function BookingItem({ item }) {
 
-       const { avatarUrl, name, createdAt, guests, coverUrl, price, sponsored } = item;
+       const { avatarUrl, name, subDescription, createdAt, guests, coverUrl, price, sponsored } = item;
 
        // console.log( sponsored );
 
@@ -194,12 +194,33 @@ function BookingItem({ item }) {
                                                  variant: "subtitle2"  // ← équivalent au style par défaut
 
                                           }}
-                                          secondary={fDateTime(createdAt)}
+                                          secondary={subDescription}
                                           secondaryTypographyProps={{
+
+
                                                  mt: 0.5,
-                                                 component: 'span',
-                                                 typography: 'caption',
+
+                                                 // component: 'span',
+                                                 // typography: 'subtitle2',
+                                                 // color: 'text.disabled',
+
+
+
+                                                 component: 'div', // Important pour supporter le multi-ligne
+                                                 variant: 'subtitle2',
                                                  color: 'text.disabled',
+                                                 // noWrap: true,
+                                                 // typography: 'subtitle2',
+                                                 // mb: 0.5,
+
+
+                                                 sx: {
+                                                        width: '250px',
+                                                        display: '-webkit-box',
+                                                        WebkitBoxOrient: 'vertical',
+                                                        WebkitLineClamp: 2,
+                                                        overflow: 'hidden',
+                                                 },
                                           }}
                                    />
                             </Stack>
